@@ -138,6 +138,8 @@ export default class StyledTextInput extends SafeComponent {
         promise = promise.catch(() => {
             // Do nothing
         });
+
+        await promise;
     }
 
     @action.bound async onChangeText(text) {
@@ -167,10 +169,10 @@ export default class StyledTextInput extends SafeComponent {
     };
 
     @action.bound async onBlur() {
-        if (!this.props.state.value) this.validate();
         uiState.focusedTextBox = null;
         this.focused = false;
         if (this.props.onBlur) this.props.onBlur();
+        await this.validate();
         if (this.valid === INVALID) tm.shared.textInputOnBlur(this.props.inputName, this.errorTextCopy);
     }
 
