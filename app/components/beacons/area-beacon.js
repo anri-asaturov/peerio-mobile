@@ -104,15 +104,17 @@ export default class AreaBeacon extends SafeComponent {
     }
 
     get pointerHorizontalTwoThirds() {
+        const { frameWidth } = this.props.position;
         return {
-            containerPositionX: { right: this.parentHorizontalPos - 2 * vars.beaconWidth / 3 },
+            containerPositionX: { right: windowWidth - (this.parentHorizontalPos + vars.beaconWidth / 3 + frameWidth) },
             pointerPositionX: { right: vars.beaconWidth / 3 }
         };
     }
 
     get pointerHorizontalRightMost() {
+        const { frameWidth } = this.props.position;
         return {
-            containerPositionX: { right: this.parentHorizontalPos - (vars.beaconWidth + vars.pointerPadding) },
+            containerPositionX: { right: windowWidth - (this.parentHorizontalPos + vars.pointerPadding + frameWidth) },
             pointerPositionX: { right: vars.pointerPadding }
         };
     }

@@ -48,18 +48,31 @@ export default class MockBeacon extends Component {
         uiState.mockBeaconType = !uiState.mockBeaconType;
     }
 
+    @action.bound toggleHorizontalPadding() {
+        this.padding = this.padding ? 0 : 100;
+    }
+
     get list() {
+        const containerStyle = {
+            flexGrow: 1,
+            backgroundColor: vars.lightGrayBg,
+            flexDirection: 'row',
+            paddingLeft: this.showLeft ? this.padding : 0,
+            paddingRight: !this.showLeft ? this.padding : 0
+        }
         return (
-            <View style={{ flexGrow: 1, backgroundColor: vars.lightGrayBg, flexDirection: 'row' }}>
+            <View style={containerStyle}>
                 {!this.showVertical && this.showLeft && <MockTabContainer vertical />}
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.white, paddingHorizontal: 20, paddingVertical: 50 }}>
                     <Text>1. Click on any icon to see its beacon.</Text>
                     <Text>2. Use the blue buttons to change the location of the icons</Text>
                     <Text>3. Use the white buttons to change change beacon properties (must refresh by pressing any blue button afterwards)</Text>
+                    <Text>(Left/Right padding changes the position of the arrow with respect to the beacon)</Text>
                     {buttons.roundBlueBgButton('Toggle Top/Bottom Beacons', this.toggleTopBottom)}
                     {buttons.roundBlueBgButton('Toggle Left/Right Beacons', this.toggleLeftRight)}
                     {buttons.roundWhiteBgButton('Toggle arrow orientation', this.toggleArrow)}
                     {buttons.roundWhiteBgButton('Toggle Area/Spot beacon', this.toggleBeaconType)}
+                    {buttons.roundWhiteBgButton('Toggle Left/Right Padding', this.toggleHorizontalPadding)}
                 </View>
                 {!this.showVertical && !this.showLeft && <MockTabContainer vertical />}
             </View>);
