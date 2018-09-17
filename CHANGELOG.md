@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.351.0"></a>
+# [3.351.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.350.0...v3.351.0) (2018-09-17)
+
+
+### Bug Fixes
+
+* changed property error to errorType ([90e9064](https://github.com/PeerioTechnologies/peerio-mobile/commit/90e9064))
+* max character limit error username input ([13ece61](https://github.com/PeerioTechnologies/peerio-mobile/commit/13ece61))
+
+
+
 <a name="3.350.0"></a>
 # [3.350.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.349.0...v3.350.0) (2018-09-13)
 
