@@ -10,10 +10,8 @@ import { vars, styledTextInput } from '../../styles/styles';
 import icons from '../helpers/icons';
 import testLabel from '../helpers/test-label';
 import { tx } from '../utils/translator';
-import { socket, telemetry } from '../../lib/icebear';
+import { socket } from '../../lib/icebear';
 import tm from '../../telemetry';
-
-const { S } = telemetry;
 
 // Because JS has no enums
 const VALID = true;
