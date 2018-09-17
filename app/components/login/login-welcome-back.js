@@ -4,14 +4,18 @@ import { action, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { T, tx } from '../utils/translator';
 import loginState from './login-state';
-import ActivityOverlay from '../controls/activity-overlay';
 import { vars, signupStyles } from '../../styles/styles';
 import SafeComponent from '../shared/safe-component';
 import Text from '../controls/custom-text';
 import IntroStepIndicator from '../shared/intro-step-indicator';
 import LoginButtonBack from './login-button-back';
 import LoginInputs from './login-inputs';
-import { User } from '../../lib/icebear';
+import { User, telemetry } from '../../lib/icebear';
+import tm from '../../telemetry';
+import TmHelper from '../../telemetry/helpers';
+import ActivityOverlay from '../controls/activity-overlay';
+
+const { S } = telemetry;
 
 const marginBottom = 10;
 const marginTop = vars.spacing.small.maxi2x;
@@ -33,7 +37,13 @@ export default class LoginWelcomeBack extends SafeComponent {
     @observable lastUser;
 
     async componentDidMount() {
+        this.startTime = Date.now();
+        TmHelper.currentRoute = S.WELCOME_BACK_SCREEN;
         this.lastUser = await User.getLastAuthenticated();
+    }
+
+    componentWillUnmount() {
+        tm.login.duration(this.startTime);
     }
 
     @action.bound onSignupPress() {
@@ -45,8 +55,12 @@ export default class LoginWelcomeBack extends SafeComponent {
     }
 
     @action.bound switchUserLink(text) {
+        const onPress = () => {
+            tm.login.changeUser();
+            loginState.switchUser();
+        };
         return (
-            <Text style={{ color: vars.peerioBlue }} onPress={loginState.switchUser}>
+            <Text style={{ color: vars.peerioBlue }} onPress={onPress}>
                 {text}
             </Text>
         );

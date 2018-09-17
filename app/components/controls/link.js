@@ -12,7 +12,8 @@ export default class Link extends Component {
     }
 
     open() {
-        Linking.openURL(this.props.url);
+        if (this.props.url.tracker) this.props.url.tracker();
+        Linking.openURL(this.props.url.link);
     }
 
     render() {
@@ -31,5 +32,5 @@ Link.propTypes = {
     children: PropTypes.any.isRequired,
     onPress: PropTypes.any,
     style: PropTypes.any,
-    url: PropTypes.string
+    url: PropTypes.any
 };

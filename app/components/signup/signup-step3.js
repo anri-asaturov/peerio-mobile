@@ -6,13 +6,17 @@ import { vars, signupStyles } from '../../styles/styles';
 import signupState from './signup-state';
 import { tx } from '../utils/translator';
 import StyledTextInput from '../shared/styled-text-input';
-import { socket, validation } from '../../lib/icebear';
+import { socket, validation, telemetry } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import CheckBox from '../shared/checkbox';
 import SignupButtonBack from './signup-button-back';
 import SignupHeading from './signup-heading';
 import SignupStepIndicator from './signup-step-indicator';
+import TmHelper from '../../telemetry/helpers';
+import tm from '../../telemetry';
+
+const { S } = telemetry;
 
 const { validators } = validation;
 const { email } = validators;
@@ -27,6 +31,8 @@ export default class SignupStep3 extends SafeComponent {
     @action.bound emailInputRef(ref) { this.emailInput = ref; }
 
     componentDidMount() {
+        this.startTime = Date.now();
+        TmHelper.currentRoute = S.ACCOUNT_EMAIL;
         // QUICK SIGNUP DEV FLAG
         if (__DEV__ && process.env.PEERIO_QUICK_SIGNUP) {
             const rnd = new Date().getTime() % 100000;
@@ -39,13 +45,22 @@ export default class SignupStep3 extends SafeComponent {
         }
     }
 
-    @action.bound handleNextButton() {
-        if (this.isNextDisabled) return;
-        signupState.email = this.emailState.value;
-        signupState.next();
+    componentWillUnmount() {
+        tm.signup.duration(this.startTime);
     }
 
-    get isNextDisabled() { return !socket.connected || !this.emailState.value || !this.emailInput.isValid; }
+    @action tmToggleChecked() {
+        tm.signup.toggleNewsletterCheckbox(signupState.subscribeToPromoEmails);
+    }
+
+    @action.bound handleCreateButton() {
+        if (this.isCreateDisabled) return;
+        signupState.email = this.emailState.value;
+        signupState.next();
+        tm.signup.navigate(S.CREATE);
+    }
+
+    get isCreateDisabled() { return !socket.connected || !this.emailState.value || !this.emailInput.isValid; }
 
     renderThrow() {
         return (
@@ -58,12 +73,14 @@ export default class SignupStep3 extends SafeComponent {
                         autoFocus
                         state={this.emailState}
                         validations={email}
+                        inputName={S.EMAIL}
                         label={`${tx('title_email')}*`}
                         helperText={tx('title_hintEmail')}
                         lowerCase
                         keyboardType="email-address"
                         returnKeyType="next"
-                        onSubmitEditing={this.handleNextButton}
+                        onSubmitEditing={this.handleCreateButton}
+                        placeholder={tx('title_emailPlaceholderSignup')}
                         required
                         clearTextIcon
                         ref={this.emailInputRef}
@@ -73,6 +90,7 @@ export default class SignupStep3 extends SafeComponent {
                         <CheckBox
                             alignLeft
                             state={signupState}
+                            onChange={this.tmToggleChecked}
                             property="subscribeToPromoEmails"
                             text={tx('title_subscribeNewsletter')}
                             accessibilityLabel={tx('title_subscribeNewsletter')} />
@@ -80,8 +98,8 @@ export default class SignupStep3 extends SafeComponent {
                     <View style={{ alignItems: 'flex-end' }}>
                         {buttons.roundBlueBgButton(
                             tx('button_create'),
-                            this.handleNextButton,
-                            this.isNextDisabled,
+                            this.handleCreateButton,
+                            this.isCreateDisabled,
                             'button_create',
                             { width: vars.signupButtonWidth, marginVertical: 30 })}
                     </View>

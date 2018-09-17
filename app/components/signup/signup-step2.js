@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, action, reaction } from 'mobx';
+import { observable, action, reaction, when } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
 import randomWords from 'random-words';
@@ -8,23 +8,34 @@ import { vars, signupStyles } from '../../styles/styles';
 import signupState from './signup-state';
 import { tx } from '../utils/translator';
 import StyledTextInput from '../shared/styled-text-input';
-import { socket, validation } from '../../lib/icebear';
+import { socket, validation, telemetry, config } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import SignupButtonBack from './signup-button-back';
 import SignupHeading from './signup-heading';
 import SignupStepIndicator from './signup-step-indicator';
+import TmHelper from '../../telemetry/helpers';
+import tm from '../../telemetry';
+
+const { S } = telemetry;
 
 const { validators } = validation;
 const { username } = validators;
 
+const MAX_USERNAME_LENGTH = config.user.maxUsernameLength;
+
 @observer
 export default class SignupStep2 extends SafeComponent {
+    // used for telemetry option to know if user autofilled username before or after getting error
+    errorFlag = S.FIRST;
+
     usernameState = observable({ value: '' });
 
     @action.bound usernameInputRef(ref) { this.usernameInput = ref; }
 
     componentDidMount() {
+        this.startTime = Date.now();
+        TmHelper.currentRoute = S.ACCOUNT_USERNAME;
         // QUICK SIGNUP DEV FLAG
         if (__DEV__ && process.env.PEERIO_QUICK_SIGNUP) {
             this.usernameInput.onChangeText(randomWords({ min: 2, max: 2, join: 'o' }).substring(0, 16));
@@ -39,18 +50,23 @@ export default class SignupStep2 extends SafeComponent {
             () => signupState.usernameSuggestions,
             () => LayoutAnimation.easeInEaseOut()
         );
-
         signupState.suggestUsernames();
+
+        when(() => this.usernameInput.valid === false, () => {
+            this.errorFlag = S.SECOND;
+        });
     }
 
     componentWillUnmount() {
         this.suggestionAnimationReaction();
+        tm.signup.duration(this.startTime);
     }
 
     @action.bound handleNextButton() {
         if (this.isNextDisabled) return;
         signupState.username = this.usernameState.value;
         signupState.next();
+        tm.signup.navigate(S.NEXT);
     }
 
     get isNextDisabled() { return !socket.connected || !this.usernameState.value || !this.usernameInput.isValid; }
@@ -58,6 +74,7 @@ export default class SignupStep2 extends SafeComponent {
     @action.bound fillField(suggestion) {
         this.usernameState.value = suggestion;
         this.usernameInput.onChangeText(this.usernameState.value);
+        tm.signup.pickUsername(this.errorFlag);
     }
 
     suggestionPill = (suggestion) => {
@@ -118,12 +135,15 @@ export default class SignupStep2 extends SafeComponent {
                         autoFocus
                         state={this.usernameState}
                         validations={username}
-                        helperText={tx('title_hintUsername')}
+                        inputName={S.USERNAME}
+                        helperText={this.usernameState.value.length >= MAX_USERNAME_LENGTH ?
+                            tx('title_characterLimitReached') :
+                            tx('title_hintUsername')}
+                        maxLength={MAX_USERNAME_LENGTH}
                         label={`${tx('title_username')}*`}
                         lowerCase
                         required
                         clearTextIcon
-                        placeholder={tx('title_emailPlaceholderSignup')}
                         keyboardType="email-address"
                         returnKeyType="next"
                         onSubmitEditing={this.handleNextButton}

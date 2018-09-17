@@ -8,7 +8,11 @@ import signupState from './signup-state';
 import { tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
-import { User } from '../../lib/icebear';
+import { User, telemetry } from '../../lib/icebear';
+import TmHelper from '../../telemetry/helpers';
+import tm from '../../telemetry';
+
+const { S } = telemetry;
 
 const buttonContainer = {
     flexDirection: 'row',
@@ -20,6 +24,15 @@ const buttonContainer = {
 
 @observer
 export default class SignupShareData extends SafeComponent {
+    componentDidMount() {
+        this.startTime = Date.now();
+        TmHelper.currentRoute = S.SHARE_DATA;
+    }
+
+    componentWillUnmount() {
+        tm.signup.duration(this.startTime);
+    }
+
     @action.bound handleShareButton() {
         // TODO: replace with icebear version after it's merged
         const { settings } = User.current;
@@ -28,10 +41,14 @@ export default class SignupShareData extends SafeComponent {
             settings.dataCollection = true;
             User.current.saveSettings();
         });
+        tm.signup.shareData(true);
+        tm.signup.finishSignup();
         signupState.finishSignUp();
     }
 
     @action.bound handleDeclineButton() {
+        tm.signup.shareData(false);
+        tm.signup.finishSignup();
         signupState.finishSignUp();
     }
 

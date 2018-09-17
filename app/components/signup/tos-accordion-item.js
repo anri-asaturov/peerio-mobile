@@ -8,6 +8,10 @@ import SafeComponent from '../shared/safe-component';
 import icons from '../helpers/icons';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
+import tm from '../../telemetry';
+import { telemetry } from '../../lib/icebear';
+
+const { S } = telemetry;
 
 const textTitleStyle = {
     flex: 1,
@@ -27,7 +31,15 @@ const paragraphStyle = {
 export default class TosAccordionItem extends SafeComponent {
     @observable isOpen = false;
 
-    @action.bound toggle() { this.isOpen = !this.isOpen; }
+    @action.bound toggle() {
+        this.isOpen = !this.isOpen;
+        // Only need to send TM event on Open
+        if (this.isOpen) {
+            if (this.props.data.title === 'title_termsOfUse') {
+                tm.signup.readMoreAccordion(S.TERMS_OF_USE_SUMMARY);
+            } else tm.signup.readMoreAccordion(tx(this.props.data.title));
+        }
+    }
 
     keyExtractor = item => item.subtitle;
 

@@ -1,8 +1,30 @@
-import { Platform, Dimensions } from 'react-native';
+import { Platform, Dimensions, PixelRatio } from 'react-native';
 
 import branding from './branding';
 
 const { width, height } = Dimensions.get('window');
+
+function getDevicePixelRatio() {
+    const result = PixelRatio.get();
+    switch (result) {
+        case (1):
+            return 160;
+        case (1.5):
+            return 240;
+        case (2):
+            return 320;
+        case (3):
+            return 480;
+        case (3.5):
+            return 560;
+        case (4):
+            return 640;
+        default:
+            return -1;
+    }
+}
+
+const devicePixelRatio = getDevicePixelRatio();
 
 function isIphoneX() {
     const { OS, isPad, isTVOS } = Platform;
@@ -274,6 +296,7 @@ const vars = {
     fabSize: 60,
     fabRight: 16,
     fabBottom: 32,
+    devicePixelRatio,
     retentionOffset,
     iPhoneXBottom,
     tabCellHeight,

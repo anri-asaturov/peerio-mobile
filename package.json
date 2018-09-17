@@ -1,6 +1,6 @@
 {
   "name": "peeriomobile",
-  "version": "3.346.0",
+  "version": "3.353.0",
   "private": true,
   "scripts": {
     "postinstall": "./scripts/setup-env.sh && npm run icebear:compile && ./scripts/setup-rn-debugging.sh && ./scripts/copy-android-resources.sh && ./scripts/android-switch-to-rn-fork.sh && node scripts/test-deps.js",
@@ -52,6 +52,7 @@
     "file-loader": "0.9.0",
     "is-js": "0.1.1",
     "is_js": "0.9.0",
+    "isemail": "3.1.3",
     "json-stringify-safe": "5.0.1",
     "linkifyjs": "github:PeerioTechnologies/linkifyjs",
     "lodash": "4.17.10",

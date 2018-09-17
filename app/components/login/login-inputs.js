@@ -6,11 +6,14 @@ import { tx } from '../utils/translator';
 import loginState from './login-state';
 import { vars } from '../../styles/styles';
 import StyledTextInput from '../shared/styled-text-input';
-import { socket, validation, User } from '../../lib/icebear';
+import { socket, validation, telemetry, User } from '../../lib/icebear';
 import uiState from '../layout/ui-state';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import Text from '../controls/custom-text';
+import tm from '../../telemetry';
+
+const { S } = telemetry;
 
 const { validators } = validation;
 const { usernameLogin } = validators;
@@ -48,13 +51,16 @@ export default class LoginInputs extends SafeComponent {
         loginState.username = this.usernameState.value;
         loginState.passphrase = this.passwordState.value;
         uiState.hideAll()
-            .then(() => loginState.login())
+            .then(async () => {
+                await loginState.login();
+                tm.login.onLoginSuccess();
+            })
             .catch(e => {
                 let errorMessage = 'error_wrongAK';
                 if (e.deleted || e.blacklisted) {
                     errorMessage = 'error_accountSuspendedTitle';
                 }
-                this.passwordInput.setCustomError(tx(errorMessage));
+                this.passwordInput.setCustomError(errorMessage);
             });
     }
 
@@ -71,8 +77,10 @@ export default class LoginInputs extends SafeComponent {
                 {!hideUsernameInput && (<View>
                     <StyledTextInput
                         state={this.usernameState}
+                        inputName={S.USERNAME}
                         validations={usernameLogin}
-                        hint={tx('title_username')}
+                        label={tx('title_username')}
+                        tmTrackEmailError
                         ref={this.usernameInputRef}
                         lowerCase
                         testID="usernameLogin" />
@@ -80,7 +88,8 @@ export default class LoginInputs extends SafeComponent {
                 </View>)}
                 <StyledTextInput
                     state={this.passwordState}
-                    hint={tx('title_AccountKey')}
+                    inputName={S.ACCOUNT_KEY}
+                    label={tx('title_AccountKey')}
                     onSubmit={this.submit}
                     secureText
                     returnKeyType="go"
