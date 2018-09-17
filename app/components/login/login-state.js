@@ -2,10 +2,10 @@ import { when, observable, action, reaction } from 'mobx';
 import RNRestart from 'react-native-restart';
 import mainState from '../main/main-state';
 import settingsState from '../settings/settings-state';
-import { User, fileStore, socket, TinyDb, warnings, config, overrideServer } from '../../lib/icebear';
+import { User, fileStore, socket, TinyDb, warnings, config, overrideServer, clientApp } from '../../lib/icebear';
 import keychain from '../../lib/keychain-bridge';
 import { rnAlertYesNo } from '../../lib/alerts';
-import { popupSignOutAutologin, popupKeychainError } from '../shared/popups';
+import { popupSignOutAutologin } from '../shared/popups';
 import { tx } from '../utils/translator';
 import RoutedState from '../routes/routed-state';
 import routes from '../routes/routes';
@@ -219,10 +219,16 @@ class LoginState extends RoutedState {
     @action async loadFromKeychain() {
         await keychain.load();
         if (!keychain.hasPlugin) return false;
-        let data = await keychain.get(await mainState.getKeychainKey(this.username));
+        const keychainKey = await mainState.getKeychainKey(this.username);
+        let data = await keychain.get(keychainKey);
         if (!data) {
-            return await popupKeychainError(null, tx('error_keychainRead'))
-                && this.loadFromKeychain();
+            console.log(`reading keychain failed`);
+            await new Promise(resolve => when(() => clientApp.isFocused, resolve));
+            console.log(`app is in foreground, trying again`);
+            data = await keychain.get(keychainKey);
+            if (!data) {
+                return false;
+            }
         }
         try {
             const touchIdKey = `user::${this.username}::touchid`;

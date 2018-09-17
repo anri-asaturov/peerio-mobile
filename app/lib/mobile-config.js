@@ -72,7 +72,8 @@ export default (c, icebear) => {
         learnLegacyFiles: 'https://www.peerio.com/blog/posts/new-filesystem/',
         // sharedFiles: '' TODO: Add link to file
         openTerms: whitelabel.TERMS_URL || 'https://peerio.com/conditions.html',
-        openPrivacy: whitelabel.PRIVACY || 'https://peerio.com/privacy.html'
+        openPrivacy: whitelabel.PRIVACY || 'https://peerio.com/privacy.html',
+        pendingFiles: 'https://peerio.zendesk.com/hc/en-us/articles/360015675792'
     };
 
     setUrlMap(cfg.translator.urlMap);

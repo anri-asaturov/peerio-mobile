@@ -256,6 +256,7 @@ export default class SettingsLevel1 extends SafeComponent {
                     {__DEV__ && <BasicSettingsItem title="silent invite" onPress={this.testSilentInvite} />}
                     {__DEV__ && <BasicSettingsItem title="toggle connection" onPress={toggleConnection} />}
                     {__DEV__ && <BasicSettingsItem title="damage TouchID" onPress={() => mainState.damageUserTouchId()} />}
+                    {__DEV__ && <BasicSettingsItem title="destroy TouchID" onPress={() => mainState.destroyUserTouchId()} />}
                     {__DEV__ && <BasicSettingsItem title="snackbar" onPress={() =>
                         snackbarState.pushTemporary('test')} />}
                     {__DEV__ && <BasicSettingsItem title="snackbar long" onPress={() =>

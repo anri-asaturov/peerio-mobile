@@ -1,5 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Linking } from 'react-native';
+import { when } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
@@ -9,6 +10,10 @@ import AvatarCircle from './avatar-circle';
 import SafeComponent from './safe-component';
 import { chatState } from '../states';
 import signupState from '../signup/signup-state';
+import { config } from '../../lib/icebear';
+import drawerState from './drawer-state';
+import preferenceStore from '../settings/preference-store';
+import fileState from '../files/file-state';
 
 const MAINTENANCE_DAY = 'May 15';
 const MAINTENANCE_TIME1 = '2 AM';
@@ -102,4 +107,51 @@ class TopDrawerNewContact extends SafeComponent {
     }
 }
 
-export { TopDrawerMaintenance, TopDrawerNewContact, TopDrawerBackupAccountKey };
+@observer
+class TopDrawerPendingFiles extends SafeComponent {
+    learnMore() {
+        Linking.openURL(config.translator.urlMap.pendingFiles);
+    }
+
+    renderThrow() {
+        // no localization because of temporary nature
+        const descriptionLine1 = `Files marked “pending” will be removed by November 15th 2018.`;
+        return (
+            <TopDrawer
+                {...this.props}
+                heading="Note on “Pending” Files"
+                image={icons.imageIcon(
+                    require('../../assets/info-icon.png'),
+                    vars.iconSizeMedium2x
+                )}
+                {...{ descriptionLine1 }}
+                buttonText={tx('button_learnMore')}
+                buttonAction={this.learnMore} // TODO fix link
+            />
+        );
+    }
+}
+
+class TopDrawerAutoMount extends SafeComponent {
+    async componentDidMount() {
+        await new Promise(resolve => when(() => preferenceStore.loaded, resolve));
+        drawerState.addDrawerTrigger(
+            TopDrawerPendingFiles,
+            drawerState.DRAWER_CONTEXT.FILES,
+            {},
+            () => preferenceStore.prefs.pendingFilesBannerVisible && fileState.store.folderStore.root.hasLegacyFiles,
+            () => {
+                preferenceStore.prefs.pendingFilesBannerVisible = false;
+            }
+        );
+    }
+    renderThrow() { return null; }
+}
+
+export {
+    TopDrawerMaintenance,
+    TopDrawerNewContact,
+    TopDrawerBackupAccountKey,
+    TopDrawerPendingFiles,
+    TopDrawerAutoMount
+};

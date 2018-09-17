@@ -17,7 +17,7 @@ import { vars } from '../../styles/styles';
 import mockContactStore from './mock-contact-store';
 import mockFileStore from './mock-file-store';
 import TabContainer from '../layout/tab-container';
-import { TopDrawerMaintenance, TopDrawerNewContact } from '../shared/top-drawer-components';
+import { TopDrawerMaintenance, /* TopDrawerNewContact, */ TopDrawerPendingFiles, TopDrawerAutoMount } from '../shared/top-drawer-components';
 
 const button = {
     position: 'absolute',
@@ -72,9 +72,7 @@ export default class MockChatList extends Component {
     };
 
     addLocalDrawer = () => {
-        drawerState.addDrawer(TopDrawerNewContact, drawerState.DRAWER_CONTEXT.CONTACTS, {
-            contact: User.current
-        });
+        drawerState.addDrawer(TopDrawerPendingFiles, drawerState.DRAWER_CONTEXT.FILES);
     };
 
     removeDrawer = () => {
@@ -95,7 +93,7 @@ export default class MockChatList extends Component {
             case 'files':
                 return <Files />;
             default:
-                return <ContactList />;
+                return <Files />;
         }
     }
 
@@ -134,6 +132,7 @@ export default class MockChatList extends Component {
                         Delete
                     </Text>
                 </TouchableOpacity>
+                <TopDrawerAutoMount />
             </View>
         );
     }

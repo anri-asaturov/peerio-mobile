@@ -19,28 +19,32 @@ class PreferenceStore {
         externalContentJustForFavs: false,
         peerioContentEnabled: true,
         showMoveSharedFolderPopup: true,
-        importContactsInBackground: false
+        importContactsInBackground: false,
+        pendingFilesBannerVisible: true
     };
 
-    observePreference(key, dbName, localStore) {
+    async observePreference(key, dbName, localStore) {
         const prefKey = `pref_${key}`;
-        TinyDb[dbName].getValue(prefKey)
-            .then((loadedValue) => {
-                if (loadedValue || loadedValue === false) {
-                    localStore[key] = loadedValue;
-                }
-                reaction(() => localStore[key], () => {
-                    TinyDb[dbName].setValue(prefKey, localStore[key]);
-                });
+        try {
+            const loadedValue = await TinyDb[dbName].getValue(prefKey);
+            if (loadedValue || loadedValue === false) {
+                localStore[key] = loadedValue;
+            }
+            reaction(() => localStore[key], () => {
+                TinyDb[dbName].setValue(prefKey, localStore[key]);
             });
+        } catch (e) {
+            console.error(e);
+        }
     }
 
-    init() {
-        if (this.loaded) return;
-        this.loaded = true;
-        Object.keys(this.prefs).forEach((key) => {
-            this.observePreference(key, 'user', this.prefs);
-        });
+    @observable loaded = false;
+    async init() {
+        if (this.loaded || this.loading) return;
+        this.loading = true;
+        await Promise.all(Object.keys(this.prefs).map(key => {
+            return this.observePreference(key, 'user', this.prefs);
+        }));
 
         reaction(() => User.current.deleted, loginState.signOut);
 
@@ -51,10 +55,13 @@ class PreferenceStore {
                 });
             }
         });
+
+        this.loading = false;
+        this.loaded = true;
     }
 }
 
 const preferenceStore = new PreferenceStore();
 clientApp.uiUserPrefs = preferenceStore.prefs;
-
+global.preferenceStore = preferenceStore;
 export default preferenceStore;

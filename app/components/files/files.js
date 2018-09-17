@@ -20,9 +20,9 @@ import icons from '../helpers/icons';
 import ButtonText from '../controls/button-text';
 import uiState from '../layout/ui-state';
 import SharedFolderRemovalNotif from './shared-folder-removal-notif';
-import { fileStore } from '../../lib/icebear';
 import SearchBar from '../controls/search-bar';
 import FlatListWithDrawer from '../shared/flat-list-with-drawer';
+import drawerState from '../shared/drawer-state';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -30,7 +30,7 @@ const INITIAL_LIST_SIZE = 20;
 const PAGE_SIZE = 20;
 
 function backFolderAction() {
-    fileStore.folderStore.currentFolder = fileStore.folderStore.currentFolder.parent;
+    fileState.store.folderStore.currentFolder = fileState.store.folderStore.currentFolder.parent;
 }
 
 @observer
@@ -39,7 +39,7 @@ export default class Files extends SafeComponent {
     @observable refresh = 0;
 
     get leftIcon() {
-        if (!fileStore.folderStore.currentFolder.parent) return null;
+        if (!fileState.store.folderStore.currentFolder.parent) return null;
         return <BackIcon action={backFolderAction} />;
     }
 
@@ -51,8 +51,8 @@ export default class Files extends SafeComponent {
     }
 
     get layoutTitle() {
-        if (!fileStore.folderStore.currentFolder.parent) return null;
-        return fileStore.folderStore.currentFolder.name;
+        if (!fileState.store.folderStore.currentFolder.parent) return null;
+        return fileState.store.folderStore.currentFolder.name;
     }
 
     @observable dataSource = [];
@@ -63,13 +63,13 @@ export default class Files extends SafeComponent {
     get data() {
         let data = fileState.store.searchQuery ?
             fileState.store.filesAndFoldersSearchResult
-            : fileStore.folderStore.currentFolder.filesAndFoldersDefaultSorting;
+            : fileState.store.folderStore.currentFolder.filesAndFoldersDefaultSorting;
         if (fileState.isFileSelectionMode) data = data.filter(item => !item.isLegacy && item.readyForDownload);
         return data;
     }
 
     componentDidMount() {
-        this.reactionNavigation = reaction(() => fileStore.folderStore.currentFolder,
+        this.reactionNavigation = reaction(() => fileState.store.folderStore.currentFolder,
             action(() => {
                 this.maxLoadedIndex = INITIAL_LIST_SIZE;
                 this.refresh++;
@@ -93,10 +93,10 @@ export default class Files extends SafeComponent {
         this.reactionNavigation && this.reactionNavigation();
         this.reactionNavigation = null;
         // remove icebear hook for deletion
-        fileStore.bulk.deleteFolderConfirmator = null;
+        fileState.store.bulk.deleteFolderConfirmator = null;
     }
 
-    onChangeFolder = folder => { fileStore.folderStore.currentFolder = folder; };
+    onChangeFolder = folder => { fileState.store.folderStore.currentFolder = folder; };
 
     item = ({ item, index }) => {
         // fileId for file, id for folder
@@ -133,6 +133,7 @@ export default class Files extends SafeComponent {
     list() {
         return (
             <FlatListWithDrawer
+                context={drawerState.DRAWER_CONTEXT.FILES}
                 setScrollViewRef={this.flatListRef}
                 ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
                 ListFooterComponent={this.noFilesMatchSearch}
@@ -150,7 +151,7 @@ export default class Files extends SafeComponent {
     get isZeroState() { return fileState.store.isEmpty; }
 
     get isEmpty() {
-        const folder = fileStore.folderStore.currentFolder;
+        const folder = fileState.store.folderStore.currentFolder;
         if (this.data.length
             || (!folder.isShared && folder.isRoot)) return false;
         return true;
@@ -267,7 +268,7 @@ export default class Files extends SafeComponent {
 
     sharedFolderRemovalNotifs() {
         // TODO: add any missed conditions for when to NOT show this
-        if (!fileStore.folderStore.currentFolder.isRoot) return null;
+        if (!fileState.store.folderStore.currentFolder.isRoot) return null;
         // TODO: map them from a list of notifications from SDK
         const folderNames = [
             'test-folder-name-1',
@@ -281,7 +282,7 @@ export default class Files extends SafeComponent {
     body() {
         if (this.data.length
             || fileState.findFilesText
-            || !fileStore.folderStore.currentFolder.isRoot) return this.list();
+            || !fileState.store.folderStore.currentFolder.isRoot) return this.list();
         return this.isZeroState && <FilesZeroStatePlaceholder />;
     }
 

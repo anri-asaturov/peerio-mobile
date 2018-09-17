@@ -23,6 +23,7 @@ import Text from './controls/custom-text';
 import BeaconLayout from './beacons/beacon-layout';
 import loginState from './login/login-state';
 import { uploadFileAndroid, uploadFileiOS, wakeUpAndUploadFileiOS } from './utils/shared-files';
+import { TopDrawerAutoMount } from './shared/top-drawer-components';
 
 const { height, width } = Dimensions.get('window');
 @observer
@@ -134,6 +135,7 @@ export default class App extends SafeComponent {
                 {uiState.picker}
                 <Text key="debug" style={{ height: 0 }} testID="debugText">{uiState.debugText}</Text>
                 <StatusBar barStyle="light-content" hidden={false} key="statusBar" />
+                <TopDrawerAutoMount />
                 {!process.env.NO_DEV_BAR && <TestHelper key="testHelper" />}
             </View>
         );
