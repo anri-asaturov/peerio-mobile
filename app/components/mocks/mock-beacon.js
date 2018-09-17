@@ -13,12 +13,16 @@ import routes from '../routes/routes';
 import buttons from '../helpers/buttons';
 import MockTabContainer from './mock-tab-container';
 import { uiState } from '../states';
+import AreaBeacon from '../beacons/area-beacon';
+import SpotBeacon from '../beacons/spot-beacon';
+import beaconState from '../beacons/beacon-state';
 
 @observer
 export default class MockBeacon extends Component {
-    @observable showVertical = false;
+    @observable showVertical = true;
     @observable showTop = false;
     @observable showLeft = false;
+    @observable padding;
 
     componentWillMount() {
         User.current = mockContactStore.createMock();
@@ -42,10 +46,12 @@ export default class MockBeacon extends Component {
 
     @action.bound toggleArrow() {
         uiState.mockBeaconArrowDirection = !uiState.mockBeaconArrowDirection;
+        beaconState.activeBeacon.sidePointer = !uiState.mockBeaconArrowDirection;
     }
 
     @action.bound toggleBeaconType() {
         uiState.mockBeaconType = !uiState.mockBeaconType;
+        beaconState.activeBeacon.component = uiState.mockBeaconType ? AreaBeacon : SpotBeacon;
     }
 
     @action.bound toggleHorizontalPadding() {
@@ -59,20 +65,20 @@ export default class MockBeacon extends Component {
             flexDirection: 'row',
             paddingLeft: this.showLeft ? this.padding : 0,
             paddingRight: !this.showLeft ? this.padding : 0
-        }
+        };
         return (
             <View style={containerStyle}>
                 {!this.showVertical && this.showLeft && <MockTabContainer vertical />}
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.white, paddingHorizontal: 20, paddingVertical: 50 }}>
-                    <Text>1. Click on any icon to see its beacon.</Text>
-                    <Text>2. Use the blue buttons to change the location of the icons</Text>
-                    <Text>3. Use the white buttons to change change beacon properties (must refresh by pressing any blue button afterwards)</Text>
-                    <Text>(Left/Right padding changes the position of the arrow with respect to the beacon)</Text>
-                    {buttons.roundBlueBgButton('Toggle Top/Bottom Beacons', this.toggleTopBottom)}
-                    {buttons.roundBlueBgButton('Toggle Left/Right Beacons', this.toggleLeftRight)}
+                    <Text>1. Click on any icon to see its beacon</Text>
+                    <Text>2. Use the buttons to change beacon properties</Text>
+                    {buttons.roundWhiteBgButton('Toggle Top/Bottom Beacons', this.toggleTopBottom)}
+                    {buttons.roundWhiteBgButton('Toggle Left/Right Beacons', this.toggleLeftRight)}
                     {buttons.roundWhiteBgButton('Toggle arrow orientation', this.toggleArrow)}
                     {buttons.roundWhiteBgButton('Toggle Area/Spot beacon', this.toggleBeaconType)}
                     {buttons.roundWhiteBgButton('Toggle Left/Right Padding', this.toggleHorizontalPadding)}
+                    <Text>(Left/Right padding causes beacon position on the page to change, which changes
+                        the position of the arrow with respect to the beacon when the arrow is oriented horizontally)</Text>
                 </View>
                 {!this.showVertical && !this.showLeft && <MockTabContainer vertical />}
             </View>);
