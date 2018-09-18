@@ -72,10 +72,10 @@ export default class MockBeacon extends Component {
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.white, paddingHorizontal: 20, paddingVertical: 50 }}>
                     <Text>1. Click on any icon to see its beacon</Text>
                     <Text>2. Use the buttons to change beacon properties</Text>
-                    {buttons.roundWhiteBgButton('Toggle Top/Bottom Beacons', this.toggleTopBottom)}
-                    {buttons.roundWhiteBgButton('Toggle Left/Right Beacons', this.toggleLeftRight)}
-                    {buttons.roundWhiteBgButton('Toggle arrow orientation', this.toggleArrow)}
-                    {buttons.roundWhiteBgButton('Toggle Area/Spot beacon', this.toggleBeaconType)}
+                    {buttons.roundWhiteBgButton('Toggle Top/Bottom', this.toggleTopBottom)}
+                    {buttons.roundWhiteBgButton('Toggle Left/Right', this.toggleLeftRight)}
+                    {buttons.roundWhiteBgButton('Toggle Arrow Orientation', this.toggleArrow)}
+                    {buttons.roundWhiteBgButton('Toggle Area/Spot Beacon', this.toggleBeaconType)}
                     {buttons.roundWhiteBgButton('Toggle Left/Right Padding', this.toggleHorizontalPadding)}
                     <Text>(Left/Right padding causes beacon position on the page to change, which changes
                         the position of the arrow with respect to the beacon when the arrow is oriented horizontally)</Text>
