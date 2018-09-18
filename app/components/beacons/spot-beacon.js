@@ -6,7 +6,6 @@ import { View, Dimensions, TouchableOpacity, LayoutAnimation } from 'react-nativ
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import Text from '../controls/custom-text';
-import { User } from '../../lib/icebear';
 import beaconState from './beacon-state';
 import { tx } from '../utils/translator';
 
@@ -29,25 +28,23 @@ export default class SpotBeacon extends SafeComponent {
         LayoutAnimation.easeInEaseOut();
     }
 
-    markSeen = (id) => {
-        User.current.beacons.set(id, true);
-        // we are not waiting for saveBeacons because there's no visual feedback
-        User.current.saveBeacons();
-    };
-
     @action.bound onPress() {
         const { id } = this.props;
         beaconState.removeBeacon(id);
-        this.markSeen(id);
+        beaconState.markSeen([id]);
     }
 
     @action.bound onPressContainer() {
-        const { flow } = this.props;
-        this.onPress();
-        if (flow) {
-            beaconState.beacons
-                .filter(b => b.flow === flow)
-                .forEach(b => this.markSeen(b.id));
+        // pressing container should break the flow of beacons
+        // if we have one. to handle that we use onDismiss
+        const { onDismiss, id } = this.props;
+        if (onDismiss) {
+            // we are not calling onDismiss to not
+            // spam saving beacon requests
+            beaconState.removeBeacon(id);
+            onDismiss();
+        } else {
+            this.onPress();
         }
     }
 

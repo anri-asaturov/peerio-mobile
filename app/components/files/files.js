@@ -23,7 +23,7 @@ import SharedFolderRemovalNotif from './shared-folder-removal-notif';
 import SearchBar from '../controls/search-bar';
 import FlatListWithDrawer from '../shared/flat-list-with-drawer';
 import drawerState from '../shared/drawer-state';
-import headerBeacons from '../beacons/header-beacons';
+import onboardingBeacons from '../beacons/onboarding-beacons';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -48,7 +48,7 @@ export default class Files extends SafeComponent {
         return !fileState.isFileSelectionMode &&
             <PlusBorderIcon
                 action={() => FileUploadActionSheet.show(false, true)}
-                beacon={headerBeacons.uploadFileBeacon}
+                beacon={onboardingBeacons.uploadFileBeacon}
                 testID="buttonUploadFileToFiles" />;
     }
 

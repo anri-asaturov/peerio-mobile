@@ -11,7 +11,7 @@ import routerMain from '../routes/router-main';
 import uiState from './ui-state';
 import { invitationState } from '../states';
 import TabItem from './tab-item';
-import tabBeacons from '../beacons/tab-beacons';
+import onboardingBeacons from '../beacons/onboarding-beacons';
 
 const bottomRowStyle = {
     flex: 0,
@@ -38,24 +38,24 @@ export default class TabContainer extends SafeComponent {
                     icon="forum"
                     highlightList={['space']}
                     bubble={chatStore.unreadMessages + chatInviteStore.received.length}
-                    beacon={tabBeacons.chatBeacon} />
+                    beacon={onboardingBeacons.chatBeacon} />
                 <TabItem
                     text={t('title_files')}
                     route="files"
                     icon="folder"
                     bubble={fileStore.unreadFiles}
-                    beacon={tabBeacons.filesBeacon} />
+                    beacon={onboardingBeacons.filesBeacon} />
                 <TabItem
                     text={t('title_contacts')}
                     route="contacts"
                     icon="people"
                     highlightList={['contactAdd', 'contactInvite']}
-                    beacon={tabBeacons.contactBeacon} />
+                    beacon={onboardingBeacons.contactBeacon} />
                 <TabItem
                     text={t('title_settings')}
                     route="settings"
                     icon="settings"
-                    beacon={tabBeacons.settingsBeacon} />
+                    beacon={onboardingBeacons.settingsBeacon} />
             </View>
         );
     }

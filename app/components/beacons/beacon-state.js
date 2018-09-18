@@ -26,6 +26,12 @@ class BeaconState {
         if (!idToRemove) return;
         this.beacons = this.beacons.filter(b => b.id !== idToRemove);
     }
+
+    markSeen = (ids) => {
+        ids.forEach(id => User.current.beacons.set(id, true));
+        // we are not waiting for saveBeacons because there's no visual feedback
+        User.current.saveBeacons();
+    };
 }
 
 const beaconState = new BeaconState();

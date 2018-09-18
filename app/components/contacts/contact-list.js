@@ -16,7 +16,7 @@ import uiState from '../layout/ui-state';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
 import drawerState from '../shared/drawer-state';
 import ListSeparator from '../shared/list-separator';
-import headerBeacons from '../beacons/header-beacons';
+import onboardingBeacons from '../beacons/onboarding-beacons';
 
 const INITIAL_LIST_SIZE = 20;
 
@@ -78,7 +78,7 @@ export default class ContactList extends SafeComponent {
             <PlusBorderIcon
                 action={contactState.fabAction}
                 testID="addContactButton"
-                beacon={headerBeacons.addContactBeacon}
+                beacon={onboardingBeacons.addContactBeacon}
             />
         );
     }
