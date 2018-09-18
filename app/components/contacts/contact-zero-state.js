@@ -9,6 +9,7 @@ import testLabel from '../helpers/test-label';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import drawerState from '../shared/drawer-state';
 import { adjustImageDimensions } from '../helpers/image';
+import preferenceStore from '../settings/preference-store';
 import SyncAddressButton from '../shared/sync-address-button';
 
 const { width } = Dimensions.get('window');
@@ -77,7 +78,8 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
                 <ViewWithDrawer style={wrapper} alwaysBounceVertical={false}>
                     {this.title}
                     {this.zeroStateIllustration}
-                    <SyncAddressButton />
+                    {preferenceStore.prefs.importContactsInBackground
+                        ? null : <SyncAddressButton />}
                 </ViewWithDrawer>
             </View>
         );
