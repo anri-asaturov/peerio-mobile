@@ -6,6 +6,7 @@ import { clientApp, contactStore, warnings, User, config } from '../../lib/icebe
 import { tx } from '../utils/translator';
 import contactAddState from './contact-add-state';
 import chatState from '../messaging/chat-state';
+import { popupContactPermission } from '../shared/popups';
 
 class ContactState extends RoutedState {
     _prefix = 'contacts';
@@ -103,6 +104,16 @@ class ContactState extends RoutedState {
             && !addedContacts.length;
     }
 
+    softRequestPermission = async () => {
+        const hasPermissions =
+            await popupContactPermission(
+                tx('title_permissionContacts'),
+                tx('title_permissionContactsDescroption')
+            ) && await this.hasPermissions();
+        clientApp.uiUserPrefs.importContactsInBackground = hasPermissions;
+        return hasPermissions;
+    };
+
     @action requestPermission() {
         console.log('contact-state.js: requesting permissions');
         return new Promise(resolve => RNContacts.requestPermission((err, permission) => {
@@ -178,10 +189,8 @@ class ContactState extends RoutedState {
         }));
     }
 
-    @action async testImport() {
-        const hasPermissions = await this.hasPermissions();
-        if (!hasPermissions) {
-            warnings.add(tx('title_contactsAllowAccess'));
+    @action.bound async testImport() {
+        if (!await this.softRequestPermission()) {
             return;
         }
         this.isInProgress = true;

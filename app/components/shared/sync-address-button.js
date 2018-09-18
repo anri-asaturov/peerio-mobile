@@ -12,7 +12,7 @@ export default class SyncAddressButton extends SafeComponent {
             <View style={{ alignItems: 'center' }}>
                 {buttons.roundBlueBgButton(
                     'button_syncAddressBook',
-                    () => contactState.testImport(),
+                    contactState.testImport,
                     null,
                     null,
                     { width: 247 }
