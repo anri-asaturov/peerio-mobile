@@ -161,12 +161,7 @@ export default class Files extends SafeComponent {
 
     get noFilesInFolder() {
         if (!this.isEmpty) return null;
-        const s = {
-            color: vars.txtMedium,
-            textAlign: 'center',
-            marginTop: vars.headerSpacing
-        };
-        return <Text style={s}>{tx('title_noFilesInFolder')}</Text>;
+        return <FilesZeroStatePlaceholder emptyFolder />;
     }
 
     onChangeFindFilesText(text) {
@@ -289,14 +284,14 @@ export default class Files extends SafeComponent {
     }
 
     renderThrow() {
+        const { noFilesInFolder } = this;
         return (
             <View
                 style={{ flex: 1, flexGrow: 1 }}>
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.darkBlueBackground05 }}>
                     {upgradeForFiles()}
-                    {this.noFilesInFolder}
+                    {noFilesInFolder || this.body()}
                     {/* this.sharedFolderRemovalNotifs() */}
-                    {this.body()}
                 </View>
                 <ProgressOverlay enabled={fileState.store.loading} />
                 {this.toolbar()}
