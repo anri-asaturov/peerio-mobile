@@ -7,7 +7,6 @@ import { t } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import { fileStore, chatInviteStore, chatStore } from '../../lib/icebear';
 import fileState from '../files/file-state';
-import contactState from '../contacts/contact-state';
 import routerMain from '../routes/router-main';
 import uiState from '../layout/ui-state';
 import { invitationState } from '../states';
