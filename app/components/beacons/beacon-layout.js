@@ -4,6 +4,7 @@ import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 import beaconState from './beacon-state';
+import { timeoutWithAction } from '../utils/timeouts';
 
 const BEACON_DELAY = 1000;
 
@@ -12,14 +13,12 @@ export default class BeaconLayout extends SafeComponent {
     @observable beacon = null;
     componentWillMount() {
         reaction(() => beaconState.activeBeacon, newBeacon => {
-            if (this.timeout) {
-                clearTimeout(this.timeout);
-                this.timeout = null;
-            }
-            this.beacon = null;
-            this.timeout = setTimeout(() => {
-                this.beacon = newBeacon;
-            }, BEACON_DELAY);
+            timeoutWithAction(
+                this,
+                () => { this.beacon = null; },
+                () => { this.beacon = newBeacon; },
+                BEACON_DELAY
+            );
         }, true);
     }
 

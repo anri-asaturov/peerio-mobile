@@ -6,5 +6,6 @@ export default class PlusBorderIcon extends HeaderIconBase {
     // to compensate for borderwidth
     style = { marginRight: -4 };
     innerStyle = { borderWidth: 2, borderColor: vars.white, borderRadius: 4 };
-    action = () => this.props.action();
+    action = this.props.action;
+    beacon = this.props.beacon;
 }

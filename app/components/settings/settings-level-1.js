@@ -131,6 +131,11 @@ export default class SettingsLevel1 extends SafeComponent {
         console.log('Beacons are:', User.current.beacons.toJSON());
     };
 
+    clearBeaconsState = () => {
+        User.current.beacons.clear();
+        User.current.saveBeacons();
+    };
+
     /**
      * Scroll helper is used to provide scrolling capability
      * to the test script. Note that it overrides ref and onScroll
@@ -267,7 +272,8 @@ export default class SettingsLevel1 extends SafeComponent {
                     {__DEV__ && <BasicSettingsItem title="test warning" onPress={() => warnings.addSevere('warning')} />}
                     {__DEV__ && <BasicSettingsItem title="reset external setting" onPress={this.resetExternalSetting} />}
                     {__DEV__ && <BasicSettingsItem title="log MC props" onPress={this.showProps} />}
-                    {__DEV__ && <BasicSettingsItem title="show beacons state" onPress={this.showBeaconsState} />}
+                    {__DEV__ && <BasicSettingsItem title="show saved beacons" onPress={this.showBeaconsState} />}
+                    {__DEV__ && <BasicSettingsItem title="clear saved beacons" onPress={this.clearBeaconsState} />}
                     {/* <BasicSettingsItem title={t('payments')} onPress={() => settingsState.transition('payments')} /> */}
                     {/* <BasicSettingsItem title={t('quotas')} onPress={() => settingsState.transition('quotas')} /> */}
                 </View>

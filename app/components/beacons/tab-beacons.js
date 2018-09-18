@@ -1,51 +1,45 @@
 import { observable } from 'mobx';
-import AreaBeacon from './area-beacon';
+import SpotBeacon from './spot-beacon';
 import routes from '../routes/routes';
 
 class TabBeacons {
     get chatBeacon() {
-        const condition = () => routes.main.route === 'chats';
+        const condition = () => routes.main.inactive;
         return observable({
             id: 'mobile-chat-icon',
-            component: AreaBeacon,
-            headerText: 'title_contacts',
-            descriptionText: 'title_findContacts',
+            priority: 5,
+            flow: 'onboarding',
+            component: SpotBeacon,
+            headerText: 'title_chat_beacon',
+            descriptionText: 'description_chat_beacon',
             condition,
             position: null
         });
     }
 
     get filesBeacon() {
-        const condition = () => routes.main.route === 'files';
+        const condition = () => routes.main.inactive;
         return observable({
             id: 'mobile-files-icon',
-            component: AreaBeacon,
-            headerText: 'title_contacts',
-            descriptionText: 'title_findContacts',
+            priority: 3,
+            flow: 'onboarding',
+            component: SpotBeacon,
+            headerText: 'title_files_beacon',
+            descriptionText: 'description_files_beacon',
             position: null,
             condition
         });
     }
 
     get contactBeacon() {
-        const condition = () => routes.main.route.toLowerCase().includes('contact');
+        const condition = () => routes.main.inactive;
         return observable({
             id: 'mobile-contact-icon',
-            component: AreaBeacon,
-            headerText: 'title_contacts',
-            descriptionText: 'title_findContacts',
-            position: null,
-            condition
-        });
-    }
-
-    get settingsBeacon() {
-        const condition = () => routes.main.route === 'settings';
-        return observable({
-            id: 'mobile-settings-icon',
-            component: AreaBeacon,
-            headerText: 'title_contacts',
-            descriptionText: 'title_findContacts',
+            priority: 1,
+            flow: 'onboarding',
+            component: SpotBeacon,
+            headerText: 'title_contact_beacon',
+            descriptionText: 'description_contact_beacon',
             position: null,
             condition
         });

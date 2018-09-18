@@ -2,28 +2,78 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<a name="3.353.0"></a>
-# [3.353.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.351.0...v3.353.0) (2018-09-17)
-
-
-
-<a name="3.351.0"></a>
-# [3.351.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.350.0...v3.351.0) (2018-09-17)
+<a name="3.352.0"></a>
+# [3.352.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.345.0...v3.352.0) (2018-09-14)
 
 
 ### Bug Fixes
 
-* changed property error to errorType ([90e9064](https://github.com/PeerioTechnologies/peerio-mobile/commit/90e9064))
-* max character limit error username input ([13ece61](https://github.com/PeerioTechnologies/peerio-mobile/commit/13ece61))
-
-
-
-<a name="3.350.0"></a>
-# [3.350.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.349.0...v3.350.0) (2018-09-13)
+* add beacon back ([407e61b](https://github.com/PeerioTechnologies/peerio-mobile/commit/407e61b))
+* adjust to sdk modifications ([3a86d65](https://github.com/PeerioTechnologies/peerio-mobile/commit/3a86d65))
+* android beacon clipping and automatically determine X position of beacons ([228ff92](https://github.com/PeerioTechnologies/peerio-mobile/commit/228ff92))
+* cleanup ([6148587](https://github.com/PeerioTechnologies/peerio-mobile/commit/6148587))
+* cleanup ([f4f6f54](https://github.com/PeerioTechnologies/peerio-mobile/commit/f4f6f54))
+* cleanup ([d02a483](https://github.com/PeerioTechnologies/peerio-mobile/commit/d02a483))
+* clear state ([6bd2c37](https://github.com/PeerioTechnologies/peerio-mobile/commit/6bd2c37))
+* container w/h ([6f26631](https://github.com/PeerioTechnologies/peerio-mobile/commit/6f26631))
+* deps ([3db8bee](https://github.com/PeerioTechnologies/peerio-mobile/commit/3db8bee))
+* desc ([8443427](https://github.com/PeerioTechnologies/peerio-mobile/commit/8443427))
+* extract timeout in helper ([a1e7499](https://github.com/PeerioTechnologies/peerio-mobile/commit/a1e7499))
+* filter ([3f6909c](https://github.com/PeerioTechnologies/peerio-mobile/commit/3f6909c))
+* filter not seen ([c50599e](https://github.com/PeerioTechnologies/peerio-mobile/commit/c50599e))
+* id to remove ([0c351d1](https://github.com/PeerioTechnologies/peerio-mobile/commit/0c351d1))
+* key choice logic in key-value-storage.js ([#312](https://github.com/PeerioTechnologies/peerio-mobile/issues/312)) ([ff5af3d](https://github.com/PeerioTechnologies/peerio-mobile/commit/ff5af3d))
+* lint ([a3d21e4](https://github.com/PeerioTechnologies/peerio-mobile/commit/a3d21e4))
+* measureable icon to own file ([80e9630](https://github.com/PeerioTechnologies/peerio-mobile/commit/80e9630))
+* no settings beacon ([3af26b0](https://github.com/PeerioTechnologies/peerio-mobile/commit/3af26b0))
+* prority ([708c48b](https://github.com/PeerioTechnologies/peerio-mobile/commit/708c48b))
+* remove beacon first ([30e9f4f](https://github.com/PeerioTechnologies/peerio-mobile/commit/30e9f4f))
+* remove extra ([45440bd](https://github.com/PeerioTechnologies/peerio-mobile/commit/45440bd))
+* remove uiState.isFirstLogin condition ([58cf334](https://github.com/PeerioTechnologies/peerio-mobile/commit/58cf334))
+* top ([329dca3](https://github.com/PeerioTechnologies/peerio-mobile/commit/329dca3))
 
 
 ### Features
 
+* Android share extension ([#291](https://github.com/PeerioTechnologies/peerio-mobile/issues/291)) ([d4d0e6d](https://github.com/PeerioTechnologies/peerio-mobile/commit/d4d0e6d))
+* welcome back screen [branch ch12939] ([#309](https://github.com/PeerioTechnologies/peerio-mobile/issues/309)) ([61c6650](https://github.com/PeerioTechnologies/peerio-mobile/commit/61c6650))
+
+
+
+<a name="3.347.0"></a>
+# [3.347.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.345.0...v3.347.0) (2018-09-14)
+
+
+### Bug Fixes
+
+* add beacon back ([407e61b](https://github.com/PeerioTechnologies/peerio-mobile/commit/407e61b))
+* adjust to sdk modifications ([3a86d65](https://github.com/PeerioTechnologies/peerio-mobile/commit/3a86d65))
+* android beacon clipping and automatically determine X position of beacons ([228ff92](https://github.com/PeerioTechnologies/peerio-mobile/commit/228ff92))
+* cleanup ([6148587](https://github.com/PeerioTechnologies/peerio-mobile/commit/6148587))
+* cleanup ([f4f6f54](https://github.com/PeerioTechnologies/peerio-mobile/commit/f4f6f54))
+* cleanup ([d02a483](https://github.com/PeerioTechnologies/peerio-mobile/commit/d02a483))
+* clear state ([6bd2c37](https://github.com/PeerioTechnologies/peerio-mobile/commit/6bd2c37))
+* container w/h ([6f26631](https://github.com/PeerioTechnologies/peerio-mobile/commit/6f26631))
+* deps ([3db8bee](https://github.com/PeerioTechnologies/peerio-mobile/commit/3db8bee))
+* desc ([8443427](https://github.com/PeerioTechnologies/peerio-mobile/commit/8443427))
+* extract timeout in helper ([a1e7499](https://github.com/PeerioTechnologies/peerio-mobile/commit/a1e7499))
+* filter ([3f6909c](https://github.com/PeerioTechnologies/peerio-mobile/commit/3f6909c))
+* filter not seen ([c50599e](https://github.com/PeerioTechnologies/peerio-mobile/commit/c50599e))
+* id to remove ([0c351d1](https://github.com/PeerioTechnologies/peerio-mobile/commit/0c351d1))
+* key choice logic in key-value-storage.js ([#312](https://github.com/PeerioTechnologies/peerio-mobile/issues/312)) ([ff5af3d](https://github.com/PeerioTechnologies/peerio-mobile/commit/ff5af3d))
+* lint ([a3d21e4](https://github.com/PeerioTechnologies/peerio-mobile/commit/a3d21e4))
+* measureable icon to own file ([80e9630](https://github.com/PeerioTechnologies/peerio-mobile/commit/80e9630))
+* no settings beacon ([3af26b0](https://github.com/PeerioTechnologies/peerio-mobile/commit/3af26b0))
+* prority ([708c48b](https://github.com/PeerioTechnologies/peerio-mobile/commit/708c48b))
+* remove beacon first ([30e9f4f](https://github.com/PeerioTechnologies/peerio-mobile/commit/30e9f4f))
+* remove extra ([45440bd](https://github.com/PeerioTechnologies/peerio-mobile/commit/45440bd))
+* remove uiState.isFirstLogin condition ([58cf334](https://github.com/PeerioTechnologies/peerio-mobile/commit/58cf334))
+* top ([329dca3](https://github.com/PeerioTechnologies/peerio-mobile/commit/329dca3))
+
+
+### Features
+
+* Android share extension ([#291](https://github.com/PeerioTechnologies/peerio-mobile/issues/291)) ([d4d0e6d](https://github.com/PeerioTechnologies/peerio-mobile/commit/d4d0e6d))
 * welcome back screen [branch ch12939] ([#309](https://github.com/PeerioTechnologies/peerio-mobile/issues/309)) ([61c6650](https://github.com/PeerioTechnologies/peerio-mobile/commit/61c6650))
 
 

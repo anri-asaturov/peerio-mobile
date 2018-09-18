@@ -26,6 +26,9 @@ import { fileStore } from '../../lib/icebear';
 import { popupUpgradeNotification, popupUpgradeProgress } from '../shared/popups';
 import preferenceStore from '../settings/preference-store';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
+import { timeoutWithAction } from '../utils/timeouts';
+
+const INACTIVE_DELAY = 5000;
 
 class RouterMain extends Router {
     // current route object
@@ -40,6 +43,7 @@ class RouterMain extends Router {
     @observable contactStateLoaded = false;
     @observable loading = false;
     @observable invoked = false;
+    @observable inactive = false;
     _initialRoute = 'chats';
 
     constructor() {
@@ -59,6 +63,15 @@ class RouterMain extends Router {
         reaction(() => fileStore.migration.pending, migration => {
             if (migration) this.filesystemUpgrade();
         }, true);
+
+        reaction(() => this.current || this.currentIndex, () => {
+            timeoutWithAction(
+                this,
+                () => { this.inactive = false; },
+                () => { this.inactive = true; },
+                INACTIVE_DELAY
+            );
+        });
     }
 
     @action initialRoute() {

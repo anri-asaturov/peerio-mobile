@@ -29,13 +29,31 @@ export default class SpotBeacon extends SafeComponent {
         LayoutAnimation.easeInEaseOut();
     }
 
-    @action.bound onPress() {
-        const { id } = this.props;
-        beaconState.removeBeacon(id);
-
+    markSeen = (id) => {
         User.current.beacons.set(id, true);
         // we are not waiting for saveBeacons because there's no visual feedback
         User.current.saveBeacons();
+    };
+
+    @action.bound onPress() {
+        const { id } = this.props;
+        beaconState.removeBeacon(id);
+        this.markSeen(id);
+    }
+
+    @action.bound onPressContainer() {
+        const { flow } = this.props;
+        this.onPress();
+        if (flow) {
+            beaconState.beacons
+                .filter(b => b.flow === flow)
+                .forEach(b => this.markSeen(b.id));
+        }
+    }
+
+    @action.bound onPressIcon() {
+        this.onPress();
+        this.props.onPressIcon();
     }
 
     get beaconHeight() {
@@ -152,7 +170,6 @@ export default class SpotBeacon extends SafeComponent {
 
     renderThrow() {
         const { position, headerText, descriptionText } = this.props;
-
         if (!position || !headerText && !descriptionText) return null;
 
         const {
@@ -193,16 +210,26 @@ export default class SpotBeacon extends SafeComponent {
             borderRadius: this.bubbleDiameter / 2,
             borderColor: vars.beaconBg,
             borderWidth: vars.beaconBorderWidth,
+            backgroundColor: vars.beaconBg,
             justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: this.props.spotBgColor
+            alignItems: 'center'
         }];
+
+        const innerCircle = {
+            position: 'relative',
+            width: this.bubbleDiameter - vars.beaconBorderWidth * 2,
+            height: this.bubbleDiameter - vars.beaconBorderWidth * 2,
+            borderRadius: this.bubbleDiameter / 2,
+            backgroundColor: this.props.spotBgColor,
+            justifyContent: 'center',
+            alignItems: 'center'
+        };
 
         return (
             <View style={container} pointerEvents="box-none">
                 <TouchableOpacity
                     activeOpacity={1}
-                    onPress={this.onPress}
+                    onPress={this.onPressContainer}
                     pressRetentionOffset={vars.pressRetentionOffset}
                     style={rectangle}>
                     {headerText && <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>{tx(headerText)}</Text>}
@@ -210,10 +237,12 @@ export default class SpotBeacon extends SafeComponent {
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={1}
-                    onPress={this.onPress}
+                    onPress={this.onPressIcon}
                     pressRetentionOffset={vars.pressRetentionOffset}
                     style={outerCircle}>
-                    {this.props.content}
+                    <View style={innerCircle}>
+                        {this.props.content}
+                    </View>
                 </TouchableOpacity>
             </View>
         );

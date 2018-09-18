@@ -21,6 +21,7 @@ import UnreadMessageIndicator from './unread-message-indicator';
 import { vars } from '../../styles/styles';
 import ChatZeroStatePlaceholder from './chat-zero-state-placeholder';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
+import headerBeacons from '../beacons/header-beacons';
 
 const INITIAL_LIST_SIZE = 10;
 
@@ -38,9 +39,12 @@ export default class ChatList extends SafeComponent {
     @observable enableIndicators = false;
 
     get rightIcon() {
-        return (<PlusBorderIcon
-            action={CreateActionSheet.show}
-            testID="buttonCreateNewChat" />);
+        return (
+            <PlusBorderIcon
+                action={CreateActionSheet.show}
+                beacon={headerBeacons.startChatBeacon}
+                testID="buttonCreateNewChat" />
+        );
     }
 
     // TODO use for firstLoginZeroState

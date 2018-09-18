@@ -11,7 +11,7 @@ import routerMain from '../routes/router-main';
 import icons from '../helpers/icons';
 import testLabel from '../helpers/test-label';
 import uiState from './ui-state';
-import beaconState from '../beacons/beacon-state';
+import MeasureableIcon from './measureable-icon';
 
 const actionCellStyle = {
     flex: 1,
@@ -23,42 +23,6 @@ const actionCellStyle = {
 const actionTextStyle = {
     color: vars.white
 };
-
-@observer
-class MeasureableIcon extends SafeComponent {
-    layout = () => {
-        const { beacon, icon } = this.props;
-        if (beacon) {
-            this.ref.measure(
-                (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-                    console.log(`frameWidth: ${frameWidth}, frameHeight: ${frameHeight}, pageX: ${pageX}, pageY: ${pageY}`);
-                    beacon.position = { frameWidth, frameHeight, pageX, pageY };
-                    beacon.content = icons.plain(icon, undefined, vars.peerioBlue);
-                    // color of tab container
-                    beacon.spotBgColor = vars.darkBlueBackground15;
-                    beaconState.requestBeacon(beacon);
-                });
-        }
-    };
-
-    // TODO clean up mock beacons
-    // ---------------------
-    componentWillUnmount() {
-        if (this.props.beacon) beaconState.removeBeacon(this.props.beacon.id);
-    }
-
-    setRef = ref => { this.ref = ref; };
-
-    renderThrow() {
-        return (
-            <View
-                onLayout={this.layout}
-                ref={this.setRef}>{/* TODO clean up mock beacons */}
-                {icons.plain(this.props.icon, undefined, this.props.color)}
-            </View>
-        );
-    }
-}
 
 @observer
 export default class TabItem extends SafeComponent {
@@ -91,7 +55,11 @@ export default class TabItem extends SafeComponent {
                 style={actionCellStyle}>
                 <View
                     pointerEvents="none" style={{ alignItems: 'center' }}>
-                    <MeasureableIcon {...this.props} color={color} />
+                    <MeasureableIcon
+                        {...this.props}
+                        color={color}
+                        onPress={this.onPressTabItem}
+                        spotBgColor={vars.darkBlueBackground15} />
                     <Text style={[actionTextStyle, { color }]}>{text}</Text>
                     {indicator}
                 </View>

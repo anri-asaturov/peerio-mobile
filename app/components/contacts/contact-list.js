@@ -16,6 +16,7 @@ import uiState from '../layout/ui-state';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
 import drawerState from '../shared/drawer-state';
 import ListSeparator from '../shared/list-separator';
+import headerBeacons from '../beacons/header-beacons';
 
 const INITIAL_LIST_SIZE = 20;
 
@@ -73,7 +74,13 @@ export default class ContactList extends SafeComponent {
     }
 
     get rightIcon() {
-        return <PlusBorderIcon action={contactState.fabAction} testID="addContactButton" />;
+        return (
+            <PlusBorderIcon
+                action={contactState.fabAction}
+                testID="addContactButton"
+                beacon={headerBeacons.addContactBeacon}
+            />
+        );
     }
 
     get contactListComponent() {
