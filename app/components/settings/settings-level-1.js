@@ -26,6 +26,7 @@ import AvatarCircle from '../shared/avatar-circle';
 import PaymentStorageUsageItem from '../payments/payments-storage-usage-item';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { TopDrawerMaintenance, TopDrawerNewContact } from '../shared/top-drawer-components';
+import routes from '../routes/routes';
 
 const svStyle = {
     flexGrow: 1,
@@ -134,6 +135,7 @@ export default class SettingsLevel1 extends SafeComponent {
     clearBeaconsState = () => {
         User.current.beacons.clear();
         User.current.saveBeacons();
+        routes.main.chats();
     };
 
     /**
@@ -255,6 +257,8 @@ export default class SettingsLevel1 extends SafeComponent {
                         testID="button_signOut"
                     />
                     {this.spacer}
+                    {__DEV__ && <BasicSettingsItem title="show saved beacons" onPress={this.showBeaconsState} />}
+                    {__DEV__ && <BasicSettingsItem title="clear saved beacons" onPress={this.clearBeaconsState} />}
                     {__DEV__ && <BasicSettingsItem title="save account key" onPress={this.testSaveAccountKey} />}
                     {__DEV__ && <BasicSettingsItem title="global drawer" onPress={this.testGlobalDrawer} />}
                     {__DEV__ && <BasicSettingsItem title="contact drawer" onPress={this.testLocalDrawer} />}
@@ -272,8 +276,6 @@ export default class SettingsLevel1 extends SafeComponent {
                     {__DEV__ && <BasicSettingsItem title="test warning" onPress={() => warnings.addSevere('warning')} />}
                     {__DEV__ && <BasicSettingsItem title="reset external setting" onPress={this.resetExternalSetting} />}
                     {__DEV__ && <BasicSettingsItem title="log MC props" onPress={this.showProps} />}
-                    {__DEV__ && <BasicSettingsItem title="show saved beacons" onPress={this.showBeaconsState} />}
-                    {__DEV__ && <BasicSettingsItem title="clear saved beacons" onPress={this.clearBeaconsState} />}
                     {/* <BasicSettingsItem title={t('payments')} onPress={() => settingsState.transition('payments')} /> */}
                     {/* <BasicSettingsItem title={t('quotas')} onPress={() => settingsState.transition('quotas')} /> */}
                 </View>

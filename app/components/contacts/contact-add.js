@@ -96,7 +96,6 @@ export default class ContactAdd extends SafeComponent {
     };
 
     get leftIcon() {
-        if (contactState.empty) return null;
         return <BackIcon action={routes.main.contacts} />;
     }
 

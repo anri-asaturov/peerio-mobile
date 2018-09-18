@@ -263,6 +263,10 @@ const vars = {
     wizardPadding: 36,
     height80: height * 0.8,
     topCircleSizeSmall: 52,
+    contactZeroStateArrowWidth: 50,
+    contactZeroStateArrowWidthSmall: 40,
+    contactZeroStateArrowHeight: 30,
+    contactZeroStateArrowHeightSmall: 24,
 
     font: {
         size: {

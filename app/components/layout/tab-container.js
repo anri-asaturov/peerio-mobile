@@ -48,7 +48,7 @@ export default class TabContainer extends SafeComponent {
                     beacon={tabBeacons.filesBeacon} />
                 <TabItem
                     text={t('title_contacts')}
-                    route={contactState.empty ? 'contactAdd' : 'contacts'}
+                    route="contacts"
                     icon="people"
                     highlightList={['contactAdd', 'contactInvite']}
                     beacon={tabBeacons.contactBeacon} />

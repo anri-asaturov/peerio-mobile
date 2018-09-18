@@ -4,7 +4,7 @@ import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
 import { action, computed } from 'mobx';
 import SafeComponent from '../shared/safe-component';
-import ContactsPlaceholder from './contacts-placeholder';
+import ContactZeroState from './contact-zero-state';
 import ProgressOverlay from '../shared/progress-overlay';
 import ContactItem from './contact-item';
 import ContactSectionHeader from './contact-section-header';
@@ -86,7 +86,7 @@ export default class ContactList extends SafeComponent {
     get contactListComponent() {
         return !contactState.empty
             ? this.listView()
-            : !contactState.store.loading && <ContactsPlaceholder />;
+            : !contactState.store.loading && <ContactZeroState />;
     }
 
     renderThrow() {

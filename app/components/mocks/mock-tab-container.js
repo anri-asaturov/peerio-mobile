@@ -48,7 +48,7 @@ export default class MockTabContainer extends SafeComponent {
                     beacon={mockTabBeacons.filesBeacon} />
                 <TabItem
                     text={t('title_contacts')}
-                    route={contactState.empty ? 'contactAdd' : 'contacts'}
+                    route="contacts"
                     icon="people"
                     highlightList={['contactAdd', 'contactInvite']}
                     beacon={mockTabBeacons.contactBeacon} />
