@@ -12,7 +12,7 @@ class MockTabBeacons {
             component: uiState.mockBeaconType ? AreaBeacon : SpotBeacon,
             sidePointer: !uiState.mockBeaconArrowDirection,
             headerText: 'title_contacts',
-            descriptionText: 'title_findContacts',
+            descriptionText: 'description_startChat_beacon',
             condition,
             position: null
         });

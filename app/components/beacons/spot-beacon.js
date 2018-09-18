@@ -182,8 +182,8 @@ export default class SpotBeacon extends SafeComponent {
         } = this.horizontalMeasures;
 
         // set padding between bubble and text based on where the bubble is positioned
-        const paddingTop = this.isParentTop ? this.bubblePadding : vars.beaconPadding;
-        const paddingBottom = this.isParentTop ? vars.beaconPadding : this.bubblePadding;
+        const paddingTop = this.isParentTop ? this.bubbleDiameter / 4 : vars.beaconPadding;
+        const paddingBottom = this.isParentTop ? vars.beaconPadding : this.bubbleDiameter / 4;
 
         const container = [containerPositionX, this.containerPositionY, {
             width: containerWidth,
@@ -232,8 +232,16 @@ export default class SpotBeacon extends SafeComponent {
                     onPress={this.onPressContainer}
                     pressRetentionOffset={vars.pressRetentionOffset}
                     style={rectangle}>
-                    {headerText && <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>{tx(headerText)}</Text>}
-                    {descriptionText && <Text semibold={!headerText} style={textStyle} onLayout={this.onDescriptionTextLayout} >{tx(descriptionText)}</Text>}
+                    {headerText && (
+                        <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>
+                            {tx(headerText)}
+                        </Text>
+                    )}
+                    {descriptionText && (
+                        <Text semibold={!headerText} style={textStyle} onLayout={this.onDescriptionTextLayout} >
+                            {tx(descriptionText)}
+                        </Text>
+                    )}
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={1}

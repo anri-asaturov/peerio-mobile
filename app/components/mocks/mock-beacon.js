@@ -20,7 +20,7 @@ import beaconState from '../beacons/beacon-state';
 @observer
 export default class MockBeacon extends Component {
     @observable showVertical = true;
-    @observable showTop = false;
+    @observable showTop = true;
     @observable showLeft = false;
     @observable padding;
 
