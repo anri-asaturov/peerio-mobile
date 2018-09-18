@@ -6,11 +6,10 @@ import SafeComponent from '../shared/safe-component';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import testLabel from '../helpers/test-label';
-import buttons from '../helpers/buttons';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import drawerState from '../shared/drawer-state';
-import { contactState } from '../states';
 import { adjustImageDimensions } from '../helpers/image';
+import SyncAddressButton from '../shared/sync-address-button';
 
 const { width } = Dimensions.get('window');
 
@@ -72,20 +71,13 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
             </View>);
     }
 
-    get syncButton() {
-        return (
-            <View style={{ alignItems: 'center' }}>
-                {buttons.roundBlueBgButton('button_syncAddressBook', () => contactState.testImport())}
-            </View>);
-    }
-
     renderThrow() {
         return (
             <View style={container}>
                 <ViewWithDrawer style={wrapper} alwaysBounceVertical={false}>
                     {this.title}
                     {this.zeroStateIllustration}
-                    {this.syncButton}
+                    <SyncAddressButton />
                 </ViewWithDrawer>
             </View>
         );

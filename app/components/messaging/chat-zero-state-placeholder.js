@@ -11,6 +11,8 @@ import buttons from '../helpers/buttons';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { uiState } from '../states';
 import routes from '../routes/routes';
+import preferenceStore from '../settings/preference-store';
+import SyncAddressButton from '../shared/sync-address-button';
 
 const zeroStateImage = require('../../assets/zero_chat_state/zero-state.png');
 
@@ -84,7 +86,8 @@ export default class ChatZeroStatePlaceholder extends SafeComponent {
                         source={zeroStateImage}
                         resizeMode="contain"
                         style={imageStyle} />
-                    {this.moreDetails}
+                    {preferenceStore.prefs.importContactsInBackground ?
+                        this.moreDetails : <SyncAddressButton />}
                 </ViewWithDrawer>
             </View>
         );
