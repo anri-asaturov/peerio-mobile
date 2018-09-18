@@ -112,7 +112,7 @@ export default (c, icebear, tm) => {
             link: 'https://peerio.zendesk.com/hc/en-us/articles/360015675792'
         },
         maintenanceReadMore: {
-            link: 'https://www.peerio.com/' // TODO: should be actual URL ?
+            link: 'https://peerio.zendesk.com/hc/en-us/articles/360000371866'
         }
     };
 

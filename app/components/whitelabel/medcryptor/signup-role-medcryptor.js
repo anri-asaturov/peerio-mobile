@@ -51,7 +51,7 @@ export default class SignupRoleMedcryptor extends SafeComponent {
 
     get body() {
         return (
-            <View>
+            <View style={{ marginHorizontal: vars.inputMarginHorizontal }}>
                 {this.selectedAU && <MedcryptorSpecialtyPickerBox />}
                 <MedcryptorRolePickerBox />
             </View>
