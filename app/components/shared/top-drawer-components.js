@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { View, Linking } from 'react-native';
 import { when } from 'mobx';
 import { observer } from 'mobx-react/native';
@@ -10,17 +11,13 @@ import AvatarCircle from './avatar-circle';
 import SafeComponent from './safe-component';
 import { chatState } from '../states';
 import signupState from '../signup/signup-state';
-import { config, telemetry } from '../../lib/icebear';
+import { config, telemetry, serverSettings } from '../../lib/icebear';
 import drawerState from './drawer-state';
 import preferenceStore from '../settings/preference-store';
 import fileState from '../files/file-state';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
-
-const MAINTENANCE_DAY = 'May 15';
-const MAINTENANCE_TIME1 = '2 AM';
-const MAINTENANCE_TIME2 = '5 AM';
 
 const outerCircle = {
     width: vars.iconSizeMedium2x,
@@ -68,23 +65,47 @@ class TopDrawerBackupAccountKey extends SafeComponent {
 
 @observer
 class TopDrawerMaintenance extends SafeComponent {
+    static trigger() {
+        let informInterval = Number.MAX_SAFE_INTEGER;
+        const { lastTimeSawMaintenanceNotice } = preferenceStore.prefs;
+        if (lastTimeSawMaintenanceNotice) {
+            try {
+                informInterval = new Date() - new Date(lastTimeSawMaintenanceNotice);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        // 24 hour interval between notices
+        const MIN_INFORM_INTERVAL = 24 * 60 * 60 * 1000;
+        return serverSettings.maintenanceWindow
+            && serverSettings.maintenanceWindow.length === 2
+            && informInterval > MIN_INFORM_INTERVAL;
+    }
+
+    static triggerAction() {
+        preferenceStore.prefs.lastTimeSawMaintenanceNotice = new Date();
+    }
+
+    readMore() {
+        Linking.openURL(config.translator.urlMap.maintenanceReadMore);
+    }
+
     renderThrow() {
+        // double checking in case maintenance window was set to null right before render
+        if (!TopDrawerMaintenance.trigger()) return null;
+        const [start, end] =
+            serverSettings.maintenanceWindow.map(date => moment(date).format('DD/MM/YYYY hh:mm'));
         return (
             <TopDrawer
                 {...this.props}
-                heading={tx('title_scheduledMaintenance')}
+                heading={tx('dialog_scheduledMaintenance')}
                 image={icons.imageIcon(
                     require('../../assets/info-icon.png'),
                     vars.iconSizeMedium2x
                 )}
-                descriptionLine1={tx('title_peerioUnavailable')}
-                descriptionLine2={tx('title_unavailabilityTime', {
-                    day: MAINTENANCE_DAY,
-                    time1: MAINTENANCE_TIME1,
-                    time2: MAINTENANCE_TIME2
-                })}
+                descriptionLine1={tx('dialog_scheduledMaintenanceDates', { start, end })}
                 buttonText={tx('title_readMore')}
-                buttonAction={() => console.log('open link')} // TODO fix link
+                buttonAction={this.readMore}
             />
         );
     }
@@ -144,14 +165,22 @@ class TopDrawerAutoMount extends SafeComponent {
         await new Promise(resolve => when(() => preferenceStore.loaded, resolve));
         drawerState.addDrawerTrigger(
             TopDrawerPendingFiles,
-            drawerState.DRAWER_CONTEXT.FILES,
-            {},
+            drawerState.DRAWER_CONTEXT.FILES, // files-only context
+            {}, // empty additional props
             () => preferenceStore.prefs.pendingFilesBannerVisible && fileState.store.folderStore.root.hasLegacyFiles,
             () => {
                 preferenceStore.prefs.pendingFilesBannerVisible = false;
             }
         );
+        drawerState.addDrawerTrigger(
+            TopDrawerMaintenance,
+            null, // global context
+            {}, // empty additional props
+            TopDrawerMaintenance.trigger,
+            TopDrawerMaintenance.triggerAction
+        );
     }
+
     renderThrow() { return null; }
 }
 

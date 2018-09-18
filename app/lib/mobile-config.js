@@ -110,6 +110,9 @@ export default (c, icebear, tm) => {
         },
         pendingFiles: {
             link: 'https://peerio.zendesk.com/hc/en-us/articles/360015675792'
+        },
+        maintenanceReadMore: {
+            link: 'https://www.peerio.com/' // TODO: should be actual URL ?
         }
     };
 

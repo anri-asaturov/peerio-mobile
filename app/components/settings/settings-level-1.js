@@ -25,7 +25,7 @@ import icons from '../helpers/icons';
 import AvatarCircle from '../shared/avatar-circle';
 import PaymentStorageUsageItem from '../payments/payments-storage-usage-item';
 import ViewWithDrawer from '../shared/view-with-drawer';
-import { TopDrawerMaintenance, TopDrawerNewContact } from '../shared/top-drawer-components';
+import { TopDrawerBackupAccountKey, TopDrawerNewContact } from '../shared/top-drawer-components';
 import routes from '../routes/routes';
 
 const svStyle = {
@@ -111,7 +111,7 @@ export default class SettingsLevel1 extends SafeComponent {
     }
 
     testGlobalDrawer = () => {
-        setTimeout(() => drawerState.addDrawer(TopDrawerMaintenance), 3000);
+        setTimeout(() => drawerState.addDrawer(TopDrawerBackupAccountKey), 3000);
     };
 
     testLocalDrawer = () => {

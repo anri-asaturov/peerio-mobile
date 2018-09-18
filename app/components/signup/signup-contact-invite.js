@@ -7,7 +7,6 @@ import { headerContainer, textStyle, skipButtonStyle, listHeader, textListTitle,
 import { tx } from '../utils/translator';
 import buttons from '../helpers/buttons';
 import contactState from '../contacts/contact-state';
-import signupState from '../signup/signup-state';
 import ContactImportItem from '../contacts/contact-import-item';
 import snackbarState from '../snackbars/snackbar-state';
 import SearchBar from '../controls/search-bar';
@@ -18,6 +17,7 @@ import ListItem from './signup-contact-list-item';
 import Text from '../controls/custom-text';
 import imagePopups from '../shared/image-popups';
 import SafeComponent from '../shared/safe-component';
+import routes from '../routes/routes';
 
 const _ = require('lodash');
 const iconClear = require('../../assets/file_icons/ic_close.png');
@@ -95,7 +95,7 @@ export default class SignupContactInvite extends SafeComponent {
             snackbarState.pushTemporary(tx('title_contactsAdded', { contactsAdded }));
         }
         this.silentInvite();
-        signupState.finishSignUp();
+        routes.modal.discard();
     }
 
     @action.bound onChangeSearchBarText(text) {
@@ -234,7 +234,7 @@ export default class SignupContactInvite extends SafeComponent {
             }
             if (message) snackbarState.pushTemporary(message);
             this.silentInvite(true);
-            signupState.finishSignUp();
+            routes.modal.discard();
         }
     }
 

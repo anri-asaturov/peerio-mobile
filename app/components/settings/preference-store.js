@@ -20,7 +20,8 @@ class PreferenceStore {
         peerioContentEnabled: true,
         showMoveSharedFolderPopup: true,
         importContactsInBackground: false,
-        pendingFilesBannerVisible: true
+        pendingFilesBannerVisible: true,
+        lastTimeSawMaintenanceNotice: null
     };
 
     async observePreference(key, dbName, localStore) {
