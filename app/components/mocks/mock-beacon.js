@@ -27,6 +27,9 @@ export default class MockBeacon extends Component {
     componentWillMount() {
         User.current = mockContactStore.createMock();
         User.current.activePlans = [];
+        User.current.beacons = {
+            get() { return null; }
+        };
         contactState.store = mockContactStore;
         contactState.init();
         routes.main.route = 'chats';
