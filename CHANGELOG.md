@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.353.0"></a>
+# [3.353.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.345.0...v3.353.0) (2018-09-18)
+
+
+### Bug Fixes
+
+* adjust to sdk modifications ([3a86d65](https://github.com/PeerioTechnologies/peerio-mobile/commit/3a86d65))
+* android beacon clipping and automatically determine X position of beacons ([228ff92](https://github.com/PeerioTechnologies/peerio-mobile/commit/228ff92))
+* area beacon horizontal position ([798677c](https://github.com/PeerioTechnologies/peerio-mobile/commit/798677c))
+* container w/h ([6f26631](https://github.com/PeerioTechnologies/peerio-mobile/commit/6f26631))
+* deps ([3db8bee](https://github.com/PeerioTechnologies/peerio-mobile/commit/3db8bee))
+* id to remove ([0c351d1](https://github.com/PeerioTechnologies/peerio-mobile/commit/0c351d1))
+* key choice logic in key-value-storage.js ([#312](https://github.com/PeerioTechnologies/peerio-mobile/issues/312)) ([ff5af3d](https://github.com/PeerioTechnologies/peerio-mobile/commit/ff5af3d))
+* made mock buttons reactive ([bae16ca](https://github.com/PeerioTechnologies/peerio-mobile/commit/bae16ca))
+* remove uiState.isFirstLogin condition ([58cf334](https://github.com/PeerioTechnologies/peerio-mobile/commit/58cf334))
+* remove unused error case ([2f63505](https://github.com/PeerioTechnologies/peerio-mobile/commit/2f63505))
+* rename beacon props ([4790e6e](https://github.com/PeerioTechnologies/peerio-mobile/commit/4790e6e))
+* spot beacon UI when in top half of screen ([d60aabf](https://github.com/PeerioTechnologies/peerio-mobile/commit/d60aabf))
+* spot beacons UI ([28a87a0](https://github.com/PeerioTechnologies/peerio-mobile/commit/28a87a0))
+
+
+### Features
+
+* Android share extension ([#291](https://github.com/PeerioTechnologies/peerio-mobile/issues/291)) ([d4d0e6d](https://github.com/PeerioTechnologies/peerio-mobile/commit/d4d0e6d))
+* no keychain errors popups. retry instead [ch13622] ([#316](https://github.com/PeerioTechnologies/peerio-mobile/issues/316)) ([8ad12fa](https://github.com/PeerioTechnologies/peerio-mobile/commit/8ad12fa))
+* pending files top drawer [ch13632] ([#317](https://github.com/PeerioTechnologies/peerio-mobile/issues/317)) ([c6d82be](https://github.com/PeerioTechnologies/peerio-mobile/commit/c6d82be))
+* welcome back screen [branch ch12939] ([#309](https://github.com/PeerioTechnologies/peerio-mobile/issues/309)) ([61c6650](https://github.com/PeerioTechnologies/peerio-mobile/commit/61c6650))
+
+
+
 <a name="3.352.0"></a>
 # [3.352.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.345.0...v3.352.0) (2018-09-14)
 
