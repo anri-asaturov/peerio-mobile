@@ -11,6 +11,7 @@ import drawerState from '../shared/drawer-state';
 import { adjustImageDimensions } from '../helpers/image';
 import preferenceStore from '../settings/preference-store';
 import SyncAddressButton from '../shared/sync-address-button';
+import zeroStateBeacons from '../beacons/zerostate-beacons';
 
 const { width } = Dimensions.get('window');
 
@@ -79,7 +80,7 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
                     {this.title}
                     {this.zeroStateIllustration}
                     {preferenceStore.prefs.importContactsInBackground
-                        ? null : <SyncAddressButton />}
+                        ? null : <SyncAddressButton beacon={zeroStateBeacons.syncBeacon} />}
                 </ViewWithDrawer>
             </View>
         );

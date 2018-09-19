@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
 import SpotBeacon from './spot-beacon';
+import AreaBeacon from './area-beacon';
 import routes from '../routes/routes';
 import uiState from '../layout/ui-state';
 import { chatStore, fileStore, contactStore } from '../../lib/peerio-icebear';
@@ -49,10 +50,19 @@ const addContactBeacon = createZeroStateBeacon({
     descriptionText: 'description_search_beacon'
 });
 
+const syncBeacon = createZeroStateBeacon({
+    id: 'sync',
+    condition: () => true,
+    priority: 0,
+    component: AreaBeacon,
+    descriptionText: 'description_sync_beacon'
+});
+
 const zeroStateBeacons = {
     startChatBeacon,
     uploadFileBeacon,
-    addContactBeacon
+    addContactBeacon,
+    syncBeacon
 };
 
 global.zeroStateBeacons = zeroStateBeacons;

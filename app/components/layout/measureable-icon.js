@@ -1,25 +1,23 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View } from 'react-native';
-import SafeComponent from '../shared/safe-component';
 import icons from '../helpers/icons';
 import beaconState from '../beacons/beacon-state';
+import MeasureableView from '../shared/measureable-view';
 
 @observer
-export default class MeasureableIcon extends SafeComponent {
-    layout = () => {
+export default class MeasureableIcon extends MeasureableView {
+    onMeasure = (position) => {
         const { beacon, icon, onPress, spotBgColor } = this.props;
-        if (beacon) {
-            this.ref.measure(
-                (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-                    console.log(`frameWidth: ${frameWidth}, frameHeight: ${frameHeight}, pageX: ${pageX}, pageY: ${pageY}`);
-                    beacon.position = { frameWidth, frameHeight, pageX, pageY };
-                    beacon.content = icons.plain(icon, undefined, this.props.color);
-                    beacon.onPressIcon = onPress;
-                    beacon.spotBgColor = spotBgColor;
-                    beaconState.requestBeacon(beacon);
-                });
+        if (!beacon) {
+            console.log('MeasureableIcon: ignoring empty beacon');
+            return;
         }
+        // console.log(JSON.stringify(position));
+        beacon.position = position;
+        beacon.content = icons.plain(icon, undefined, this.props.color);
+        beacon.onPressIcon = onPress;
+        beacon.spotBgColor = spotBgColor;
+        beaconState.requestBeacon(beacon);
     };
 
     // TODO clean up mock beacons
@@ -28,15 +26,11 @@ export default class MeasureableIcon extends SafeComponent {
         if (this.props.beacon) beaconState.removeBeacon(this.props.beacon.id);
     }
 
-    setRef = ref => { this.ref = ref; };
-
     renderThrow() {
         return (
-            <View
-                onLayout={this.layout}
-                ref={this.setRef}>{/* TODO clean up mock beacons */}
+            <MeasureableView onMeasure={this.props.beacon ? this.onMeasure : null}>
                 {icons.plain(this.props.icon, undefined, this.props.color)}
-            </View>
+            </MeasureableView>
         );
     }
 }

@@ -124,10 +124,10 @@ export default class AreaBeacon extends AbstractBeacon {
         if (!this.props.sidePointer) {
             return (this.isParentTop ?
                 { top: pageY + frameHeight } :
-                { bottom: windowHeight - (pageY + frameHeight) }
+                { bottom: windowHeight - pageY }
             );
         }
-        return { top: pageY - this.beaconHeight / 2 + frameHeight / 2 };
+        return { bottom: pageY - this.beaconHeight / 2 + frameHeight / 2 };
     }
 
     get rectanglePositionY() {
