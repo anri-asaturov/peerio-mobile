@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.362.0"></a>
+# [3.362.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.361.0...v3.362.0) (2018-09-19)
+
+
+### Bug Fixes
+
+* fix saving settings on last step ([8585676](https://github.com/PeerioTechnologies/peerio-mobile/commit/8585676))
+
+
+### Features
+
+* hide sync button after sync in contacts lest ([d07978c](https://github.com/PeerioTechnologies/peerio-mobile/commit/d07978c))
+* maintenance top drawer for mobile [ch13234] ([#319](https://github.com/PeerioTechnologies/peerio-mobile/issues/319)) ([aa32153](https://github.com/PeerioTechnologies/peerio-mobile/commit/aa32153))
+* measureable view, area beacon ([637c834](https://github.com/PeerioTechnologies/peerio-mobile/commit/637c834))
+* onboarding beacons should dismiss if user ignores their action [ch13902] ([cc35564](https://github.com/PeerioTechnologies/peerio-mobile/commit/cc35564))
+* soft request permissions on test import ([9d4a971](https://github.com/PeerioTechnologies/peerio-mobile/commit/9d4a971))
+
+
+
 <a name="3.361.0"></a>
 # [3.361.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.345.0...v3.361.0) (2018-09-18)
 
