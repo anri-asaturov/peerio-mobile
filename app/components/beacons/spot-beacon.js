@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { action, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { View, Dimensions, TouchableOpacity } from 'react-native';
 import { vars } from '../../styles/styles';
@@ -8,7 +7,6 @@ import Text from '../controls/custom-text';
 import { tx } from '../utils/translator';
 import AbstractBeacon from './abstract-beacon';
 
-const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const MINIMUM_BUBBLE_DIAMETER = 32;
@@ -21,8 +19,6 @@ const textStyle = {
 
 @observer
 export default class SpotBeacon extends AbstractBeacon {
-    @observable descriptionTextHeight;
-
     get beaconHeight() {
         const { headerText, descriptionText } = this.props;
         return (
@@ -36,12 +32,6 @@ export default class SpotBeacon extends AbstractBeacon {
             (this.bubbleDiameter / 2));
     }
 
-    // Returns true if beacon is pointing to an element that is in the top half of the screen
-    get isParentTop() {
-        if (!this.props.position) return null;
-        const { pageY: y } = this.props.position;
-        return y <= windowHeight / 2;
-    }
     get bubbleDiameter() {
         const outerDiameter = this.props.position.frameWidth + 8 + (2 * vars.beaconBorderWidth);
         return outerDiameter >= MINIMUM_BUBBLE_DIAMETER ? outerDiameter : MINIMUM_BUBBLE_DIAMETER;
@@ -128,11 +118,6 @@ export default class SpotBeacon extends AbstractBeacon {
 
     get circlePositionY() {
         return this.isParentTop ? { top: 0 } : { bottom: 0 };
-    }
-
-    @action.bound onDescriptionTextLayout(e) {
-        const { height } = e.nativeEvent.layout;
-        this.descriptionTextHeight = height;
     }
 
     renderThrow() {

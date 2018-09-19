@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { action, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { View, Dimensions, TouchableOpacity, LayoutAnimation, Image } from 'react-native';
-import SafeComponent from '../shared/safe-component';
+import { View, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { vars } from '../../styles/styles';
 import Text from '../controls/custom-text';
-import { User } from '../../lib/icebear';
-import beaconState from './beacon-state';
 import { tx } from '../utils/translator';
+import AbstractBeacon from './abstract-beacon';
 
 const pointerUpImg = require('../../assets/beacon-pointer-up.png');
 const pointerDownImg = require('../../assets/beacon-pointer-down.png');
@@ -25,22 +22,7 @@ const textStyle = {
 };
 
 @observer
-export default class AreaBeacon extends SafeComponent {
-    @observable descriptionTextHeight;
-
-    componentWillMount() {
-        LayoutAnimation.easeInEaseOut();
-    }
-
-    @action.bound onPress() {
-        const { id } = this.props;
-        beaconState.removeBeacon(id);
-
-        User.current.beacons.set(id, true);
-        // we are not waiting for saveBeacons because there's no visual feedback
-        User.current.saveBeacons();
-    }
-
+export default class AreaBeacon extends AbstractBeacon {
     get beaconHeight() {
         const { headerText, descriptionText } = this.props;
         return (
@@ -50,20 +32,6 @@ export default class AreaBeacon extends SafeComponent {
             (descriptionText ? this.descriptionTextHeight : 0) +
             // Container padding
             (2 * vars.beaconPadding));
-    }
-
-    // Returns true if beacon is pointing to an element that is in the top half of the screen
-    get isParentTop() {
-        if (!this.props.position) return null;
-        const { pageY: y } = this.props.position;
-        return y <= windowHeight / 2;
-    }
-
-    // Returns true if beacon is pointing to an element that is in the left half of the screen
-    get isParentLeft() {
-        if (!this.props.position) return null;
-        const { pageX: x } = this.props.position;
-        return x <= windowWidth / 2;
     }
 
     get parentHorizontalPos() {
@@ -169,11 +137,6 @@ export default class AreaBeacon extends SafeComponent {
     get pointerPositionY () {
         if (!this.props.sidePointer) return this.isParentTop ? { top: 1 } : { bottom: 1 };
         return { top: this.beaconHeight / 2 - this.pointerHeight / 2 };
-    }
-
-    @action.bound onDescriptionTextLayout(e) {
-        const { height } = e.nativeEvent.layout;
-        this.descriptionTextHeight = height;
     }
 
     renderThrow() {
