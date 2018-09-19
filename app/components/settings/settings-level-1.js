@@ -27,6 +27,7 @@ import PaymentStorageUsageItem from '../payments/payments-storage-usage-item';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { TopDrawerBackupAccountKey, TopDrawerNewContact } from '../shared/top-drawer-components';
 import routes from '../routes/routes';
+import uiState from '../layout/ui-state';
 
 const svStyle = {
     flexGrow: 1,
@@ -135,6 +136,7 @@ export default class SettingsLevel1 extends SafeComponent {
     clearBeaconsState = () => {
         User.current.beacons.clear();
         User.current.saveBeacons();
+        uiState.isFirstLogin = true;
         routes.main.chats();
     };
 

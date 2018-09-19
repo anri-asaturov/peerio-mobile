@@ -2,12 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { View, Dimensions, TouchableOpacity, LayoutAnimation } from 'react-native';
-import SafeComponent from '../shared/safe-component';
+import { View, Dimensions, TouchableOpacity } from 'react-native';
 import { vars } from '../../styles/styles';
 import Text from '../controls/custom-text';
-import beaconState from './beacon-state';
 import { tx } from '../utils/translator';
+import AbstractBeacon from './abstract-beacon';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -21,37 +20,8 @@ const textStyle = {
 };
 
 @observer
-export default class SpotBeacon extends SafeComponent {
+export default class SpotBeacon extends AbstractBeacon {
     @observable descriptionTextHeight;
-
-    componentWillMount() {
-        LayoutAnimation.easeInEaseOut();
-    }
-
-    @action.bound onPress() {
-        const { id } = this.props;
-        beaconState.removeBeacon(id);
-        beaconState.markSeen([id]);
-    }
-
-    @action.bound onPressContainer() {
-        // pressing container should break the flow of beacons
-        // if we have one. to handle that we use onDismiss
-        const { onDismiss, id } = this.props;
-        if (onDismiss) {
-            // we are not calling onDismiss to not
-            // spam saving beacon requests
-            beaconState.removeBeacon(id);
-            onDismiss();
-        } else {
-            this.onPress();
-        }
-    }
-
-    @action.bound onPressIcon() {
-        this.onPress();
-        this.props.onPressIcon();
-    }
 
     get beaconHeight() {
         const { headerText, descriptionText } = this.props;
