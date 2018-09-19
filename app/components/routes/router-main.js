@@ -4,6 +4,7 @@ import { observable, reaction, action, when } from 'mobx';
 import RNKeepAwake from 'react-native-keep-awake';
 import Router from './router';
 import uiState from '../layout/ui-state';
+import WelcomeZeroState from '../layout/welcome-zero-state';
 import SettingsLevel1 from '../settings/settings-level-1';
 import SettingsLevel2 from '../settings/settings-level-2';
 import SettingsLevel3 from '../settings/settings-level-3';
@@ -44,13 +45,14 @@ class RouterMain extends Router {
     @observable loading = false;
     @observable invoked = false;
     @observable inactive = false;
-    _initialRoute = 'chats';
+    _initialRoute;
 
     constructor() {
         super();
         routes.main = this;
         reaction(() => this.currentIndex && (this.route !== 'chats'), i => { this.isBackVisible = i > 0; });
         reaction(() => [this.route, this.currentIndex], () => uiState.hideAll());
+        this.add('welcomeZeroState', [<WelcomeZeroState />]);
         this.add('files', [<Files />, <FileDetailView />], fileState);
         this.add('ghosts', [<Ghosts />, <GhostsLevel1 />], ghostState);
         this.add('chats', [<whiteLabelComponents.ChatList />, <whiteLabelComponents.Chat />], chatState);
@@ -75,6 +77,7 @@ class RouterMain extends Router {
     }
 
     @action initialRoute() {
+        this._initialRoute = uiState.isFirstLogin ? 'welcomeZeroState' : 'chats';
         this[this._initialRoute](null, true);
     }
 
