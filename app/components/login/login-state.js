@@ -2,10 +2,10 @@ import { when, observable, action, reaction } from 'mobx';
 import RNRestart from 'react-native-restart';
 import mainState from '../main/main-state';
 import settingsState from '../settings/settings-state';
-import { User, fileStore, socket, TinyDb, warnings, config, overrideServer } from '../../lib/icebear';
+import { User, fileStore, socket, TinyDb, warnings, config, overrideServer, clientApp } from '../../lib/icebear';
 import keychain from '../../lib/keychain-bridge';
 import { rnAlertYesNo } from '../../lib/alerts';
-import { popupSignOutAutologin, popupKeychainError } from '../shared/popups';
+import { popupSignOutAutologin } from '../shared/popups';
 import { tx } from '../utils/translator';
 import RoutedState from '../routes/routed-state';
 import routes from '../routes/routes';
@@ -43,8 +43,15 @@ class LoginState extends RoutedState {
         this.routes.app.loginWelcome();
     }
 
-    @action useMasterPassword() {
-        this.current = 2;
+    @action.bound async switchUser() {
+        await User.removeLastAuthenticated();
+        this.clean();
+        this.routes.app.loginClean();
+    }
+
+    @action.bound async clearLastUser() {
+        await User.removeLastAuthenticated();
+        this.clean();
         this.routes.app.loginWelcome();
     }
 
@@ -58,7 +65,9 @@ class LoginState extends RoutedState {
     @action _login(user) {
         User.current = user;
         return user.login()
-            .then(() => console.log('login-state.js: logged in'))
+            .then(() => {
+                console.log('login-state.js: logged in');
+            })
             .then(async () => {
                 mainState.activate(user);
                 if (user.autologinEnabled) return;
@@ -150,7 +159,6 @@ class LoginState extends RoutedState {
             }
             untrust = popupResult.checked;
         }
-        await User.removeLastAuthenticated();
         const { username } = User.current;
         overrideServer(null);
         await TinyDb.system.removeValue(`apple-review-login`);
@@ -165,6 +173,15 @@ class LoginState extends RoutedState {
         }
         await User.current.signout(untrust);
         await RNRestart.Restart();
+    }
+
+    // Returns true if a we have existing user data AND that user is not currently logged in
+    async haveLoggedOutUser() {
+        const userData = await User.getLastAuthenticated();
+        if (!userData) return false;
+        const { username } = userData;
+        if (await TinyDb.system.getValue(`user::${username}::keychain`)) return false;
+        return true;
     }
 
     async load() {
@@ -204,10 +221,16 @@ class LoginState extends RoutedState {
     @action async loadFromKeychain() {
         await keychain.load();
         if (!keychain.hasPlugin) return false;
-        let data = await keychain.get(await mainState.getKeychainKey(this.username));
+        const keychainKey = await mainState.getKeychainKey(this.username);
+        let data = await keychain.get(keychainKey);
         if (!data) {
-            return await popupKeychainError(null, tx('error_keychainRead'))
-                && this.loadFromKeychain();
+            console.log(`reading keychain failed`);
+            await new Promise(resolve => when(() => clientApp.isFocused, resolve));
+            console.log(`app is in foreground, trying again`);
+            data = await keychain.get(keychainKey);
+            if (!data) {
+                return false;
+            }
         }
         try {
             const touchIdKey = `user::${this.username}::touchid`;

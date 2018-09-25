@@ -3,21 +3,23 @@ import { observer } from 'mobx-react/native';
 import { View, FlatList } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import ActivityOverlay from '../controls/activity-overlay';
-import { headerContainer, textStyle, skipButtonStyle, listHeader, textListTitle, footerContainer, container } from '../../styles/signup-contact-sync';
+import { listHeader, textListTitle, footerContainer, container } from '../../styles/contact-sync';
 import { tx } from '../utils/translator';
 import buttons from '../helpers/buttons';
-import contactState from '../contacts/contact-state';
-import signupState from '../signup/signup-state';
-import ContactImportItem from '../contacts/contact-import-item';
+import contactState from './contact-state';
+import ContactImportItem from './contact-import-item';
 import snackbarState from '../snackbars/snackbar-state';
 import SearchBar from '../controls/search-bar';
 import icons from '../helpers/icons';
 import { vars } from '../../styles/styles';
 import uiState from '../layout/ui-state';
-import ListItem from './signup-contact-list-item';
+import ListItem from './contact-sync-list-item';
 import Text from '../controls/custom-text';
 import imagePopups from '../shared/image-popups';
 import SafeComponent from '../shared/safe-component';
+import BackIcon from '../layout/back-icon';
+
+import routes from '../routes/routes';
 
 const _ = require('lodash');
 const iconClear = require('../../assets/file_icons/ic_close.png');
@@ -25,12 +27,23 @@ const iconClear = require('../../assets/file_icons/ic_close.png');
 const INITIAL_LIST_SIZE = 10;
 
 @observer
-export default class SignupContactInvite extends SafeComponent {
-    get useLayout2() { return true; }
+export default class ContactSyncInvite extends SafeComponent {
     @observable contactList = [];
     @observable searchBarValue = '';
     @observable refresh = 0;
     @observable inProgress = false;
+
+    get leftIcon() {
+        return <BackIcon action={() => routes.main.contacts()} />;
+    }
+
+    get rightIcon() {
+        return buttons.whiteTextButton(tx('button_skip'), () => routes.main.contacts());
+    }
+
+    get layoutTitle() {
+        return tx('title_inviteContacts');
+    }
 
     @computed get selectedContacts() {
         return this.contactList.filter(item => item.selected);
@@ -76,7 +89,7 @@ export default class SignupContactInvite extends SafeComponent {
                 try {
                     const contact = await contactState.resolveAndCache(c.email);
                     if (contact.notFound || contact.isHidden) {
-                        const listItem = new ListItem(contact, c.fullName, true);
+                        const listItem = new ListItem(contact, c.fullName, false);
                         listItem.visible = true;
                         this.contactList.push(listItem);
                         this.refreshList();
@@ -87,15 +100,6 @@ export default class SignupContactInvite extends SafeComponent {
             })());
         });
         return Promise.all(promises);
-    }
-
-    @action.bound skip() {
-        const contactsAdded = contactState.store.addedContacts.length;
-        if (contactsAdded) {
-            snackbarState.pushTemporary(tx('title_contactsAdded', { contactsAdded }));
-        }
-        this.silentInvite();
-        signupState.finishSignUp();
     }
 
     @action.bound onChangeSearchBarText(text) {
@@ -135,14 +139,6 @@ export default class SignupContactInvite extends SafeComponent {
             : null;
         return (
             <View>
-                <View style={headerContainer}>
-                    <Text ellipsizeMode="middle" numberOfLines={1} style={textStyle}>
-                        {tx('title_inviteContacts')}
-                    </Text>
-                    <View style={skipButtonStyle}>
-                        {buttons.whiteTextButton(tx('button_skip'), () => this.skip(), null, tx('button_skip'))}
-                    </View>
-                </View>
                 <SearchBar
                     textValue={this.searchBarValue}
                     placeholderText={tx('title_searchContacts')}
@@ -234,7 +230,7 @@ export default class SignupContactInvite extends SafeComponent {
             }
             if (message) snackbarState.pushTemporary(message);
             this.silentInvite(true);
-            signupState.finishSignUp();
+            routes.main.contacts();
         }
     }
 

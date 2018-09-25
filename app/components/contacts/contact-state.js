@@ -6,6 +6,7 @@ import { clientApp, contactStore, warnings, User, config } from '../../lib/icebe
 import { tx } from '../utils/translator';
 import contactAddState from './contact-add-state';
 import chatState from '../messaging/chat-state';
+import { popupContactPermission } from '../shared/popups';
 
 class ContactState extends RoutedState {
     _prefix = 'contacts';
@@ -103,6 +104,17 @@ class ContactState extends RoutedState {
             && !addedContacts.length;
     }
 
+    softRequestPermission = async () => {
+        const hasPermissions =
+            await this.hasExistingPermissions() ||
+            await popupContactPermission(
+                tx('title_permissionContacts'),
+                tx('title_permissionContactsDescroption')
+            ) && await this.hasPermissions();
+        clientApp.uiUserPrefs.importContactsInBackground = hasPermissions;
+        return hasPermissions;
+    };
+
     @action requestPermission() {
         console.log('contact-state.js: requesting permissions');
         return new Promise(resolve => RNContacts.requestPermission((err, permission) => {
@@ -113,6 +125,15 @@ class ContactState extends RoutedState {
             }
             resolve(permission);
         }));
+    }
+
+    hasExistingPermissions() {
+        return new Promise(resolve => {
+            RNContacts.checkPermission((err, permission) => {
+                console.log(`${err}, ${permission}`);
+                resolve(!!err || permission === 'authorized');
+            });
+        });
     }
 
     @action hasPermissions() {
@@ -178,10 +199,27 @@ class ContactState extends RoutedState {
         }));
     }
 
-    @action async testImport() {
-        const hasPermissions = await this.hasPermissions();
-        if (!hasPermissions) {
-            warnings.add(tx('title_contactsAllowAccess'));
+    @action.bound async syncContacts() {
+        if (!await this.softRequestPermission()) {
+            return;
+        }
+        this.routerMain.contactSyncAdd();
+    }
+
+    @action.bound async inviteContacts() {
+        if (!await this.softRequestPermission()) {
+            return;
+        }
+        this.routerMain.contactSyncInvite();
+    }
+
+    /**
+     * Note: This functionality is currently unused anywhere but might be in the future
+     * Automatically add contacts without confirming with user
+     * Invites need to be confirmed by user
+    */
+    @action.bound async testImport() {
+        if (!await this.softRequestPermission()) {
             return;
         }
         this.isInProgress = true;

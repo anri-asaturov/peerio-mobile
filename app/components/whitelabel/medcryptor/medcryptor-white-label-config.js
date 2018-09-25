@@ -11,7 +11,8 @@ const whiteLabelConfig = {
         original: 'Peerio',
         replacement: 'MedCryptor'
     }],
-    LOCALE_PREFIX: 'mcr_'
+    LOCALE_PREFIX: 'mcr_',
+    SIGNUP_STEP_COUNT: 5
 };
 
 export default whiteLabelConfig;

@@ -26,7 +26,6 @@ const helperTextStyle = {
 };
 
 const inputContainer = {
-    marginHorizontal: vars.inputMarginHorizontal,
     marginTop: vars.spacing.small.midi2x
 };
 

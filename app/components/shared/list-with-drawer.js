@@ -30,7 +30,7 @@ export default class ListWithDrawer extends SafeComponent {
 
         this.drawerReaction = reaction(
             // context is to be set when using the list
-            () => drawerState.getDrawer(this.props.context),
+            () => drawerState.getDrawer(),
             async drawer => {
                 await this.whenAnimationFinished();
                 if (this.cachedDrawer && this.cachedDrawer !== drawer) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
 import { vars } from '../../styles/styles';
@@ -7,6 +8,7 @@ import SafeComponent from '../shared/safe-component';
 import signupState from './signup-state';
 import Text from '../controls/custom-text';
 import buttons from '../helpers/buttons';
+import tm from '../../telemetry';
 
 const roundedBoxStyle = {
     borderColor: vars.txtMedium,
@@ -72,6 +74,11 @@ const textBoxText = {
 
 @observer
 export default class SignupPdfPreview extends SafeComponent {
+    @action.bound saveAccountKey() {
+        signupState.saveAccountKey();
+        tm.signup.saveAk();
+    }
+
     renderThrow() {
         return (
             <View style={roundedBoxStyle}>
@@ -106,7 +113,7 @@ export default class SignupPdfPreview extends SafeComponent {
                     </View>
                     {buttons.roundBlueBgButton(
                         tx('button_downloadPdf'),
-                        signupState.saveAccountKey,
+                        this.saveAccountKey,
                         null,
                         'button_downloadPdf',
                         { marginHorizontal: vars.spacing.small.mini2x })}

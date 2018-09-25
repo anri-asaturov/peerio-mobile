@@ -7,7 +7,7 @@ import { tx } from '../utils/translator';
 import buttons from '../helpers/buttons';
 import contactState from '../contacts/contact-state';
 import signupState from './signup-state';
-import { formStyle, titleDark, textNormal } from '../../styles/signup-contact-sync';
+import { formStyle, titleDark, textNormal } from '../../styles/contact-sync';
 import { popupContactPermission } from '../shared/popups';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -56,7 +56,7 @@ export default class SignupContactSyncStart extends SafeComponent {
                             <Text style={textNormal}>{tx('title_findYourContactsDescription')} </Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-                            {buttons.roundBlueBgButton(tx('title_syncContacts'), () => this.syncContacts())}
+                            {buttons.roundBlueBgButton(tx('button_syncContacts'), () => this.syncContacts())}
                         </View>
                     </View>
                     {this.icon}

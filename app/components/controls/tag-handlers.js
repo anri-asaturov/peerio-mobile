@@ -5,20 +5,22 @@ import Italic from './italic';
 import Link from './link';
 import routes from '../routes/routes';
 
-// counter for BR
-let keyIndex = 0;
+let counter = 0;
 
 function a(text, url, style) {
     if (!url) {
         console.error(`tag-handlers.js: bad ${text} link`);
         return text;
     }
-    if (url.startsWith('route:')) {
-        const [, type, route] = url.split(':');
-        const action = () => routes[type][route]();
+    if (url.link.startsWith('route:')) {
+        const [, type, route] = url.link.split(':');
+        const action = () => {
+            if (url.tracker) url.tracker();
+            routes[type][route]();
+        };
         if (action) return <Link key={text} onPress={action} style={style}>{text}</Link>;
     }
-    return <Link key={url} url={url} style={style}>{text}</Link>;
+    return <Link key={url.link} url={url} style={style}>{text}</Link>;
 }
 
 function b(text) {
@@ -30,7 +32,7 @@ function i(text) {
 }
 
 function br() {
-    return <Text key={++keyIndex}>{'\n'}</Text>;
+    return <Text key={counter++}>{'\n'}</Text>;
 }
 
 module.exports = {

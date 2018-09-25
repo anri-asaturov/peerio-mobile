@@ -20,7 +20,10 @@ import TestHelper from './helpers/test-helper';
 import MockComponent from './mocks';
 import ActionSheetLayout from './layout/action-sheet-layout';
 import Text from './controls/custom-text';
+import BeaconLayout from './beacons/beacon-layout';
+import loginState from './login/login-state';
 import { uploadFileAndroid, uploadFileiOS, wakeUpAndUploadFileiOS } from './utils/shared-files';
+import { TopDrawerAutoMount } from './shared/top-drawer-components';
 
 const { height, width } = Dimensions.get('window');
 @observer
@@ -52,8 +55,13 @@ export default class App extends SafeComponent {
     async componentWillMount() {
         if (!MockComponent) {
             let route = routerApp.routes.loading;
-            if (!await User.getLastAuthenticated()
-                && !await TinyDb.system.getValue('apple-review-login')) {
+
+            // Have existing user that isn't logged in
+            if (await loginState.haveLoggedOutUser()) {
+                route = routerApp.routes.loginWelcomeBack;
+            }
+            // No existing user
+            if (!await User.getLastAuthenticated() && !await TinyDb.system.getValue('apple-review-login')) {
                 route = routerApp.routes.loginWelcome;
             }
             route.transition();
@@ -119,12 +127,15 @@ export default class App extends SafeComponent {
         return (
             <View style={(height < 500) ? tabletHack : { flex: 1, flexGrow: 1 }}>
                 <RouteNavigator key="navigator" routes={routerApp} />
+                <BeaconLayout />
+                {/* BeaconLayout.debugHelper */}
                 <ModalLayout key="modals" />
                 <PopupLayout key="popups" />
                 <ActionSheetLayout key="actionSheets" />
                 {uiState.picker}
                 <Text key="debug" style={{ height: 0 }} testID="debugText">{uiState.debugText}</Text>
                 <StatusBar barStyle="light-content" hidden={false} key="statusBar" />
+                <TopDrawerAutoMount />
                 {!process.env.NO_DEV_BAR && <TestHelper key="testHelper" />}
             </View>
         );

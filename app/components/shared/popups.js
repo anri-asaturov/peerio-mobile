@@ -10,11 +10,14 @@ import popupState from '../layout/popup-state';
 import locales from '../../lib/locales';
 import CheckBox from './checkbox';
 import { vars } from '../../styles/styles';
-import { fileStore, User, config } from '../../lib/icebear';
+import { fileStore, User, config, telemetry } from '../../lib/icebear';
 import testLabel from '../helpers/test-label';
 import FilePreview from '../files/file-preview';
 import PopupMigration from '../controls/popup-migration';
 import TwoFactorAuthPrompt from '../settings/two-factor-auth-prompt';
+import tm from '../../telemetry';
+
+const { S } = telemetry;
 
 const titleStyle = {
     color: vars.lighterBlackText,
@@ -298,12 +301,18 @@ let tos = '';
 function popupTOS() {
     console.log(`popups.js: popup tos`);
     return new Promise((resolve) => {
+        const startTime = Date.now();
         popupState.showPopup({
             fullScreen: 1,
             contents: <WebView
                 source={{ html: tos }} />,
             buttons: [{
-                id: 'ok', text: tu('button_ok'), action: resolve
+                id: 'ok',
+                text: tu('button_ok'),
+                action: () => {
+                    resolve();
+                    tm.signup.durationItem(startTime, S.TERMS_OF_USE);
+                }
             }]
         });
     });
@@ -314,12 +323,18 @@ let privacy = '';
 function popupPrivacy() {
     console.log(`popups.js: popup privacy`);
     return new Promise((resolve) => {
+        const startTime = Date.now();
         popupState.showPopup({
             fullScreen: 1,
             contents: <WebView
                 source={{ html: privacy }} />,
             buttons: [{
-                id: 'ok', text: tu('button_ok'), action: resolve
+                id: 'ok',
+                text: tu('button_ok'),
+                action: () => {
+                    resolve();
+                    tm.signup.durationItem(startTime, S.PRIVACY_POLICY);
+                }
             }]
         });
     });

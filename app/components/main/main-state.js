@@ -78,8 +78,16 @@ class MainState extends RoutedState {
         const user = User.current;
         const keychainKey = await this.getKeychainKey();
         await keychain.delete(keychainKey);
-        await keychain.save(keychainKey, 'blah');
+        await keychain.save(keychainKey, 'blah', false);
         console.log('main-state.js: touch id damaged');
+        user.hasTouchIdCached = true;
+    }
+
+    @action async destroyUserTouchId() {
+        const user = User.current;
+        const keychainKey = await this.getKeychainKey();
+        await keychain.delete(keychainKey);
+        console.log('main-state.js: touch id destroyed');
         user.hasTouchIdCached = true;
     }
 

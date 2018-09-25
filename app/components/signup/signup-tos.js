@@ -11,10 +11,14 @@ import buttons from '../helpers/buttons';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { TopDrawerBackupAccountKey } from '../shared/top-drawer-components';
 import { drawerState, uiState } from '../states';
-import { socket } from '../../lib/icebear';
+import { socket, telemetry } from '../../lib/icebear';
 import routes from '../routes/routes';
 import TosAccordion from './tos-accordion';
 import { popupTOS, popupPrivacy } from '../shared/popups';
+import TmHelper from '../../telemetry/helpers';
+import tm from '../../telemetry';
+
+const { S } = telemetry;
 
 const { height } = Dimensions.get('window');
 
@@ -34,13 +38,25 @@ export default class SignupTos extends SafeComponent {
     }
 
     componentDidMount() {
+        this.startTime = Date.now();
+        TmHelper.currentRoute = S.TERMS_OF_USE;
         if (!signupState.keyBackedUp) {
             drawerState.addDrawer(TopDrawerBackupAccountKey);
         }
     }
 
+    componentWillUnmount() {
+        tm.signup.duration(this.startTime);
+    }
+
+    @action.bound cancelSignup() {
+        tm.signup.navigate(S.CANCEL);
+        routes.app.signupCancel();
+    }
+
     @action.bound
     async finishSignup() {
+        tm.signup.acceptTos();
         await signupState.finishAccountCreation();
         uiState.isFirstLogin = true;
         signupState.next();
@@ -63,19 +79,19 @@ export default class SignupTos extends SafeComponent {
     }
 
     @action.bound openTermsLink(text) {
-        return (
-            <Text style={{ color: vars.peerioBlue }} onPress={async () => { await popupTOS(); }}>
-                {text}
-            </Text>
-        );
+        const onPress = async () => {
+            tm.signup.readMorePopup(S.TERMS_OF_USE);
+            await popupTOS();
+        };
+        return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
     }
 
     @action.bound openPrivacyLink(text) {
-        return (
-            <Text style={{ color: vars.peerioBlue }} onPress={async () => { await popupPrivacy(); }}>
-                {text}
-            </Text>
-        );
+        const onPress = async () => {
+            tm.signup.readMorePopup(S.PRIVACY_POLICY);
+            await popupPrivacy();
+        };
+        return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
     }
 
     renderThrow() {
@@ -89,7 +105,7 @@ export default class SignupTos extends SafeComponent {
                     <View style={buttonContainer}>
                         {buttons.blueTextButton(
                             tx('button_decline'),
-                            routes.app.signupCancel,
+                            this.cancelSignup,
                             !socket.connected,
                             null,
                             'button_decline'

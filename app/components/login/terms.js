@@ -16,7 +16,7 @@ export default class Terms extends Component {
 
     terms() {
         if (loginState.isInProgress) return;
-        Linking.openURL(config.translator.urlMap.openTerms);
+        Linking.openURL(config.translator.urlMap.openTerms.link);
     }
 
     render() {

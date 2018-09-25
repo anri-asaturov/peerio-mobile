@@ -4,6 +4,7 @@ import { observable, reaction, action, when } from 'mobx';
 import RNKeepAwake from 'react-native-keep-awake';
 import Router from './router';
 import uiState from '../layout/ui-state';
+import WelcomeZeroState from '../layout/welcome-zero-state';
 import SettingsLevel1 from '../settings/settings-level-1';
 import SettingsLevel2 from '../settings/settings-level-2';
 import SettingsLevel3 from '../settings/settings-level-3';
@@ -12,6 +13,8 @@ import GhostsLevel1 from '../ghosts/ghosts-level-1';
 import Files from '../files/files';
 import FileDetailView from '../files/file-detail-view';
 import ContactAdd from '../contacts/contact-add';
+import ContactSyncAdd from '../contacts/contact-sync-add';
+import ContactSyncInvite from '../contacts/contact-sync-invite';
 import ContactView from '../contacts/contact-view';
 import ContactList from '../contacts/contact-list';
 import ContactListInvite from '../contacts/contact-list-invite';
@@ -26,6 +29,9 @@ import { fileStore } from '../../lib/icebear';
 import { popupUpgradeNotification, popupUpgradeProgress } from '../shared/popups';
 import preferenceStore from '../settings/preference-store';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
+import { timeoutWithAction } from '../utils/timeouts';
+
+const INACTIVE_DELAY = 5000;
 
 class RouterMain extends Router {
     // current route object
@@ -40,18 +46,22 @@ class RouterMain extends Router {
     @observable contactStateLoaded = false;
     @observable loading = false;
     @observable invoked = false;
-    _initialRoute = 'chats';
+    @observable inactive = false;
+    _initialRoute;
 
     constructor() {
         super();
         routes.main = this;
         reaction(() => this.currentIndex && (this.route !== 'chats'), i => { this.isBackVisible = i > 0; });
         reaction(() => [this.route, this.currentIndex], () => uiState.hideAll());
+        this.add('welcomeZeroState', [<WelcomeZeroState />]);
         this.add('files', [<Files />, <FileDetailView />], fileState);
         this.add('ghosts', [<Ghosts />, <GhostsLevel1 />], ghostState);
         this.add('chats', [<whiteLabelComponents.ChatList />, <whiteLabelComponents.Chat />], chatState);
         this.add('contacts', [<ContactList />, <ContactView nonModal />], contactState);
         this.add('contactAdd', [<ContactAdd />], contactAddState);
+        this.add('contactSyncAdd', [<ContactSyncAdd />], contactAddState);
+        this.add('contactSyncInvite', [<ContactSyncInvite />], contactAddState);
         this.add('contactInvite', [<ContactListInvite />], contactAddState);
         this.add('settings', [<SettingsLevel1 />, <SettingsLevel2 />, <SettingsLevel3 />], settingsState);
         this.add('channelInvite', [<whiteLabelComponents.ChannelInvite />], invitationState);
@@ -59,9 +69,19 @@ class RouterMain extends Router {
         reaction(() => fileStore.migration.pending, migration => {
             if (migration) this.filesystemUpgrade();
         }, true);
+
+        reaction(() => this.current || this.currentIndex, () => {
+            timeoutWithAction(
+                this,
+                () => { this.inactive = false; },
+                () => { this.inactive = true; },
+                INACTIVE_DELAY
+            );
+        });
     }
 
     @action initialRoute() {
+        this._initialRoute = uiState.isFirstLogin ? 'welcomeZeroState' : 'chats';
         this[this._initialRoute](null, true);
     }
 

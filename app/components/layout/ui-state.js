@@ -39,6 +39,9 @@ class UIState extends RoutedState {
         // es: `Spanish`,
         // ru: `Russian`
     };
+    // Mock properties -----
+    @observable mockBeaconArrowDirection = true; // True = vertical, false = horizontal
+    @observable mockBeaconType = true; // True = Area Beacon, false = Spot Beacon
 
     get bottomOffset() {
         const pickerHeight = this.pickerVisible ? this.pickerHeight : 0;

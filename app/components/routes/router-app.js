@@ -5,6 +5,7 @@ import SignupWizard from '../signup/signup-wizard';
 import LayoutMain from '../layout/layout-main';
 import LoadingScreen from '../layout/loading-screen';
 import LoginWelcome from '../login/login-welcome';
+import LoginWelcomeBack from '../login/login-welcome-back';
 import LoginClean from '../login/login-clean';
 import PopupState from '../layout/popup-state';
 import routerMain from './router-main';
@@ -18,6 +19,7 @@ class RouterApp extends Router {
         routes.app = this;
         this.add('loading', LoadingScreen);
         this.add('loginWelcome', LoginWelcome);
+        this.add('loginWelcomeBack', LoginWelcomeBack);
         this.add('loginClean', LoginClean);
         this.add('signupStep1', SignupWizard);
         this.add('signupCancel', SignupCancel);

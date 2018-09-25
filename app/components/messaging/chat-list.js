@@ -21,6 +21,7 @@ import UnreadMessageIndicator from './unread-message-indicator';
 import { vars } from '../../styles/styles';
 import ChatZeroStatePlaceholder from './chat-zero-state-placeholder';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
+import zeroStateBeacons from '../beacons/zerostate-beacons';
 
 const INITIAL_LIST_SIZE = 10;
 
@@ -38,15 +39,13 @@ export default class ChatList extends SafeComponent {
     @observable enableIndicators = false;
 
     get rightIcon() {
-        return (<PlusBorderIcon
-            action={CreateActionSheet.show}
-            testID="buttonCreateNewChat" />);
+        return (
+            <PlusBorderIcon
+                action={CreateActionSheet.show}
+                beacon={zeroStateBeacons.startChatBeacon}
+                testID="buttonCreateNewChat" />
+        );
     }
-
-    // TODO use for firstLoginZeroState
-    // get layoutTitle() {
-    //     return uiState.isFirstLogin ? tx('title_zeroFirstLoginTitle') : tx('title_chats');
-    // }
 
     get dataSource() {
         return [
@@ -195,7 +194,7 @@ export default class ChatList extends SafeComponent {
         this.scrollView.scrollToLocation({
             itemIndex: pos.index,
             sectionIndex: pos.section,
-            viewOffset: drawerState.getDrawer(drawerState.DRAWER_CONTEXT.CHATS) ? -vars.topDrawerHeight : 0,
+            viewOffset: drawerState.getDrawer() ? -vars.topDrawerHeight : 0,
             viewPosition: 0
         });
     }
@@ -209,7 +208,7 @@ export default class ChatList extends SafeComponent {
         this.scrollView.scrollToLocation({
             itemIndex: pos.index,
             sectionIndex: pos.section,
-            viewOffset: drawerState.getDrawer(drawerState.DRAWER_CONTEXT.CHATS) ? -vars.topDrawerHeight : 0,
+            viewOffset: drawerState.getDrawer() ? -vars.topDrawerHeight : 0,
             viewPosition: 0.9
         });
     }

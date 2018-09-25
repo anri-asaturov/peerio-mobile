@@ -11,6 +11,7 @@ import routerMain from '../routes/router-main';
 import icons from '../helpers/icons';
 import testLabel from '../helpers/test-label';
 import uiState from './ui-state';
+import MeasureableIcon from './measureable-icon';
 
 const actionCellStyle = {
     flex: 1,
@@ -26,6 +27,12 @@ const actionTextStyle = {
 @observer
 export default class TabItem extends SafeComponent {
     @action.bound onPressTabItem() {
+        const { onPressTabItem } = this.props;
+        onPressTabItem && onPressTabItem();
+        this.onPress();
+    }
+
+    @action.bound onPress() {
         const { route } = this.props;
         if (routerMain.route === route && uiState.currentScrollView) {
             if (routerMain.route === 'files') fileState.goToRoot();
@@ -52,8 +59,13 @@ export default class TabItem extends SafeComponent {
                 onPress={this.onPressTabItem}
                 pressRetentionOffset={vars.retentionOffset}
                 style={actionCellStyle}>
-                <View pointerEvents="none" style={{ alignItems: 'center' }}>
-                    {icons.plain(icon, undefined, color)}
+                <View
+                    pointerEvents="none" style={{ alignItems: 'center' }}>
+                    <MeasureableIcon
+                        {...this.props}
+                        color={color}
+                        onPress={this.onPress}
+                        spotBgColor={vars.darkBlueBackground15} />
                     <Text style={[actionTextStyle, { color }]}>{text}</Text>
                     {indicator}
                 </View>

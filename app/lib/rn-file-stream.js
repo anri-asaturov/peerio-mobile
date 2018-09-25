@@ -10,7 +10,8 @@ const { fileHelpers } = icebear;
 const { bytesToB64, b64ToBytes } = icebear.crypto.cryptoUtil;
 
 const isIOS = Platform.OS === 'ios';
-const ROOT = isIOS ? RNFS.CachesDirectoryPath : RNFS.ExternalDirectoryPath;
+const ROOT = isIOS ? RNFS.CachesDirectoryPath :
+    (RNFS.ExternalDirectoryPath || RNFS.ExternalStorageDirectoryPath || RNFS.CachesDirectoryPath);
 
 function getTemporaryDirectory() {
     return pathUtils.join(ROOT, 'cache');

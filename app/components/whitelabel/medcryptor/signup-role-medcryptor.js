@@ -11,8 +11,8 @@ import { socket } from '../../../lib/icebear';
 import medcryptorUiState from './medcryptor-ui-state';
 import SafeComponent from '../../shared/safe-component';
 import SignupButtonBack from '../../signup/signup-button-back';
-import SignupHeading from '../../signup//signup-heading';
-import SignupStepIndicatorMedcryptor from './signup-step-indicator-medcryptor';
+import SignupHeading from '../../signup/signup-heading';
+import SignupStepIndicator from '../../signup/signup-step-indicator';
 import buttons from '../../helpers/buttons';
 
 @observer
@@ -51,7 +51,7 @@ export default class SignupRoleMedcryptor extends SafeComponent {
 
     get body() {
         return (
-            <View>
+            <View style={{ marginHorizontal: vars.inputMarginHorizontal }}>
                 {this.selectedAU && <MedcryptorSpecialtyPickerBox />}
                 <MedcryptorRolePickerBox />
             </View>
@@ -61,7 +61,7 @@ export default class SignupRoleMedcryptor extends SafeComponent {
     render() {
         return (
             <View style={signupStyles.page}>
-                <SignupStepIndicatorMedcryptor />
+                <SignupStepIndicator />
                 <View style={signupStyles.container}>
                     <View>
                         <SignupButtonBack />

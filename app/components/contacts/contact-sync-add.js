@@ -5,22 +5,30 @@ import { observable, action, computed } from 'mobx';
 import ActivityOverlay from '../controls/activity-overlay';
 import { tx } from '../utils/translator';
 import buttons from '../helpers/buttons';
-import contactState from '../contacts/contact-state';
-import signupState from '../signup/signup-state';
-import ContactImportItem from '../contacts/contact-import-item';
-import { headerContainer, textStyle, skipButtonStyle, listHeader, textListTitle, footerContainer, container } from '../../styles/signup-contact-sync';
-import ListItem from './signup-contact-list-item';
+import contactState from './contact-state';
+import ContactImportItem from './contact-import-item';
+import { listHeader, textListTitle, footerContainer, container } from '../../styles/contact-sync';
+import ListItem from './contact-sync-list-item';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
+import BackIcon from '../layout/back-icon';
+import routes from '../routes/routes';
 
 const INITIAL_LIST_SIZE = 10;
 
 @observer
-export default class SignupContactAdd extends SafeComponent {
-    get useLayout2() { return true; }
+export default class ContactSyncAdd extends SafeComponent {
     @observable contactList = [];
     @observable inProgress = false;
     @observable refresh = 0;
+
+    get leftIcon() {
+        return <BackIcon action={() => routes.main.contacts()} />;
+    }
+
+    get rightIcon() {
+        return buttons.whiteTextButton(tx('button_skip'), () => routes.main.contactSyncInvite());
+    }
 
     @computed get selectedContacts() {
         return this.contactList.filter(item => item.selected);
@@ -35,7 +43,7 @@ export default class SignupContactAdd extends SafeComponent {
             console.error(e);
         }
         this.inProgress = false;
-        if (this.contactList.length === 0) signupState.next();
+        if (this.contactList.length === 0) routes.main.contactSyncInvite();
     }
 
     /**
@@ -59,19 +67,6 @@ export default class SignupContactAdd extends SafeComponent {
             })());
         });
         return Promise.all(promises);
-    }
-
-    header() {
-        return (
-            <View style={headerContainer}>
-                <Text ellipsizeMode="middle" numberOfLines={1} style={textStyle}>
-                    {tx('title_addContacts')}
-                </Text>
-                <View style={skipButtonStyle}>
-                    {buttons.whiteTextButton(tx('button_skip'), () => signupState.next())}
-                </View>
-            </View>
-        );
     }
 
     @computed get allSelected() {
@@ -134,7 +129,7 @@ export default class SignupContactAdd extends SafeComponent {
 
     @action.bound addSelectedContacts() {
         this.selectedContacts.forEach(i => contactState.store.getContactAndSave(i.contact.username));
-        signupState.next();
+        routes.main.contactSyncInvite();
     }
 
     footer() {
@@ -151,7 +146,6 @@ export default class SignupContactAdd extends SafeComponent {
     renderThrow() {
         return (
             <View style={container}>
-                {this.header()}
                 {this.body()}
                 {this.footer()}
                 <ActivityOverlay large visible={this.inProgress} />

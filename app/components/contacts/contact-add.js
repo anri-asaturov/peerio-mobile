@@ -96,7 +96,6 @@ export default class ContactAdd extends SafeComponent {
     };
 
     get leftIcon() {
-        if (contactState.empty) return null;
         return <BackIcon action={routes.main.contacts} />;
     }
 
@@ -270,7 +269,7 @@ export default class ContactAdd extends SafeComponent {
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>
                             <View style={buttonRow}>
                                 <Text semibold style={labelDark}>{tx('title_findContacts')}</Text>
-                                {this.renderButton1('title_importContacts', () => contactState.testImport())}
+                                {this.renderButton1('title_importContacts', () => contactState.inviteContacts())}
                             </View>
                         </View>
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>

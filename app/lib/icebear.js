@@ -9,8 +9,8 @@ const { getFirstLetterUpperCase } = require('./peerio-icebear/helpers/string');
 
 icebear.getFirstLetterUpperCase = getFirstLetterUpperCase;
 
-const { socket, config, FileStreamBase, TinyDb } = icebear;
-mobileConfig(config, { FileStreamBase });
+const { socket, config, FileStreamBase, telemetry, TinyDb } = icebear;
+mobileConfig(config, { FileStreamBase }, telemetry);
 
 const OVERRIDE_SERVER_KEY = 'socketServerOverride';
 

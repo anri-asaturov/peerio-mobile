@@ -8,7 +8,7 @@ defineSupportCode(({ Then }) => {
 
     Then('I create a folder named {string}', async function (word) {
         await this.filesListPage.uploadFileButtton.click();
-        
+
         await this.filesListPage.createFolderOption.click();
         await this.filesListPage.folderNameInput.setValue(word);
         await this.filesListPage.hideKeyboardHelper();
@@ -36,10 +36,10 @@ defineSupportCode(({ Then }) => {
 
     Then('I move the file in the folder named {string}', async function (word) {
         await this.homePage.filesTab.click();
-        
+
         await this.filesListPage.optionsButttonFor('Iceland.jpg').click();
         await this.filesListPage.moveOption.click();
-        
+
         await this.filesListPage.folderNamed(word).click();
     });
 

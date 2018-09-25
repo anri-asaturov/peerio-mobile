@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     AppRegistry, UIManager
 } from 'react-native';

@@ -2,34 +2,21 @@ import React from 'react';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
-import Text from '../../controls/custom-text';
 import MedcryptorCountryPickerBox from './medcryptor-country-picker-box';
 import { vars, signupStyles } from '../../../styles/styles';
 import signupState from '../../signup/signup-state';
-import { tx, T } from '../../utils/translator';
+import { tx } from '../../utils/translator';
 import StyledTextInput from '../../shared/styled-text-input';
 import { socket, validation } from '../../../lib/icebear';
 import medcryptorUiState from './medcryptor-ui-state';
 import SafeComponent from '../../shared/safe-component';
 import SignupButtonBack from '../../signup/signup-button-back';
 import SignupHeading from '../../signup//signup-heading';
-import SignupStepIndicatorMedcryptor from './signup-step-indicator-medcryptor';
+import SignupStepIndicator from '../../signup//signup-step-indicator';
 import buttons from '../../helpers/buttons';
 
 const { validators } = validation;
 const { mcrDoctorAhpraAvailability, mcrAdminAhpraAvailability, medicalIdFormat } = validators;
-
-const footer = {
-    flex: 0.4,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-};
-
-const ahpraTextStyle = {
-    fontSize: vars.font.size.smaller,
-    color: vars.black54,
-    alignSelf: 'flex-start'
-};
 
 @observer
 export default class SignupCountryMedcryptor extends SafeComponent {
@@ -84,7 +71,9 @@ export default class SignupCountryMedcryptor extends SafeComponent {
     get body() {
         return (
             <View>
-                <MedcryptorCountryPickerBox />
+                <View style={{ marginHorizontal: vars.inputMarginHorizontal }}>
+                    <MedcryptorCountryPickerBox />
+                </View>
                 {this.selectedAU && <View>
                     <StyledTextInput
                         state={this.medicalIdState}
@@ -94,12 +83,8 @@ export default class SignupCountryMedcryptor extends SafeComponent {
                         returnKeyType="go"
                         required
                         ref={this.medicalIdInputRef}
+                        helperText={tx('title_medicalIdDescription')}
                         testID="medicalId" />
-                    <View style={footer}>
-                        <Text style={ahpraTextStyle}>
-                            <T k="title_medicalIdDescription" />
-                        </Text>
-                    </View>
                 </View>}
             </View>
         );
@@ -108,7 +93,7 @@ export default class SignupCountryMedcryptor extends SafeComponent {
     render() {
         return (
             <View style={signupStyles.page}>
-                <SignupStepIndicatorMedcryptor />
+                <SignupStepIndicator />
                 <View style={signupStyles.container}>
                     <View>
                         <SignupButtonBack />

@@ -8,7 +8,8 @@ import ContactList from '../contacts/contact-list';
 import SettingsLevel1 from '../settings/settings-level-1';
 import Files from '../files/files';
 import ChannelInvite from '../messaging/channel-invite';
-import icebear, { User } from '../../lib/icebear';
+import { User } from '../../lib/icebear';
+import contactState from '../contacts/contact-state';
 import chatState from '../messaging/chat-state';
 import drawerState from '../shared/drawer-state';
 import mockChatStore from './mock-chat-store';
@@ -16,7 +17,7 @@ import { vars } from '../../styles/styles';
 import mockContactStore from './mock-contact-store';
 import mockFileStore from './mock-file-store';
 import TabContainer from '../layout/tab-container';
-import { TopDrawerMaintenance, TopDrawerNewContact } from '../shared/top-drawer-components';
+import { TopDrawerMaintenance, /* TopDrawerNewContact, */ TopDrawerPendingFiles, TopDrawerAutoMount } from '../shared/top-drawer-components';
 
 const button = {
     position: 'absolute',
@@ -62,9 +63,8 @@ export default class MockChatList extends Component {
         mockFileStore.install();
         chatState.store = mockChatStore;
         chatState.init();
-        icebear.chatStore = mockChatStore;
-        icebear.contactStore = mockContactStore;
-        icebear.fileStore = mockFileStore;
+        contactState.store = mockContactStore;
+        contactState.init();
     }
 
     addGlobalDrawer = () => {
@@ -72,9 +72,7 @@ export default class MockChatList extends Component {
     };
 
     addLocalDrawer = () => {
-        drawerState.addDrawer(TopDrawerNewContact, drawerState.DRAWER_CONTEXT.CONTACTS, {
-            contact: User.current
-        });
+        drawerState.addDrawer(TopDrawerPendingFiles, 'files');
     };
 
     removeDrawer = () => {
@@ -95,20 +93,14 @@ export default class MockChatList extends Component {
             case 'files':
                 return <Files />;
             default:
-                return <ContactList />;
+                return <Files />;
         }
     }
 
     render() {
         return (
-            <View
-                style={{
-                    backgroundColor: 'white',
-                    flex: 1,
-                    flexGrow: 1,
-                    paddingTop: vars.layoutPaddingTop
-                }}
-            >
+            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
+                <TabContainer />
                 {this.list}
                 <PopupLayout key="popups" />
                 <StatusBar barStyle="default" />
@@ -140,6 +132,7 @@ export default class MockChatList extends Component {
                         Delete
                     </Text>
                 </TouchableOpacity>
+                <TopDrawerAutoMount />
             </View>
         );
     }

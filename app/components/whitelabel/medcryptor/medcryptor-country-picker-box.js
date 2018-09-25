@@ -18,6 +18,7 @@ export default class MedcryptorCountryPickerBox extends SafeComponent {
                 data={medcryptorUiState.countries}
                 value={medcryptorUiState.countrySelected}
                 label={tx('title_countryOfPractice')}
+                hint={tx('title_countryOfPractice')}
                 style={pickerBox}
             />
         );

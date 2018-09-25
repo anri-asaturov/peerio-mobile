@@ -42,7 +42,7 @@ export default class SignupGenerationBox extends SafeComponent {
         this.props.animated &&
             Animated.timing(this.lottieValue, {
                 toValue: 1,
-                duration: 8000,
+                duration: __DEV__ ? 500 : 8000,
                 useNativeDriver: true
             }).start(() => {
                 this.animationFinished = true;

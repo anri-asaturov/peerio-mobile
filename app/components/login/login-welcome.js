@@ -12,6 +12,11 @@ import DebugMenuTrigger from '../shared/debug-menu-trigger';
 import SafeComponent from '../shared/safe-component';
 import LoginHeading from './login-heading';
 import { adjustImageDimensions } from '../helpers/image';
+import { telemetry } from '../../lib/icebear';
+import tm from '../../telemetry';
+import TmHelper from '../../telemetry/helpers';
+
+const { S } = telemetry;
 
 const logoWelcome = require('../../assets/peerio-logo-dark.png');
 const imageWelcome = require('../../assets/welcome-illustration.png');
@@ -32,11 +37,22 @@ const buttonContainer = {
 @observer
 export default class LoginWelcome extends SafeComponent {
     @action.bound onSignupPress() {
+        tm.signup.onStartAccountCreation();
         loginState.routes.app.signupStep1();
     }
 
     @action.bound onLoginPress() {
+        tm.login.onNavigateLogin();
         loginState.routes.app.loginClean();
+    }
+
+    componentDidMount() {
+        this.startTime = Date.now();
+        TmHelper.currentRoute = S.WELCOME_SCREEN;
+    }
+
+    componentWillUnmount() {
+        tm.signup.duration(this.startTime);
     }
 
     render() {

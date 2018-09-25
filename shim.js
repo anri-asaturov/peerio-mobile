@@ -189,6 +189,12 @@ if (!Array.prototype.random) {
 	}
 }
 
+if (!String.prototype.normalize) {
+	String.prototype.normalize = function () {
+		return this;
+	}
+}
+
 // Implement console.time and console.timeEnd if one of them is missing
 if (!console["time"] || !console["timeEnd"]) {
 	var timers = {};
