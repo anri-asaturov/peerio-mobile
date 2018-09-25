@@ -12,6 +12,7 @@
 		00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+		0204B9C3215AC06F00BAD78D /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0204B9C0215ABFC100BAD78D /* libRCTBlob.a */; };
 		020C455F2138710300A0691D /* privacy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 020C45292138710200A0691D /* privacy.txt */; };
 		020C45FF2138C95D00A0691D /* account_key_backup_medcryptor.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 020C45C92138C95D00A0691D /* account_key_backup_medcryptor.pdf */; };
 		02202B821E840B07006CDA9B /* libRNMail.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02202B791E840AF7006CDA9B /* libRNMail.a */; };
@@ -193,6 +194,27 @@
 			proxyType = 2;
 			remoteGlobalIDString = 163CDE4E2087CAD3001065FB;
 			remoteInfo = "RNRandomBytes-tvOS";
+		};
+		0204B9BB215ABFC100BAD78D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91AFFC53E28140839A2B4730 /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 64AA15081EF7F30100718508;
+			remoteInfo = "BVLinearGradient-tvOS";
+		};
+		0204B9BF215ABFC100BAD78D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0204B9B7215ABFC100BAD78D /* RCTBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
+			remoteInfo = RCTBlob;
+		};
+		0204B9C1215ABFC100BAD78D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0204B9B7215ABFC100BAD78D /* RCTBlob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ADD01A681E09402E00F6D226;
+			remoteInfo = "RCTBlob-tvOS";
 		};
 		02202B781E840AF7006CDA9B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -593,6 +615,7 @@
 		00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTImage.xcodeproj; path = "../node_modules/react-native/Libraries/Image/RCTImage.xcodeproj"; sourceTree = "<group>"; };
 		00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "../node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
+		0204B9B7215ABFC100BAD78D /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		020C45292138710200A0691D /* privacy.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = privacy.txt; path = ../app/assets/privacy.txt; sourceTree = "<group>"; };
 		020C45C92138C95D00A0691D /* account_key_backup_medcryptor.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = account_key_backup_medcryptor.pdf; path = ../app/assets/account_key_backup_medcryptor.pdf; sourceTree = "<group>"; };
 		02210A6A1E01902A006D7AC0 /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
@@ -718,6 +741,7 @@
 				0253BCEE20ACDE5C001A16B5 /* libKCKeepAwake.a in Frameworks */,
 				022653CA21351574003EEF56 /* libLottie.a in Frameworks */,
 				022653CB2135157F003EEF56 /* libLottieReactNative.a in Frameworks */,
+				0204B9C3215AC06F00BAD78D /* libRCTBlob.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -769,6 +793,15 @@
 			isa = PBXGroup;
 			children = (
 				00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0204B9B8215ABFC100BAD78D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0204B9C0215ABFC100BAD78D /* libRCTBlob.a */,
+				0204B9C2215ABFC100BAD78D /* libRCTBlob-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -854,6 +887,7 @@
 			isa = PBXGroup;
 			children = (
 				0253781E1EC4E14700752E61 /* libBVLinearGradient.a */,
+				0204B9BC215ABFC100BAD78D /* libBVLinearGradient.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1052,6 +1086,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0204B9B7215ABFC100BAD78D /* RCTBlob.xcodeproj */,
 				026818931F742B9100A42812 /* RCTCameraRoll.xcodeproj */,
 				025935571E809AA300FAEE7E /* InAppUtils.xcodeproj */,
 				0222C3701E0C989D0084C586 /* RCTPushNotification.xcodeproj */,
@@ -1296,6 +1331,10 @@
 					ProjectRef = 026B0DA01E0384D600B24721 /* RCTAnimation.xcodeproj */;
 				},
 				{
+					ProductGroup = 0204B9B8215ABFC100BAD78D /* Products */;
+					ProjectRef = 0204B9B7215ABFC100BAD78D /* RCTBlob.xcodeproj */;
+				},
+				{
 					ProductGroup = 026818941F742B9100A42812 /* Products */;
 					ProjectRef = 026818931F742B9100A42812 /* RCTCameraRoll.xcodeproj */;
 				},
@@ -1504,6 +1543,27 @@
 			fileType = archive.ar;
 			path = "libRNRandomBytes-tvOS.a";
 			remoteRef = 0204B9AF215AA03600BAD78D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0204B9BC215ABFC100BAD78D /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = 0204B9BB215ABFC100BAD78D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0204B9C0215ABFC100BAD78D /* libRCTBlob.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTBlob.a;
+			remoteRef = 0204B9BF215ABFC100BAD78D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0204B9C2215ABFC100BAD78D /* libRCTBlob-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTBlob-tvOS.a";
+			remoteRef = 0204B9C1215ABFC100BAD78D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		02202B791E840AF7006CDA9B /* libRNMail.a */ = {

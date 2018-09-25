@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, TouchableOpacity } from 'react-native';
-import Menu, { MenuOptions, MenuOption, MenuTrigger } from 'react-native-menu';
 import moment from 'moment';
 import SafeComponent from '../shared/safe-component';
 import ghostState from './ghost-state';
@@ -72,7 +71,7 @@ export default class GhostItem extends SafeComponent {
                     <Text style={lightText}>{g.recipients.join(', ')}</Text>
                     <View style={rowFill}>
                         <Text style={[lightText, shrinkFill]} ellipsizeMode="tail" numberOfLines={1}>{g.preview}</Text>
-                        <Menu onSelect={action => action().then(() => this.reloadGhosts())}>
+                        {/*<Menu onSelect={action => action().then(() => this.reloadGhosts())}>
                             <MenuTrigger style={{ padding: vars.iconPadding }}>
                                 {icons.plaindark('more-vert')}
                             </MenuTrigger>
@@ -84,7 +83,7 @@ export default class GhostItem extends SafeComponent {
                                     <Text>Delete</Text>
                                 </MenuOption>
                             </MenuOptions>
-                        </Menu>
+                        </Menu>*/}
                     </View>
                 </View>
             </TouchableOpacity>

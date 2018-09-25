@@ -55,12 +55,6 @@ export default class RadioGroup extends SafeComponent {
     }
 }
 
-RadioGroup.propTypes = {
-    onSelect: React.PropTypes.func.isRequired,
-    defaultSelect: React.PropTypes.number,
-    optionTitles: React.PropTypes.any
-};
-
 RadioGroup.defaultProps = {
     defaultSelect: -1
 };

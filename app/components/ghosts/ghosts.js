@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, ListView, ScrollView, Animated } from 'react-native';
-import { MenuContext } from 'react-native-menu';
 import { observable /* , reaction */ } from 'mobx';
 import SafeComponent from '../shared/safe-component';
 import GhostsZeroState from './ghosts-zero-state';
@@ -39,16 +38,14 @@ export default class Ghosts extends SafeComponent {
 
     listView() {
         return (
-            <MenuContext>
-                <ScrollView
-                    initialListSize={1}
-                    dataSource={this.dataSource}
-                    renderRow={this.item}
-                    enableEmptySections
-                    ref={sv => { this.scrollView = sv; }}>
-                    {this.data.map(i => this.item(i))}
-                </ScrollView>
-            </MenuContext>
+            <ScrollView
+                initialListSize={1}
+                dataSource={this.dataSource}
+                renderRow={this.item}
+                enableEmptySections
+                ref={sv => { this.scrollView = sv; }}>
+                {this.data.map(i => this.item(i))}
+            </ScrollView>
         );
     }
 

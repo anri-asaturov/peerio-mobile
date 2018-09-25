@@ -23,6 +23,3 @@ export default class DebugMenuTrigger extends Component {
     }
 }
 
-DebugMenuTrigger.propTypes = {
-    children: React.PropTypes.element.isRequired
-};

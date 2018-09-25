@@ -22,7 +22,3 @@ export default class RadioButton extends SafeComponent {
     }
 }
 
-RadioButton.propTypes = {
-    onPress: React.PropTypes.func,
-    isSelected: React.PropTypes.bool
-};
