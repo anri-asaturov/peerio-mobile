@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.368.0"></a>
+# [3.368.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.367.0...v3.368.0) (2018-09-25)
+
+
+### Bug Fixes
+
+* settings toggle didn't work [ch14067] ([a8ad07a](https://github.com/PeerioTechnologies/peerio-mobile/commit/a8ad07a))
+
+
+
 <a name="3.367.0"></a>
 # [3.367.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.366.0...v3.367.0) (2018-09-22)
 
