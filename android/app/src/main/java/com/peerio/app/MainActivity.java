@@ -3,6 +3,7 @@ package com.peerio.app;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.content.Intent;
 
 import com.facebook.react.*;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -21,6 +22,18 @@ public class MainActivity extends ReactActivity {
         if (BuildConfig.DEBUG) return;
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        
+        ReactContext context = this.getReactInstanceManager().getCurrentReactContext();
+        String fileUri = Utils.getUriFromIntent(intent);
+        
+        if (fileUri != null && context != null) {
+            context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("sharedFile", fileUri);
+        }
     }
 
     @Override
@@ -57,5 +70,10 @@ public class MainActivity extends ReactActivity {
     @Override
     protected String getMainComponentName() {
         return "peeriomobile";
+    }
+
+    @Override
+    protected ReactActivityDelegate createReactActivityDelegate() {
+        return new LaunchActivityDelegate(this, getMainComponentName());
     }
 }

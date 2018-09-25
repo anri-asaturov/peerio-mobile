@@ -17,7 +17,7 @@ export default class MedcryptorSpecialtyPickerBox extends SafeComponent {
                 data={medcryptorUiState.specialties}
                 value={medcryptorUiState.specialtySelected}
                 state={medcryptorUiState}
-                hint={tx('title_specialty')}
+                label={tx('title_specialty')}
                 errorMessage={tx('title_selectYourSpecialty')}
                 style={pickerBox}
             />

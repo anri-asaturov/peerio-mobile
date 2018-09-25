@@ -50,8 +50,8 @@ const icons = {
         return icons.plain(name, size, vars.darkIcon, undefined, style);
     },
 
-    plainalert(name, size) {
-        return icons.plain(name, size, vars.txtAlert);
+    plainalert(name, size, style) {
+        return icons.plain(name, size, vars.red, null, style);
     },
 
     plainWhite(name, size) {

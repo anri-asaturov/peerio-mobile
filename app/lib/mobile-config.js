@@ -92,7 +92,7 @@ export default (c, icebear) => {
     // socket server is always taken from env
     cfg.socketServerUrl =
         process.env.PEERIO_SOCKET_SERVER || 'wss://changeme.peerio.com';
-    cfg.FileStream = rnFileStream(icebear.FileStreamAbstract);
+    cfg.FileStream = rnFileStream(icebear.FileStreamBase);
     cfg.StorageEngine = KeyValueStorage;
     cfg.CacheEngine = SqlCipherDbStorage;
 

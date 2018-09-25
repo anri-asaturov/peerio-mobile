@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, PanResponder, Linking,
+import { View, PanResponder, Linking, DeviceEventEmitter,
     AppState, ActivityIndicator, NativeModules,
     Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
 import { observer } from 'mobx-react/native';
@@ -9,7 +9,7 @@ import ModalLayout from './layout/modal-layout';
 import RouteNavigator from './routes/route-navigator';
 import routerApp from './routes/router-app';
 import uiState from './layout/ui-state';
-import { clientApp, crypto, startSocket, config, User, TinyDb, socket } from '../lib/icebear';
+import { clientApp, crypto, startSocket, config, User, TinyDb } from '../lib/icebear';
 import { scryptNative, signDetachedNative, verifyDetachedNative } from '../lib/scrypt-native';
 import push from '../lib/push';
 import consoleOverride from '../lib/console-override';
@@ -20,39 +20,11 @@ import TestHelper from './helpers/test-helper';
 import MockComponent from './mocks';
 import ActionSheetLayout from './layout/action-sheet-layout';
 import Text from './controls/custom-text';
-import fileState from './files/file-state';
-import { promiseWhen } from './helpers/sugar';
-import routes from './routes/routes';
+import { uploadFileAndroid, uploadFileiOS, wakeUpAndUploadFileiOS } from './utils/shared-files';
 
 const { height, width } = Dimensions.get('window');
 @observer
 export default class App extends SafeComponent {
-    wakeUpAndHandleOpenURL = (event) => {
-        this.handleOpenURL({ url: event });
-    };
-
-    async handleOpenURL(event) {
-        await promiseWhen(() => routes.main.contactStateLoaded);
-
-        if (event && event.url && socket.authenticated) {
-            routes.main.files();
-            fileState.goToRoot();
-
-            const url = decodeURIComponent(event.url);
-            const json = url.split('://')[1]; // url format: {urlScheme}://{data}
-            const { files, path } = JSON.parse(json);
-
-            const firstFile = files[0];
-            const fileProps = {
-                fileName: firstFile,
-                ext: firstFile.split('.')[1],
-                url: `${path}/${firstFile}`
-            };
-
-            fileState.uploadInFiles(fileProps);
-        }
-    }
-
     constructor(props) {
         super(props);
         uiState.load();
@@ -87,6 +59,7 @@ export default class App extends SafeComponent {
             route.transition();
         }
     }
+
     componentDidMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
         AppState.addEventListener('memoryWarning', this._handleMemoryWarning);
@@ -102,8 +75,12 @@ export default class App extends SafeComponent {
                 crypto.sign.setImplementation(signDetachedNative, verifyDetachedNative);
             }
         }
-        Linking.getInitialURL().then(this.wakeUpAndHandleOpenURL);
-        Linking.addEventListener('url', this.handleOpenURL);
+
+        Linking.getInitialURL().then(wakeUpAndUploadFileiOS);
+        Linking.addEventListener('url', uploadFileiOS);
+
+        uploadFileAndroid(this.props.sharedFile);
+        DeviceEventEmitter.addListener('sharedFile', uploadFileAndroid);
     }
 
     _handleAppStateChange(appState) {

@@ -40,7 +40,6 @@ export default fileStream => {
                 await RNFS.mkdir(pathUtils.dirname(this.filePath));
                 this.fileDescriptor = this.filePath;
             }
-            return this;
         }
 
         close() {
@@ -88,7 +87,7 @@ export default fileStream => {
                 this.fileDescriptor,
                 bytesToB64(buffer),
                 'base64'
-            ).return(buffer);
+            );
         }
 
         static getFullPath(uid, name) {

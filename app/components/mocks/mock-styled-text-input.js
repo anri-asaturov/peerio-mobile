@@ -36,14 +36,14 @@ export default class MockStyleTextInput extends Component {
                         state={this.state1}
                         errorText="Wrong pass (Hint: it might be 123)"
                         validation={this.validation1}
-                        hint="This guy hides his secrets"
+                        label="This guy hides his secrets"
                         secureText
                     />
                     <StyledTextInput
                         state={this.state2}
                         errorText="Dirty until proven innocent (Try 123)"
                         validation={this.validation2}
-                        hint="This guy is always dirty"
+                        label="This guy is always dirty"
                         alwaysDirty
                     />
                 </View>

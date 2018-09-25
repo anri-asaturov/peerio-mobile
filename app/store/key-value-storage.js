@@ -9,6 +9,11 @@ class KeyValueStorage {
         return this.prefix + key;
     }
 
+    // inverse function for _getKey
+    _getOriginalKey(keyWithPrefix) {
+        return keyWithPrefix.slice(this.prefix.length);
+    }
+
     // should return null if value doesn't exist
     getValue(key) {
         return AsyncStorage.getItem(this._getKey(key))
@@ -34,7 +39,7 @@ class KeyValueStorage {
     getAllKeys() {
         return AsyncStorage.getAllKeys()
             .then(keys => {
-                return keys.filter(k => k.startsWith(this.prefix)).map(k => k.replace(this.prefix, ''));
+                return keys.filter(k => k.startsWith(this.prefix)).map(k => this._getOriginalKey(k));
             });
     }
 

@@ -73,7 +73,7 @@ export default class LoginClean extends SafeComponent {
                     <StyledTextInput
                         state={this.usernameState}
                         validations={usernameLogin}
-                        hint={tx('title_username')}
+                        label={tx('title_username')}
                         ref={this.usernameInputRef}
                         lowerCase
                         testID="usernameLogin"
@@ -81,7 +81,7 @@ export default class LoginClean extends SafeComponent {
                     <View style={{ height: 8 }} />
                     <StyledTextInput
                         state={this.passwordState}
-                        hint={tx('title_AccountKey')}
+                        label={tx('title_AccountKey')}
                         onSubmit={this.submit}
                         secureText
                         returnKeyType="go"
