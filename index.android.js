@@ -6,6 +6,6 @@ import App from './app/components/App';
 
 global.platform = 'android';
 
-UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+// UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
 AppRegistry.registerComponent('peeriomobile', () => App);

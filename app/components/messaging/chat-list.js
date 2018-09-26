@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, LayoutAnimation } from 'react-native';
+import { View, LayoutAnimation, Platform } from 'react-native';
 import sectionListGetItemLayout from 'react-native-section-list-get-item-layout';
 import { observable, reaction, action, computed } from 'mobx';
 import { chatInviteStore, chatStore } from '../../lib/icebear';
@@ -242,7 +242,8 @@ export default class ChatList extends SafeComponent {
         Object.assign(this, { minSectionIndex, minItemIndex, maxSectionIndex, maxItemIndex });
     }
 
-    getItemLayout = sectionListGetItemLayout({
+    // TODO: fix getitemlayout for RN 0.55
+    getItemLayout = Platform.OS === 'android' ? null : sectionListGetItemLayout({
         // first section is channels
         // second section is DMs
         getItemHeight: (rowData, sectionIndex /* , rowIndex */) => sectionIndex === 0 ?
