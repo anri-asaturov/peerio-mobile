@@ -159,7 +159,6 @@ dependencies {
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-contacts')
     compile project(':react-native-linear-gradient')
-    compile project(':react-native-mail')
     compile project(':react-native-billing')
     compile project(':ReactAndroid')
     compile project(':react-native-vector-icons')
