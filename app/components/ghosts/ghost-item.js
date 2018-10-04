@@ -5,7 +5,7 @@ import { View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import SafeComponent from '../shared/safe-component';
 import ghostState from './ghost-state';
-import icons from '../helpers/icons';
+// import icons from '../helpers/icons';
 import { vars } from '../../styles/styles';
 import { mailStore } from '../../lib/icebear';
 import Text from '../controls/custom-text';
@@ -71,7 +71,7 @@ export default class GhostItem extends SafeComponent {
                     <Text style={lightText}>{g.recipients.join(', ')}</Text>
                     <View style={rowFill}>
                         <Text style={[lightText, shrinkFill]} ellipsizeMode="tail" numberOfLines={1}>{g.preview}</Text>
-                        {/*<Menu onSelect={action => action().then(() => this.reloadGhosts())}>
+                        {/* <Menu onSelect={action => action().then(() => this.reloadGhosts())}>
                             <MenuTrigger style={{ padding: vars.iconPadding }}>
                                 {icons.plaindark('more-vert')}
                             </MenuTrigger>
@@ -83,7 +83,7 @@ export default class GhostItem extends SafeComponent {
                                     <Text>Delete</Text>
                                 </MenuOption>
                             </MenuOptions>
-                        </Menu>*/}
+                        </Menu> */}
                     </View>
                 </View>
             </TouchableOpacity>

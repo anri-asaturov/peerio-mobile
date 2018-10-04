@@ -108,7 +108,11 @@
     "scrypt-async": "2.0.0",
     "socket.io-client": "2.1.1",
     "tweetnacl": "1.0.0",
-    "url-regex": "4.1.1"
+    "url-regex": "4.1.1",
+    "@storybook/react-native": "^3.4.11",
+    "@storybook/addon-actions": "^3.4.11",
+    "@storybook/addon-links": "^3.4.11",
+    "@storybook/addons": "^3.4.11"
   },
   "devDependencies": {
     "appium": "1.7.1",
@@ -148,10 +152,6 @@
     "user-home-cli": "1.0.1",
     "validate-commit-message": "3.0.1",
     "webdriverio": "4.9.10",
-    "@storybook/react-native": "^3.4.11",
-    "@storybook/addon-actions": "^3.4.11",
-    "@storybook/addon-links": "^3.4.11",
-    "@storybook/addons": "^3.4.11",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0"
   },
