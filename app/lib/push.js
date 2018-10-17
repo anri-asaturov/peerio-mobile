@@ -26,16 +26,40 @@ function onRegister(token) {
     };
     if (socket.authenticated) registerServerSide();
     socket.onAuthenticated(registerServerSide);
+    console.log(`push register called`);
+    setTimeout(() => {
+        PushNotificationIOS.presentLocalNotification(
+            {
+                alertBody: 'Hello world!!!'
+            }
+        );
+        /* PushNotification.localNotification({
+            title: 'hello',
+            message: `processed a notification:`
+        }); */
+    }, 3000);
 }
 
 function enablePushNotifications() {
+    console.log(`enablePushNotifications called`);
     PushNotification.configure({
         onRegister,
 
         onNotification(notification) {
             console.log('🚲 push.js: NOTIFICATION:', notification);
-            notification.finish(PushNotificationIOS.FetchResult.NoData);
-            console.log('🚲 push.js: nofitication finish callback called');
+            if (notification.data && notification.data.remote) {
+                PushNotificationIOS.presentLocalNotification(
+                    {
+                        alertBody: 'Hello world!!!'
+                    }
+                );
+                notification.finish(PushNotificationIOS.FetchResult.NoData);
+                console.log('🚲 push.js: nofitication finish callback called');
+                /* PushNotification.localNotification({
+                    title: 'hello',
+                    message: `processed a notification: ${JSON.stringify(notification.data)}`
+                }); */
+            }
         },
 
         // GCM sender id
@@ -75,8 +99,8 @@ const enableServerSide = () => toggleServerSide(true);
 const disableServerSide = () => toggleServerSide(false);
 
 if (__DEV__) {
-    const TEST_TOKEN = 'a41f1b2e8e9279c81dd9c69c56fd060d25c743354a146d4d9dcddcd9bf73b0e6';
-    onRegister({ token: TEST_TOKEN });
+    // const TEST_TOKEN = 'a41f1b2e8e9279c81dd9c69c56fd060d25c743354a146d4d9dcddcd9bf73b0e6';
+    // onRegister({ token: TEST_TOKEN });
 }
 
 enablePushNotifications();

@@ -91,7 +91,10 @@ void RogerAddressBookChangeCallback(ABAddressBookRef addressBook, CFDictionaryRe
   [[NSNotificationCenter defaultCenter] addObserver:self
                                   selector:@selector(userContactsChange:)
              name:CNContactStoreDidChangeNotification object:nil]; */
-
+  // define UNUserNotificationCenter
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  center.delegate = self;
+  
   return YES;
 }
 
@@ -121,4 +124,17 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   [RCTPushNotificationManager didReceiveLocalNotification:notification];
 }
+
+//Called when a notification is delivered to a foreground app.
+// -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+// {
+//  NSLog(@"User Info : %@",notification.request.content.userInfo);
+  // [RCTPushNotificationManager didReceiveLocalNotification:notification];
+  /* [RCTPushNotificationManager
+     didReceiveRemoteNotification:notification.request.content.userInfo
+     fetchCompletionHandler:completionHandler]; */
+  // UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
+//  completionHandler(UNNotificationPresentationOptionAlert);
+// }
+
 @end
