@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, LayoutAnimation, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { observable, reaction, action, computed } from 'mobx';
 import { chatInviteStore, chatStore } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
@@ -21,6 +21,7 @@ import { vars } from '../../styles/styles';
 import ChatZeroStatePlaceholder from './chat-zero-state-placeholder';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
 import zeroStateBeacons from '../beacons/zerostate-beacons';
+import { transitionAnimation } from '../helpers/animations';
 
 const INITIAL_LIST_SIZE = 10;
 
@@ -80,22 +81,24 @@ export default class ChatList extends SafeComponent {
                 viewPosition: 0
             });
         };
+        uiState.testAction3 = () => {
+            this.scrollView.scrollToLocation({
+                sectionIndex: 0,
+                itemIndex: -1,
+                viewOffset: vars.topDrawerHeight,
+                animated: true
+            });
+        };
 
         this.indicatorReaction = reaction(() => [
             this.topIndicatorVisible,
             this.bottomIndicatorVisible
-        ], () => {
-            LayoutAnimation.easeInEaseOut();
-        }, { fireImmediately: true });
+        ], transitionAnimation, { fireImmediately: true });
 
         setTimeout(() => {
             // TODO: unify this
             if (Platform.OS === 'android') {
-                this.scrollView.scrollToLocation({
-                    sectionIndex: 0,
-                    itemIndex: 0,
-                    viewOffset: 0
-                });
+                // we don't do anything here because no indicator update is an iOS problem right now
             } else {
                 this.scrollView._wrapperListRef._listRef.scrollToOffset({ offset: 0 });
             }

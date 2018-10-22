@@ -2,6 +2,100 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.381.0"></a>
+# [3.381.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.380.0...v3.381.0) (2018-10-22)
+
+
+### Bug Fixes
+
+* fix drawer appearing/disappearing on android RN0.55 [ch 15668] ([7658370](https://github.com/PeerioTechnologies/peerio-mobile/commit/7658370))
+
+
+
+<a name="3.380.0"></a>
+# [3.380.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.379.0...v3.380.0) (2018-10-22)
+
+
+### Bug Fixes
+
+* return file picker manager back [ch15624] ([2adcf52](https://github.com/PeerioTechnologies/peerio-mobile/commit/2adcf52))
+
+
+
+<a name="3.379.0"></a>
+# [3.379.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.378.0...v3.379.0) (2018-10-19)
+
+
+### Bug Fixes
+
+* extract displayName and extension with more fallbacks [ch15563] ([a7a851e](https://github.com/PeerioTechnologies/peerio-mobile/commit/a7a851e))
+* use transitionAnimation instead of LayoutAnimation to prevent android crash [ch15564] ([1f2a58d](https://github.com/PeerioTechnologies/peerio-mobile/commit/1f2a58d))
+
+
+
+<a name="3.378.0"></a>
+# [3.378.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.377.0...v3.378.0) (2018-10-18)
+
+
+
+<a name="3.377.0"></a>
+# [3.377.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.375.0...v3.377.0) (2018-10-18)
+
+
+### Bug Fixes
+
+* add tap action to avatar ([#341](https://github.com/PeerioTechnologies/peerio-mobile/issues/341)) ([115f8a6](https://github.com/PeerioTechnologies/peerio-mobile/commit/115f8a6))
+* fireImmediately for receipts ([71104b1](https://github.com/PeerioTechnologies/peerio-mobile/commit/71104b1))
+* fix mail regression [ch15383] ([626b13b](https://github.com/PeerioTechnologies/peerio-mobile/commit/626b13b))
+* improving beacon fade in/out animation and timing[branch ch10991] ([#337](https://github.com/PeerioTechnologies/peerio-mobile/issues/337)) ([8631a80](https://github.com/PeerioTechnologies/peerio-mobile/commit/8631a80))
+* remove checkbox from 2fa popup [branch ch13613] ([#332](https://github.com/PeerioTechnologies/peerio-mobile/issues/332)) ([d89d38a](https://github.com/PeerioTechnologies/peerio-mobile/commit/d89d38a))
+* remove test code ([54853e4](https://github.com/PeerioTechnologies/peerio-mobile/commit/54853e4))
+* remove unneded source path ([ac91a04](https://github.com/PeerioTechnologies/peerio-mobile/commit/ac91a04))
+* resolve request permissions properly [ch15270] ([#348](https://github.com/PeerioTechnologies/peerio-mobile/issues/348)) ([e57b638](https://github.com/PeerioTechnologies/peerio-mobile/commit/e57b638))
+* save ak to txt on signup for android without pdf reader [branch … ([#339](https://github.com/PeerioTechnologies/peerio-mobile/issues/339)) ([d59e817](https://github.com/PeerioTechnologies/peerio-mobile/commit/d59e817))
+* section list height calculations [ch14098] ([a49bf88](https://github.com/PeerioTechnologies/peerio-mobile/commit/a49bf88))
+* shallow maps ([18aa572](https://github.com/PeerioTechnologies/peerio-mobile/commit/18aa572))
+* signup back icon [branch ch13143] ([#329](https://github.com/PeerioTechnologies/peerio-mobile/issues/329)) ([ed578ce](https://github.com/PeerioTechnologies/peerio-mobile/commit/ed578ce))
+* subscrubeToPromoEmails should be set fo false by default [ch15266] ([4fc9380](https://github.com/PeerioTechnologies/peerio-mobile/commit/4fc9380))
+
+
+### Features
+
+* debug menu can now be brought up by doing a shake gesture (shift + N for android emulators) [branch ch14253] ([#343](https://github.com/PeerioTechnologies/peerio-mobile/issues/343)) ([7128bab](https://github.com/PeerioTechnologies/peerio-mobile/commit/7128bab))
+* disable onboarding emails flag [ch15032] ([28d5dda](https://github.com/PeerioTechnologies/peerio-mobile/commit/28d5dda))
+* remove purpose field in room creation [branch ch12374] ([#342](https://github.com/PeerioTechnologies/peerio-mobile/issues/342)) ([843392f](https://github.com/PeerioTechnologies/peerio-mobile/commit/843392f))
+
+
+
+<a name="3.376.0"></a>
+# [3.376.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.375.0...v3.376.0) (2018-10-18)
+
+
+### Bug Fixes
+
+* add tap action to avatar ([#341](https://github.com/PeerioTechnologies/peerio-mobile/issues/341)) ([115f8a6](https://github.com/PeerioTechnologies/peerio-mobile/commit/115f8a6))
+* fireImmediately for receipts ([71104b1](https://github.com/PeerioTechnologies/peerio-mobile/commit/71104b1))
+* fix mail regression [ch15383] ([626b13b](https://github.com/PeerioTechnologies/peerio-mobile/commit/626b13b))
+* improving beacon fade in/out animation and timing[branch ch10991] ([#337](https://github.com/PeerioTechnologies/peerio-mobile/issues/337)) ([8631a80](https://github.com/PeerioTechnologies/peerio-mobile/commit/8631a80))
+* remove checkbox from 2fa popup [branch ch13613] ([#332](https://github.com/PeerioTechnologies/peerio-mobile/issues/332)) ([d89d38a](https://github.com/PeerioTechnologies/peerio-mobile/commit/d89d38a))
+* remove test code ([54853e4](https://github.com/PeerioTechnologies/peerio-mobile/commit/54853e4))
+* remove unneded source path ([ac91a04](https://github.com/PeerioTechnologies/peerio-mobile/commit/ac91a04))
+* resolve request permissions properly [ch15270] ([#348](https://github.com/PeerioTechnologies/peerio-mobile/issues/348)) ([e57b638](https://github.com/PeerioTechnologies/peerio-mobile/commit/e57b638))
+* save ak to txt on signup for android without pdf reader [branch … ([#339](https://github.com/PeerioTechnologies/peerio-mobile/issues/339)) ([d59e817](https://github.com/PeerioTechnologies/peerio-mobile/commit/d59e817))
+* section list height calculations [ch14098] ([a49bf88](https://github.com/PeerioTechnologies/peerio-mobile/commit/a49bf88))
+* shallow maps ([18aa572](https://github.com/PeerioTechnologies/peerio-mobile/commit/18aa572))
+* signup back icon [branch ch13143] ([#329](https://github.com/PeerioTechnologies/peerio-mobile/issues/329)) ([ed578ce](https://github.com/PeerioTechnologies/peerio-mobile/commit/ed578ce))
+* subscrubeToPromoEmails should be set fo false by default [ch15266] ([4fc9380](https://github.com/PeerioTechnologies/peerio-mobile/commit/4fc9380))
+
+
+### Features
+
+* debug menu can now be brought up by doing a shake gesture (shift + N for android emulators) [branch ch14253] ([#343](https://github.com/PeerioTechnologies/peerio-mobile/issues/343)) ([7128bab](https://github.com/PeerioTechnologies/peerio-mobile/commit/7128bab))
+* disable onboarding emails flag [ch15032] ([28d5dda](https://github.com/PeerioTechnologies/peerio-mobile/commit/28d5dda))
+* remove purpose field in room creation [branch ch12374] ([#342](https://github.com/PeerioTechnologies/peerio-mobile/issues/342)) ([843392f](https://github.com/PeerioTechnologies/peerio-mobile/commit/843392f))
+
+
+
 <a name="3.375.0"></a>
 # [3.375.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.374.0...v3.375.0) (2018-10-09)
 

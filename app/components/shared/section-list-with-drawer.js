@@ -21,8 +21,7 @@ export default class SectionListWithDrawer extends ListWithDrawer {
             if (Platform.OS === 'android') {
                 this.scrollView.scrollToLocation({
                     sectionIndex: 0,
-                    itemIndex: 0,
-                    viewOffset: offset,
+                    itemIndex: -1,
                     animated
                 });
             } else {
@@ -43,8 +42,9 @@ export default class SectionListWithDrawer extends ListWithDrawer {
             if (Platform.OS === 'android') {
                 this.scrollView.scrollToLocation({
                     sectionIndex: 0,
-                    itemIndex: 0,
-                    viewOffset: 0,
+                    itemIndex: -1,
+                    // android calculates offset of list header differently
+                    viewOffset: this.topDrawer ? vars.topDrawerHeight : 0,
                     animated
                 });
             } else {
@@ -58,9 +58,14 @@ export default class SectionListWithDrawer extends ListWithDrawer {
         }
     };
 
+    onScrollToIndexFailed = () => {
+        console.debug(`section-list-with-drawer: on scroll to index failed`);
+    };
+
     renderThrow() {
         return (
             <SectionList
+                onScrollToIndexFailed={this.onScrollToIndexFailed}
                 {...this.props}
                 ref={this.scrollViewRef}
                 ListHeaderComponent={this.topDrawer}

@@ -1,6 +1,6 @@
 {
   "name": "peeriomobile",
-  "version": "3.375.0",
+  "version": "3.381.0",
   "private": true,
   "scripts": {
     "postinstall": "./scripts/setup-env.sh && npm run icebear:compile && ./scripts/setup-rn-debugging.sh && ./scripts/copy-android-resources.sh && ./scripts/android-switch-to-rn-fork.sh && node scripts/test-deps.js",
@@ -72,7 +72,7 @@
     "pbkdf2": "github:PeerioTechnologies/pbkdf2",
     "pdfform.js": "1.0.13",
     "peerio-copy": "github:PeerioTechnologies/peerio-copy#icebear",
-    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#dev",
+    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#revert-connection-fixes",
     "peerio-translator": "github:PeerioTechnologies/peerio-translator#v1.0.2",
     "process": "0.11.9",
     "prop-types": "15.5.10",
@@ -89,6 +89,7 @@
     "react-native-contacts": "github:PeerioTechnologies/react-native-contacts#0.55",
     "react-native-device-info": "github:PeerioTechnologies/react-native-device-info#0.55",
     "react-native-file-opener": "github:PeerioTechnologies/react-native-file-opener#0.55",
+    "react-native-file-picker": "github:PeerioTechnologies/react-native-file-picker-clean#0.55",
     "react-native-fs": "github:PeerioTechnologies/react-native-fs#master",
     "react-native-image-crop-picker": "github:PeerioTechnologies/react-native-image-crop-picker#0.55",
     "react-native-image-picker": "github:PeerioTechnologies/react-native-image-picker#0.55",
@@ -96,7 +97,7 @@
     "react-native-keep-awake": "3.0.1",
     "react-native-key-event": "1.0.0",
     "react-native-linear-gradient": "2.4.0",
-    "react-native-mail": "3.0.7",
+    "react-native-mail": "github:PeerioTechnologies/react-native-mail",
     "react-native-menu": "0.21.0",
     "react-native-popup-menu": "0.8.4",
     "react-native-privacy-snapshot": "github:PeerioTechnologies/react-native-privacy-snapshot",
