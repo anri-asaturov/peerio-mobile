@@ -72,7 +72,7 @@
     "pbkdf2": "github:PeerioTechnologies/pbkdf2",
     "pdfform.js": "1.0.13",
     "peerio-copy": "github:PeerioTechnologies/peerio-copy#icebear",
-    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#revert-connection-fixes",
+    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#dev",
     "peerio-translator": "github:PeerioTechnologies/peerio-translator#v1.0.2",
     "process": "0.11.9",
     "prop-types": "15.5.10",
