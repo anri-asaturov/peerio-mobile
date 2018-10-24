@@ -1,6 +1,7 @@
 import PushNotification from 'react-native-push-notification';
 import { Platform, PushNotificationIOS } from 'react-native';
 import { when, observable } from 'mobx';
+import randomWords from 'random-words';
 import { socket } from '../lib/icebear';
 import whitelabel from '../components/whitelabel/white-label-config';
 
@@ -45,15 +46,20 @@ function enablePushNotifications() {
     PushNotification.configure({
         onRegister,
 
-        onNotification(notification) {
+        async onNotification(notification) {
             console.log('🚲 push.js: NOTIFICATION:', notification);
             if (notification.data && notification.data.remote) {
-                PushNotificationIOS.presentLocalNotification(
+                console.log('try presenting a notificaiton');
+                await PushNotificationIOS.presentLocalNotification(
                     {
-                        alertBody: 'Hello world!!!'
+                        alertBody: `Generated message: ${randomWords()}`
                     }
                 );
-                notification.finish(PushNotificationIOS.FetchResult.NoData);
+                await notification.finish(PushNotificationIOS.FetchResult.NoData);
+                await PushNotificationIOS.cancelAllLocalNotifications();
+                await PushNotificationIOS.removeAllDeliveredNotifications();
+
+
                 console.log('🚲 push.js: nofitication finish callback called');
                 /* PushNotification.localNotification({
                     title: 'hello',
