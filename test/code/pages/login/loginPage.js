@@ -1,6 +1,10 @@
 const Page = require('../page');
 
 class LoginPage extends Page {
+    get usernamePresent() {
+        return this.checkIfPresent('~usernameLogin');
+    }
+
     get username() {
         return this.getWhenVisible('~usernameLogin');
     }

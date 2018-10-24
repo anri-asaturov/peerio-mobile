@@ -21,7 +21,7 @@ defineSupportCode(({ When, Then }) => {
     });
 
     Then('they log in', async function () {
-        await this.loginExistingAccount(process.env.CHAT_RECIPIENT_USER, process.env.CHAT_RECIPIENT_PASS);
+        await this.loginExistingAccountWithout2FA(process.env.CHAT_RECIPIENT_USER, process.env.CHAT_RECIPIENT_PASS);
     });
 
     Then('they accept the room invite', async function () {

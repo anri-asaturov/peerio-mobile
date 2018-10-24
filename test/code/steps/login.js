@@ -53,7 +53,11 @@ defineSupportCode(({ Given, When, Then }) => {
     });
 
     When('I sign in', async function () {
-        await this.loginExistingAccount(this.username, this.passphrase);
+        await this.loginExistingAccountWithout2FA(this.username, this.passphrase);
+    });
+
+    When('I sign in with 2fa', async function () {
+        await this.loginExistingAccountWith2FA(this.username, this.passphrase);
     });
 
     When('I log in as {word} user', async function (string) {
@@ -61,7 +65,7 @@ defineSupportCode(({ Given, When, Then }) => {
             await this.createNewAccount();
         } else {
             const credentials = existingUsers[string];
-            await this.loginExistingAccount(credentials.name, credentials.passphrase);
+            await this.loginExistingAccountWithout2FA(credentials.name, credentials.passphrase);
         }
     });
 

@@ -150,6 +150,8 @@ class World {
         await this.createAccountPage.copyButton.click();
         await this.createAccountPage.nextButton.click();
 
+        await this.contactsPage.snackbar.click();
+
         await this.createAccountPage.acceptButton.click();
         await this.createAccountPage.shareButton.click();
     }
@@ -169,11 +171,27 @@ class World {
         await this.alertsPage.dismissNotificationsAlert();
         await this.startPage.loginButton.click();
 
-        await this.loginPage.username.setValue(username);
-        await this.loginPage.hideKeyboardHelper();
+        // Is hidden if username is cached
+        if (await !this.loginPage.usernamePresent) {
+            await this.loginPage.username.setValue(username);
+            await this.loginPage.hideKeyboardHelper();
+        }
         await this.loginPage.passphrase.setValue(passphrase);
         await this.loginPage.hideKeyboardHelper();
         await this.loginPage.submitButton.click();
+    }
+
+    async loginExistingAccountWithout2FA(username, passphrase) {
+        await this.loginExistingAccount(username, passphrase);
+
+        await this.dismissEmailConfirmationPopup();
+        await this.seeWelcomeScreen();
+    }
+
+    async loginExistingAccountWith2FA(username, passphrase) {
+        await this.loginExistingAccount(username, passphrase);
+
+        await this.enterTokenInPrompt();
 
         await this.dismissEmailConfirmationPopup();
         await this.seeWelcomeScreen();
