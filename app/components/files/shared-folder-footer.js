@@ -35,7 +35,7 @@ export default class SharedFolderFooter extends SafeComponent {
                 onPress={action} >
                 {icon && icons.plaindark(icon, vars.iconSize, iconStyle)}
                 <View style={{ padding: vars.spacing.medium.mini }}>
-                    <Text style={{ fontWeight: 'bold', color: vars.bg }}>
+                    <Text style={{ fontWeight: 'bold', color: vars.peerioBlue }}>
                         {tu(title)}
                     </Text>
                 </View>

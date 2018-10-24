@@ -2,7 +2,7 @@ import React from 'react';
 import { View, PanResponder, Linking, DeviceEventEmitter,
     AppState, ActivityIndicator, NativeModules,
     Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
-import RNShakeEvent from 'react-native-shake-event';
+// import RNShakeEvent from 'react-native-shake-event';
 import KeyEvent from 'react-native-key-event';
 import { observer } from 'mobx-react/native';
 import SafeComponent from './shared/safe-component';
@@ -97,11 +97,11 @@ export default class App extends SafeComponent {
             if (keyCode.unicodeChar === 78 && keyCode.isShiftPressed) uiState.showDebugMenu = true;
         });
 
-        RNShakeEvent.addEventListener('shake', () => { uiState.showDebugMenu = true; });
+        // RNShakeEvent.addEventListener('shake', () => { uiState.showDebugMenu = true; });
     }
 
     componentWillUnmount() {
-        RNShakeEvent.removeEventListener('shake');
+        // RNShakeEvent.removeEventListener('shake');
     }
 
     _handleAppStateChange(appState) {

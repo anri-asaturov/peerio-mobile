@@ -42,31 +42,48 @@ const container2 = {
     paddingTop: 68
 };
 
+const backupAkPage = {
+    paddingHorizontal: pagePadding,
+    paddingTop: vars.isDeviceScreenBig ? 96 : 68
+};
+
 const headerContainer = {
     marginTop: vars.spacing.small.maxi2x,
     marginBottom: vars.spacing.medium.maxi
 };
 
 const headerStyle = {
-    fontSize: vars.font.size27, // TODO font should be 27, massive = 24
+    fontSize: vars.font.size27,
     color: vars.darkBlue,
     marginBottom: vars.spacing.small.midi
 };
 
 const headerStyle2 = {
-    fontSize: vars.font.size27, // TODO font should be 27, massive = 24
+    fontSize: vars.font.size27,
     color: vars.darkBlue,
     marginBottom: vars.spacing.medium.midi
 };
 
-const description = {
-    fontSize: vars.font.size18,
+const descriptionStyle = {
     color: vars.textBlack87,
     marginBottom: vars.spacing.medium.maxi2x
 };
 
+const description = [descriptionStyle, {
+    fontSize: vars.font.size18
+}];
+
+const description2 = [descriptionStyle, {
+    fontSize: vars.isDeviceScreenBig ? vars.font.size16 : vars.font.size14
+}];
+
+const generateAkDescription = [descriptionStyle, {
+    fontSize: vars.isDeviceScreenBig ? vars.font.size18 : vars.font.size14
+}];
+
 const subTitle = {
     color: vars.textBlack87,
+    fontSize: vars.isDeviceScreenBig ? vars.font.size16 : vars.font.size14,
     marginBottom: 0
 };
 
@@ -77,11 +94,14 @@ const separator = {
 };
 
 const suggestionContainer = {
-    height: 24,
+    maxHeight: 50,
     flexDirection: 'row',
     flexWrap: 'wrap',
     flex: 1,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    // to allow possible third row in suggested usernames to be hidden
+    borderBottomWidth: 1,
+    borderBottomColor: page.backgroundColor
 };
 
 const suggestionTitle = {
@@ -98,10 +118,13 @@ export default {
     emptyProgressBar,
     container,
     container2,
+    backupAkPage,
     headerContainer,
     headerStyle,
     headerStyle2,
     description,
+    description2,
+    generateAkDescription,
     separator,
     suggestionContainer,
     suggestionTitle,

@@ -15,7 +15,7 @@ const { S } = telemetry;
 
 const textTitleStyle = {
     flex: 1,
-    fontSize: vars.font.size16
+    fontSize: vars.isDeviceScreenBig ? vars.font.size16 : vars.font.size14
 };
 const textStyle = {
     color: vars.textBlack54
@@ -60,10 +60,10 @@ export default class TosAccordionItem extends SafeComponent {
         const titleStyle = {
             flex: 1,
             flexShrink: 1,
-            height: 58,
+            height: 64,
             flexDirection: 'row',
-            alignItems: 'center',
             borderColor: vars.darkBlueDivider12,
+            alignItems: 'center',
             borderTopWidth: index ? 1 : 0,
             marginBottom: this.isOpen ? vars.spacing.small.midi2x : 0
         };
@@ -75,7 +75,7 @@ export default class TosAccordionItem extends SafeComponent {
                 <TouchableOpacity onPress={this.toggle} style={titleStyle}>
                     {this.isOpen ? leftIcon.on : leftIcon.off}
                     <Text semibold style={[textTitleStyle, { color: titleTextColor }]}>{tx(title)}</Text>
-                    {icons.dark(rightIconName, this.toggle)}
+                    {icons.darkNoPadding(rightIconName, this.toggle)}
                 </TouchableOpacity>
                 {this.isOpen ? <FlatList
                     data={content}

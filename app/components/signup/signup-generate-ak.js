@@ -24,7 +24,7 @@ export default class SignupGenerateAk extends SafeComponent {
                         animated
                         marginBottom
                     />
-                    <Text style={signupStyles.description}>
+                    <Text style={signupStyles.generateAkDescription}>
                         {tx('title_generatingAkExplanation')}
                     </Text>
                 </View>

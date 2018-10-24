@@ -22,12 +22,21 @@ const { S } = telemetry;
 
 const { height } = Dimensions.get('window');
 
+const buttonContainerHeight = 52;
+
 const buttonContainer = {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopWidth: 1,
+    borderTopColor: vars.separatorColor,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    marginTop: vars.spacing.small.mini,
-    marginBottom: vars.spacing.small.maxi2x
+    paddingHorizontal: signupStyles.pagePadding,
+    height: buttonContainerHeight,
+    backgroundColor: vars.white
 };
 
 @observer
@@ -65,7 +74,7 @@ export default class SignupTos extends SafeComponent {
     get content() {
         return (
             <View>
-                <Text style={signupStyles.description}>
+                <Text style={signupStyles.description2}>
                     {<T k="title_termsDescription">
                         {{
                             openTerms: this.openTermsLink,
@@ -73,7 +82,7 @@ export default class SignupTos extends SafeComponent {
                         }}
                     </T>}
                 </Text>
-                <TosAccordion />
+                <TosAccordion style={{ paddingBottom: buttonContainerHeight }} />
             </View>
         );
     }
@@ -96,30 +105,32 @@ export default class SignupTos extends SafeComponent {
 
     renderThrow() {
         return (
-            <ViewWithDrawer style={[signupStyles.page, { height }]}>
-                <View style={signupStyles.container2}>
-                    <Text semibold serif style={signupStyles.headerStyle2}>
-                        {tx('title_termsOfUseSentenceCase')}
-                    </Text>
-                    {this.content}
-                    <View style={buttonContainer}>
-                        {buttons.blueTextButton(
-                            tx('button_decline'),
-                            this.cancelSignup,
-                            !socket.connected,
-                            null,
-                            'button_decline'
-                        )}
-                        <View style={{ width: 24 }} />
-                        {buttons.roundBlueBgButton(
-                            tx('button_accept'),
-                            this.finishSignup,
-                            !socket.connected,
-                            'button_accept'
-                        )}
+            <View>
+                <ViewWithDrawer style={[signupStyles.page, { height }]}>
+                    <View style={signupStyles.container2}>
+                        <Text semibold serif style={signupStyles.headerStyle2}>
+                            {tx('title_termsOfUseSentenceCase')}
+                        </Text>
+                        {this.content}
                     </View>
+                </ViewWithDrawer>
+                <View style={buttonContainer}>
+                    {buttons.blueTextButton(
+                        tx('button_decline'),
+                        this.cancelSignup,
+                        !socket.connected,
+                        null,
+                        'button_decline'
+                    )}
+                    <View style={{ width: 24 }} />
+                    {buttons.roundBlueBgButton(
+                        tx('button_accept'),
+                        this.finishSignup,
+                        !socket.connected,
+                        'button_accept'
+                    )}
                 </View>
-            </ViewWithDrawer>
+            </View>
         );
     }
 }

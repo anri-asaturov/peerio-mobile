@@ -1,4 +1,4 @@
-import { DeviceEventEmitter, NativeEventEmitter } from 'react-native';
+import { DeviceEventEmitter, NativeEventEmitter, Platform } from 'react-native';
 import { observable, action } from 'mobx';
 import RNContacts from 'react-native-contacts';
 import RoutedState from '../routes/routed-state';
@@ -25,7 +25,10 @@ class ContactState extends RoutedState {
         // and do not reinitialize cache
         this.importedEmails = this.importedEmails || await this.cache.getValue('imported_emails') || {};
         console.log(`loaded cached imported emails: ${Object.keys(this.importedEmails).length}`);
-        await this.syncCachedEmails();
+        // TODO: fix crash when revoking contact permissions on android
+        if (Platform.OS !== 'android') {
+            await this.syncCachedEmails();
+        }
         // TODO: android implementation of RNContacts.subscribeToUpdates
         RNContacts.subscribeToUpdates && RNContacts.subscribeToUpdates(() => {
             console.log(`contact-store.js: subscribed to updates`);
@@ -117,14 +120,18 @@ class ContactState extends RoutedState {
 
     @action requestPermission() {
         console.log('contact-state.js: requesting permissions');
-        return new Promise(resolve => RNContacts.requestPermission((err, permission) => {
-            if (err) {
-                console.error(err);
-                resolve('denied');
-                return;
-            }
-            resolve(permission);
-        }));
+        return new Promise(resolve => {
+            // TODO: this is currently android-only
+            this.createPermissionHandler(resolve);
+            RNContacts.requestPermission((err, permission) => {
+                if (err) {
+                    console.error(err);
+                    resolve('denied');
+                    return;
+                }
+                resolve(permission);
+            });
+        });
     }
 
     hasExistingPermissions() {

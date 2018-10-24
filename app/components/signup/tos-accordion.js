@@ -7,6 +7,7 @@ import { vars } from '../../styles/styles';
 import TosAccordionItem from './tos-accordion-item';
 
 const iconPadding = vars.spacing.small.midi2x;
+
 const listData = [
     {
         title: 'title_termsDataCollection',
@@ -87,6 +88,6 @@ export default class TosAccordion extends SafeComponent {
                 keyExtractor={this.keyExtractor}
                 data={listData}
                 renderItem={this.listItem}
-                style={{ marginBottom: vars.spacing.medium.midi2x }} />);
+                style={[{ marginBottom: vars.spacing.medium.midi2x }, this.props.style]} />);
     }
 }

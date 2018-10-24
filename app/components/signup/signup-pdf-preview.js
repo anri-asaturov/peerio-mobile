@@ -13,7 +13,8 @@ import tm from '../../telemetry';
 const roundedBoxStyle = {
     borderColor: vars.txtMedium,
     borderWidth: 1,
-    borderRadius: 12
+    borderRadius: 12,
+    height: vars.isDeviceScreenBig ? 140 : 110
 };
 
 const footer = {
@@ -46,15 +47,15 @@ const previewBox = {
 };
 
 const innerPreviewBox = {
-    height: 100,
+    height: vars.isDeviceScreenBig ? 92 : 62,
     backgroundColor: '#2e2f4b',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'center'
 };
 
 const previewHeaderText = {
     color: vars.white,
-    fontSize: vars.font.size12
+    fontSize: vars.isDeviceScreenBig ? vars.font.size12 : vars.font.size8
 };
 
 const textBox = {
@@ -63,13 +64,13 @@ const textBox = {
     alignSelf: 'stretch',
     marginHorizontal: 16,
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: vars.isDeviceScreenBig ? 8 : 4
 };
 
 const textBoxText = {
     color: vars.textBlack87,
     fontSize: vars.font.size8,
-    marginVertical: 4
+    marginVertical: vars.isDeviceScreenBig ? 4 : 0
 };
 
 @observer
@@ -105,7 +106,7 @@ export default class SignupPdfPreview extends SafeComponent {
                 <View style={footer}>
                     <View>
                         <Text style={filenameStyle}>
-                            {signupState.backupFileName}
+                            {signupState.backupFileName('pdf')}
                         </Text>
                         <Text style={filesizeStyle}>
                             {FILE_SIZE}

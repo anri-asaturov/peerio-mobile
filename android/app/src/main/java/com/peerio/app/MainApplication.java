@@ -4,6 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.filepicker.FilePickerPackage;
+import com.chirag.RNMail.RNMail;
 import net.kangyufei.KeyEventPackage;
 import com.jadsonlourenco.RNShakeEvent.RNShakeEventPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -49,6 +51,8 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new FilePickerPackage(),
+                    new RNMail(),
                     new KeyEventPackage(),
                     new RNShakeEventPackage(),
                     new LottiePackage(),

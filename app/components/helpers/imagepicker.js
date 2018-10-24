@@ -3,6 +3,8 @@ import ImagePicker from 'react-native-image-picker';
 import moment from 'moment';
 import { fileHelpers } from '../../lib/icebear';
 
+// uses react-native-file-picker || react-native-file-picker-clean
+// do not delete
 const { FilePickerManager } = NativeModules;
 
 let lastCall = null;

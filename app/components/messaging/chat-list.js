@@ -1,7 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, LayoutAnimation, Platform } from 'react-native';
-import sectionListGetItemLayout from 'react-native-section-list-get-item-layout';
+import { View, Platform } from 'react-native';
 import { observable, reaction, action, computed } from 'mobx';
 import { chatInviteStore, chatStore } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
@@ -22,6 +21,7 @@ import { vars } from '../../styles/styles';
 import ChatZeroStatePlaceholder from './chat-zero-state-placeholder';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
 import zeroStateBeacons from '../beacons/zerostate-beacons';
+import { transitionAnimation } from '../helpers/animations';
 
 const INITIAL_LIST_SIZE = 10;
 
@@ -81,18 +81,31 @@ export default class ChatList extends SafeComponent {
                 viewPosition: 0
             });
         };
+        uiState.testAction3 = () => {
+            this.scrollView.scrollToLocation({
+                sectionIndex: 0,
+                itemIndex: -1,
+                viewOffset: vars.topDrawerHeight,
+                animated: true
+            });
+        };
 
         this.indicatorReaction = reaction(() => [
             this.topIndicatorVisible,
             this.bottomIndicatorVisible
-        ], () => {
-            LayoutAnimation.easeInEaseOut();
-        }, { fireImmediately: true });
+        ], transitionAnimation, { fireImmediately: true });
+
+        setTimeout(() => {
+            // TODO: unify this
+            if (Platform.OS === 'android') {
+                // we don't do anything here because no indicator update is an iOS problem right now
+            } else {
+                this.scrollView._wrapperListRef._listRef.scrollToOffset({ offset: 0 });
+            }
+        }, 100);
     }
 
     componentWillUnmount() {
-        this.reaction && this.reaction();
-        this.reaction = null;
         this.indicatorReaction && this.indicatorReaction();
         this.indicatorReaction = null;
         uiState.currentScrollView = null;
@@ -241,15 +254,6 @@ export default class ChatList extends SafeComponent {
         });
         Object.assign(this, { minSectionIndex, minItemIndex, maxSectionIndex, maxItemIndex });
     }
-
-    // TODO: fix getitemlayout for RN 0.55
-    getItemLayout = Platform.OS === 'android' ? null : sectionListGetItemLayout({
-        // first section is channels
-        // second section is DMs
-        getItemHeight: (rowData, sectionIndex /* , rowIndex */) => sectionIndex === 0 ?
-            vars.sectionHeaderHeight : vars.chatListItemDMHeight,
-        getSectionHeaderHeight: () => vars.sectionHeaderHeight
-    });
 
     listView() {
         if (chatState.routerMain.currentIndex !== 0) return null;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clipboard, LayoutAnimation } from 'react-native';
+import { Clipboard } from 'react-native';
 import { observable, action, reaction } from 'mobx';
 import Text from '../controls/custom-text';
 import RoutedState from '../routes/routed-state';
@@ -55,7 +55,6 @@ class SettingsState extends RoutedState {
 
     @action transition(subroute) {
         console.log(`settings-state.js: transition ${subroute}`);
-        LayoutAnimation.easeInEaseOut();
         if (subroute) {
             this.subroute = subroute;
             this.stack.push(subroute);

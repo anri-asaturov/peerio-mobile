@@ -66,7 +66,7 @@ export default class PopupLayout extends SafeComponent {
             paddingBottom: uiState.keyboardHeight
         };
         const backgroundColor = colors[popup.type];
-        const margin = vars.spacing.large.mini2;
+        const margin = vars.spacing.large.mini2x;
         const wrapper = {
             flexGrow: popup.fullScreen,
             backgroundColor,

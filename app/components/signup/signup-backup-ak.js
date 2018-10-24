@@ -21,7 +21,7 @@ const { S } = telemetry;
 const buttonContainer = {
     alignItems: 'flex-end',
     marginTop: vars.spacing.small.mini,
-    marginBottom: vars.spacing.small.maxi2x
+    marginBottom: vars.spacing.small.mini2x
 };
 
 @observer
@@ -57,9 +57,10 @@ export default class SignupBackupAk extends SafeComponent {
     }
 
     renderThrow() {
+        const marginTop = vars.spacing.medium.maxi2x;
         return (
             <View style={signupStyles.page}>
-                <View style={signupStyles.container2}>
+                <View style={signupStyles.backupAkPage}>
                     <SignupHeading title="title_backupAk" subTitle="title_generatingAkDescription" />
                     <SignupGenerationBox />
                     <View style={buttonContainer}>
@@ -70,13 +71,13 @@ export default class SignupBackupAk extends SafeComponent {
                             null,
                             'button_copy')}
                     </View>
-                    <Text style={signupStyles.description}>
+                    <Text style={signupStyles.description2}>
                         {tx('title_akBackupDescription')}
                     </Text>
                     <View>
                         <SignupPdfPreview />
                     </View>
-                    <View style={[buttonContainer, { marginTop: 32 }]}>
+                    <View style={[buttonContainer, { marginTop }]}>
                         {buttons.blueTextButton(
                             tx(signupState.keyBackedUp ? 'button_next' : 'button_skipBackup'),
                             signupState.keyBackedUp ? this.handleNext : this.handleSkip,

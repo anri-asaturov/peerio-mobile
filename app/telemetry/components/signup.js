@@ -89,6 +89,8 @@ const signup = setup(
                 S.DOWNLOAD_CONFIRM,
                 {
                     item: S.ACCOUNT_KEY,
+                    location: S.ONBOARDING,
+                    sublocation: TmHelper.currentRoute,
                     fileType
                 }
             ];

@@ -11,7 +11,6 @@ const textinputStyle = {
 const bottomMessageContainer = {
     flexDirection: 'row',
     marginTop: vars.spacing.small.mini,
-    marginBottom: vars.spacing.small.maxi,
     height: vars.spacing.medium.midi2x
 };
 
@@ -20,13 +19,18 @@ const errorTextStyle = {
     color: vars.red
 };
 
-const helperTextStyle = {
+const helperTextFocusedStyle = {
     fontSize: vars.font.size12,
     color: vars.peerioBlue
 };
 
+const helperTextBlurredStyle = {
+    fontSize: vars.font.size12,
+    color: vars.textBlack54
+};
+
 const inputContainer = {
-    marginTop: vars.spacing.small.midi2x
+    marginTop: vars.spacing.small.midi
 };
 
 const labelContainerStyle = {
@@ -50,7 +54,8 @@ export default {
     textinputStyle,
     bottomMessageContainer,
     errorTextStyle,
-    helperTextStyle,
+    helperTextFocusedStyle,
+    helperTextBlurredStyle,
     inputContainer,
     labelContainerStyle,
     iconContainer

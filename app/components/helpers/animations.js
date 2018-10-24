@@ -1,4 +1,4 @@
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, Platform } from 'react-native';
 
 const duration = 150;
 const easeInOpacity = {
@@ -7,6 +7,7 @@ const easeInOpacity = {
 };
 
 function transitionAnimation() {
+    if (Platform.OS === 'android') return fadeInAnimation();
     return LayoutAnimation.configureNext({
         duration,
         delete: easeInOpacity,

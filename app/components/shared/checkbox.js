@@ -40,7 +40,6 @@ export default class CheckBox extends Component {
             paddingVertical: vars.spacing.small.maxi
         };
         const checkbox = {
-            flexShrink: 1,
             borderRadius: 2,
             borderWidth: 2,
             borderColor,

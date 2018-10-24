@@ -100,6 +100,11 @@ export default {
             borderRadius: vars.button.borderRadius,
             backgroundColor: disabled ? vars.mediumGrayBg : vars.peerioBlue
         };
+        const textStyle = {
+            textAlign: 'center',
+            color: vars.white,
+            fontSize: vars.font.size14
+        };
         return (
             <TouchableOpacity
                 {...testLabel(accessibilityId)}
@@ -108,9 +113,7 @@ export default {
                 pressRetentionOffset={vars.pressRetentionOffset}
                 style={[touchableStyle, containerStyle]}>
                 <View style={[buttonStyle, style]}>
-                    <Text semibold style={{ textAlign: 'center', color: vars.white }}>
-                        {tu(text)}
-                    </Text>
+                    <Text semibold style={textStyle}>{tu(text)}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -133,6 +136,11 @@ export default {
             borderWidth: 1,
             backgroundColor: disabled ? vars.mediumGrayBg : vars.white
         };
+        const textStyle = {
+            textAlign: 'center',
+            color: vars.peerioBlue,
+            fontSize: vars.font.size14
+        };
         return (
             <TouchableOpacity
                 {...testLabel(accessibilityId)}
@@ -141,9 +149,7 @@ export default {
                 pressRetentionOffset={vars.pressRetentionOffset}
                 style={touchableStyle}>
                 <View style={[buttonStyle, style]}>
-                    <Text semibold style={{ textAlign: 'center', color: vars.peerioBlue }}>
-                        {tu(text)}
-                    </Text>
+                    <Text semibold style={textStyle}>{tu(text)}</Text>
                 </View>
             </TouchableOpacity>
         );

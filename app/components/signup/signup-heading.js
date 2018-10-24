@@ -10,13 +10,13 @@ const marginBottom = 10;
 const marginTop = vars.spacing.small.maxi2x;
 
 const headerStyle = {
-    fontSize: 24, // TODO: accomodate for iPhone SE
+    fontSize: vars.isDeviceScreenBig ? vars.font.size27 : vars.font.size24,
     color: vars.darkBlue,
     marginBottom
 };
 
 const headerDescription = {
-    fontSize: 14, // TODO: accomodate for iPhone SE
+    fontSize: vars.isDeviceScreenBig ? vars.font.size18 : vars.font.size14,
     color: vars.textBlack54,
     marginBottom: marginBottom + 10
 };

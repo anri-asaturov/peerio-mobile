@@ -30,7 +30,7 @@ const logoBar = {
 const headerContainer = {
     flex: 0,
     paddingHorizontal: signupStyles.pagePadding,
-    paddingTop: vars.spacing.large.mini2x
+    paddingTop: vars.isDeviceScreenBig ? vars.spacing.large.mini2x : vars.spacing.medium.maxi2x
 };
 
 const buttonContainer = {
@@ -66,7 +66,7 @@ export default class LoginWelcome extends SafeComponent {
                     <Image
                         resizeMode="contain"
                         source={imageWelcome}
-                        style={{ height, alignSelf: 'center' }} />
+                        style={{ height, alignSelf: 'center', marginBottom: -vars.spacing.small.midi2x }} />
                 </View>
                 <View style={logoBar}>
                     <Image

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SectionList } from 'react-native';
+import { SectionList, Platform } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { action } from 'mobx';
 import { vars } from '../../styles/styles';
@@ -17,10 +17,19 @@ export default class SectionListWithDrawer extends ListWithDrawer {
         try {
             // TODO: undocumented react-native reference
             // subject to change
-            this.scrollView._wrapperListRef._listRef.scrollToOffset({
-                offset: vars.topDrawerHeight,
-                animated
-            });
+            const offset = vars.topDrawerHeight;
+            if (Platform.OS === 'android') {
+                this.scrollView.scrollToLocation({
+                    sectionIndex: 0,
+                    itemIndex: -1,
+                    animated
+                });
+            } else {
+                this.scrollView._wrapperListRef._listRef.scrollToOffset({
+                    offset,
+                    animated
+                });
+            }
         } catch (e) {
             console.error(e);
         }
@@ -30,18 +39,33 @@ export default class SectionListWithDrawer extends ListWithDrawer {
         try {
             // TODO: undocumented react-native reference
             // subject to change
-            this.scrollView._wrapperListRef._listRef.scrollToOffset({
-                offset: 0,
-                animated
-            });
+            if (Platform.OS === 'android') {
+                this.scrollView.scrollToLocation({
+                    sectionIndex: 0,
+                    itemIndex: -1,
+                    // android calculates offset of list header differently
+                    viewOffset: this.topDrawer ? vars.topDrawerHeight : 0,
+                    animated
+                });
+            } else {
+                this.scrollView._wrapperListRef._listRef.scrollToOffset({
+                    offset: 0,
+                    animated
+                });
+            }
         } catch (e) {
             console.error(e);
         }
     };
 
+    onScrollToIndexFailed = () => {
+        console.debug(`section-list-with-drawer: on scroll to index failed`);
+    };
+
     renderThrow() {
         return (
             <SectionList
+                onScrollToIndexFailed={this.onScrollToIndexFailed}
                 {...this.props}
                 ref={this.scrollViewRef}
                 ListHeaderComponent={this.topDrawer}

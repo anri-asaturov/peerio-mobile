@@ -14,6 +14,7 @@ import { User, telemetry } from '../../lib/icebear';
 import tm from '../../telemetry';
 import TmHelper from '../../telemetry/helpers';
 import ActivityOverlay from '../controls/activity-overlay';
+import DebugMenuTrigger from '../shared/debug-menu-trigger';
 
 const { S } = telemetry;
 
@@ -21,13 +22,13 @@ const marginBottom = 10;
 const marginTop = vars.spacing.small.maxi2x;
 
 const titleStyle = {
-    fontSize: 24, // TODO: accomodate for iPhone SE
+    fontSize: vars.isDeviceScreenBig ? vars.font.size27 : vars.font.size24,
     color: vars.darkBlue,
     marginBottom
 };
 
 const subtitleStyle = {
-    fontSize: 14, // TODO: accomodate for iPhone SE
+    fontSize: vars.isDeviceScreenBig ? vars.font.size18 : vars.font.size14,
     color: vars.textBlack54,
     marginBottom: marginBottom + 10
 };
@@ -83,17 +84,19 @@ export default class LoginWelcomeBack extends SafeComponent {
                 <IntroStepIndicator max={1} current={1} />
                 <View style={[signupStyles.container, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
                     <LoginButtonBack />
-                    <View style={{ marginTop }}>
-                        <Text semibold serif style={titleStyle}>
-                            {tx('title_welcomeBackFirstname', { firstName: this.lastUser.firstName })}
-                        </Text>
-                        <T k="title_switchUser" style={subtitleStyle}>
-                            {{
-                                username: this.lastUser.username,
-                                switchUser: this.switchUserLink
-                            }}
-                        </T>
-                    </View>
+                    <DebugMenuTrigger>
+                        <View style={{ marginTop }}>
+                            <Text semibold serif style={titleStyle}>
+                                {tx('title_welcomeBackFirstname', { firstName: this.lastUser.firstName })}
+                            </Text>
+                            <T k="title_switchUser" style={subtitleStyle}>
+                                {{
+                                    username: this.lastUser.username,
+                                    switchUser: this.switchUserLink
+                                }}
+                            </T>
+                        </View>
+                    </DebugMenuTrigger>
                     <LoginInputs hideUsernameInput />
                 </View>
                 <ActivityOverlay large visible={loginState.isInProgress} />

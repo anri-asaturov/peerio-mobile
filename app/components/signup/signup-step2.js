@@ -24,6 +24,8 @@ const { username } = validators;
 
 const MAX_USERNAME_LENGTH = config.user.maxUsernameLength;
 
+const suggestionContainerHeight = signupStyles.suggestionContainer.maxHeight;
+
 @observer
 export default class SignupStep2 extends SafeComponent {
     // used for telemetry option to know if user autofilled username before or after getting error
@@ -80,17 +82,20 @@ export default class SignupStep2 extends SafeComponent {
     suggestionPill = (suggestion) => {
         if (!suggestion) return null;
         const style = {
+            minWidth: 48,
             height: 21,
             borderColor: vars.peerioPurple,
             borderWidth: 1,
             borderRadius: 16,
             marginRight: vars.spacing.small.midi2x,
             marginBottom: vars.spacing.small.midi,
-            paddingHorizontal: vars.spacing.small.midi
+            paddingHorizontal: vars.spacing.small.midi,
+            alignItems: 'center'
         };
         const textStyle = {
             color: vars.peerioPurple,
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            fontSize: vars.font.size14
         };
 
         return (
@@ -106,18 +111,29 @@ export default class SignupStep2 extends SafeComponent {
     };
 
     get suggestionBlock() {
-        if (!signupState.usernameSuggestions.length) return null;
         const suggestionTitle = this.usernameInput && this.usernameInput.errorMessageText === 'error_usernameNotAvailable' ?
             tx('title_try') : tx('title_available');
+        const suggestionBox = !signupState.usernameSuggestions.length ? null :
+            (<View style={{ height: suggestionContainerHeight, flexDirection: 'row' }}>
+                <View>
+                    <Text style={signupStyles.suggestionTitle}>{suggestionTitle}</Text>
+                </View>
+                <View style={signupStyles.suggestionContainer}>
+                    {signupState.usernameSuggestions.map(this.suggestionPill)}
+                </View>
+            </View>);
+
         return (
             <View>
-                <View style={signupStyles.separator} />
-                <View style={{ flexDirection: 'row' }}>
-                    <View>
-                        <Text style={signupStyles.suggestionTitle}>{suggestionTitle}</Text>
-                    </View>
-                    <View style={signupStyles.suggestionContainer}>
-                        {signupState.usernameSuggestions.map(this.suggestionPill)}
+                <View style={{ height: suggestionContainerHeight + 48 }}>
+                    {suggestionBox}
+                    <View style={{ alignItems: 'flex-end' }}>
+                        {buttons.roundBlueBgButton(
+                            tx('button_next'),
+                            this.handleNextButton,
+                            this.isNextDisabled,
+                            'button_next',
+                            { width: vars.signupButtonWidth })}
                     </View>
                 </View>
             </View>
@@ -149,15 +165,8 @@ export default class SignupStep2 extends SafeComponent {
                         onSubmitEditing={this.handleNextButton}
                         ref={this.usernameInputRef}
                         testID="username" />
+                    <View style={signupStyles.separator} />
                     {this.suggestionBlock}
-                    <View style={{ alignItems: 'flex-end', marginVertical: 30 }}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_next'),
-                            this.handleNextButton,
-                            this.isNextDisabled,
-                            'button_next',
-                            { width: vars.signupButtonWidth })}
-                    </View>
                 </View>
             </View>
         );

@@ -31,7 +31,7 @@ export default class Text extends SafeComponent {
             if (italic) style.fontStyle = 'italic';
         }
         style.fontFamily = font.join('');
-        if (Platform.OS === 'android') style.fontFamily = style.fontFamily.replace(' ', '');
+        if (Platform.OS === 'android') style.fontFamily = style.fontFamily.replace(/ /g, '');
 
         // Override font
         if (monospace) {

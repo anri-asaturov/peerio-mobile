@@ -63,6 +63,7 @@ export default class SignupStep3 extends SafeComponent {
     get isCreateDisabled() { return !socket.connected || !this.emailState.value || !this.emailInput.isValid; }
 
     renderThrow() {
+        const buttonMarginTop = vars.isDeviceScreenBig ? vars.spacing.large.minix : vars.spacing.small.maxi;
         return (
             <View style={signupStyles.page}>
                 <SignupStepIndicator />
@@ -85,7 +86,7 @@ export default class SignupStep3 extends SafeComponent {
                         clearTextIcon
                         ref={this.emailInputRef}
                         testID="email" />
-                    <View style={[signupStyles.separator, { marginBottom: 12 }]} />
+                    <View style={[signupStyles.separator, { marginBottom: 0 }]} />
                     <View style={checkboxContainer}>
                         <CheckBox
                             alignLeft
@@ -95,7 +96,7 @@ export default class SignupStep3 extends SafeComponent {
                             text={tx('title_subscribeNewsletter')}
                             accessibilityLabel={tx('title_subscribeNewsletter')} />
                     </View>
-                    <View style={{ alignItems: 'flex-end' }}>
+                    <View style={{ alignItems: 'flex-end', marginTop: buttonMarginTop }}>
                         {buttons.roundBlueBgButton(
                             tx('button_create'),
                             this.handleCreateButton,

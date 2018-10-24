@@ -71,12 +71,14 @@ export default class SignupCancel extends SafeComponent {
         return (
             <View style={signupStyles.page}>
                 <View style={signupStyles.container2}>
-                    <SignupHeading title="title_cancelSignup" subTitle="title_declineExplanation" />
-
+                    <SignupHeading title="title_cancelSignup" />
+                    <Text style={[signupStyles.subTitle, { marginBottom: vars.spacing.medium.midi2x }]}>
+                        {tx('title_declineExplanation')}
+                    </Text>
                     <Text semibold style={signupStyles.subTitle}>
                         {tx('title_whyRequired')}
                     </Text>
-                    <Text style={signupStyles.description}>
+                    <Text style={signupStyles.description2}>
                         {<T k="title_whyRequiredExplanation">
                             {{
                                 openPrivacy: this.openPrivacyLink,
@@ -88,7 +90,7 @@ export default class SignupCancel extends SafeComponent {
                     <Text semibold style={signupStyles.subTitle}>
                         {tx('title_signupAgain')}
                     </Text>
-                    <Text style={signupStyles.description}>
+                    <Text style={signupStyles.description2}>
                         {tx('title_signupAgainExplanation')}
                     </Text>
 

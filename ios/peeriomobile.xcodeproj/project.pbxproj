@@ -12,6 +12,7 @@
 		00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+		020633D02178066B00F5743C /* libRNMail.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 020633CB2177FF8E00F5743C /* libRNMail.a */; };
 		020C455F2138710300A0691D /* privacy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 020C45292138710200A0691D /* privacy.txt */; };
 		020C45FF2138C95D00A0691D /* account_key_backup_medcryptor.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 020C45C92138C95D00A0691D /* account_key_backup_medcryptor.pdf */; };
 		02210A811E019037006D7AC0 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02210A7F1E01902A006D7AC0 /* libRNSound.a */; };
@@ -84,6 +85,7 @@
 		9632AAC221123273001A290F /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CEC59B21107C3600F546CE /* ShareViewController.swift */; };
 		96CEC59F21107C3600F546CE /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96CEC59D21107C3600F546CE /* MainInterface.storyboard */; };
 		96CEC5A321107C3600F546CE /* peerioshare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 96CEC59921107C3600F546CE /* peerioshare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B480C99936704BE39C34256C /* RNMailTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = AAF353486CC6468FB1D8B2E3 /* RNMailTests.xctest */; };
 		B73DC4B1F0BD4E63BE1B4BD5 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B836295CD1B344EBB035E1B6 /* Foundation.ttf */; };
 		CF69BA63107E428598B08410 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D883CDAA7C4E718E6EE873 /* EvilIcons.ttf */; };
 		E19FDAE0C2454345A5CE2523 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FC9400FF0F74C249A550AC2 /* MaterialCommunityIcons.ttf */; };
@@ -201,6 +203,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = ADD01A681E09402E00F6D226;
 			remoteInfo = "RCTBlob-tvOS";
+		};
+		020633CA2177FF8E00F5743C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41AF8F820E745F28DB9CABA /* RNMail.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 46FEDE7F1AFF192F00D3261C;
+			remoteInfo = RNMail;
+		};
+		020633CC2177FF8E00F5743C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41AF8F820E745F28DB9CABA /* RNMail.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 46FEDE8A1AFF192F00D3261C;
+			remoteInfo = RNMailTests;
 		};
 		020D12A021670C1D007484E3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -690,7 +706,10 @@
 		96CEC5A021107C3600F546CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0F64612EAF249BC98CB3DE2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		A7DDFAC6A6F74107A3D45471 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		AAF353486CC6468FB1D8B2E3 /* RNMailTests.xctest */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RNMailTests.xctest; sourceTree = "<group>"; };
 		B836295CD1B344EBB035E1B6 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		BAFA3A4C53B343109B4687EE /* libRNMail.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNMail.a; sourceTree = "<group>"; };
+		D41AF8F820E745F28DB9CABA /* RNMail.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNMail.xcodeproj; path = "../node_modules/react-native-mail/RNMail.xcodeproj"; sourceTree = "<group>"; };
 		D6B6ACECFF1F4D2BB617DD23 /* RNShakeEvent.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNShakeEvent.xcodeproj; path = "../node_modules/react-native-shake-event/ios/RNShakeEvent.xcodeproj"; sourceTree = "<group>"; };
 		DE216B2DFB25438F8922A621 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		E324EB0D0FAE4F96A2D57F34 /* RCTPrivacySnapshot.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTPrivacySnapshot.xcodeproj; path = "../node_modules/react-native-privacy-snapshot/RCTPrivacySnapshot.xcodeproj"; sourceTree = "<group>"; };
@@ -743,6 +762,8 @@
 				02B2F2AA216FFA88006CF183 /* libRCTBlob.a in Frameworks */,
 				02B2F2AB216FFA96006CF183 /* libRNShakeEvent.a in Frameworks */,
 				02B2F2AC216FFB8E006CF183 /* libRNDeviceInfo.a in Frameworks */,
+				020633D02178066B00F5743C /* libRNMail.a in Frameworks */,
+				B480C99936704BE39C34256C /* RNMailTests.xctest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +824,15 @@
 			children = (
 				0204B9C0215ABFC100BAD78D /* libRCTBlob.a */,
 				0204B9C2215ABFC100BAD78D /* libRCTBlob-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		020633C62177FF8E00F5743C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				020633CB2177FF8E00F5743C /* libRNMail.a */,
+				020633CD2177FF8E00F5743C /* RNMailTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -889,6 +919,8 @@
 			isa = PBXGroup;
 			children = (
 				6010053ADBBD49E89C9CE1A4 /* libRNShakeEvent.a */,
+				BAFA3A4C53B343109B4687EE /* libRNMail.a */,
+				AAF353486CC6468FB1D8B2E3 /* RNMailTests.xctest */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1121,6 +1153,7 @@
 				1D58BC509EB240BF97F97E0E /* Lottie.xcodeproj */,
 				1FAA700E927442478D70768D /* LottieReactNative.xcodeproj */,
 				D6B6ACECFF1F4D2BB617DD23 /* RNShakeEvent.xcodeproj */,
+				D41AF8F820E745F28DB9CABA /* RNMail.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1409,6 +1442,10 @@
 					ProjectRef = 88D6237453EF462AAED942D1 /* RNImagePicker.xcodeproj */;
 				},
 				{
+					ProductGroup = 020633C62177FF8E00F5743C /* Products */;
+					ProjectRef = D41AF8F820E745F28DB9CABA /* RNMail.xcodeproj */;
+				},
+				{
 					ProductGroup = 02FDD4A51DA6457E004E1D5A /* Products */;
 					ProjectRef = 081BA9E7BB014EC9A1CF87BA /* RNRandomBytes.xcodeproj */;
 				},
@@ -1552,6 +1589,20 @@
 			fileType = archive.ar;
 			path = "libRCTBlob-tvOS.a";
 			remoteRef = 0204B9C1215ABFC100BAD78D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		020633CB2177FF8E00F5743C /* libRNMail.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNMail.a;
+			remoteRef = 020633CA2177FF8E00F5743C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		020633CD2177FF8E00F5743C /* RNMailTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNMailTests.xctest;
+			remoteRef = 020633CC2177FF8E00F5743C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		020D12A121670C1D007484E3 /* libRNFS.a */ = {
@@ -2078,6 +2129,7 @@
 					"$(SRCROOT)/../node_modules/lottie-ios/lottie-ios/Classes/**",
 					"$(SRCROOT)/../node_modules/lottie-react-native/src/ios/LottieReactNative",
 					"$(SRCROOT)/../node_modules/react-native-shake-event/ios",
+					"$(SRCROOT)/../node_modules/react-native-mail/RNMail",
 				);
 				INFOPLIST_FILE = peeriomobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -2087,6 +2139,8 @@
 					"\"$(SRCROOT)/peeriomobile\"",
 					"$(PROJECT_DIR)/peeriomobile/libsodium-ios/lib",
 					"$(PROJECT_DIR)/lib",
+					"\"$(SRCROOT)/peeriomobile\"",
+					"\"$(SRCROOT)/peeriomobile\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2146,6 +2200,7 @@
 					"$(SRCROOT)/../node_modules/lottie-ios/lottie-ios/Classes/**",
 					"$(SRCROOT)/../node_modules/lottie-react-native/src/ios/LottieReactNative",
 					"$(SRCROOT)/../node_modules/react-native-shake-event/ios",
+					"$(SRCROOT)/../node_modules/react-native-mail/RNMail",
 				);
 				INFOPLIST_FILE = peeriomobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -2155,6 +2210,8 @@
 					"\"$(SRCROOT)/peeriomobile\"",
 					"$(PROJECT_DIR)/peeriomobile/libsodium-ios/lib",
 					"$(PROJECT_DIR)/lib",
+					"\"$(SRCROOT)/peeriomobile\"",
+					"\"$(SRCROOT)/peeriomobile\"",
 					"\"$(SRCROOT)/peeriomobile\"",
 				);
 				OTHER_LDFLAGS = (

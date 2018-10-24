@@ -13,6 +13,44 @@ import uiState from '../layout/ui-state';
 
 const { height } = Dimensions.get('window');
 
+const container = {
+    backgroundColor: vars.darkBlueBackground15,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+    paddingTop: vars.statusBarHeight
+};
+const debugContainer = {
+    paddingHorizontal: vars.spacing.medium.maxi2x,
+    marginVertical: vars.spacing.small.maxi2x
+};
+const buttonContainer = {
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingHorizontal: vars.loginWizard_debugMenu_paddingH
+};
+const button = {
+    height: 36,
+    padding: vars.spacing.small.mini2x,
+    justifyContent: 'center',
+    backgroundColor: vars.darkBlue,
+    borderColor: '#FFFFFF50',
+    borderWidth: 1,
+    borderRadius: 6
+};
+const input = {
+    height: 40,
+    backgroundColor: '#FFFFFF90',
+    marginTop: vars.spacing.small.maxi2x,
+    fontFamily: vars.peerioFontFamily,
+    borderColor: vars.darkBlue,
+    borderWidth: 1,
+    borderRadius: 8
+};
+
 @observer
 export default class DebugMenu extends SafeComponent {
     @observable showDebugLogs = false;
@@ -35,42 +73,6 @@ export default class DebugMenu extends SafeComponent {
 
     renderThrow() {
         if (!uiState.showDebugMenu) return null;
-        const container = {
-            backgroundColor: vars.darkBlueBackground15,
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            right: 0
-        };
-        const debugContainer = {
-            paddingHorizontal: vars.spacing.medium.maxi2x,
-            marginVertical: vars.spacing.small.maxi2x
-        };
-        const buttonContainer = {
-            flexDirection: 'row',
-            flexGrow: 1,
-            justifyContent: 'space-between',
-            paddingHorizontal: vars.loginWizard_debugMenu_paddingH
-        };
-        const button = {
-            height: 36,
-            padding: vars.spacing.small.mini2x,
-            justifyContent: 'center',
-            backgroundColor: vars.darkBlue,
-            borderColor: '#FFFFFF50',
-            borderWidth: 1,
-            borderRadius: 6
-        };
-        const input = {
-            height: 40,
-            backgroundColor: '#FFFFFF90',
-            marginTop: vars.spacing.small.maxi2x,
-            fontFamily: vars.peerioFontFamily,
-            borderColor: vars.darkBlue,
-            borderWidth: 1,
-            borderRadius: 8
-        };
         return (
             <View style={container}>
                 <View style={debugContainer}>
