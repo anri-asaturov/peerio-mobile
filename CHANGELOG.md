@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.387.0"></a>
+# [3.387.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.386.0...v3.387.0) (2018-10-25)
+
+
+
 <a name="3.386.0"></a>
 # [3.386.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.386.0) (2018-10-25)
 
