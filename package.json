@@ -57,7 +57,7 @@
     "file-loader": "0.9.0",
     "is-js": "0.1.1",
     "is_js": "0.9.0",
-    "isemail": "3.1.4",
+    "isemail": "3.2.0",
     "json-stringify-safe": "5.0.1",
     "linkifyjs": "github:PeerioTechnologies/linkifyjs",
     "lodash": "4.17.11",
