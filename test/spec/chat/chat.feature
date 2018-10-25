@@ -8,8 +8,8 @@ Feature: Create new chat
         And  they are in my contacts
     Examples:
     | new or existing | user       |
-    | new             | test_karim |
-    | create_dm_test  | test_karim |
+    | new             | chat_recipient |
+    | create_dm_test  | chat_recipient |
 
     Scenario Outline: Create room successfully
         When I log in as <new or existing> user
