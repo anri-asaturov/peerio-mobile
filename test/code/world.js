@@ -171,8 +171,8 @@ class World {
         await this.alertsPage.dismissNotificationsAlert();
         await this.startPage.loginButton.click();
 
-        // Is hidden if username is cached
-        if (await !this.loginPage.usernamePresent) {
+        // Skip if username is cached
+        if (await this.loginPage.usernamePresent) {
             await this.loginPage.username.setValue(username);
             await this.loginPage.hideKeyboardHelper();
         }
