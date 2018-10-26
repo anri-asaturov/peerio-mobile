@@ -34,7 +34,8 @@ export default class ViewWithDrawer extends ListWithDrawer {
             <ScrollView
                 onLayout={(event) => { this.layoutHeight = event.nativeEvent.layout.height; }}
                 ref={this.scrollViewRef}
-                {...this.props}>
+                {...this.props.scrollHelper}
+                {...this.props} >
                 {this.topDrawer}
                 <View style={{ minHeight }}>
                     {this.props.children}
