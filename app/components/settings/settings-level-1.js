@@ -176,7 +176,7 @@ export default class SettingsLevel1 extends SafeComponent {
             </SettingsItem>
         );
         return (
-            <ViewWithDrawer style={svStyle} {...scrollHelper}>
+            <ViewWithDrawer style={svStyle} scrollHelper={scrollHelper}>
                 <View style={bgStyle}>
                     <SettingsItem
                         title={User.current.fullName}
