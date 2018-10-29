@@ -23,6 +23,7 @@ import SharedFolderRemovalNotif from './shared-folder-removal-notif';
 import SearchBar from '../controls/search-bar';
 import FlatListWithDrawer from '../shared/flat-list-with-drawer';
 import zeroStateBeacons from '../beacons/zerostate-beacons';
+import { scrollHelper } from '../helpers/test-helper';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -134,6 +135,7 @@ export default class Files extends SafeComponent {
     list() {
         return (
             <FlatListWithDrawer
+                scrollHelper={scrollHelper}
                 setScrollViewRef={this.flatListRef}
                 ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
                 ListFooterComponent={this.noFilesMatchSearch}

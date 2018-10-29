@@ -29,8 +29,9 @@ export default class FlatListWithDrawer extends ListWithDrawer {
     renderThrow() {
         return (
             <FlatList
-                {...this.props}
                 ref={this.scrollViewRef}
+                {...this.props.scrollHelper}
+                {...this.props}
                 ListHeaderComponent={this.topDrawer} />
         );
     }

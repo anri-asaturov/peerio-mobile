@@ -66,8 +66,9 @@ export default class SectionListWithDrawer extends ListWithDrawer {
         return (
             <SectionList
                 onScrollToIndexFailed={this.onScrollToIndexFailed}
-                {...this.props}
                 ref={this.scrollViewRef}
+                {...this.props.scrollHelper}
+                {...this.props}
                 ListHeaderComponent={this.topDrawer}
             />
         );

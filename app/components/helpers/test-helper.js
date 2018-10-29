@@ -35,20 +35,40 @@ const { height } = Dimensions.get('window');
 @observer
 export default class TestHelper extends Component {
     scrollEnd = () => {
-        currentScrollView.scrollToEnd({ animated: false });
+        if (currentScrollView.scrollToLocation) {
+            const sectionList = currentScrollView.props.sections;
+            const lastSection = sectionList.length - 1;
+            const itemList = sectionList[lastSection].data;
+            const lastItem = itemList.length - 1;
+            currentScrollView.scrollToLocation({ itemIndex: lastItem, sectionIndex: lastSection, animated: false }); // SectionList
+        } else if (currentScrollView.scrollToEnd) currentScrollView.scrollToEnd({ animated: false }); // Scroll View + FlatList
     };
 
     scrollHome = () => {
-        currentScrollView.scrollTo({ y: 0, animated: false });
+        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y: 0, animated: false }); // Scroll View
+        else if (currentScrollView.scrollToOffset) currentScrollView.scrollToOffset({ offset: 0, animated: false }); // FlatList
+        else if (currentScrollView.scrollToLocation) currentScrollView.scrollToLocation({ itemIndex: 0, sectionIndex: 0, viewPosition: 0, animated: false }); // SectionList
     };
 
     scrollUp = () => {
         const y = Math.max(0, currentScrollPosition - height / 2);
-        currentScrollView.scrollTo({ y, animated: false });
+        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y, animated: false }); // Scroll View
+        else if (currentScrollView.scrollToOffset) currentScrollView.scrollToOffset({ offset: 0, animated: false }); // FlatList
+        else if (currentScrollView.scrollToLocation) currentScrollView.scrollToLocation({ itemIndex: 0, sectionIndex: 0, viewOffset: 0, animated: false }); // SectionList
     };
 
     scrollDown = () => {
-        currentScrollView.scrollTo({ y: currentScrollPosition + height / 2, animated: false });
+        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y: currentScrollPosition + height / 2, animated: false }); // Scroll View
+        else if (currentScrollView.scrollToOffset) currentScrollView.scrollToOffset({ offset: currentScrollPosition + height / 2, animated: false }); // FlatList
+        else if (currentScrollView.scrollToLocation) {
+            let itemIndex = 0;
+            const sectionList = currentScrollView.props.sections;
+            const sectionIndex = sectionList.length - 1;
+            console.log(sectionList);
+            console.log(sectionIndex);
+            if (sectionIndex === 1) itemIndex = 5; // Only one section, likely scenario in chat list
+            currentScrollView.scrollToLocation({ itemIndex, sectionIndex, animated: false }); // SectionList
+        }
     };
 
     item(letter, id, action) {

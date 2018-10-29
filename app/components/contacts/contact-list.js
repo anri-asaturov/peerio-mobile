@@ -16,6 +16,7 @@ import uiState from '../layout/ui-state';
 import SectionListWithDrawer from '../shared/section-list-with-drawer';
 import ListSeparator from '../shared/list-separator';
 import zeroStateBeacons from '../beacons/zerostate-beacons';
+import { scrollHelper } from '../helpers/test-helper';
 
 const INITIAL_LIST_SIZE = 20;
 
@@ -61,6 +62,7 @@ export default class ContactList extends SafeComponent {
         return (
             <SectionListWithDrawer
                 setScrollViewRef={this.scrollViewRef}
+                scrollHelper={scrollHelper}
                 ItemSeparatorComponent={ListSeparator}
                 initialNumToRender={INITIAL_LIST_SIZE}
                 sections={this.sections}
