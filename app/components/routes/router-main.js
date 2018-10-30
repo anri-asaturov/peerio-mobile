@@ -88,7 +88,12 @@ class RouterMain extends Router {
         return this.route === this._initialRoute;
     }
 
-    @action async initial() {
+    @action async initializeAndTransition() {
+        await this.initialize();
+        // this.tranisitionToMain();
+    }
+
+    @action async initialize() {
         if (this.invoked) return;
         this.invoked = true;
         this.loading = true;
@@ -101,6 +106,9 @@ class RouterMain extends Router {
         contactState.init();
         this.contactStateLoaded = true;
         this.loading = false;
+    }
+
+    @action tranisitionToMain() {
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
         this.initialRoute();
