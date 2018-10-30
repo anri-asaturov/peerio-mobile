@@ -18,6 +18,7 @@ import mockContactStore from './mock-contact-store';
 import mockFileStore from './mock-file-store';
 import TabContainer from '../layout/tab-container';
 import { TopDrawerMaintenance, /* TopDrawerNewContact, */ TopDrawerPendingFiles, TopDrawerAutoMount } from '../shared/top-drawer-components';
+import { observable } from '../../../node_modules/mobx/lib/mobx';
 
 const button = {
     position: 'absolute',
@@ -60,6 +61,8 @@ export default class MockChatList extends Component {
     componentWillMount() {
         User.current = mockContactStore.createMock();
         User.current.activePlans = [];
+        User.current.beacons = observable.map();
+        User.current.saveBeacons = () => {};
         mockFileStore.install();
         chatState.store = mockChatStore;
         chatState.init();
@@ -93,18 +96,13 @@ export default class MockChatList extends Component {
             case 'files':
                 return <Files />;
             default:
-                return <Files />;
+                return <ChatList />;
         }
     }
 
-    render() {
+    get drawerControl() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
-                <TabContainer />
-                {this.list}
-                <PopupLayout key="popups" />
-                <StatusBar barStyle="default" />
-                <TabContainer />
+            <View>
                 <TouchableOpacity
                     style={add1}
                     onPress={this.addGlobalDrawer}
@@ -132,6 +130,17 @@ export default class MockChatList extends Component {
                         Delete
                     </Text>
                 </TouchableOpacity>
+            </View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
+                {this.list}
+                <TabContainer />
+                <PopupLayout key="popups" />
+                <StatusBar barStyle="default" />
                 <TopDrawerAutoMount />
             </View>
         );

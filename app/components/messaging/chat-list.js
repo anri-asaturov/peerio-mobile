@@ -99,7 +99,7 @@ export default class ChatList extends SafeComponent {
             // TODO: unify this
             if (Platform.OS === 'android') {
                 // we don't do anything here because no indicator update is an iOS problem right now
-            } else {
+            } else if (this.scrollView && this.scrollView._wrapperListRef) {
                 this.scrollView._wrapperListRef._listRef.scrollToOffset({ offset: 0 });
             }
         }, 100);
