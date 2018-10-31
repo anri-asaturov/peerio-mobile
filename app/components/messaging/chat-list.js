@@ -183,11 +183,10 @@ export default class ChatList extends SafeComponent {
      * Scrolls to the topmost unread item in the list
      */
     @action.bound scrollUpToUnread() {
-        const pos = this.firstUnreadItemPosition;
+        const pos = this.firstUnreadItem;
         if (!pos) return;
-        this.scrollView.scrollToLocation({
-            itemIndex: pos.index,
-            sectionIndex: pos.section,
+        this.scrollView.scrollToIndex({
+            index: pos.index,
             viewOffset: drawerState.getDrawer() ? -vars.topDrawerHeight : 0,
             viewPosition: 0
         });
@@ -197,13 +196,12 @@ export default class ChatList extends SafeComponent {
      * Scrolls to the bottommost unread item in the list
      */
     @action.bound scrollDownToUnread() {
-        const pos = this.lastUnreadItemPosition;
+        const pos = this.lastUnreadItem;
         if (!pos) return;
-        this.scrollView.scrollToLocation({
-            itemIndex: pos.index,
-            sectionIndex: pos.section,
+        this.scrollView.scrollToIndex({
+            index: pos.index,
             viewOffset: drawerState.getDrawer() ? -vars.topDrawerHeight : 0,
-            viewPosition: 0.9
+            viewPosition: 1
         });
     }
 
