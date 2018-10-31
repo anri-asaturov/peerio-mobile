@@ -21,11 +21,11 @@ class MockChatStore {
     get allRooms() { return this.channels; }
 
     constructor() {
-        for (let i = 0; i < 55; ++i) {
+        for (let i = 0; i < 15; ++i) {
             this.chats.push(this.createMockChannel());
         }
 
-        for (let i = 0; i < 155; ++i) {
+        for (let i = 0; i < 125; ++i) {
             this.chats.push(this.createMock());
         }
 

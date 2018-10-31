@@ -122,7 +122,7 @@ export default class ChatList extends SafeComponent {
 
     inviteItem = (chat) => <ChannelInviteListItem id={chat.kegDbId} chat={chat} channelName={chat.channelName} />;
     channelItem = (chat) => <ChannelListItem chat={chat} channelName={chat.name} />;
-    dmItem = (chat) => <ChatListItem key={chat.id} chat={chat} />;
+    dmItem = (chat) => <ChatListItem height={vars.listItemHeight} key={chat.id} chat={chat} />;
     renderListItem = (item) => {
         if (item.kegDbId) return this.inviteItem(item);
         if (item.isChannel) return this.channelItem(item);
@@ -136,6 +136,34 @@ export default class ChatList extends SafeComponent {
         if (!chat.id && !chat.kegDbId && !chat.spaceId && !chat.sectionTitle) return null;
 
         return this.renderListItem(chat);
+    };
+
+    getItemLayout = (data, index) => {
+        let offset = 0;
+        const { firstSectionItems, secondSectionItems } = this;
+        // first item is a section header
+        const firstSectionLength = firstSectionItems.length ?
+            firstSectionItems.length + 1 : 0;
+        // first section
+        if (firstSectionLength) {
+            offset += Math.min(index, firstSectionLength) * vars.sectionHeaderHeight;
+        }
+        // first item is a section header
+        const secondSectionLength = secondSectionItems.length ?
+            secondSectionItems.length + 1 : 0;
+        if (secondSectionLength) {
+            if (index > firstSectionLength) {
+                offset += vars.sectionHeaderHeight;
+            }
+            offset += Math.max(0, index - 1 - firstSectionLength) * vars.listItemHeight;
+        }
+
+        const length = index > firstSectionLength ? vars.listItemHeight : vars.sectionHeaderHeight;
+        return {
+            length,
+            offset,
+            index
+        };
     };
 
     @action.bound scrollViewRef(sv) {
@@ -219,7 +247,7 @@ export default class ChatList extends SafeComponent {
             minItemIndex = Math.min(minItemIndex, itemIndex);
             maxItemIndex = Math.max(maxItemIndex, itemIndex);
         });
-        console.log(`viewability changed: min: ${minItemIndex}, max: ${maxItemIndex}`);
+        // console.log(`viewability changed: min: ${minItemIndex}, max: ${maxItemIndex}`);
         Object.assign(this, { minItemIndex, maxItemIndex });
     }
 
@@ -235,6 +263,7 @@ export default class ChatList extends SafeComponent {
                 keyExtractor={this.keyExtractor}
                 onViewableItemsChanged={this.onViewableItemsChanged}
                 viewabilityConfig={viewabilityConfig}
+                getItemLayout={this.getItemLayout}
             />
         );
     }

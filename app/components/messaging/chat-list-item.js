@@ -121,12 +121,18 @@ export default class ChatListItem extends SafeComponent {
 
         const key = chat.id;
         const unread = chat.unreadCount > 0;
+        // NOTE: fixed height is used for correct calculation of scrolling
+        // in the parent SectionList. To prevent weird bugs with scrolling,
+        // we force-fix the height here, so that if somebody forgets to update
+        // the item height in section list, it would be visible
+        // (-1) takes into account the separator
+        const height = this.props.height ? this.props.height - 1 : undefined;
         return (
             <TouchableOpacity
                 key={key}
                 onPress={this.onPress}
                 pressRetentionOffset={vars.pressRetentionOffset}>
-                <View style={containerStyle}>
+                <View style={[containerStyle, { height }]}>
                     <View>
                         <View style={pinStyle}>
                             {chat.isFavorite && icons.iconPinnedChat(pinOn)}
