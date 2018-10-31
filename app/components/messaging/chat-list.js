@@ -79,10 +79,13 @@ export default class ChatList extends SafeComponent {
             this.reverseRoomSorting = !this.reverseRoomSorting;
         };
 
-        this.indicatorReaction = reaction(() => [
-            this.topIndicatorVisible,
-            this.bottomIndicatorVisible
-        ], transitionAnimation, { fireImmediately: true });
+        // android has buggy overlay if you trigger animation immediately
+        if (Platform.OS !== 'android') {
+            this.indicatorReaction = reaction(() => [
+                this.topIndicatorVisible,
+                this.bottomIndicatorVisible
+            ], transitionAnimation, { fireImmediately: true });
+        }
     }
 
     componentWillUnmount() {
@@ -229,7 +232,7 @@ export default class ChatList extends SafeComponent {
             ++i;
         }
         this.maxItemIndex = Math.max(this.minItemIndex, i - 1);
-    };
+    }
 
     get listView() {
         if (chatState.routerMain.currentIndex !== 0) return null;
