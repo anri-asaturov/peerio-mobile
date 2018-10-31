@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, LayoutAnimation } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { observable, action, computed } from 'mobx';
 import LottieView from 'lottie-react-native';
@@ -18,23 +18,27 @@ const revealAnimation = require('../../assets/loading_screens/loading-screen-rev
 
 @observer
 export default class LoadingScreen extends Component {
-    @observable loadingStep = 0;
-    @observable randomMessage;
+    @observable authenticated = false;
+    @observable logoAnimVisible = true;
+    @observable statusTextVisible = true;
+    @observable revealAnimVisible = false;
+
+    logoAnimValue = new Animated.Value(0);
 
     async componentDidMount() {
-        this.animateLogo();
-
         try {
+            this.animateLogo();
             await loginState.load();
             if (!loginState.loaded) throw new Error('error logging in after return');
-            this.goToNextStep();
             await promiseWhen(() => socket.authenticated);
-            this.goToNextStep();
+
+            this.authenticated = true; // Changes status text
+
             await promiseWhen(() => routes.main.chatStateLoaded);
-            this.goToNextStep();
             await promiseWhen(() => routes.main.fileStateLoaded);
-            this.goToNextStep();
             await promiseWhen(() => routes.main.contactStateLoaded);
+
+            this.animateReveal();
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
             if (!loginState.loaded) routes.app.routes.loginWelcomeBack.transition();
@@ -43,34 +47,40 @@ export default class LoadingScreen extends Component {
     }
 
     @action.bound animateLogo() {
-        this.lottieValue = new Animated.Value(0);
-        Animated.timing(this.lottieValue, {
+        this.logoAnimValue.setValue(0);
+        Animated.timing(this.logoAnimValue, {
             toValue: 1,
             duration: 1500,
             useNativeDriver: true
         }).start(() => {
-            console.log('LOGO ANIMATION');
-            if (loginState.loading) this.animateLogo();
-            else this.animateReveal();
+            if (this.logoAnimVisible) this.animateLogo();
         });
     }
 
     @action.bound animateReveal() {
-        routerMain.tranisitionToMain();
-    }
-
-    @action.bound goToNextStep() {
-        ++this.loadingStep;
+        this.revealAnimVisible = true;
+        this.logoAnimVisible = false;
+        LayoutAnimation.easeInEaseOut();
+        this.statusTextVisible = false;
+        this.revealAnimValue = new Animated.Value(0);
+        Animated.timing(this.revealAnimValue, {
+            toValue: 1,
+            duration: 2500,
+            useNativeDriver: true
+        }).start(() => {
+            this.wireframeAnimValue = false;
+            routerMain.tranisitionToMain();
+        });
     }
 
     @computed get statusText() {
         if (!socket.connected) return tx('title_waitingToConnect');
-        return tx(this.icons[this.loadingStep]);
+        if (this.authenticated) return tx('title_decrypting'); // TODO change copy
+        return tx('title_connecting');
     }
 
     render() {
         const container = {
-            backgroundColor: vars.darkBlue,
             flex: 1,
             flexGrow: 1,
             alignItems: 'center'
@@ -81,7 +91,7 @@ export default class LoadingScreen extends Component {
             justifyContent: 'flex-end',
             marginBottom: vars.loadingScreenMarginBottom
         };
-        const style = {
+        const animationContainer = {
             alignSelf: 'stretch', // this is for android throwing errors
             position: 'absolute',
             top: 0,
@@ -90,37 +100,33 @@ export default class LoadingScreen extends Component {
             bottom: 0
         };
         const statusTextStyle = {
-            marginTop: vars.spacing.medium.midi2x,
             fontSize: vars.font.size18,
             color: vars.white,
             textAlign: 'center'
         };
         return (
             <View style={container}>
-                <LottieView
-                    progress={this.lottieValue}
-                    style={style}
+                {this.revealAnimVisible && <LottieView
+                    progress={this.revealAnimValue}
+                    style={[animationContainer, { backgroundColor: vars.darkBlue }]}
+                    source={revealAnimation}
+                    resizeMode="cover"
+                />}
+                {this.logoAnimVisible && <LottieView
+                    progress={this.logoAnimValue}
+                    style={[animationContainer, { backgroundColor: vars.darkBlueBackground05 }]}
                     source={logoAnimation}
-                    autoPlay={false}
-                    loop
-                />
-                <View style={loadingProgressContainer}>
+                    resizeMode="cover"
+                />}
+                {this.statusTextVisible && <View style={loadingProgressContainer}>
                     <Text style={statusTextStyle}>
                         {this.statusText}
                     </Text>
-                </View>
+                </View>}
                 <View style={{ position: 'absolute', bottom: 0, right: 0, left: 0 }}>
                     <SnackBarConnection />
                 </View>
             </View>
         );
     }
-
-    icons = [
-        'title_connecting',
-        'title_authenticating',
-        'title_decrypting',
-        'title_confirming',
-        'title_done'
-    ];
 }
