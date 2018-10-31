@@ -91,7 +91,7 @@ export default class TopDrawer extends SafeComponent {
     }
 }
 
-TopDrawer.PropTypes = {
+TopDrawer.propTypes = {
     context: PropTypes.string,
     heading: PropTypes.string.isRequired,
     image: PropTypes.any.isRequired,

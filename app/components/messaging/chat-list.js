@@ -34,7 +34,6 @@ export default class ChatList extends SafeComponent {
     @observable reverseRoomSorting = false;
     @observable minItemIndex = null;
     @observable maxItemIndex = null;
-    @observable enableIndicators = false;
     flatListHeight = 0;
 
     get rightIcon() {
@@ -79,36 +78,11 @@ export default class ChatList extends SafeComponent {
         uiState.testAction1 = () => {
             this.reverseRoomSorting = !this.reverseRoomSorting;
         };
-        uiState.testAction2 = () => {
-            const { data, index } = this.dataSource[this.dataSource.length - 1];
-            this.scrollView.scrollToLocation({
-                itemIndex: data.length - 1,
-                sectionIndex: index,
-                viewPosition: 0
-            });
-        };
-        uiState.testAction3 = () => {
-            this.scrollView.scrollToLocation({
-                sectionIndex: 0,
-                itemIndex: -1,
-                viewOffset: vars.topDrawerHeight,
-                animated: true
-            });
-        };
 
         this.indicatorReaction = reaction(() => [
             this.topIndicatorVisible,
             this.bottomIndicatorVisible
         ], transitionAnimation, { fireImmediately: true });
-
-        setTimeout(() => {
-            // TODO: unify this
-            if (Platform.OS === 'android') {
-                // we don't do anything here because no indicator update is an iOS problem right now
-            } else if (this.scrollView && this.scrollView._wrapperListRef) {
-                this.scrollView._wrapperListRef._listRef.scrollToOffset({ offset: 0 });
-            }
-        }, 100);
     }
 
     componentWillUnmount() {
@@ -166,8 +140,6 @@ export default class ChatList extends SafeComponent {
     @action.bound scrollViewRef(sv) {
         this.scrollView = sv;
         uiState.currentScrollView = sv;
-        this.enableIndicators = true;
-        // setTimeout(() => { this.enableIndicators = true; }, 1200);
     }
 
     @computed get firstUnreadItem() {
@@ -187,7 +159,6 @@ export default class ChatList extends SafeComponent {
     }
 
     @computed get topIndicatorVisible() {
-        if (!this.enableIndicators) return false;
         // if view hasn't been updated with viewable range
         if (this.minItemIndex === null) return false;
         const pos = this.firstUnreadItem;
@@ -196,7 +167,6 @@ export default class ChatList extends SafeComponent {
     }
 
     @computed get bottomIndicatorVisible() {
-        if (!this.enableIndicators) return false;
         // if view hasn't been updated with viewable range
         if (this.maxItemIndex === null) return false;
         const pos = this.lastUnreadItem;
@@ -212,7 +182,7 @@ export default class ChatList extends SafeComponent {
         if (!pos) return;
         const { itemOffset } = this.getItemOffset(pos.index);
         const offset = itemOffset
-            + (drawerState.getDrawer() ? -vars.topDrawerHeight : 0);
+            + (drawerState.getDrawer() ? vars.topDrawerHeight : 0);
         // console.log(`scroll up to ${pos.index}, ${itemOffset}, ${offset}`);
         this.scrollView.scrollToOffset({ offset });
     }
@@ -225,7 +195,7 @@ export default class ChatList extends SafeComponent {
         if (!pos) return;
         const { itemOffset, length } = this.getItemOffset(pos.index);
         const offset = itemOffset - this.flatListHeight + length
-            + (drawerState.getDrawer() ? -vars.topDrawerHeight : 0);
+            + (drawerState.getDrawer() ? vars.topDrawerHeight : 0);
         // console.log(`${this.flatListHeight} scroll down to ${pos.index}, ${itemOffset}, ${offset}`);
         this.scrollView.scrollToOffset({ offset });
     }
@@ -248,8 +218,17 @@ export default class ChatList extends SafeComponent {
         Object.assign(this, { minItemIndex, maxItemIndex });
     }
 
-    onLayout = e => {
+    @action.bound onLayout(e) {
         this.flatListHeight = e.nativeEvent.layout.height;
+        // calculate initial viewable items because react native fails to do it sometimes
+        this.minItemIndex = 0;
+        let i = 0;
+        while (i < this.dataSource.length) {
+            const { itemOffset } = this.getItemOffset(i);
+            if (itemOffset > this.flatListHeight) break;
+            ++i;
+        }
+        this.maxItemIndex = Math.max(this.minItemIndex, i - 1);
     };
 
     get listView() {
