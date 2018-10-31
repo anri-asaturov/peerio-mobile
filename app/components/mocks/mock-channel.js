@@ -37,10 +37,8 @@ class MockChannel {
 
     constructor() {
         TinyDb.userCollection = TinyDb.open('testuser');
-        for (let i = 0; i < 8; ++i) this.participants.push(mockContactStore.createMock());
+        this.initParticipants();
         this.id = randomWords({ min: 7, max: 7, join: ':' });
-        this.addAdmin(this.participants[0]);
-        this.addAdmin(this.participants[1]);
 
         for (let i = 0; i < 10; ++i) {
             this.addInlineImageMessage();
@@ -48,6 +46,12 @@ class MockChannel {
         }
         // this.addInlineImageMessage();
         // this.addExternalUrlMessage();
+    }
+
+    initParticipants() {
+        for (let i = 0; i < 8; ++i) this.participants.push(mockContactStore.createMock());
+        this.addAdmin(this.participants[0]);
+        this.addAdmin(this.participants[1]);
     }
 
     toggleFavoriteState() {
