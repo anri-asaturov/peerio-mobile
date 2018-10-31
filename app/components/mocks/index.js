@@ -13,8 +13,8 @@ import MockChatList from './mock-chat-list';
 // import MockPerfResults from './mock-perf-results';
 // import MockSqlTest from './mock-sql-test';
 
-// export default null;
-export default MockChatList;
+export default null;
+// export default MockChatList;
 // export default MockSqlTest;
 // export default MockSignupContactInvite;
 // export default MockChannel;

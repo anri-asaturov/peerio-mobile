@@ -35,6 +35,7 @@ export default class ChatList extends SafeComponent {
     @observable minItemIndex = null;
     @observable maxItemIndex = null;
     @observable enableIndicators = false;
+    flatListHeight = 0;
 
     get rightIcon() {
         return (
@@ -138,7 +139,7 @@ export default class ChatList extends SafeComponent {
         return this.renderListItem(chat);
     };
 
-    getItemLayout = (data, index) => {
+    getItemOffset = (index) => {
         let offset = 0;
         const { firstSectionItems, secondSectionItems } = this;
         // first item is a section header
@@ -159,11 +160,7 @@ export default class ChatList extends SafeComponent {
         }
 
         const length = index > firstSectionLength ? vars.listItemHeight : vars.sectionHeaderHeight;
-        return {
-            length,
-            offset,
-            index
-        };
+        return { itemOffset: offset, length };
     };
 
     @action.bound scrollViewRef(sv) {
@@ -213,11 +210,11 @@ export default class ChatList extends SafeComponent {
     @action.bound scrollUpToUnread() {
         const pos = this.firstUnreadItem;
         if (!pos) return;
-        this.scrollView.scrollToIndex({
-            index: pos.index,
-            viewOffset: drawerState.getDrawer() ? -vars.topDrawerHeight : 0,
-            viewPosition: 0
-        });
+        const { itemOffset } = this.getItemOffset(pos.index);
+        const offset = itemOffset
+            + (drawerState.getDrawer() ? -vars.topDrawerHeight : 0);
+        // console.log(`scroll up to ${pos.index}, ${itemOffset}, ${offset}`);
+        this.scrollView.scrollToOffset({ offset });
     }
 
     /**
@@ -226,11 +223,11 @@ export default class ChatList extends SafeComponent {
     @action.bound scrollDownToUnread() {
         const pos = this.lastUnreadItem;
         if (!pos) return;
-        this.scrollView.scrollToIndex({
-            index: pos.index,
-            viewOffset: drawerState.getDrawer() ? -vars.topDrawerHeight : 0,
-            viewPosition: 1
-        });
+        const { itemOffset, length } = this.getItemOffset(pos.index);
+        const offset = itemOffset - this.flatListHeight + length
+            + (drawerState.getDrawer() ? -vars.topDrawerHeight : 0);
+        // console.log(`${this.flatListHeight} scroll down to ${pos.index}, ${itemOffset}, ${offset}`);
+        this.scrollView.scrollToOffset({ offset });
     }
 
     /**
@@ -251,10 +248,15 @@ export default class ChatList extends SafeComponent {
         Object.assign(this, { minItemIndex, maxItemIndex });
     }
 
+    onLayout = e => {
+        this.flatListHeight = e.nativeEvent.layout.height;
+    };
+
     get listView() {
         if (chatState.routerMain.currentIndex !== 0) return null;
         return (
             <FlatListWithDrawer
+                onLayout={this.onLayout}
                 setScrollViewRef={this.scrollViewRef}
                 style={{ flexGrow: 1 }}
                 initialNumToRender={INITIAL_LIST_SIZE}
@@ -263,7 +265,6 @@ export default class ChatList extends SafeComponent {
                 keyExtractor={this.keyExtractor}
                 onViewableItemsChanged={this.onViewableItemsChanged}
                 viewabilityConfig={viewabilityConfig}
-                getItemLayout={this.getItemLayout}
             />
         );
     }
