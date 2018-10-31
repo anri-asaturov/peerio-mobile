@@ -104,11 +104,14 @@ export default class ChatListItem extends SafeComponent {
     }
 
     renderThrow() {
-        if (chatState.collapseDMs) return null;
-        if (!this.props || !this.props.chat) return null;
+        if (!this.props || !this.props.chat) {
+            console.error('Null chat provided to chat list item');
+        }
         const { chat } = this.props;
         const { otherParticipants, headLoaded } = chat;
-        if (chat.isChannel && !headLoaded) return null;
+        if (chat.isChannel && !headLoaded) {
+            console.error('Head is not loaded in the provided chat list item. Still rendering');
+        }
         // no participants means chat with yourself
         let contact = contactState.store.getContact(User.current.username);
         // two participants

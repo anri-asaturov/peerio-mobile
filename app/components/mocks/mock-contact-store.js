@@ -56,7 +56,6 @@ class MockContactStore {
     }
 
     getContact(username) {
-        console.log(`get ${username}`);
         const r = this.contactsMap.get(username);
         return r || { username, loading: false, notFound: true };
     }

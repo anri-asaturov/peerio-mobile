@@ -64,7 +64,9 @@ export default class MockChatList extends Component {
         chatState.init();
         contactState.store = mockContactStore;
         contactState.init();
-        global.chatState = chatState;
+        const { chats } = chatState.store;
+        chats[0].unreadCount = 2;
+        chats[chats.length - 1].unreadCount = 3;
     }
 
     addGlobalDrawer = () => {
