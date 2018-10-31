@@ -6,7 +6,7 @@ import { View, TouchableOpacity } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import chatState from './chat-state';
-import { User, contactStore } from '../../lib/icebear';
+import { User } from '../../lib/icebear';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
@@ -14,6 +14,7 @@ import DmTitle from '../shared/dm-title';
 import AvatarCircle from '../shared/avatar-circle';
 import DeletedCircle from '../shared/deleted-circle';
 import ListSeparator from '../shared/list-separator';
+import contactState from '../contacts/contact-state';
 
 const pinOn = require('../../assets/chat/icon-pin.png');
 
@@ -109,7 +110,7 @@ export default class ChatListItem extends SafeComponent {
         const { otherParticipants, headLoaded } = chat;
         if (chat.isChannel && !headLoaded) return null;
         // no participants means chat with yourself
-        let contact = contactStore.getContact(User.current.username);
+        let contact = contactState.store.getContact(User.current.username);
         // two participants
         if (otherParticipants && otherParticipants.length === 1) {
             contact = otherParticipants[0];

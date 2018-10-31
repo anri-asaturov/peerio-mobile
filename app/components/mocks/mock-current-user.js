@@ -1,5 +1,3 @@
-import randomWords from 'random-words';
-import capitalize from 'capitalize';
 import { observable } from 'mobx';
 
 class MockCurrentUser {
@@ -8,16 +6,20 @@ class MockCurrentUser {
     @observable username;
     beacons = observable.map();
     activePlans = [];
+    settings = {
+        loaded: true
+    };
+    loading = false;
 
     saveBeacons() {
         console.log(`mock save beacons`);
     }
 
     constructor() {
-        const username = `${randomWords()}${this.contacts.length}`;
-        const firstName = capitalize(randomWords());
-        const lastName = capitalize(randomWords());
-        const address = `${randomWords()}@123.com`;
+        const username = `mockCurrentUser`;
+        const firstName = 'Current';
+        const lastName = 'User';
+        const address = `current@user.com`;
         Object.assign(this, {
             username,
             firstName,

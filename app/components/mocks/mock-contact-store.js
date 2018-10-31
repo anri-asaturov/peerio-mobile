@@ -1,6 +1,7 @@
 import randomWords from 'random-words';
 import capitalize from 'capitalize';
 import { observable } from 'mobx';
+import MockCurrentUser from './mock-current-user';
 
 class MockContactStore {
     addedContacts = [];
@@ -44,6 +45,13 @@ class MockContactStore {
         };
         this.contacts.push(contact);
         this.contactsMap.set(username, contact);
+        return contact;
+    }
+
+    createMockCurrentUser() {
+        const contact = new MockCurrentUser();
+        this.contacts.push(contact);
+        this.contactsMap.set(contact.username, contact);
         return contact;
     }
 

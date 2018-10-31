@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, Platform } from 'react-native';
 import { observable, reaction, action, computed } from 'mobx';
-import { chatInviteStore, chatStore } from '../../lib/icebear';
+import { chatInviteStore } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
 import ChatListItem from './chat-list-item';
 import ChannelListItem from './channel-list-item';
@@ -55,7 +55,7 @@ export default class ChatList extends SafeComponent {
     }
 
     @computed get firstSectionItems() {
-        const allChannels = chatStore.allRooms || [];
+        const allChannels = chatState.store.allRooms || [];
         allChannels.sort((a, b) => {
             const first = (a.name || a.channelName || '').toLocaleLowerCase();
             const second = (b.name || b.channelName || '').toLocaleLowerCase();
@@ -280,7 +280,7 @@ export default class ChatList extends SafeComponent {
     }
 
     renderThrow() {
-        const body = ((chatStore.chats.length || chatInviteStore.received.length) && chatState.store.loaded) ?
+        const body = ((chatState.store.chats.length || chatInviteStore.received.length) && chatState.store.loaded) ?
             this.listView() : this.zeroStatePlaceholder();
 
         return (

@@ -18,7 +18,6 @@ import mockContactStore from './mock-contact-store';
 import mockFileStore from './mock-file-store';
 import TabContainer from '../layout/tab-container';
 import { TopDrawerMaintenance, /* TopDrawerNewContact, */ TopDrawerPendingFiles, TopDrawerAutoMount } from '../shared/top-drawer-components';
-import { observable } from '../../../node_modules/mobx/lib/mobx';
 
 const button = {
     position: 'absolute',
@@ -59,15 +58,13 @@ const remove = [
 @observer
 export default class MockChatList extends Component {
     componentWillMount() {
-        User.current = mockContactStore.createMock();
-        User.current.activePlans = [];
-        User.current.beacons = observable.map();
-        User.current.saveBeacons = () => {};
+        User.current = mockContactStore.createMockCurrentUser();
         mockFileStore.install();
         chatState.store = mockChatStore;
         chatState.init();
         contactState.store = mockContactStore;
         contactState.init();
+        global.chatState = chatState;
     }
 
     addGlobalDrawer = () => {
