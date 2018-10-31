@@ -211,13 +211,6 @@
 			remoteGlobalIDString = 46FEDE7F1AFF192F00D3261C;
 			remoteInfo = RNMail;
 		};
-		020633CC2177FF8E00F5743C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D41AF8F820E745F28DB9CABA /* RNMail.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 46FEDE8A1AFF192F00D3261C;
-			remoteInfo = RNMailTests;
-		};
 		020D12A021670C1D007484E3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 85F72AE1AB9C4B249FDE6333 /* RNFS.xcodeproj */;
@@ -308,13 +301,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 8C5379761FB471D100C1BC65;
 			remoteInfo = Lottie_tvOS;
-		};
-		022653CE213515BF003EEF56 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1D58BC509EB240BF97F97E0E /* Lottie.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 62CA59B71E3C173B002D7188;
-			remoteInfo = Lottie_iOS;
 		};
 		0235B5D61E65DE24001D77D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -832,7 +818,6 @@
 			isa = PBXGroup;
 			children = (
 				020633CB2177FF8E00F5743C /* libRNMail.a */,
-				020633CD2177FF8E00F5743C /* RNMailTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1257,7 +1242,6 @@
 			dependencies = (
 				0253B8111E6868F200554265 /* PBXTargetDependency */,
 				96CEC5A221107C3600F546CE /* PBXTargetDependency */,
-				022653CF213515BF003EEF56 /* PBXTargetDependency */,
 			);
 			name = peeriomobile;
 			productName = peeriomobile;
@@ -1596,13 +1580,6 @@
 			fileType = archive.ar;
 			path = libRNMail.a;
 			remoteRef = 020633CA2177FF8E00F5743C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		020633CD2177FF8E00F5743C /* RNMailTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNMailTests.xctest;
-			remoteRef = 020633CC2177FF8E00F5743C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		020D12A121670C1D007484E3 /* libRNFS.a */ = {
@@ -2053,11 +2030,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		022653CF213515BF003EEF56 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Lottie_iOS;
-			targetProxy = 022653CE213515BF003EEF56 /* PBXContainerItemProxy */;
-		};
 		0253B8111E6868F200554265 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = React;
