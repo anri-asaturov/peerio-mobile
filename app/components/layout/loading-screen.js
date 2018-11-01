@@ -3,7 +3,6 @@ import { View, Animated, LayoutAnimation } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { observable, action, computed } from 'mobx';
 import LottieView from 'lottie-react-native';
-import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
 import loginState from '../login/login-state';
 import routes from '../routes/routes';
@@ -24,6 +23,7 @@ export default class LoadingScreen extends Component {
     @observable revealAnimVisible = false;
 
     logoAnimValue = new Animated.Value(0);
+    statusTextOpacity = new Animated.Value(1);
 
     async componentDidMount() {
         try {
@@ -58,16 +58,22 @@ export default class LoadingScreen extends Component {
     @action.bound animateReveal() {
         this.revealAnimVisible = true;
         this.logoAnimVisible = false;
-        LayoutAnimation.easeInEaseOut();
-        this.statusTextVisible = false;
         this.revealAnimValue = new Animated.Value(0);
+
+        Animated.timing(this.statusTextOpacity, {
+            toValue: 0,
+            duration: 250,
+            useNativeDriver: true
+        }).start();
+
         Animated.timing(this.revealAnimValue, {
             toValue: 1,
             duration: 2500,
             useNativeDriver: true
         }).start(() => {
-            this.wireframeAnimValue = false;
+            this.revealAnimVisible = false;
             routerMain.transitionToMain();
+            LayoutAnimation.easeInEaseOut();
         });
     }
 
@@ -101,7 +107,8 @@ export default class LoadingScreen extends Component {
             marginStart: vars.spacing.small.mini2x,
             fontSize: vars.font.size18,
             color: vars.white,
-            textAlign: 'center'
+            textAlign: 'center',
+            opacity: this.statusTextOpacity
         };
         return (
             <View style={container}>
@@ -117,11 +124,11 @@ export default class LoadingScreen extends Component {
                     source={logoAnimation}
                     resizeMode="cover"
                 />}
-                {this.statusTextVisible && <View style={loadingProgressContainer}>
-                    <Text style={statusTextStyle}>
+                <View style={loadingProgressContainer}>
+                    <Animated.Text style={statusTextStyle}>
                         {this.statusText}
-                    </Text>
-                </View>}
+                    </Animated.Text>
+                </View>
                 <View style={{ position: 'absolute', bottom: 0, right: 0, left: 0 }}>
                     <SnackBarConnection />
                 </View>
