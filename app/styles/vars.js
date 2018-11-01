@@ -249,7 +249,6 @@ const vars = {
     pinnedChatPaddingHorizontal: 2,
     fileListHorizontalPadding: scaleDim(16),
     fileInnerItemPaddingRight: 8,
-    loadingScreenMarginBottom: scaleDim(170),
     loadingScreenMarginTop: scaleDim(206),
     dmInvitePaddingTop: scaleDim(90),
     verificationMessageWidth: scaleDim(260),

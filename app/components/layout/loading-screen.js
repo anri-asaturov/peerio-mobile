@@ -12,6 +12,7 @@ import { tx } from '../utils/translator';
 import SnackBarConnection from '../snackbars/snackbar-connection';
 import routerMain from '../routes/router-main';
 
+const logoHeight = 72; // Logo in the animation
 const logoAnimation = require('../../assets/loading_screens/loading-screen-logo-animation.json');
 const revealAnimation = require('../../assets/loading_screens/loading-screen-reveal-animation.json');
 
@@ -90,10 +91,9 @@ export default class LoadingScreen extends Component {
             alignItems: 'center'
         };
         const loadingProgressContainer = {
-            flex: 1,
-            flexGrow: 1,
-            justifyContent: 'flex-end',
-            marginBottom: vars.loadingScreenMarginBottom
+            position: 'absolute',
+            top: '50%',
+            marginTop: vars.spacing.medium.maxi2x + (logoHeight / 2)
         };
         const animationContainer = {
             alignSelf: 'stretch', // this is for android throwing errors
