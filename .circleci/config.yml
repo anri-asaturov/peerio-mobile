@@ -2,11 +2,11 @@ version: 2
 jobs:
   build:
     macos:
-      xcode: "9.4.1"
+      xcode: "10.0.0"
     environment:
       XCODE_SCHEME: peeriomobile
       PEERIO_IOS_SIM: 'iPhone 6 Plus'
-      PEERIO_IOS_VERSION: '10.3'
+      PEERIO_IOS_VERSION: '12.0'
       PEERIO_TEST_PLATFORM: 'ios'
       CIRCLE_TEST_REPORTS: ~/reports
       CIRCLE_ARTIFACTS: ~/artifacts

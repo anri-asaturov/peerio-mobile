@@ -1,5 +1,5 @@
 // import MockBeacon from './beacons/mock-beacon';
-// import MockChannel from './mock-channel';
+// import MockChannelView from './mock-channel-view';
 /* import MockChannelCreate from './mock-channel-create'; */
 // import MockChatList from './mock-chat-list';
 // import MockTwoFactorAuth from './mock-two-factor-auth';
@@ -14,7 +14,7 @@
 // import MockSqlTest from './mock-sql-test';
 
 export default null;
-// export default MockBeacon;
+// export default MockChatList;
 // export default MockSqlTest;
 // export default MockSignupContactInvite;
 // export default MockChannel;

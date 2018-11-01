@@ -1,149 +1,144 @@
-import React, { Component } from 'react';
-import { View, StatusBar, Image } from 'react-native';
-import { observable, reaction } from 'mobx';
-import { observer } from 'mobx-react/native';
-import HeaderMain from '../layout/header-main';
-import Chat from '../messaging/chat';
-import ChannelInfo from '../messaging/channel-info';
-import PopupLayout from '../layout/popup-layout';
-import ChannelAddPeople from '../messaging/channel-add-people';
-import InputMainContainer from '../layout/input-main-container';
-import FileUploadProgress from '../files/file-upload-progress';
-import { User, clientApp, TinyDb } from '../../lib/icebear';
-import fileState from '../files/file-state';
-import chatState from '../messaging/chat-state';
-import contactState from '../contacts/contact-state';
+import { observable } from 'mobx';
+import randomWords from 'random-words';
+import capitalize from 'capitalize';
 import mockContactStore from './mock-contact-store';
-import mockChatStore from './mock-chat-store';
 import mockFileStore from './mock-file-store';
-import routerMain from '../routes/router-main';
-import routerModal from '../routes/router-modal';
+import { TinyDb } from '../../lib/icebear';
 
-@observer
-export default class MockChannel extends Component {
-    @observable showChannelInfo = false;
-    @observable showAddPeople = false;
-    @observable originalData = null;
-    @observable imagePath = null;
+const randomImages = [
+    'https://i.ytimg.com/vi/xC5n8f0fTeE/maxresdefault.jpg',
+    'http://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1487095116/forest-park-portland-oregon-FORESTBATH0217.jpg?itok=XVmUfPQB',
+    'http://cdn-image.travelandleisure.com/sites/default/files/styles/1600x1000/public/1487095116/yakushima-forest-japan-FORESTBATH0217.jpg?itok=mnXAvDq3',
+    'http://25.media.tumblr.com/865fb0f33ebdde6360be8576ad6b1978/tumblr_n08zcnLOEf1t8zamio1_250.png',
+    'http://globalforestlink.com/wp-content/uploads/2015/07/coniferous.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Grand_Anse_Beach_Grenada.jpg/1200px-Grand_Anse_Beach_Grenada.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5RzVGnDGecjd0b7YqxzvkkRo-6jiraf9FOMQAgChfa4WKD_6c',
+    'http://www.myjerseyshore.com/wp-content/themes/directorypress/thumbs//Beaches-Page-Picture.jpg',
+    'http://www.shoreexcursionsgroup.com/img/article/region_bermuda2.jpg'
+];
 
-    async componentWillMount() {
-        clientApp.uiUserPrefs.externalContentConsented = true;
-        clientApp.uiUserPrefs.externalContentEnabled = true;
+class MockChannel {
+    @observable messages = [];
+    @observable id;
+    @observable isChannel = true;
+    @observable name = randomWords({ min: 1, max: 4, join: '-' });
+    @observable topic = `${capitalize(randomWords({ min: 2, max: 4, join: ' ' }))}!`;
+    @observable participants = [];
+    @observable isFavorite = false;
+    @observable isMuted = false;
+    @observable adminMap = observable.map();
+    @observable loaded = true;
+    @observable unreadCount = 0;
+    @observable headLoaded = true;
 
-        User.current = { activePlans: [] };
-        mockFileStore.install();
-        contactState.store = mockContactStore;
-        chatState.store = mockChatStore;
-        chatState.addAck = () => {
-            chatState.store.activeChat.addInlineImageMessage();
-        };
-        chatState.addMessage = message => {
-            chatState.store.activeChat.addRandomMessage(message);
-        };
-        fileState.uploadInline = async path => {
-            console.log(path);
-            chatState.store.activeChat.addInlineImageMessageFromFile(path);
-        };
-        routerMain.current = observable({
-            routeState: observable({
-                title: '# channel-mock',
-                titleAction: () => { this.showChannelInfo = true; }
-            })
+    get allJoinedParticipants() { return this.participants; }
+    get otherParticipants() { return this.participants; }
+
+
+    constructor() {
+        TinyDb.userCollection = TinyDb.open('testuser');
+        this.initParticipants();
+        this.id = randomWords({ min: 7, max: 7, join: ':' });
+
+        for (let i = 0; i < 10; ++i) {
+            this.addInlineImageMessage();
+            // this.addRandomMessage();
+        }
+        // this.addInlineImageMessage();
+        // this.addExternalUrlMessage();
+    }
+
+    initParticipants() {
+        for (let i = 0; i < 8; ++i) this.participants.push(mockContactStore.createMock());
+        this.addAdmin(this.participants[0]);
+        this.addAdmin(this.participants[1]);
+    }
+
+    toggleFavoriteState() {
+        this.isFavorite = !this.isFavorite;
+    }
+
+    toggleMuted() {
+        this.isMuted = !this.isMuted;
+    }
+
+    removeChannelMember(contact) {
+        const i = this.participants.indexOf(contact);
+        if (i !== -1) this.participants.splice(i, 1);
+    }
+
+    isAdmin(contact) {
+        return this.adminMap.has(contact.username);
+    }
+
+    addAdmin(contact) {
+        this.adminMap.set(contact.username, contact);
+    }
+
+    removeAdmin(contact) {
+        this.adminMap.delete(contact.username);
+    }
+
+    sendInvites(contacts) {
+        contacts.forEach(i => {
+            if (this.participants.filter(p => p.username === i.username).length === 0) {
+                this.participants.push(i);
+            }
         });
-        const discard = routerModal.discard.bind(routerModal);
-        routerModal.discard = () => {
-            this.showChannelInfo = false;
-            this.showAddPeople = false;
-            if (routerModal.route === 'channelAddPeople') {
-                this.showChannelInfo = true;
-            }
-            discard();
-        };
-
-        reaction(() => routerModal.route, route => {
-            if (route === 'channelAddPeople') {
-                this.showChannelInfo = false;
-                this.showAddPeople = true;
-            }
-        });
-
-        this.imagePath = await TinyDb.system.getValue('mock-thumbnail');
-        fileState.localFileMap.set(1, this.imagePath);
-        fileState.localFileMap.set(2, this.imagePath);
     }
 
-    componentDidMount() {
-        setInterval(() => {
-            this.progress += 10;
-            if (this.progress > this.progressMax) {
-                this.progress = 0;
-            }
-        }, 1000);
+    createMock(message) {
+        const id = randomWords({ min: 1, max: 4, join: '-' });
+        let text = message;
+        if (!message && message !== false) text = randomWords({ min: 1, max: 4, join: ' ' });
+        const sender = this.participants[0];
+        const groupWithPrevious = Math.random() > 0.5;
+        return { id, text, sender, groupWithPrevious };
     }
 
-    get channelList() {
-        return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1 }}>
-                <HeaderMain />
-                <Chat />
-                <StatusBar barStyle="light-content" />
-            </View>
-        );
+    addRandomMessage(message) {
+        const m = this.createMock(message);
+        this.messages.push(m);
     }
 
-    get channelInfo() {
-        return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1 }}>
-                <ChannelInfo />
-                <StatusBar barStyle="default" />
-            </View>
-        );
+    addInlineImageMessage() {
+        const m = this.createMock(false);
+        const name = `${randomWords({ min: 8, max: 12, join: '_' })}.png`;
+        const url = randomImages.random();
+        m.hasUrls = true;
+        m.externalImages = [{ url, name, oversized: true /* , fileId: 1 */ }];
+        this.messages.push(m);
     }
 
-    get addPeople() {
-        return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1 }}>
-                <ChannelAddPeople />
-                <StatusBar barStyle="default" />
-            </View>
-        );
+    addExternalUrlMessage() {
+        const m = this.createMock('https://eslint.org/docs/rules/operator-assignment');
+        const name = `${randomWords({ min: 1, max: 2, join: '_' })}.png`;
+        const title = capitalize(randomWords({ min: 3, max: 5, join: ' ' }));
+        const description = capitalize(randomWords({ min: 5, max: 10, join: ' ' }));
+        const url = randomImages.random();
+        m.inlineImage = { url, name, title, description, isLocal: false };
+        this.messages.push(m);
     }
 
-    get body() {
-        if (this.showChannelInfo) return this.channelInfo;
-        if (this.showAddPeople) return this.addPeople;
-        return this.channelList;
+    addFileMessage() {
+        const m = this.createMock(false);
+        m.files = [mockFileStore.files[0].id];
+        this.messages.push(m);
     }
 
-    @observable progressMax = 100;
-    @observable progress = 90;
-
-    get progressBar() {
-        const { progressMax, progress } = this;
-        const file = { fileId: 1, progressMax, progress, ext: 'jpg' };
-        const title = 'Caaaaaaat1 very long title which grows forever and ever.jpg';
-        return <FileUploadProgress file={file} title={title} />;
+    async addInlineImageMessageFromFile(path) {
+        const m = this.createMock(false);
+        const name = `${randomWords({ min: 1, max: 2, join: '_' })}.png`;
+        const url = path;
+        m.inlineImage = { url, name, isLocal: true };
+        this.messages.push(m);
     }
 
-    get image() {
-        const { originalData } = this;
-        if (!originalData) return null;
-        const s = {
-            width: 100,
-            height: 100
-        };
-        return <Image style={s} source={{ uri: `data:image/png;base64,${originalData}` }} />;
-    }
-
-    render() {
-        return (
-            <View style={{ flex: 1, flexGrow: 1 }}>
-                {this.body}
-                {this.image}
-                {this.progressBar}
-                <InputMainContainer canSend />
-                <PopupLayout key="popups" />
-            </View>
-        );
+    get uploadQueue() {
+        const f = mockFileStore.files[0];
+        f.uploading = true;
+        return [f];
     }
 }
+
+export default MockChannel;

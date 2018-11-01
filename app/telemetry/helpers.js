@@ -17,6 +17,7 @@ class TmHelper {
             operatingSystem: Platform.OS,
             osVersion: Platform.Version
         };
+        if (__DEV__) baseProps.eventTime = Date.now();
         const obj = {
             event: event[0],
             properties: event[1] || {}

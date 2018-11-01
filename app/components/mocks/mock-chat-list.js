@@ -58,13 +58,15 @@ const remove = [
 @observer
 export default class MockChatList extends Component {
     componentWillMount() {
-        User.current = mockContactStore.createMock();
-        User.current.activePlans = [];
+        User.current = mockContactStore.createMockCurrentUser();
         mockFileStore.install();
         chatState.store = mockChatStore;
         chatState.init();
         contactState.store = mockContactStore;
         contactState.init();
+        const { chats } = chatState.store;
+        chats[0].unreadCount = 2;
+        chats[chats.length - 1].unreadCount = 3;
     }
 
     addGlobalDrawer = () => {
@@ -93,18 +95,13 @@ export default class MockChatList extends Component {
             case 'files':
                 return <Files />;
             default:
-                return <Files />;
+                return <ChatList />;
         }
     }
 
-    render() {
+    get drawerControl() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
-                <TabContainer />
-                {this.list}
-                <PopupLayout key="popups" />
-                <StatusBar barStyle="default" />
-                <TabContainer />
+            <View>
                 <TouchableOpacity
                     style={add1}
                     onPress={this.addGlobalDrawer}
@@ -132,6 +129,17 @@ export default class MockChatList extends Component {
                         Delete
                     </Text>
                 </TouchableOpacity>
+            </View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
+                {this.list}
+                <TabContainer />
+                <PopupLayout key="popups" />
+                <StatusBar barStyle="default" />
                 <TopDrawerAutoMount />
             </View>
         );

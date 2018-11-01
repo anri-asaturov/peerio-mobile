@@ -58,8 +58,8 @@ export default class LoginInputs extends SafeComponent {
         loginState.passphrase = this.passwordState.value;
         uiState.hideAll()
             .then(async () => {
+                tm.login.onSigninButton();
                 await loginState.login();
-                tm.login.onLoginSuccess();
             })
             .catch(e => {
                 let errorMessage = 'error_wrongAK';
@@ -67,6 +67,7 @@ export default class LoginInputs extends SafeComponent {
                     errorMessage = 'error_accountSuspendedTitle';
                 }
                 this.passwordInput.setCustomError(errorMessage, false);
+                tm.login.onUserLoginFailed(false);
             });
     }
 

@@ -37,9 +37,38 @@ const login = setup(
             ];
         },
 
-        onLoginSuccess: () => {
+        onSigninButton: () => {
             return [
-                S.SIGN_IN, { text: S.SIGN_IN }
+                S.SIGN_IN, {
+                    option: S.MANUAL
+                }];
+        },
+
+        onUserLogin: (autoLogin, hasSeenTfa) => {
+            return [
+                S.SIGN_IN_SUCCESS, {
+                    option: autoLogin ? S.AUTO : S.MANUAL,
+                    condition: hasSeenTfa ? S.TSV_ON : S.TSV_OFF
+                }
+            ];
+        },
+
+        onUserLoginFailed: (autoLogin) => {
+            return [
+                S.SIGN_IN_FAIL, {
+                    option: autoLogin ? S.AUTO : S.MANUAL
+                }
+            ];
+        },
+
+        onUserTfaLoginFailed: (autoLogin) => {
+            return [
+                S.SIGN_IN_FAIL, {
+                    location: S.SIGN_IN,
+                    sublocation: S.TSV_DIALOG,
+                    option: autoLogin ? S.AUTO : S.MANUAL,
+                    condition: S.TSV_ON
+                }
             ];
         },
 

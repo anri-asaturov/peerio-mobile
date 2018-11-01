@@ -29,7 +29,8 @@ const shared = setup({
     // Used to send errors when input is blurred
     textInputOnBlur: (tm, errorMsg) => {
         if (!errorMsg) return null; // Do not send error event if there is no error message
-        if (errorMsg === 'error_usernameNotAvailable') return null; // Do not track this error here
+        // Do not track these errors here
+        if (errorMsg === 'error_usernameNotAvailable' || errorMsg === 'error_wrongAK') return null;
         return [
             S.TEXT_INPUT,
             {

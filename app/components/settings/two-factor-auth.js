@@ -15,6 +15,7 @@ import TwoFactorAuthCodes from './two-factor-auth-codes';
 import TwoFactorAuthCodesGenerate from './two-factor-auth-codes-generate';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
+import tm from '../../telemetry';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -41,6 +42,7 @@ async function twoFactorAuthPopup(active2FARequest) {
     if (!active2FARequest) return;
     console.log(JSON.stringify(active2FARequest));
     const { submit, cancel, type } = active2FARequest;
+    // result returns true if 2fa code was entered, false if popup was canceled
     const result = await popup2FA(
         tx('title_2FARequired'),
         tx('dialog_enter2FA'),
@@ -58,10 +60,18 @@ async function twoFactorAuthPopup(active2FARequest) {
     }
     const { value, checked } = result;
     uiState.trustDevice2FA = checked;
-    submit(value, checked);
+    try {
+        await submit(value, checked);
+    } catch (e) {
+        console.error(e);
+        if (type === 'login') tm.login.onUserTfaLoginFailed(User.current.autologinEnabled);
+    }
 }
 
-reaction(() => clientApp.active2FARequest, twoFactorAuthPopup);
+reaction(() => clientApp.active2FARequest, active2FARequest => {
+    loginState.tfaRequested = active2FARequest.type === 'login';
+    twoFactorAuthPopup(active2FARequest);
+});
 
 export { twoFactorAuthPopup };
 

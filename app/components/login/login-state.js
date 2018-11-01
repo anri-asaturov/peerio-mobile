@@ -9,6 +9,7 @@ import { popupSignOutAutologin } from '../shared/popups';
 import { tx } from '../utils/translator';
 import RoutedState from '../routes/routed-state';
 import routes from '../routes/routes';
+import tm from '../../telemetry';
 
 const loginConfiguredKey = 'loginConfigured';
 
@@ -22,6 +23,7 @@ class LoginState extends RoutedState {
     @observable current = 0;
     @observable selectedAutomatic = null;
     @observable loaded = false;
+    @observable tfaRequested = false;
     _prefix = 'login';
     _resetTouchId = null;
 
@@ -70,8 +72,11 @@ class LoginState extends RoutedState {
             })
             .then(async () => {
                 mainState.activateAndTransition(user);
-                if (user.autologinEnabled) return;
-                // wait for user to answer
+                if (user.autologinEnabled) {
+                    tm.login.onUserLogin(true, this.tfaRequested);
+                    return;
+                }
+                tm.login.onUserLogin(false, this.tfaRequested);
                 await this.enableAutomaticLogin(user);
             })
             .catch(e => {

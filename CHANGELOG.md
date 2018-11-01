@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.391.0"></a>
+# [3.391.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.390.0...v3.391.0) (2018-11-01)
+
+
+### Bug Fixes
+
+* show room invites [ch16421] ([6658775](https://github.com/PeerioTechnologies/peerio-mobile/commit/6658775))
+
+
+
+<a name="3.390.0"></a>
+# [3.390.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.390.0) (2018-11-01)
+
+
+### Bug Fixes
+
+* wait for authenticated before prompting upload ([#357](https://github.com/PeerioTechnologies/peerio-mobile/issues/357)) ([1faedc4](https://github.com/PeerioTechnologies/peerio-mobile/commit/1faedc4))
+
+
+### Features
+
+* chat beacons ([#345](https://github.com/PeerioTechnologies/peerio-mobile/issues/345)) ([941f1db](https://github.com/PeerioTechnologies/peerio-mobile/commit/941f1db))
+
+
+
+<a name="3.389.0"></a>
+# [3.389.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.389.0) (2018-10-31)
+
+
+### Bug Fixes
+
+* wait for authenticated before prompting upload ([#357](https://github.com/PeerioTechnologies/peerio-mobile/issues/357)) ([1faedc4](https://github.com/PeerioTechnologies/peerio-mobile/commit/1faedc4))
+
+
+### Features
+
+* chat beacons ([#345](https://github.com/PeerioTechnologies/peerio-mobile/issues/345)) ([941f1db](https://github.com/PeerioTechnologies/peerio-mobile/commit/941f1db))
+
+
+
 <a name="3.388.0"></a>
 # [3.388.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.388.0) (2018-10-25)
 
