@@ -69,7 +69,7 @@ class LoginState extends RoutedState {
                 console.log('login-state.js: logged in');
             })
             .then(async () => {
-                mainState.activate(user);
+                mainState.activateAndTransition(user);
                 if (user.autologinEnabled) return;
                 // wait for user to answer
                 await this.enableAutomaticLogin(user);

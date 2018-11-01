@@ -88,11 +88,6 @@ class RouterMain extends Router {
         return this.route === this._initialRoute;
     }
 
-    @action async initializeAndTransition() {
-        await this.initialize();
-        // this.tranisitionToMain();
-    }
-
     @action async initialize() {
         if (this.invoked) return;
         this.invoked = true;
@@ -108,7 +103,7 @@ class RouterMain extends Router {
         this.loading = false;
     }
 
-    @action tranisitionToMain() {
+    @action transitionToMain() {
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
         this.initialRoute();

@@ -31,9 +31,7 @@ export default class LoadingScreen extends Component {
             await loginState.load();
             if (!loginState.loaded) throw new Error('error logging in after return');
             await promiseWhen(() => socket.authenticated);
-
-            this.authenticated = true; // Changes status text
-
+            this.authenticated = true;
             await promiseWhen(() => routes.main.chatStateLoaded);
             await promiseWhen(() => routes.main.fileStateLoaded);
             await promiseWhen(() => routes.main.contactStateLoaded);
@@ -69,14 +67,14 @@ export default class LoadingScreen extends Component {
             useNativeDriver: true
         }).start(() => {
             this.wireframeAnimValue = false;
-            routerMain.tranisitionToMain();
+            routerMain.transitionToMain();
         });
     }
 
     @computed get statusText() {
         if (!socket.connected) return tx('title_waitingToConnect');
-        if (this.authenticated) return tx('title_decrypting'); // TODO change copy
-        return tx('title_connecting');
+        if (!this.authenticated) return tx('title_authenticating');
+        return tx('title_decrypting');
     }
 
     render() {
@@ -100,6 +98,7 @@ export default class LoadingScreen extends Component {
             bottom: 0
         };
         const statusTextStyle = {
+            marginStart: vars.spacing.small.mini2x,
             fontSize: vars.font.size18,
             color: vars.white,
             textAlign: 'center'

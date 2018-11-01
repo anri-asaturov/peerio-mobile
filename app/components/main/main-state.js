@@ -22,8 +22,9 @@ class MainState extends RoutedState {
     }
 
     @action async activateAndTransition(/* user */) {
-        await this.routerMain.initializeAndTransition();
+        await this.routerMain.initialize();
         this.routes.app.main();
+        this.routes.main.initialRoute();
     }
 
     @action async load() {
