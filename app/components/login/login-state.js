@@ -64,14 +64,15 @@ class LoginState extends RoutedState {
         this.isInProgress = false;
     }
 
-    @action _login(user) {
+    @action _login(user, manual) {
         User.current = user;
         return user.login()
             .then(() => {
                 console.log('login-state.js: logged in');
             })
             .then(async () => {
-                mainState.activateAndTransition(user);
+                if (manual) mainState.activateAndTransition(user);
+                else mainState.activate(user);
                 if (user.autologinEnabled) {
                     tm.login.onUserLogin(true, this.tfaRequested);
                     return;
@@ -123,6 +124,7 @@ class LoginState extends RoutedState {
             });
     }
 
+    // Manual Login
     @action login = async (pin) => {
         /* if (this.username === config.appleTestUser
             && config.appleTestServer !== socket.url) {
@@ -135,10 +137,11 @@ class LoginState extends RoutedState {
         user.passphrase = (pin || this.passphrase).trim();
         this.isInProgress = true;
         return new Promise(resolve => {
-            when(() => socket.connected, () => resolve(this._login(user)));
+            when(() => socket.connected, () => resolve(this._login(user, true)));
         }).then(() => mainState.saveUser());
     };
 
+    // Automatic Login
     @action loginCached = (data) => {
         const user = new User();
         user.deserializeAuthData(data);
