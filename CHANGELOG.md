@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.392.0"></a>
+# [3.392.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.391.0...v3.392.0) (2018-11-02)
+
+
+### Bug Fixes
+
+* added fade in/out ([6a553a1](https://github.com/PeerioTechnologies/peerio-mobile/commit/6a553a1))
+* code style and login logic regressions ([1e1bc52](https://github.com/PeerioTechnologies/peerio-mobile/commit/1e1bc52))
+* partial animation skip ([41aeb3c](https://github.com/PeerioTechnologies/peerio-mobile/commit/41aeb3c))
+* text positioning ([1457fa7](https://github.com/PeerioTechnologies/peerio-mobile/commit/1457fa7))
+
+
+### Features
+
+* new loading screen animation [branch ch16061] ([49d0112](https://github.com/PeerioTechnologies/peerio-mobile/commit/49d0112))
+
+
+
 <a name="3.391.0"></a>
 # [3.391.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.390.0...v3.391.0) (2018-11-01)
 
