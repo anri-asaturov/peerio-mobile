@@ -10,6 +10,12 @@ import { inputMain, vars } from '../../styles/styles';
 import icons from '../helpers/icons';
 import { uiState, chatState } from '../states';
 import testLabel from '../helpers/test-label';
+import MeasureableIcon from './measureable-icon';
+import chatBeacons from '../beacons/chat-beacons';
+
+const buttonStyle = {
+    paddingHorizontal: vars.iconPadding
+};
 
 @observer
 export default class InputMain extends SafeComponent {
@@ -58,16 +64,15 @@ export default class InputMain extends SafeComponent {
         const chatName = chatState.title;
         return (
             <View style={outerStyle}>
-                {icons.dark(
-                    'add-circle-outline',
-                    this.plus,
-                    {
-                        paddingLeft: vars.spacing.small.mini2x,
-                        paddingRight: vars.spacing.medium.maxi2x
-                    },
-                    null,
-                    'buttonUploadToChat'
-                )}
+                <View style={buttonStyle}>
+                    <MeasureableIcon
+                        icon="add-circle-outline"
+                        testId="buttonUploadToChat"
+                        beacon={chatBeacons.shareFilesInChatBeacon}
+                        color={vars.darkIcon}
+                        onPress={this.plus}
+                        spotBgColor={vars.white} />
+                </View>
                 <View style={autoExpandingInputContainerStyle}>
                     <AutoExpandingTextInput
                         onChangeText={this.onChangeText}

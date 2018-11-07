@@ -7,7 +7,6 @@ import mainState from './main/main-state';
 import loginState from './login/login-state';
 import contactState from './contacts/contact-state';
 import contactAddState from './contacts/contact-add-state';
-import ghostState from './ghosts/ghost-state';
 import invitationState from './messaging/invitation-state';
 import drawerState from './shared/drawer-state';
 
@@ -21,7 +20,6 @@ export {
     fileState,
     contactState,
     contactAddState,
-    ghostState,
     invitationState,
     drawerState
 };

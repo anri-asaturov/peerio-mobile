@@ -1,17 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
 import ButtonBack from '../shared/button-back';
 import SafeComponent from '../shared/safe-component';
 import loginState from './login-state';
 import tm from '../../telemetry';
-import { telemetry } from '../../lib/icebear';
-
-const { S } = telemetry;
 
 @observer
 export default class LoginButtonBack extends SafeComponent {
-    onBackPressed() {
-        tm.login.navigate(S.BACK);
+    @action.bound onBackPressed() {
+        tm.login.navigate(this.props.telemetry);
         loginState.clearLastUser();
     }
 
@@ -19,3 +18,7 @@ export default class LoginButtonBack extends SafeComponent {
         return <ButtonBack onBackPressed={this.onBackPressed} />;
     }
 }
+
+LoginButtonBack.propTypes = {
+    telemetry: PropTypes.any
+};

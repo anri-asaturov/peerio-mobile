@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { ScrollView, View, LayoutAnimation, Platform } from 'react-native';
+import { ScrollView, View, Platform } from 'react-native';
 import { action, reaction } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -8,6 +8,7 @@ import popupState from './popup-state';
 import ButtonText from '../controls/button-text';
 import { vars } from '../../styles/styles';
 import uiState from './ui-state';
+import { transitionAnimation } from '../helpers/animations';
 
 const colors = {
     systemWarning: vars.yellow,
@@ -17,7 +18,7 @@ const colors = {
 @observer
 export default class PopupLayout extends SafeComponent {
     componentDidMount() {
-        reaction(() => popupState.activePopup, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => popupState.activePopup, transitionAnimation);
     }
 
     onPress(item) {

@@ -17,6 +17,10 @@ function getTemporaryDirectory() {
     return pathUtils.join(ROOT, 'cache');
 }
 
+function getSafeNameForSaving(name) {
+    return name.replace(/[,:]/g, '');
+}
+
 const ASSET_PROTOCOL = 'asset://';
 
 export default fileStream => {
@@ -92,7 +96,7 @@ export default fileStream => {
         }
 
         static getFullPath(uid, name) {
-            return `${ROOT}/${uid}/${name}`;
+            return `${ROOT}/${uid}/${getSafeNameForSaving(name)}`;
         }
 
         static exists(path) {
@@ -144,7 +148,7 @@ export default fileStream => {
         }
 
         static getTempCachePath(name) {
-            return pathUtils.join(getTemporaryDirectory(), name);
+            return pathUtils.join(getTemporaryDirectory(), getSafeNameForSaving(name));
         }
 
         static formatAssetsPath(path) {

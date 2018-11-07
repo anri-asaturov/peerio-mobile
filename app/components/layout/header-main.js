@@ -8,7 +8,8 @@ import routerMain from '../routes/router-main';
 import { vars } from '../../styles/styles';
 import BackIcon from './back-icon';
 import testLabel from '../helpers/test-label';
-import icons from '../helpers/icons';
+import MeasureableIcon from './measureable-icon';
+import chatBeacons from '../beacons/chat-beacons';
 
 @observer
 export default class HeaderMain extends SafeComponent {
@@ -52,7 +53,13 @@ export default class HeaderMain extends SafeComponent {
                 <Text semibold ellipsizeMode="middle" numberOfLines={1} style={textStyle}>
                     {title}
                 </Text>
-                {titleAction && icons.whiteNoPadding('arrow-drop-down', titleAction)}
+                {titleAction && <MeasureableIcon
+                    icon="arrow-drop-down"
+                    beacon={chatBeacons.infoPanelBeacon}
+                    color={vars.white}
+                    onPress={titleAction}
+                    spotBgColor={vars.darkBlue} />
+                }
             </TouchableOpacity>
         );
         // this is for animation purposes so that object gets completely redrawn on transition

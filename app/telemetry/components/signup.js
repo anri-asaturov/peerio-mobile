@@ -1,49 +1,48 @@
 import { telemetry } from '../../lib/icebear';
 import { setup } from '../main';
-import TmHelper from '../helpers';
 
 const { S, duration } = telemetry;
 
 const location = S.ONBOARDING;
 const signup = setup(
     {
-        duration: (startTime) => {
+        duration: (tm) => {
             return [
                 S.DURATION,
                 {
                     location,
-                    sublocation: TmHelper.currentRoute,
-                    totalTime: duration(startTime)
+                    sublocation: tm.sublocation,
+                    totalTime: duration(tm.startTime)
                 }
             ];
         },
 
-        durationItem: (startTime, item) => {
+        durationItem: (tm) => {
             return [
                 S.DURATION,
                 {
-                    item,
+                    item: tm.item,
                     location: S.ONBOARDING,
-                    totalTime: duration(startTime)
+                    totalTime: duration(tm.startTime)
                 }
             ];
         },
 
-        onStartAccountCreation: () => {
+        onStartAccountCreation: (tm) => {
             return [
                 S.START_ACCOUNT_CREATION, {
                     location,
-                    sublocation: TmHelper.currentRoute
+                    sublocation: tm.sublocation
                 }
             ];
         },
 
-        navigate: (option) => {
+        navigate: (tm) => {
             return [
                 S.NAVIGATE,
                 {
-                    option,
-                    sublocation: TmHelper.currentRoute
+                    option: tm.option,
+                    sublocation: tm.sublocation
                 }
             ];
         },
@@ -64,53 +63,53 @@ const signup = setup(
             ];
         },
 
-        copyAk: () => {
+        copyAk: (tm) => {
             return [
                 S.COPY,
                 {
                     item: S.ACCOUNT_KEY,
-                    sublocation: TmHelper.currentRoute
+                    sublocation: tm.sublocation
                 }
             ];
         },
 
-        saveAk: (sublocation) => {
+        saveAk: (tm) => {
             return [
                 S.DOWNLOAD,
                 {
                     item: S.ACCOUNT_KEY,
-                    sublocation: sublocation || TmHelper.currentRoute
+                    sublocation: tm.sublocation
                 }
             ];
         },
 
-        confirmSaveAk: (fileType) => {
+        confirmSaveAk: (tm, fileType) => {
             return [
                 S.DOWNLOAD_CONFIRM,
                 {
                     item: S.ACCOUNT_KEY,
                     location: S.ONBOARDING,
-                    sublocation: TmHelper.currentRoute,
+                    sublocation: tm.sublocation,
                     fileType
                 }
             ];
         },
 
-        readMorePopup: (item) => {
+        readMorePopup: (tm) => {
             return [
                 S.READ_MORE,
                 {
-                    item,
+                    item: tm.item,
                     location: S.ONBOARDING
                 }
             ];
         },
 
-        readMoreAccordion: (item) => {
+        readMoreAccordion: (tm) => {
             return [
                 S.READ_MORE,
                 {
-                    item,
+                    item: tm.item,
                     location: S.ONBOARDING
                 }
             ];

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, when, reaction, action } from 'mobx';
-import { View, Image, Dimensions, LayoutAnimation, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import Progress from '../shared/progress';
@@ -16,6 +16,7 @@ import fileState from '../files/file-state';
 import settingsState from '../settings/settings-state';
 import { clientApp, config, util } from '../../lib/icebear';
 import { T, tx } from '../utils/translator';
+import { transitionAnimation } from '../helpers/animations';
 
 const toSettings = text => (
     <Text
@@ -148,7 +149,7 @@ export default class FileInlineImage extends SafeComponent {
     }
 
     componentDidMount() {
-        reaction(() => this.opened, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => this.opened, transitionAnimation);
     }
 
     layout = (evt) => {

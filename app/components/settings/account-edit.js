@@ -74,7 +74,6 @@ export default class AccountEdit extends SafeComponent {
                 <View style={{ margin: vars.spacing.small.midi2x }}>
                     {this.label2('title_dataDetail')}
                     {this.label('title_dataPreferences')}
-                    {this.toggle('title_errorTrackingMessage', 'errorTracking')}
                     {this.toggle('title_dataCollectionMessage', 'dataCollection')}
                 </View>
                 <View style={{ marginTop: vars.spacing.medium.mini2x, marginLeft: vars.spacing.medium.maxi2x, marginBottom: vars.spacing.large.midi, flex: 1, flexGrow: 1, justifyContent: 'flex-end' }}>

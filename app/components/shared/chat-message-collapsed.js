@@ -9,6 +9,7 @@ import ChatMessageBody from './chat-message-body';
 import MessageSentError from './message-sent-error';
 
 const itemStyle = {
+    marginTop: 8,
     flex: 1,
     flexGrow: 1,
     flexDirection: 'row',
@@ -18,7 +19,7 @@ const itemStyle = {
 const itemContainerStyle = {
     flexDirection: 'row',
     marginLeft: 68,
-    marginRight: 8
+    marginRight: 6
 };
 
 @observer

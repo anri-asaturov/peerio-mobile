@@ -57,7 +57,7 @@ async function processResponse(functor, params) {
     // for the sake of compatibility
     const ext = fileHelpers.getFileExtension(response.path).trim().toLowerCase();
     if (params && params.isCamera) {
-        response.fileName = `${moment(Date.now()).format('llll')}.${ext}`;
+        response.fileName = `${moment(Date.now()).format('llll')}`;
     }
     // we may or may not have fileName, path or uri, depending on platform
     const { fileName, path, uri } = response;

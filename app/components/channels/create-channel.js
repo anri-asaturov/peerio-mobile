@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { View, ScrollView, Dimensions, LayoutAnimation, Keyboard } from 'react-native';
+import { View, ScrollView, Dimensions, Keyboard } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { observable, reaction, action } from 'mobx';
 import ContactSelectorUniversal from '../contacts/contact-selector-universal';
@@ -14,6 +14,7 @@ import { User, config, socket } from '../../lib/icebear';
 import SnackBarConnection from '../snackbars/snackbar-connection';
 import Text from '../controls/custom-text';
 import ModalHeader from '../shared/modal-header';
+import { transitionAnimation } from '../helpers/animations';
 
 const fillView = { flex: 1, flexGrow: 1, backgroundColor: vars.darkBlueBackground05 };
 
@@ -42,7 +43,7 @@ export default class CreateChannel extends Component {
             this._disableScrollUpdate = true;
             setTimeout(() => this._scrollView.scrollToEnd(), 0);
         });
-        reaction(() => this.step, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => this.step, transitionAnimation);
     }
 
     refContactSelector = ref => { this._contactSelector = ref; };

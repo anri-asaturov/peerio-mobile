@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StatusBar, LayoutAnimation } from 'react-native';
-import { observable, reaction } from 'mobx';
+import { View, StatusBar } from 'react-native';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import ComposeMessage from '../messaging/compose-message';
 import CreateChannel from '../channels/create-channel';
@@ -13,7 +13,6 @@ export default class MockChannelCreate extends Component {
     @observable isChatMode = true;
 
     componentDidMount() {
-        reaction(() => this.isChatMode, () => LayoutAnimation.easeInEaseOut());
         User.current = {};
         contactState.store = mockContactStore;
     }

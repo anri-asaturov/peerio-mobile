@@ -66,11 +66,12 @@ export default class StyledTextInput extends SafeComponent {
      * Sets validation state to INVALID and displays the custom error.
      * Custom error always overrides normal error. Custom error is cleared onFocus.
      * @param {String} error - The error to be displayed
+     * @param {Boolean} sendTmEvent - Whether the event needs to be sent through telemetry or not
      */
-    @action.bound setCustomError(error) {
+    @action.bound setCustomError(error, sendTmEvent) {
         this.valid = INVALID;
         this.customErrorTextCopy = error;
-        tm.shared.textInputOnError(this.props.inputName, error);
+        if (sendTmEvent) tm.shared.textInputOnError(this.props.telemetry, error);
     }
 
     // Checks if text field is empty and validates accordingly
@@ -101,7 +102,7 @@ export default class StyledTextInput extends SafeComponent {
      * @prop {String} validation.message - The error to show if validation fails at action
      */
     @action.bound async validate() {
-        const { validations, alwaysDirty, state } = this.props;
+        const { validations, alwaysDirty, state, telemetry } = this.props;
         // Do not run validation on a field that hasn't been modified yet unless it is alwaysDirty
         if (!this.isDirty && !alwaysDirty) return;
         this.handleEmptyField();
@@ -129,7 +130,7 @@ export default class StyledTextInput extends SafeComponent {
                         this.valid = valid;
                         if (valid === INVALID) {
                             this.errorTextCopy = validation.message;
-                            tm.shared.textInputOnError(this.props.inputName, this.errorTextCopy);
+                            tm.shared.textInputOnError(telemetry, this.errorTextCopy);
                             return false;
                         }
                         return true;
@@ -151,7 +152,7 @@ export default class StyledTextInput extends SafeComponent {
     @action.bound async onChangeText(text) {
         this.isDirty = true;
         if (this.props.onChange) this.props.onChange(text, this.prevTextLength);
-        if (text.length === this.props.maxLength) tm.shared.textInputOnMaxChars(this.props.label);
+        if (text.length === this.props.maxLength) tm.shared.textInputOnMaxChars(this.props.telemetry);
         let inputText = text;
         const { Version, OS } = Platform;
         if (OS !== 'android' || Version > 22) {
@@ -172,20 +173,22 @@ export default class StyledTextInput extends SafeComponent {
     };
 
     @action.bound async onBlur() {
+        const { telemetry, onBlur } = this.props;
         uiState.focusedTextBox = null;
         this.focused = false;
-        if (this.props.onBlur) this.props.onBlur();
+        if (onBlur) onBlur();
         await this.validate();
-        if (this.hasError) tm.shared.textInputOnBlur(this.props.inputName, this.customErrorTextCopy || this.errorTextCopy);
+        if (this.hasError) tm.shared.textInputOnBlur(telemetry, this.customErrorTextCopy || this.errorTextCopy);
     }
 
     @action.bound onFocus() {
+        const { telemetry, onFocus } = this.props;
         uiState.focusedTextBox = this.textInput;
         this.customErrorTextCopy = '';
         this.focused = true;
-        if (this.props.onFocus) this.props.onFocus();
+        if (onFocus) onFocus();
         this.textInput.focus();
-        tm.shared.textInputOnFocus(this.props.inputName);
+        tm.shared.textInputOnFocus(telemetry);
     }
 
     get borderColor() {
@@ -222,7 +225,7 @@ export default class StyledTextInput extends SafeComponent {
     @action.bound clearInputValue() {
         this.props.state.value = '';
         this.onChangeText('');
-        tm.shared.textInputOnClear(this.props.inputName);
+        tm.shared.textInputOnClear(this.props.telemetry);
     }
 
     get customIcon() {
@@ -340,7 +343,7 @@ export default class StyledTextInput extends SafeComponent {
 StyledTextInput.propTypes = {
     state: PropTypes.any,
     style: PropTypes.any,
-    inputName: PropTypes.string,
+    telemetry: PropTypes.any,
     validations: PropTypes.any,
     label: PropTypes.any,
     testID: PropTypes.any,

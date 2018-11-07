@@ -1,8 +1,9 @@
-import { action, observable } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { LayoutAnimation, Dimensions } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 import beaconState from './beacon-state';
+import { uiState } from '../states';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -35,11 +36,18 @@ export default class AbstractBeacon extends SafeComponent {
 
     componentWillMount() {
         LayoutAnimation.configureNext(fadeInAnimation);
+        this.dismissBeaconReaction = reaction(() => uiState.modalShown, () => {
+            const { onUnmount, id } = this.props;
+            if (beaconState.activeBeacon.id === id) {
+                onUnmount && onUnmount(this.wasPressed);
+            }
+        });
     }
 
     componentWillUnmount() {
         const { onUnmount } = this.props;
         onUnmount && onUnmount(this.wasPressed);
+        this.dismissBeaconReaction && this.dismissBeaconReaction();
     }
 
     @action.bound onPress() {

@@ -34,8 +34,8 @@ const headerStyle = {
     color: vars.peerioBlue,
     fontSize: vars.font.size20,
     textAlign: 'center',
-    marginTop: vars.spacing.medium.maxi,
-    marginBottom: vars.spacing.huge.maxi
+    marginTop: vars.isDeviceScreenBig ? vars.spacing.medium.midi2x : vars.spacing.medium.mini2x,
+    marginBottom: vars.isDeviceScreenBig ? vars.spacing.huge.mini2x : vars.spacing.large.maxi2x
 };
 
 const textStyle = {
@@ -43,7 +43,8 @@ const textStyle = {
     color: vars.textBlack87,
     textAlign: 'center',
     width: 200,
-    marginVertical: 16
+    marginTop: vars.isDeviceScreenBig ? vars.spacing.large.midixx : vars.spacing.medium.maxi2x,
+    marginBottom: vars.isDeviceScreenBig ? vars.spacing.medium.mini2x : vars.spacing.small.maxi
 };
 
 @observer
@@ -60,7 +61,7 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
                         width: vars.isDeviceScreenBig ? vars.contactZeroStateArrowWidth : vars.contactZeroStateArrowWidthSmall,
                         height: vars.isDeviceScreenBig ? vars.contactZeroStateArrowHeight : vars.contactZeroStateArrowHeightSmall,
                         position: 'absolute',
-                        top: vars.isDeviceScreenBig ? vars.spacing.small.maxi : vars.spacing.small.maxi2x,
+                        top: vars.isDeviceScreenBig ? vars.spacing.small.midi2x : vars.spacing.small.maxi,
                         right: vars.isDeviceScreenBig ? vars.spacing.large.mini : vars.spacing.medium.maxi2x
                     }}
                 />}
@@ -85,9 +86,7 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
             <View style={{ alignItems: 'center' }}>
                 <Image
                     source={zeroStateImage}
-                    style={[adjustImageDimensions(zeroStateImage, width - vars.spacing.medium.mini2x * 2, null),
-                        { marginBottom: 24 }
-                    ]}
+                    style={adjustImageDimensions(zeroStateImage, width, null)}
                 />
             </View>);
     }

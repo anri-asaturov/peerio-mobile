@@ -9,6 +9,11 @@ import FolderInnerItem from './folder-inner-item';
 import fileState from './file-state';
 import { vars } from '../../styles/styles';
 
+const fileContainer = {
+    backgroundColor: vars.filesBg,
+    paddingHorizontal: vars.spacing.medium.mini2x
+};
+
 @observer
 export default class FileItem extends SafeComponent {
     @observable store = {
@@ -51,7 +56,7 @@ export default class FileItem extends SafeComponent {
     renderThrow() {
         const { file } = this.props;
         return (
-            <View style={{ backgroundColor: vars.filesBg, paddingHorizontal: vars.spacing.medium.mini2x }}>
+            <View style={fileContainer}>
                 {file.isFolder ?
                     <FolderInnerItem folder={file} onPress={this.onFolderPress} onFolderAction={this.onFolderAction} /> :
                     <FileInnerItem file={file} onPress={f => this.press(f)} onFileAction={this.onFileAction} rowID={this.props.rowID} />}

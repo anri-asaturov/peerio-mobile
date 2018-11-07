@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, TouchableOpacity, LayoutAnimation, Share, Platform } from 'react-native';
+import { View, TouchableOpacity, Share, Platform } from 'react-native';
 import { observable, reaction, action } from 'mobx';
 import ProgressOverlay from '../shared/progress-overlay';
 import SafeComponent from '../shared/safe-component';
@@ -19,6 +19,7 @@ import icons from '../helpers/icons';
 import BackIcon from '../layout/back-icon';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 import ViewWithDrawer from '../shared/view-with-drawer';
+import { transitionAnimation } from '../helpers/animations';
 
 const textinputContainer = {
     backgroundColor: vars.white,
@@ -80,7 +81,7 @@ export default class ContactAdd extends SafeComponent {
     componentDidMount() {
         uiState.currentScrollView = this._scrollView;
         reaction(() => this.query, () => {
-            LayoutAnimation.easeInEaseOut();
+            transitionAnimation();
             this.toInvite = null;
             if (this.showValidationError) this.showValidationError = false;
         });
@@ -123,11 +124,11 @@ export default class ContactAdd extends SafeComponent {
             const atInd = this.query.indexOf('@');
             const isEmail = atInd > -1 && atInd === this.query.lastIndexOf('@');
             if (isEmail) {
-                LayoutAnimation.easeInEaseOut();
+                transitionAnimation();
                 this.toInvite = this.inviteContactDuck(this.query);
             } else if (!isLegacy) {
                 this.showValidationError = true;
-                LayoutAnimation.easeInEaseOut();
+                transitionAnimation();
             }
             isLegacy && snackbarState.pushTemporary(t('title_inviteLegacy'));
         } else {

@@ -15,7 +15,6 @@ import { socket, telemetry } from '../../lib/icebear';
 import routes from '../routes/routes';
 import TosAccordion from './tos-accordion';
 import { popupTOS, popupPrivacy } from '../shared/popups';
-import TmHelper from '../../telemetry/helpers';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -39,6 +38,8 @@ const buttonContainer = {
     backgroundColor: vars.white
 };
 
+const sublocation = S.TERMS_OF_USE;
+
 @observer
 export default class SignupTos extends SafeComponent {
     componentWillMount() {
@@ -48,18 +49,17 @@ export default class SignupTos extends SafeComponent {
 
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.TERMS_OF_USE;
         if (!signupState.keyBackedUp) {
             drawerState.addDrawer(TopDrawerBackupAccountKey);
         }
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
     @action.bound cancelSignup() {
-        tm.signup.navigate(S.CANCEL);
+        tm.signup.navigate({ sublocation, option: S.CANCEL });
         routes.app.signupCancel();
     }
 
@@ -89,7 +89,7 @@ export default class SignupTos extends SafeComponent {
 
     @action.bound openTermsLink(text) {
         const onPress = async () => {
-            tm.signup.readMorePopup(S.TERMS_OF_USE);
+            tm.signup.readMorePopup({ item: S.TERMS_OF_USE });
             await popupTOS();
         };
         return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
@@ -97,7 +97,7 @@ export default class SignupTos extends SafeComponent {
 
     @action.bound openPrivacyLink(text) {
         const onPress = async () => {
-            tm.signup.readMorePopup(S.PRIVACY_POLICY);
+            tm.signup.readMorePopup({ item: S.PRIVACY_POLICY });
             await popupPrivacy();
         };
         return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);

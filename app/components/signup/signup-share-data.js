@@ -9,7 +9,6 @@ import { tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import { User, telemetry } from '../../lib/icebear';
-import TmHelper from '../../telemetry/helpers';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -22,15 +21,16 @@ const buttonContainer = {
     marginBottom: vars.spacing.small.maxi2x
 };
 
+const sublocation = S.SHARE_DATA;
+
 @observer
 export default class SignupShareData extends SafeComponent {
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.SHARE_DATA;
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
     @action.bound handleShareButton() {

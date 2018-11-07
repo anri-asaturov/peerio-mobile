@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, reaction } from 'mobx';
-import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
 import { t } from '../utils/translator';
+import { transitionAnimation } from '../helpers/animations';
 
 const itemContainerStyle = {
     flexGrow: 1,
@@ -28,7 +29,7 @@ export default class ChoiceItem extends SafeComponent {
     @observable selected = null;
 
     componentDidMount() {
-        reaction(() => this.opened, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => this.opened, transitionAnimation);
     }
 
     press() {

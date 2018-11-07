@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, LayoutAnimation, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { reaction } from 'mobx';
 import SafeComponent from '../shared/safe-component';
 import { vars, helpers } from '../../styles/styles';
+import { transitionAnimation } from '../helpers/animations';
 
 const inactiveColor = vars.toggleInactive;
 const activeColor = vars.toggleActive;
@@ -12,7 +13,7 @@ const activeColor = vars.toggleActive;
 @observer
 export default class Toggle extends SafeComponent {
     componentDidMount() {
-        reaction(() => this.props.active, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => this.props.active, transitionAnimation);
     }
 
     renderThrow() {

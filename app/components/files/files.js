@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, Animated } from 'react-native';
-import { observable, reaction, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import FilesZeroStatePlaceholder from './files-zero-state-placeholder';
@@ -24,6 +24,9 @@ import SearchBar from '../controls/search-bar';
 import FlatListWithDrawer from '../shared/flat-list-with-drawer';
 import zeroStateBeacons from '../beacons/zerostate-beacons';
 import { scrollHelper } from '../helpers/test-helper';
+import filesBeacons from '../beacons/files-beacons';
+import MeasureableView from '../shared/measureable-view';
+import beaconState from '../beacons/beacon-state';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -34,6 +37,13 @@ function backFolderAction() {
     fileState.store.folderStore.currentFolder = fileState.store.folderStore.currentFolder.parent;
 }
 
+const beaconStyle = {
+    marginLeft: 100
+};
+
+const beaconContentStyle = {
+    marginLeft: -100
+};
 @observer
 export default class Files extends SafeComponent {
     @observable findFilesText;
@@ -48,7 +58,7 @@ export default class Files extends SafeComponent {
         return !fileState.isFileSelectionMode &&
             <PlusBorderIcon
                 action={() => FileUploadActionSheet.show(false, true)}
-                beacon={zeroStateBeacons.uploadFileBeacon}
+                beacon={[zeroStateBeacons.uploadFileBeacon, filesBeacons.foldersBeacon]}
                 testID="buttonUploadFileToFiles" />;
     }
 
@@ -57,43 +67,20 @@ export default class Files extends SafeComponent {
         return fileState.store.folderStore.currentFolder.name;
     }
 
-    @observable dataSource = [];
-    @observable refreshing = false;
-    @observable maxLoadedIndex = INITIAL_LIST_SIZE;
     actionsHeight = new Animated.Value(0);
 
-    get data() {
+    @computed get data() {
         let data = fileState.store.searchQuery ?
             fileState.store.filesAndFoldersSearchResult
             : fileState.store.folderStore.currentFolder.filesAndFoldersDefaultSorting;
-        if (fileState.isFileSelectionMode) data = data.filter(item => !item.isLegacy && item.readyForDownload);
+        if (fileState.isFileSelectionMode) {
+            data = data.filter(item => !item.isLegacy &&
+                (item.isFolder || item.readyForDownload));
+        }
         return data;
     }
 
-    componentDidMount() {
-        this.reactionNavigation = reaction(() => fileState.store.folderStore.currentFolder,
-            action(() => {
-                this.maxLoadedIndex = INITIAL_LIST_SIZE;
-                this.refresh++;
-            }));
-        this.reaction = reaction(() => [
-            fileState.routerMain.route === 'files',
-            fileState.routerMain.currentIndex === 0,
-            this.data,
-            this.data.length,
-            fileState.store.searchQuery,
-            this.maxLoadedIndex
-        ], () => {
-            console.debug(`files.js: update ${this.data.length} -> ${this.maxLoadedIndex}`);
-            this.dataSource = this.data.slice(0, Math.min(this.data.length, this.maxLoadedIndex));
-        }, { fireImmediately: true });
-    }
-
     componentWillUnmount() {
-        this.reaction && this.reaction();
-        this.reaction = null;
-        this.reactionNavigation && this.reactionNavigation();
-        this.reactionNavigation = null;
         // remove icebear hook for deletion
         fileState.store.bulk.deleteFolderConfirmator = null;
     }
@@ -113,10 +100,6 @@ export default class Files extends SafeComponent {
         );
     };
 
-    onEndReached = () => {
-        if (this.maxLoadedIndex <= this.data.length) this.maxLoadedIndex += PAGE_SIZE;
-    };
-
     flatListRef = (ref) => { uiState.currentScrollView = ref; };
 
     keyExtractor = fsObject => fsObject ? (fsObject.fileId || fsObject.id) : null;
@@ -132,21 +115,29 @@ export default class Files extends SafeComponent {
         );
     }
 
+    onMeasure = position => {
+        const beacon = filesBeacons.fileReceivedBeacon;
+        beacon.position = position;
+        beaconState.requestBeacon(beacon);
+    };
+
     list() {
         return (
-            <FlatListWithDrawer
-                scrollHelper={scrollHelper}
-                setScrollViewRef={this.flatListRef}
-                ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
-                ListFooterComponent={this.noFilesMatchSearch}
-                keyExtractor={this.keyExtractor}
-                initialNumToRender={INITIAL_LIST_SIZE}
-                pageSize={PAGE_SIZE}
-                data={this.dataSource}
-                extraData={this.refresh}
-                renderItem={this.item}
-                onEndReached={this.onEndReached}
-                onEndReachedThreshold={0.5} />
+            <MeasureableView style={beaconStyle} onMeasure={this.onMeasure}>
+                <View style={beaconContentStyle}>
+                    <FlatListWithDrawer
+                        scrollHelper={scrollHelper}
+                        setScrollViewRef={this.flatListRef}
+                        ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
+                        ListFooterComponent={this.noFilesMatchSearch}
+                        keyExtractor={this.keyExtractor}
+                        initialNumToRender={INITIAL_LIST_SIZE}
+                        pageSize={PAGE_SIZE}
+                        data={this.data}
+                        extraData={this.refresh}
+                        renderItem={this.item} />
+                </View>
+            </MeasureableView>
         );
     }
 

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import SafeComponent from '../shared/safe-component';
@@ -9,10 +9,55 @@ import icons from '../helpers/icons';
 import { vars } from '../../styles/styles';
 import AvatarCircle from '../shared/avatar-circle';
 import Text from '../controls/custom-text';
+import GrayLabel from '../controls/gray-label';
+import { transitionAnimation } from '../helpers/animations';
 
 const avatarPadding = 16;
 let currentContactItem = null;
 
+const buttonStyle = {
+    paddingHorizontal: vars.spacing.small.maxi,
+    backgroundColor: vars.redWarning,
+    height: vars.removeButtonHeight,
+    justifyContent: 'center'
+};
+
+const marginBottom = 8;
+const containerStyle = {
+    height: vars.warningHeight - marginBottom,
+    marginBottom,
+    marginLeft: vars.avatarDiameter + avatarPadding * 2,
+    paddingLeft: vars.spacing.medium.mini2x,
+    borderLeftWidth: 1,
+    borderLeftColor: vars.black12,
+    flex: 1,
+    justifyContent: 'center'
+};
+
+const outerContainerStyle = {
+    height: vars.listItemHeight,
+    flex: 1,
+    flexGrow: 1,
+    flexDirection: 'row',
+    paddingLeft: avatarPadding
+};
+
+const nameStyle = {
+    fontSize: vars.font.size14,
+    color: vars.lighterBlackText,
+    paddingLeft: vars.spacing.medium.mini2x
+};
+
+const iconStyle = {
+    paddingRight: vars.spacing.medium.mini2x
+};
+
+const ownerStyle = {
+    flex: 0,
+    paddingRight: vars.spacing.medium.mini2x,
+    flexDirection: 'row',
+    alignItems: 'center'
+};
 @observer
 export default class ContactEditPermissionItem extends SafeComponent {
     @observable _showWarning = false;
@@ -22,7 +67,7 @@ export default class ContactEditPermissionItem extends SafeComponent {
     }
 
     set showWarning(value) {
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
         if (currentContactItem) {
             currentContactItem._showWarning = false;
         }
@@ -36,7 +81,7 @@ export default class ContactEditPermissionItem extends SafeComponent {
     // We hide the item, then do "unshare" logic after hide animation ends
     // Finally reset the UI state of the list item
     @action.bound removeClick() {
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
         this.collapsed = true;
         // wait for animation to finish before removing item
         setTimeout(() => {
@@ -45,13 +90,13 @@ export default class ContactEditPermissionItem extends SafeComponent {
         }, 500);
     }
 
+    get removeLabel() {
+        return this.showWarning ?
+            this.removeButton() :
+            icons.darkNoPadding('remove-circle-outline', this.handleShowWarningClick, iconStyle);
+    }
+
     removeButton() {
-        const buttonStyle = {
-            paddingHorizontal: vars.spacing.small.maxi,
-            backgroundColor: vars.redWarning,
-            height: vars.removeButtonHeight,
-            justifyContent: 'center'
-        };
         return (
             <TouchableOpacity
                 pressRetentionOffset={vars.pressRetentionOffset}
@@ -65,17 +110,6 @@ export default class ContactEditPermissionItem extends SafeComponent {
 
     deleteWarning() {
         const { firstName } = this.props.contact;
-        const marginBottom = 8;
-        const containerStyle = {
-            height: vars.warningHeight - marginBottom,
-            marginBottom,
-            marginLeft: vars.avatarDiameter + avatarPadding * 2,
-            paddingLeft: vars.spacing.medium.mini2x,
-            borderLeftWidth: 1,
-            borderLeftColor: vars.black12,
-            flex: 1,
-            justifyContent: 'center'
-        };
         const textStyle = {
             color: vars.subtleText,
             paddingRight: vars.spacing.medium.mini2x
@@ -89,27 +123,28 @@ export default class ContactEditPermissionItem extends SafeComponent {
         );
     }
 
+    get ownerLabel() {
+        return (
+            <View style={ownerStyle}>
+                <GrayLabel label="owner" />
+            </View>
+        );
+    }
+
+    get rightButton() {
+        const { isOwner } = this.props;
+        return isOwner ? this.ownerLabel : this.removeLabel;
+    }
+
     renderThrow() {
         const { contact } = this.props;
         const { fullName } = contact;
-        const containerStyle = {
-            height: vars.listItemHeight,
-            flex: 1,
-            flexGrow: 1,
-            flexDirection: 'row',
-            paddingLeft: avatarPadding
-        };
-        const nameStyle = {
-            fontSize: vars.font.size14,
-            color: vars.lighterBlackText,
-            paddingLeft: vars.spacing.medium.mini2x
-        };
         return (
             <View style={{
                 backgroundColor: this.showWarning ? vars.black05 : vars.white,
                 height: this.collapsed ? 0 : undefined
             }}>
-                <View style={containerStyle}>
+                <View style={outerContainerStyle}>
                     <View style={{ flex: 1, flexGrow: 1, flexDirection: 'row', alignItems: 'center' }}>
                         <AvatarCircle
                             contact={this.props.contact}
@@ -118,13 +153,7 @@ export default class ContactEditPermissionItem extends SafeComponent {
                             {fullName}
                         </Text>
                     </View>
-                    {this.showWarning ?
-                        this.removeButton() :
-                        icons.darkNoPadding(
-                            'remove-circle-outline',
-                            this.handleShowWarningClick,
-                            { paddingRight: vars.spacing.medium.mini2x }
-                        )}
+                    {this.rightButton}
                 </View>
                 {this.showWarning && this.deleteWarning()}
             </View>);

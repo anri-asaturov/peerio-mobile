@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { observable, action } from 'mobx';
-import { Keyboard, LayoutAnimation, View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import ContactSelectorUniversal from '../contacts/contact-selector-universal';
 import ContactEditPermission from '../contacts/contact-edit-permission';
 import SharedFolderFooter from './shared-folder-footer';
 import { vars } from '../../styles/styles';
 import routes from '../routes/routes';
+import { transitionAnimation } from '../helpers/animations';
 
 @observer
 export default class FolderShare extends Component {
@@ -27,7 +28,7 @@ export default class FolderShare extends Component {
 
     @action.bound togglePage() {
         Keyboard.dismiss();
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
         if (this.currentPage === 0) {
             this.currentPage = 1;
         } else if (this.currentPage === 1) {

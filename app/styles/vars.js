@@ -91,6 +91,7 @@ const vars = {
     textBlack38: 'rgba(0, 0, 0, .38)',
     textBlack54: 'rgba(0, 0, 0, .54)',
     textBlack87: 'rgba(0, 0, 0, .87)',
+    textDarkBlue54: 'rgba(4, 11, 64, 0.54)',
     linkColor: '#0e94cb',
     // Non-text
     black03: 'rgba(0, 0, 0, 0.03)',
@@ -249,7 +250,6 @@ const vars = {
     pinnedChatPaddingHorizontal: 2,
     fileListHorizontalPadding: scaleDim(16),
     fileInnerItemPaddingRight: 8,
-    loadingScreenMarginBottom: scaleDim(170),
     loadingScreenMarginTop: scaleDim(206),
     dmInvitePaddingTop: scaleDim(90),
     verificationMessageWidth: scaleDim(260),

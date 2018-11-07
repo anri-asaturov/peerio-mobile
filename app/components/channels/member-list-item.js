@@ -12,6 +12,7 @@ import { User } from '../../lib/icebear';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
 import ContactCard from '../shared/contact-card';
+import GrayLabel from '../controls/gray-label';
 
 @observer
 export default class MemberListItem extends SafeComponent {
@@ -52,6 +53,7 @@ export default class MemberListItem extends SafeComponent {
 
         const isAdmin = channel.isAdmin(contact);
         const isCurrentUser = contact.username === User.current.username;
+        const userStyle = { marginRight: isCurrentUser ? vars.spacing.huge.midi : vars.spacing.small.maxi2x };
 
         return (
             <View
@@ -67,15 +69,7 @@ export default class MemberListItem extends SafeComponent {
                 <View
                     {...testLabel('moreButton')}
                     style={this.moreBtnStyle}>
-                    {isAdmin &&
-                        <View style={[
-                            this.adminContainerStyle,
-                            { marginRight: isCurrentUser ? vars.spacing.huge.midi : vars.spacing.small.maxi2x }
-                        ]}>
-                            <Text semibold style={this.adminTextStyle}>
-                                {tx('title_admin')}
-                            </Text>
-                        </View>}
+                    {isAdmin && <View style={userStyle}><GrayLabel contact={contact} label="title_admin" /></View>}
                     {channel.canIAdmin && !isCurrentUser && <Menu>
                         <MenuTrigger
                             renderTouchable={() => <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} />}

@@ -6,7 +6,7 @@ import { View, TouchableOpacity } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import chatState from './chat-state';
-import { User, contactStore } from '../../lib/icebear';
+import { User } from '../../lib/icebear';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
@@ -14,6 +14,7 @@ import DmTitle from '../shared/dm-title';
 import AvatarCircle from '../shared/avatar-circle';
 import DeletedCircle from '../shared/deleted-circle';
 import ListSeparator from '../shared/list-separator';
+import contactState from '../contacts/contact-state';
 
 const pinOn = require('../../assets/chat/icon-pin.png');
 
@@ -103,13 +104,16 @@ export default class ChatListItem extends SafeComponent {
     }
 
     renderThrow() {
-        if (chatState.collapseDMs) return null;
-        if (!this.props || !this.props.chat) return null;
+        if (!this.props || !this.props.chat) {
+            console.error('Null chat provided to chat list item');
+        }
         const { chat } = this.props;
         const { otherParticipants, headLoaded } = chat;
-        if (chat.isChannel && !headLoaded) return null;
+        if (chat.isChannel && !headLoaded) {
+            console.error('Head is not loaded in the provided chat list item. Still rendering');
+        }
         // no participants means chat with yourself
-        let contact = contactStore.getContact(User.current.username);
+        let contact = contactState.store.getContact(User.current.username);
         // two participants
         if (otherParticipants && otherParticipants.length === 1) {
             contact = otherParticipants[0];
@@ -117,12 +121,18 @@ export default class ChatListItem extends SafeComponent {
 
         const key = chat.id;
         const unread = chat.unreadCount > 0;
+        // NOTE: fixed height is used for correct calculation of scrolling
+        // in the parent SectionList. To prevent weird bugs with scrolling,
+        // we force-fix the height here, so that if somebody forgets to update
+        // the item height in section list, it would be visible
+        // (-1) takes into account the separator
+        const height = this.props.height ? this.props.height - 1 : undefined;
         return (
             <TouchableOpacity
                 key={key}
                 onPress={this.onPress}
                 pressRetentionOffset={vars.pressRetentionOffset}>
-                <View style={containerStyle}>
+                <View style={[containerStyle, { height }]}>
                     <View>
                         <View style={pinStyle}>
                             {chat.isFavorite && icons.iconPinnedChat(pinOn)}

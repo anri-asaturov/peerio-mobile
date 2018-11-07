@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { View, ActivityIndicator, LayoutAnimation, Platform } from 'react-native';
+import { View, ActivityIndicator, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { observable, action, reaction, computed } from 'mobx';
 import { observer } from 'mobx-react/native';
@@ -21,6 +21,7 @@ import ContactSelectorSectionList from './contact-selector-sectionlist';
 import Text from '../controls/custom-text';
 import SearchBar from '../controls/search-bar';
 import ModalHeader from '../shared/modal-header';
+import { transitionAnimation } from '../helpers/animations';
 
 @observer
 export default class ContactSelectorUniversal extends SafeComponent {
@@ -34,7 +35,7 @@ export default class ContactSelectorUniversal extends SafeComponent {
     @observable foundContact = null;
 
     componentDidMount() {
-        this._recipientReaction = reaction(() => !!this.recipients.items.length, () => LayoutAnimation.easeInEaseOut());
+        this._recipientReaction = reaction(() => !!this.recipients.items.length, transitionAnimation);
     }
 
     componentWillUnmount() {

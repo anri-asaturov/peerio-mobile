@@ -1,9 +1,9 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { LayoutAnimation } from 'react-native';
 import SafeComponent from '../../shared/safe-component';
 import PickerPopup from '../../controls/picker-popup';
 import medcryptorUiState from './medcryptor-ui-state';
+import { transitionAnimation } from '../../helpers/animations';
 
 @observer
 class GenericPicker extends SafeComponent {
@@ -14,7 +14,7 @@ class GenericPicker extends SafeComponent {
     }
 
     componentWillUpdate() {
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
     }
 
     renderThrow() {

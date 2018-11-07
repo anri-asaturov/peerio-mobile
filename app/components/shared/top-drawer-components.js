@@ -42,8 +42,8 @@ const innerCircle = {
 class TopDrawerBackupAccountKey extends SafeComponent {
     renderThrow() {
         const action = () => {
-            signupState.saveAccountKey();
-            tm.signup.saveAk(S.TERMS_TOP_DRAWER);
+            signupState.saveAccountKey({ sublocation: S.TOP_DRAWER });
+            tm.signup.saveAk({ sublocation: S.TOP_DRAWER });
         };
         return (
             <TopDrawer

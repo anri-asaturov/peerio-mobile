@@ -140,9 +140,9 @@ export default class App extends SafeComponent {
         return (
             <View style={(height < 500) ? tabletHack : { flex: 1, flexGrow: 1 }}>
                 <RouteNavigator key="navigator" routes={routerApp} />
-                <BeaconLayout />
                 {/* BeaconLayout.debugHelper */}
                 <ModalLayout key="modals" />
+                <BeaconLayout />
                 <PopupLayout key="popups" />
                 <DebugMenu />
                 <ActionSheetLayout key="actionSheets" />

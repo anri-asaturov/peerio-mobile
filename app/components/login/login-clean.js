@@ -9,21 +9,26 @@ import SafeComponent from '../shared/safe-component';
 import LoginButtonBack from './login-button-back';
 import SignupHeading from '../signup/signup-heading';
 import IntroStepIndicator from '../shared/intro-step-indicator';
-import TmHelper from '../../telemetry/helpers';
 import tm from '../../telemetry';
 import LoginInputs from './login-inputs';
 
 const { S } = telemetry;
 
+const sublocation = S.SIGN_IN;
+
+const loginTelemetryHelper = {
+    location: S.SIGN_IN,
+    sublocation
+};
+
 @observer
 export default class LoginClean extends SafeComponent {
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.SIGN_IN;
     }
 
     componentWillUnmount() {
-        tm.login.duration(this.startTime);
+        tm.login.duration({ sublocation, startTime: this.startTime });
     }
 
     render() {
@@ -31,9 +36,9 @@ export default class LoginClean extends SafeComponent {
             <View style={signupStyles.page}>
                 <IntroStepIndicator max={1} current={1} />
                 <View style={[signupStyles.container, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
-                    <LoginButtonBack />
+                    <LoginButtonBack telemetry={{ sublocation, option: S.BACK }} />
                     <SignupHeading title="title_welcomeBack" />
-                    <LoginInputs />
+                    <LoginInputs telemetry={loginTelemetryHelper} />
                 </View>
                 <StatusBar hidden />
                 <ActivityOverlay large visible={loginState.isInProgress} />

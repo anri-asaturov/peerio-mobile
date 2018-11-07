@@ -10,7 +10,6 @@ class ChatState extends RoutedState {
     @observable store = chatStore;
     @observable chatInviteStore = chatInviteStore;
     @observable collapseChannels = false;
-    @observable collapseDMs = false;
     @observable selfNewMessageCounter = 0;
     LIMIT_PEOPLE_DM = 1;
 

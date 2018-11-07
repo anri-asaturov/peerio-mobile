@@ -13,7 +13,6 @@ import { drawerState } from '../states';
 import { socket, telemetry } from '../../lib/icebear';
 import SignupHeading from './signup-heading';
 import routes from '../routes/routes';
-import TmHelper from '../../telemetry/helpers';
 import tm from '../../telemetry';
 import { popupTOS, popupPrivacy } from '../shared/popups';
 
@@ -27,23 +26,24 @@ const buttonContainer = {
     marginBottom: vars.spacing.small.maxi2x
 };
 
+const sublocation = S.CANCEL_SIGN_UP;
+
 @observer
 export default class SignupCancel extends SafeComponent {
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.CANCEL_SIGN_UP;
         if (!signupState.keyBackedUp) {
             drawerState.addDrawer(TopDrawerBackupAccountKey);
         }
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
     @action.bound openTermsLink(text) {
         const onPress = async () => {
-            tm.signup.readMorePopup(S.TERMS_OF_USE);
+            tm.signup.readMorePopup({ item: S.TERMS_OF_USE });
             await popupTOS();
         };
         return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
@@ -51,7 +51,7 @@ export default class SignupCancel extends SafeComponent {
 
     @action.bound openPrivacyLink(text) {
         const onPress = async () => {
-            tm.signup.readMorePopup(S.PRIVACY_POLICY);
+            tm.signup.readMorePopup({ item: S.PRIVACY_POLICY });
             await popupPrivacy();
         };
         return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);

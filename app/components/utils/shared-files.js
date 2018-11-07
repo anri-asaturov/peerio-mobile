@@ -20,7 +20,8 @@ const upload = async (path, fileName, extension) => {
 };
 
 const uploadFileiOS = async (event) => {
-    if (event && event.url && socket.authenticated) {
+    await promiseWhen(() => socket.authenticated);
+    if (event && event.url) {
         const url = decodeURIComponent(event.url);
         const json = url.split('://')[1]; // url format: {urlScheme}://{data}
         const { files, path } = JSON.parse(json);
@@ -48,6 +49,7 @@ const getStoragePermission = async () => {
 
 const uploadFileAndroid = async (sharedFile) => {
     if (sharedFile) {
+        await promiseWhen(() => socket.authenticated);
         const readPermission = await getStoragePermission();
         if (readPermission) {
             // RNFS stat now provides extra things:

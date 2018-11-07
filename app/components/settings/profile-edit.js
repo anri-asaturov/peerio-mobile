@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { Image, View, ScrollView, TouchableOpacity, LayoutAnimation, Platform } from 'react-native';
+import { Image, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { observable, reaction, action } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -13,6 +13,7 @@ import icons from '../helpers/icons';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
 import AvatarCircle from '../shared/avatar-circle';
+import { transitionAnimation } from '../helpers/animations';
 
 const emailFormatValidator = validation.validators.emailFormat.action;
 
@@ -79,12 +80,15 @@ export default class ProfileEdit extends SafeComponent {
             this.showValidationError = false;
             this.newEmailTextValid = await emailFormatValidator(text);
         });
-        reaction(() => User.current && User.current.addresses && User.current.addresses.length, () => LayoutAnimation.easeInEaseOut());
+        this.addressReaction = reaction(
+            () => User.current && User.current.addresses && User.current.addresses.length, transitionAnimation
+        );
     }
 
     componentWillUnmount() {
         uiState.currentScrollView = null;
         uiState.currentScrollViewPosition = 0;
+        this.addressReaction && this.addressReaction();
     }
 
     onScroll = ({ nativeEvent: { contentOffset: { y } } }) => {
@@ -124,7 +128,7 @@ export default class ProfileEdit extends SafeComponent {
     async emailAction() {
         if (!this.validateNewEmail()) return;
         await uiState.hideAll();
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
         this.showAddEmail = !this.showAddEmail;
         if (this.showAddEmail) {
             this._addEmailBox.focus();

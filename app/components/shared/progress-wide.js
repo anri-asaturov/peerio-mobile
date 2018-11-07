@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, action } from 'mobx';
-import { View, TouchableOpacity, LayoutAnimation, Platform } from 'react-native';
+import { View, TouchableOpacity, Platform } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -10,6 +10,7 @@ import icons from '../helpers/icons';
 import FileTypeIcon from '../files/file-type-icon';
 import Thumbnail from '../shared/thumbnail';
 import { fileHelpers } from '../../lib/icebear';
+import { transitionAnimation } from '../helpers/animations';
 
 const height = 42;
 // height minus borders
@@ -80,7 +81,7 @@ export default class Progress extends SafeComponent {
     componentWillUpdate() {
         // android may break on LayoutAnimation
         if (Platform.OS === 'android') return;
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
     }
 
     componentDidMount() {

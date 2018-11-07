@@ -14,6 +14,7 @@ class UIState extends RoutedState {
     };
 
     @observable actionSheetShown = false;
+    @observable modalShown = false;
     @observable fileUpdateProgress = 0; // TODO remove when fileState progress is wired
     @observable isFirstLogin = false;
     @observable focusedTextBox = null;
@@ -31,6 +32,7 @@ class UIState extends RoutedState {
     @observable currentScrollViewPosition = 0;
     @observable customOverlayComponent = null;
     @observable trustDevice2FA = false;
+    @observable tfaFailed = false;
     @observable declinedChannelId = null;
     @observable hideTabs = false;
     @observable languages = {

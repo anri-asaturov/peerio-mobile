@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
 import { observable, action, when } from 'mobx';
@@ -34,6 +35,9 @@ export default class LoginInputs extends SafeComponent {
     @action.bound usernameInputRef(ref) { this.usernameInput = ref; }
     @action.bound passwordInputRef(ref) { this.passwordInput = ref; }
 
+    tmUsername = { ...this.props.telemetry, item: S.USERNAME };
+    tmAccountKey = { ...this.props.telemetry, item: S.ACCOUNT_KEY };
+
     async componentDidMount() {
         const { hideUsernameInput } = this.props;
         if (hideUsernameInput) {
@@ -54,15 +58,16 @@ export default class LoginInputs extends SafeComponent {
         loginState.passphrase = this.passwordState.value;
         uiState.hideAll()
             .then(async () => {
+                tm.login.onSigninButton();
                 await loginState.login();
-                tm.login.onLoginSuccess();
             })
             .catch(e => {
                 let errorMessage = 'error_wrongAK';
                 if (e.deleted || e.blacklisted) {
                     errorMessage = 'error_accountSuspendedTitle';
                 }
-                this.passwordInput.setCustomError(errorMessage);
+                this.passwordInput.setCustomError(errorMessage, false);
+                tm.login.onUserLoginFailed(false);
             });
     }
 
@@ -71,9 +76,10 @@ export default class LoginInputs extends SafeComponent {
             (!this.props.hideUsernameInput && !this.usernameInput.isValid));
     }
 
+    @action.bound
     tmEmailError(text, prevTextLength) {
         if (prevTextLength + 1 === text.length && text[text.length - 1] === '@') {
-            tm.login.onLoginWithEmail(tx(USERNAME_LABEL), tx('error_usingEmailInUsernameField'));
+            tm.login.onLoginWithEmail(this.tmUsername, tx('error_usingEmailInUsernameField'));
         }
     }
 
@@ -85,7 +91,7 @@ export default class LoginInputs extends SafeComponent {
                 {!hideUsernameInput && (<View>
                     <StyledTextInput
                         state={this.usernameState}
-                        inputName={S.USERNAME}
+                        telemetry={this.tmUsername}
                         validations={usernameLogin}
                         label={tx(USERNAME_LABEL)}
                         onChange={this.tmEmailError}
@@ -96,7 +102,7 @@ export default class LoginInputs extends SafeComponent {
                 </View>)}
                 <StyledTextInput
                     state={this.passwordState}
-                    inputName={S.ACCOUNT_KEY}
+                    telemetry={this.tmAccountKey}
                     label={tx('title_AccountKey')}
                     onSubmit={this.submit}
                     secureText
@@ -121,3 +127,8 @@ export default class LoginInputs extends SafeComponent {
         );
     }
 }
+
+LoginInputs.propTypes = {
+    telemetry: PropTypes.any.isRequired,
+    hideUsernameInput: PropTypes.any
+};

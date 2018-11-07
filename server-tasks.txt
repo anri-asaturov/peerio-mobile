@@ -1,9 +1,0 @@
-messaging server
-background service (notifications, background tasks)
-file service (transfer files)
-shark (payments and accounting)
-inferno (the service that distributes ghost messages)
-
-rewrite into proper js
-make error inherit commonerror
-remove unused errors

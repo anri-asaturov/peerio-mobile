@@ -19,7 +19,7 @@ export default class ContactEditPermission extends SafeComponent {
     @action.bound unshareFrom(contact) {
         // HINT: removing on layout animated listview causes side effects
         // we just collapse it inline
-        this.props.folder.removeParticipant(contact);
+        this.props.folder.removeParticipants([contact]);
     }
 
     get unshareButton() {
@@ -43,9 +43,13 @@ export default class ContactEditPermission extends SafeComponent {
     }
 
     item = ({ item }) => {
-        return (<ContactEditPermissionItem
-            contact={item}
-            onUnshare={this.unshareFrom} />);
+        const { folder } = this.props;
+        return (
+            <ContactEditPermissionItem
+                contact={item}
+                isOwner={item.username === folder.owner}
+                onUnshare={this.unshareFrom} />
+        );
     };
 
     keyExtractor = contact => contact.username;

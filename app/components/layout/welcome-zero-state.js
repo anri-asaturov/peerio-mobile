@@ -9,7 +9,9 @@ import { tx } from '../utils/translator';
 import ViewWithDrawer from '../shared/view-with-drawer';
 
 const { width } = Dimensions.get('window');
-const zeroStateImage = require('../../assets/contact-zero-state.png');
+
+const zeroStateImage = process.env.EXECUTABLE_NAME === 'medcryptor' ?
+    require('../../assets/welcome-zero-state-medcryptor.png') : require('../../assets/welcome-zero-state.png');
 
 const container = {
     flex: 1,
@@ -17,24 +19,19 @@ const container = {
     backgroundColor: vars.darkBlueBackground05
 };
 const headerStyle = {
-    fontSize: vars.font.size18,
-    color: vars.textBlack87,
-    paddingTop: vars.spacing.huge.midi3x,
-    paddingBottom: vars.spacing.large.midi2x,
-    textAlign: 'center'
+    fontSize: vars.font.size24,
+    color: vars.darkBlue,
+    paddingTop: vars.isDeviceScreenBig ? vars.spacing.huge.mini : vars.spacing.medium.maxi2x,
+    textAlign: 'center',
+    lineHeight: 30,
+    marginHorizontal: 16
 };
-const centeredText = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center'
-};
-const illustrationTextStyle = {
-    color: vars.textBlack54,
-    textAlign: 'center'
+const descriptionTextStyle = {
+    fontSize: vars.font.size12,
+    color: vars.textDarkBlue54,
+    textAlign: 'center',
+    paddingTop: vars.isDeviceScreenBig ? vars.spacing.medium.midi2x : vars.spacing.medium.mini2x,
+    lineHeight: 20
 };
 
 @observer
@@ -45,15 +42,10 @@ export default class WelcomeZeroState extends SafeComponent {
 
     get zeroStateIllustration() {
         return (
-            <View style={{ alignItems: 'center' }}>
-                <View style={centeredText}>
-                    <Text style={illustrationTextStyle}>{tx('title_learnFollowWalkthroughMobile')}</Text>
-                </View>
+            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                 <Image
                     source={zeroStateImage}
-                    style={[adjustImageDimensions(zeroStateImage, width - vars.spacing.medium.mini2x * 2, null),
-                        { marginBottom: vars.spacing.huge.maxi }
-                    ]}
+                    style={adjustImageDimensions(zeroStateImage, width, null)}
                 />
             </View>);
     }
@@ -62,7 +54,8 @@ export default class WelcomeZeroState extends SafeComponent {
         return (
             <View style={{ flexGrow: 1 }}>
                 <ViewWithDrawer style={container}>
-                    <Text style={headerStyle}>{tx('title_zeroFirstLoginMessage')}</Text>
+                    <Text semibold serif style={headerStyle}>{tx('title_zeroFirstLoginMessage')}</Text>
+                    <Text style={descriptionTextStyle}>{tx('title_learnFollowWalkthroughMobile')}</Text>
                     {this.zeroStateIllustration}
                 </ViewWithDrawer>
             </View>

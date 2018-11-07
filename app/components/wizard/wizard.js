@@ -1,9 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, LayoutAnimation, BackHandler } from 'react-native';
+import { View, BackHandler } from 'react-native';
 import { observable, reaction, computed } from 'mobx';
 import SafeComponent from '../shared/safe-component';
 import uiState from '../layout/ui-state';
+import { transitionAnimation } from '../helpers/animations';
 
 @observer
 export default class Wizard extends SafeComponent {
@@ -23,7 +24,7 @@ export default class Wizard extends SafeComponent {
     constructor(props) {
         super(props);
         reaction(() => this.index, () => {
-            LayoutAnimation.easeInEaseOut();
+            transitionAnimation();
         });
     }
 

@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { LayoutAnimation, Picker, View } from 'react-native';
+import { Picker, View } from 'react-native';
 import _ from 'lodash';
 import SafeComponent from '../shared/safe-component';
 import { tu } from '../utils/translator';
 import uiState from '../layout/ui-state';
 import icons from '../helpers/icons';
 import { vars } from '../../styles/styles';
+import { transitionAnimation } from '../helpers/animations';
 
 @observer
 export default class PickerPopup extends SafeComponent {
@@ -25,7 +26,7 @@ export default class PickerPopup extends SafeComponent {
     }
 
     componentWillUpdate() {
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
     }
 
     onValueChange(v) {

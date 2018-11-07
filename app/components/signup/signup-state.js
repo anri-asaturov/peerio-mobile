@@ -120,7 +120,7 @@ class SignupState extends RoutedState {
     };
 
     @action.bound
-    async saveAccountKey() {
+    async saveAccountKey(telemetryProps) {
         const {
             username,
             firstName,
@@ -149,7 +149,7 @@ class SignupState extends RoutedState {
 
                 await RNFS.writeFile(fileSavePath, content, 'utf8');
                 await FileOpener.open(fileSavePath, 'text/*', fileSavePath);
-                tm.signup.confirmSaveAk(S.TXT);
+                tm.signup.confirmSaveAk(telemetryProps, S.TXT);
             }
             this.keyBackedUp = true;
         } catch (e) {

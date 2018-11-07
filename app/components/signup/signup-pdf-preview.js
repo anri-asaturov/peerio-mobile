@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
@@ -76,8 +77,8 @@ const textBoxText = {
 @observer
 export default class SignupPdfPreview extends SafeComponent {
     @action.bound saveAccountKey() {
-        signupState.saveAccountKey();
-        tm.signup.saveAk();
+        signupState.saveAccountKey(this.props.telemetry);
+        tm.signup.saveAk(this.props.telemetry);
     }
 
     renderThrow() {
@@ -123,3 +124,7 @@ export default class SignupPdfPreview extends SafeComponent {
         );
     }
 }
+
+SignupPdfPreview.propTypes = {
+    telemetry: PropTypes.any
+};

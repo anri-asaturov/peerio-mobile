@@ -1,6 +1,6 @@
 import React from 'react';
 import { action, observable } from 'mobx';
-import { Image, View } from 'react-native';
+import { Dimensions, Image, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -14,11 +14,23 @@ import { User, chatInviteStore, contactStore } from '../../lib/icebear';
 import routes from '../routes/routes';
 import chatState from './chat-state';
 import AvatarCircle from '../shared/avatar-circle';
-import ChannelUpgradeOffer from '../channels/channel-upgrade-offer';
 import ProgressOverlay from '../shared/progress-overlay';
 import uiState from '../layout/ui-state';
+import { adjustImageDimensions } from '../helpers/image';
+import GrayLabel from '../controls/gray-label';
 
-const emojiTada = require('../../assets/emoji/tada.png');
+const { width } = Dimensions.get('window');
+
+const roomInviteIllustration = require('../../assets/chat/room-invite-illustration.png');
+
+const imageContainer = {
+    paddingTop: vars.spacing.large.midi,
+    paddingBottom: vars.spacing.large.midixx
+};
+
+const headingContainer = {
+    marginBottom: vars.spacing.medium.mini2x
+};
 
 const headingStyle = {
     color: vars.lighterBlackText,
@@ -27,26 +39,21 @@ const headingStyle = {
     lineHeight: 22
 };
 
-const headingSection = {
-    paddingTop: 116,
-    flex: 0.6
-};
-
 const sectionLine = {
     marginHorizontal: vars.spacing.medium.mini2x,
-    borderWidth: 1,
-    borderColor: vars.black12
+    height: 1,
+    backgroundColor: vars.black12
 };
 
 const infoSection = {
-    paddingTop: vars.spacing.medium.mini2x,
-    flex: 0.4,
+    paddingTop: vars.spacing.medium.mini,
     alignItems: 'center'
 };
 
 const infoText = {
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: vars.spacing.small.maxi2x
 };
 
 const hostedByStyle = {
@@ -61,7 +68,7 @@ const hostNameStyle = {
 
 const buttonContainer = {
     flexDirection: 'row',
-    marginTop: vars.spacing.medium.mini2x,
+    marginTop: vars.spacing.medium.maxi2x,
     justifyContent: 'center'
 };
 
@@ -69,9 +76,9 @@ const moreContainer = {
     backgroundColor: vars.txtLightGrey,
     height: vars.avatarDiameter,
     paddingHorizontal: vars.spacing.small.maxi2x,
+    marginVertical: vars.spacing.small.mini2x,
     width: vars.avatarDiameter * 2,
     borderRadius: vars.avatarDiameter / 2,
-    alignSelf: 'center',
     marginLeft: -vars.avatarDiameter,
     zIndex: -1,
     display: 'flex',
@@ -93,6 +100,78 @@ export default class ChannelInvite extends SafeComponent {
 
     get invitation() { return invitationState.currentInvitation; }
 
+    get leftIcon() { return <BackIcon action={routes.main.chats} />; }
+
+    get illustration() {
+        return (
+            <View style={imageContainer}>
+                <Image source={roomInviteIllustration}
+                    style={[adjustImageDimensions(roomInviteIllustration, width - vars.spacing.medium.mini2x * 2, null),
+                        { marginBottom: vars.spacing.small.mini2x, marginHorizontal: vars.spacing.medium.mini2x }
+                    ]}
+                    resizeMode="contain" />
+            </View>);
+    }
+
+    get heading() {
+        return (
+            <View style={headingContainer}>
+                <Text style={headingStyle}>
+                    {tx('title_roomInviteHeading')}
+                </Text>
+                <Text bold style={headingStyle}>
+                    #{this.invitation.channelName}
+                </Text>
+            </View>);
+    }
+
+    get participants() {
+        const { participants } = this.invitation;
+        if (!participants) return null;
+
+        const host = contactStore.getContact(this.invitation.username);
+
+        const maxToShow = 4;
+        const withoutCurrentAndHost = participants
+            .filter(x => x !== User.current.username)
+            .filter(x => x !== this.invitation.username);
+
+        const toRender = withoutCurrentAndHost.slice(0, maxToShow);
+        const notShown = withoutCurrentAndHost.length - maxToShow;
+
+        return (
+            <View style={infoSection}>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={infoText}>
+                        <Text style={hostedByStyle}>
+                            {tx('title_whoIsAlreadyIn')}
+                        </Text>
+                        <Text style={hostNameStyle}>
+                            &nbsp;#{this.invitation.channelName}
+                        </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: vars.spacing.medium.mini2x }}>
+                            <AvatarCircle contact={host} />
+                            <GrayLabel contact={host} label="title_admin" />
+                        </View>
+                        {toRender.map(participant => (
+                            <View style={{ marginLeft: -vars.spacing.small.midi }}>
+                                <AvatarCircle key={participant} contact={contactStore.getContact(participant)} />
+                            </View>
+                        ))}
+                        {notShown > 0 &&
+                            <View style={moreContainer}>
+                                <Text bold style={moreText}>
+                                    {`+${notShown}`}
+                                </Text>
+                            </View>}
+                    </View>
+                </View>
+            </View>
+        );
+    }
+
     @action.bound async acceptInvite() {
         const chatId = this.invitation.kegDbId;
         chatInviteStore.acceptInvite(chatId);
@@ -113,99 +192,34 @@ export default class ChannelInvite extends SafeComponent {
         routes.main.chats();
     }
 
-    get leftIcon() { return <BackIcon action={routes.main.chats} />; }
-
-    get inviteText() { return 'title_roomInviteHeading'; }
-
-    get inviteRoomName() { return this.invitation.channelName; }
-
-    get participants() {
-        const { participants } = this.invitation;
-        if (!participants || participants.length <= 2) { return null; }
-
-        const maxToShow = 4;
-        const withoutCurrentAndHost = participants
-            .filter(x => x !== User.current.username)
-            .filter(x => x !== this.invitation.username);
-
-        const toRender = withoutCurrentAndHost.slice(0, maxToShow);
-
-        const notShown = withoutCurrentAndHost.length - maxToShow;
-
+    get buttons() {
         return (
-            <View style={{ alignItems: 'center' }}>
-                <View style={infoText}>
-                    <Text style={hostedByStyle}>
-                        {tx('title_whoIsAlreadyIn')}
-                    </Text>
-                    <Text style={hostNameStyle}>
-                        &nbsp;#{this.inviteRoomName}
-                    </Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                    {toRender.map(participant => (
-                        <View style={{ marginLeft: -vars.spacing.small.midi }}>
-                            <AvatarCircle key={participant} contact={contactStore.getContact(participant)} />
-                        </View>
-                    ))}
-                    {notShown > 0 &&
-                        <View style={moreContainer}>
-                            <Text bold style={moreText}>
-                                {`+${notShown}`}
-                            </Text>
-                        </View>}
-                </View>
-            </View>
-        );
+            <View style={buttonContainer}>
+                <ButtonText
+                    text={tx('button_declineInvite')}
+                    onPress={this.declineInvite}
+                    testID="decline"
+                    textColor={vars.peerioBlue}
+                    style={{ marginHorizontal: vars.spacing.medium.mini2x, alignItems: 'center' }}
+                />
+                {buttons.roundBlueBgButton(
+                    tx('button_joinRoom'),
+                    this.acceptInvite,
+                    null,
+                    'accept',
+                    { marginHorizontal: vars.spacing.small.midi2x }
+                )}
+            </View>);
     }
 
     renderThrow() {
-        const hasPaywall = User.current.channelsLeft <= 0;
-        const host = contactStore.getContact(this.invitation.username);
-
         return (
             <View style={{ flex: 1, flexGrow: 1 }}>
-                {!this.waiting && hasPaywall && <ChannelUpgradeOffer />}
-                <View style={headingSection}>
-                    <Image source={emojiTada}
-                        style={{
-                            alignSelf: 'center',
-                            width: vars.iconSizeMedium,
-                            height: vars.iconSizeMedium,
-                            marginBottom: vars.spacing.small.mini2x
-                        }}
-                        resizeMode="contain" />
-                    <Text style={headingStyle}>
-                        {tx(this.inviteText)}
-                    </Text>
-                    <Text bold style={headingStyle}>
-                        #{this.inviteRoomName}
-                    </Text>
-                    <View style={buttonContainer}>
-                        <ButtonText
-                            text="Decline"
-                            onPress={this.declineInvite}
-                            testID="decline"
-                            textColor={vars.peerioBlue}
-                            style={{ marginHorizontal: vars.spacing.medium.mini2x, alignItems: 'center' }}
-                        />
-                        {buttons.roundBlueBgButton(tx('button_accept'), this.acceptInvite, hasPaywall, 'accept', { marginHorizontal: vars.spacing.small.midi2x })}
-                    </View>
-                </View>
+                {this.illustration}
+                {this.heading}
                 <View style={sectionLine} />
-                <View style={infoSection}>
-                    <View style={infoText}>
-                        <Text style={hostedByStyle}>
-                            {tx('title_hostedBy')}
-                        </Text>
-                        <Text style={hostNameStyle}>
-                            &nbsp;
-                            {host.fullName}
-                        </Text>
-                    </View>
-                    <AvatarCircle contact={host} />
-                    {this.participants}
-                </View>
+                {this.participants}
+                {this.buttons}
                 <ProgressOverlay enabled={this.waiting} />
             </View>);
     }

@@ -50,7 +50,7 @@ export default class FoldersActionSheet {
             actionButtons.push({
                 title: tx('button_unshare'),
                 action: async () => {
-                    folder.removeParticipant(chatState.currentChat.otherParticipants[0]);
+                    folder.removeParticipants([chatState.currentChat.otherParticipants[0]]);
                 }
             });
         }

@@ -25,7 +25,7 @@ class RouterApp extends Router {
         this.add('signupCancel', SignupCancel);
         this.add('main', LayoutMain, true);
 
-        when(() => this.route === 'main', () => setTimeout(() => routerMain.initial(), 0));
+        when(() => this.route === 'main', () => setTimeout(() => routerMain.initialize(), 0));
         BackHandler.addEventListener('hardwareBackPress', () => {
             if (ActionSheetLayout.visible) {
                 ActionSheetLayout.hide();

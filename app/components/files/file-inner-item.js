@@ -14,7 +14,8 @@ import FileTypeIcon from './file-type-icon';
 import testLabel from '../helpers/test-label';
 import FileProgress from './file-progress';
 import { fileHelpers, contactStore, User } from '../../lib/icebear';
-// import FileActionSheet from './file-action-sheet';
+import MeasureableIcon from '../layout/measureable-icon';
+import filesBeacons from '../beacons/files-beacons';
 
 const { width } = Dimensions.get('window');
 const height = vars.filesListItemHeight;
@@ -57,12 +58,25 @@ export default class FileInnerItem extends SafeComponent {
         );
     }
 
-    renderThrow() {
+    get iconRight() {
         const { file, onFileAction } = this.props;
+        const beforeUploadIcon = icons.dark('close', () => fileState.cancelUpload(file));
+        const uploadedIcon = (
+            <MeasureableIcon
+                icon="more-vert"
+                testId="more-vert"
+                beacon={filesBeacons.fileOptionsBeacon}
+                color={vars.darkIcon}
+                onPress={onFileAction}
+                spotBgColor={vars.filesBg} />
+        );
+
+        return file.uploading ? beforeUploadIcon : uploadedIcon;
+    }
+
+    renderThrow() {
+        const { file } = this.props;
         if (file.signatureError) return <View style={{ marginHorizontal: vars.spacing.small.midi }}><FileSignatureError /></View>;
-        const actionIcon = () => onFileAction();
-        const iconRight = file.uploading ? icons.dark('close', () => fileState.cancelUpload(file)) :
-            icons.dark('more-vert', actionIcon, null, null, 'more-vert');
         const checked = this.props.file && this.props.file.selected;
         const nameStyle = {
             color: vars.txtDark,
@@ -98,7 +112,7 @@ export default class FileInnerItem extends SafeComponent {
         const loadingStyle = null;
         const optionsIcon = this.props.hideArrow || fileState.isFileSelectionMode ? null : (
             <View style={{ flex: 0 }}>
-                {iconRight}
+                {this.iconRight}
             </View>
         );
         const testID = file.name;

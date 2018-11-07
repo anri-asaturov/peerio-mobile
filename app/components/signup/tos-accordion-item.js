@@ -36,8 +36,8 @@ export default class TosAccordionItem extends SafeComponent {
         // Only need to send TM event on Open
         if (this.isOpen) {
             if (this.props.data.title === 'title_termsOfUse') {
-                tm.signup.readMoreAccordion(S.TERMS_OF_USE_SUMMARY);
-            } else tm.signup.readMoreAccordion(tx(this.props.data.title));
+                tm.signup.readMoreAccordion({ item: S.TERMS_OF_USE_SUMMARY });
+            } else tm.signup.readMoreAccordion({ item: tx(this.props.data.title) });
         }
     }
 

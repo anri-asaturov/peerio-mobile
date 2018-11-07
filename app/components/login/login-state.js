@@ -9,6 +9,7 @@ import { popupSignOutAutologin } from '../shared/popups';
 import { tx } from '../utils/translator';
 import RoutedState from '../routes/routed-state';
 import routes from '../routes/routes';
+import tm from '../../telemetry';
 
 const loginConfiguredKey = 'loginConfigured';
 
@@ -22,6 +23,7 @@ class LoginState extends RoutedState {
     @observable current = 0;
     @observable selectedAutomatic = null;
     @observable loaded = false;
+    @observable tfaRequested = false;
     _prefix = 'login';
     _resetTouchId = null;
 
@@ -62,16 +64,20 @@ class LoginState extends RoutedState {
         this.isInProgress = false;
     }
 
-    @action _login(user) {
+    @action _login(user, manual) {
         User.current = user;
         return user.login()
             .then(() => {
                 console.log('login-state.js: logged in');
             })
             .then(async () => {
-                mainState.activate(user);
-                if (user.autologinEnabled) return;
-                // wait for user to answer
+                if (manual) mainState.activateAndTransition(user);
+                else mainState.activate(user);
+                if (user.autologinEnabled) {
+                    tm.login.onUserLogin(true, this.tfaRequested);
+                    return;
+                }
+                tm.login.onUserLogin(false, this.tfaRequested);
                 await this.enableAutomaticLogin(user);
             })
             .catch(e => {
@@ -118,6 +124,7 @@ class LoginState extends RoutedState {
             });
     }
 
+    // Manual Login
     @action login = async (pin) => {
         /* if (this.username === config.appleTestUser
             && config.appleTestServer !== socket.url) {
@@ -130,10 +137,11 @@ class LoginState extends RoutedState {
         user.passphrase = (pin || this.passphrase).trim();
         this.isInProgress = true;
         return new Promise(resolve => {
-            when(() => socket.connected, () => resolve(this._login(user)));
+            when(() => socket.connected, () => resolve(this._login(user, true)));
         }).then(() => mainState.saveUser());
     };
 
+    // Automatic Login
     @action loginCached = (data) => {
         const user = new User();
         user.deserializeAuthData(data);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Dimensions, LayoutAnimation, View } from 'react-native';
+import { ScrollView, Dimensions, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { observable, reaction } from 'mobx';
 import { vars } from '../../styles/styles';
@@ -11,6 +11,7 @@ import routes from '../routes/routes';
 import { User } from '../../lib/icebear';
 import { t } from '../utils/translator';
 import { popupYes } from '../shared/popups';
+import { transitionAnimation } from '../helpers/animations';
 
 const { width } = Dimensions.get('window');
 
@@ -26,7 +27,7 @@ export default class AccountUpgradeSwiper extends Component {
     @observable selected = 0;
 
     componentWillMount() {
-        reaction(() => this.selected, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => this.selected, transitionAnimation);
         const topPlanIndex = plans.topPlanIndex();
         setTimeout(() => {
             topPlanIndex === -1 ?

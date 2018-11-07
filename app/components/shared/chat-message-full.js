@@ -18,7 +18,7 @@ const itemStyle = {
     flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 8
+    marginTop: 8
 };
 
 const itemContainerStyle = {

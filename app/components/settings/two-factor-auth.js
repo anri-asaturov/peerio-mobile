@@ -15,6 +15,7 @@ import TwoFactorAuthCodes from './two-factor-auth-codes';
 import TwoFactorAuthCodesGenerate from './two-factor-auth-codes-generate';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
+import tm from '../../telemetry';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -41,10 +42,11 @@ async function twoFactorAuthPopup(active2FARequest) {
     if (!active2FARequest) return;
     console.log(JSON.stringify(active2FARequest));
     const { submit, cancel, type } = active2FARequest;
+    // result returns true if 2fa code was entered, false if popup was canceled
     const result = await popup2FA(
-        tx('title_2FARequired'),
-        tx('dialog_enter2FA'),
-        type === 'login' ? tx('title_trustThisDevice') : null,
+        tx('title_2FAInput'),
+        tx('title_2FAHelperText'),
+        type === 'login' ? tx('title_verifyDeviceTwoWeeks') : null,
         uiState.trustDevice2FA,
         true,
         type === 'disable'
@@ -58,10 +60,19 @@ async function twoFactorAuthPopup(active2FARequest) {
     }
     const { value, checked } = result;
     uiState.trustDevice2FA = checked;
-    submit(value, checked);
+    try {
+        await submit(value, checked);
+    } catch (e) {
+        console.error(e);
+        uiState.tfaFailed = true;
+        if (type === 'login') tm.login.onUserTfaLoginFailed(User.current.autologinEnabled);
+    }
 }
 
-reaction(() => clientApp.active2FARequest, twoFactorAuthPopup);
+reaction(() => clientApp.active2FARequest, active2FARequest => {
+    loginState.tfaRequested = active2FARequest.type === 'login';
+    twoFactorAuthPopup(active2FARequest);
+});
 
 export { twoFactorAuthPopup };
 
@@ -137,7 +148,7 @@ export default class TwoFactorAuth extends SafeComponent {
                 </View>
                 <View>
                     <Text>
-                        {tx('dialog_enter2FA')}
+                        {tx('title_2FAHelperText')}
                     </Text>
                 </View>
                 <View style={{ marginVertical }}>
@@ -161,7 +172,7 @@ export default class TwoFactorAuth extends SafeComponent {
                             }}
                             {...testLabel('confirmationCodeInput')}
                             placeholderTextColor={vars.txtDate}
-                            placeholder="123456"
+                            placeholder={tx('title_2FAHelperText')}
                             onChangeText={text => { this.confirmCode = text; }}
                             value={this.confirmCode} />
                         {buttons.blueTextButton(tx('button_confirm'),

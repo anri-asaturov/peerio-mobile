@@ -1,17 +1,17 @@
 import { telemetry } from '../../lib/icebear';
 import { setup } from '../main';
-import TmHelper from '../helpers';
 
 const { S, duration, errorMessage } = telemetry;
 
 const login = setup(
     {
-        duration: (startTime) => {
+        duration: (tm) => {
             return [
                 S.DURATION,
                 {
                     location: S.SIGN_IN,
-                    totalTime: duration(startTime)
+                    sublocation: tm.sublocation,
+                    totalTime: duration(tm.startTime)
                 }
             ];
         },
@@ -21,33 +21,64 @@ const login = setup(
                 S.NAVIGATE, {
                     option: S.SIGN_IN,
                     location: S.ONBOARDING,
-                    sublocation: TmHelper.currentRoute
+                    sublocation: S.WELCOME_SCREEN
                 }
             ];
         },
 
-        navigate: (option) => {
+        navigate: (tm) => {
             return [
                 S.NAVIGATE,
                 {
-                    option,
-                    location: S.SIGN_IN
+                    option: tm.option,
+                    location: S.SIGN_IN,
+                    sublocation: tm.sublocation
                 }
             ];
         },
 
-        onLoginSuccess: () => {
+        onSigninButton: () => {
             return [
-                S.SIGN_IN, { text: S.SIGN_IN }
+                S.SIGN_IN, {
+                    option: S.MANUAL
+                }];
+        },
+
+        onUserLogin: (autoLogin, hasSeenTfa) => {
+            return [
+                S.SIGN_IN_SUCCESS, {
+                    option: autoLogin ? S.AUTO : S.MANUAL,
+                    condition: hasSeenTfa ? S.TSV_ON : S.TSV_OFF
+                }
             ];
         },
 
-        onLoginWithEmail: (label, errorMsg) => {
+        onUserLoginFailed: (autoLogin) => {
+            return [
+                S.SIGN_IN_FAIL, {
+                    option: autoLogin ? S.AUTO : S.MANUAL
+                }
+            ];
+        },
+
+        onUserTfaLoginFailed: (autoLogin) => {
+            return [
+                S.SIGN_IN_FAIL, {
+                    location: S.SIGN_IN,
+                    sublocation: S.TSV_DIALOG,
+                    option: autoLogin ? S.AUTO : S.MANUAL,
+                    condition: S.TSV_ON
+                }
+            ];
+        },
+
+        onLoginWithEmail: (tm, errorMsg) => {
             return [
                 S.TEXT_INPUT,
                 {
-                    item: label,
-                    location: TmHelper.currentRoute,
+                    item: tm.item,
+                    location: tm.location,
+                    sublocation: tm.sublocation,
                     state: S.ERROR,
                     errorType: errorMessage(errorMsg)
                 }

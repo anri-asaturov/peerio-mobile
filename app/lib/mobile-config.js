@@ -11,7 +11,6 @@ const { setStringReplacement } = require('peerio-translator');
 
 export default (c, icebear, tm) => {
     const cfg = c;
-    cfg.ghostFrontendUrl = 'https://mail.peerio.com';
     // --- TRANSLATOR
     cfg.translator = {};
     if (whitelabel.stringReplacements) {

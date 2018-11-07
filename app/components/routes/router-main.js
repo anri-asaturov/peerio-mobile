@@ -7,8 +7,6 @@ import WelcomeZeroState from '../layout/welcome-zero-state';
 import SettingsLevel1 from '../settings/settings-level-1';
 import SettingsLevel2 from '../settings/settings-level-2';
 import SettingsLevel3 from '../settings/settings-level-3';
-import Ghosts from '../ghosts/ghosts';
-import GhostsLevel1 from '../ghosts/ghosts-level-1';
 import Files from '../files/files';
 import FileDetailView from '../files/file-detail-view';
 import ContactAdd from '../contacts/contact-add';
@@ -17,7 +15,7 @@ import ContactSyncInvite from '../contacts/contact-sync-invite';
 import ContactView from '../contacts/contact-view';
 import ContactList from '../contacts/contact-list';
 import ContactListInvite from '../contacts/contact-list-invite';
-import { fileState, ghostState, chatState, settingsState, contactState, contactAddState, invitationState } from '../states';
+import { fileState, chatState, settingsState, contactState, contactAddState, invitationState } from '../states';
 // import { enablePushNotifications } from '../../lib/push';
 import routes from './routes';
 import loginState from '../login/login-state';
@@ -55,7 +53,6 @@ class RouterMain extends Router {
         reaction(() => [this.route, this.currentIndex], () => uiState.hideAll());
         this.add('welcomeZeroState', [<WelcomeZeroState />]);
         this.add('files', [<Files />, <FileDetailView />], fileState);
-        this.add('ghosts', [<Ghosts />, <GhostsLevel1 />], ghostState);
         this.add('chats', [<whiteLabelComponents.ChatList />, <whiteLabelComponents.Chat />], chatState);
         this.add('contacts', [<ContactList />, <ContactView nonModal />], contactState);
         this.add('contactAdd', [<ContactAdd />], contactAddState);
@@ -88,7 +85,7 @@ class RouterMain extends Router {
         return this.route === this._initialRoute;
     }
 
-    @action async initial() {
+    @action async initialize() {
         if (this.invoked) return;
         this.invoked = true;
         this.loading = true;
@@ -101,6 +98,9 @@ class RouterMain extends Router {
         contactState.init();
         this.contactStateLoaded = true;
         this.loading = false;
+    }
+
+    @action transitionToMain() {
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
         this.initialRoute();
