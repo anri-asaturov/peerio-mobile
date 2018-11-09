@@ -2,6 +2,7 @@ import { NativeModules, AlertIOS } from 'react-native';
 import PaymentsBase from './payments-base';
 import { socket } from '../../lib/icebear';
 import whitelabel from '../../components/whitelabel/white-label-config';
+import { promiseWhen } from '../helpers/sugar';
 
 const { InAppUtils } = NativeModules;
 
@@ -62,6 +63,7 @@ class PaymentsIos extends PaymentsBase {
                 store: 'ios',
                 receipt: response.transactionReceipt
             };
+            await promiseWhen(() => socket.authenticated);
             const serverResponse = await socket.send('/auth/paid-plans/mobile-purchase/register', payload);
             console.log(serverResponse);
             console.log(`🚲 payments-ios.js: register result success ${id}`);

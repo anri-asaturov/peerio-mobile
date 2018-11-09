@@ -2,6 +2,7 @@ import { Alert } from 'react-native';
 import InAppBilling from 'react-native-billing';
 import PaymentsBase from './payments-base';
 import { socket } from '../../lib/icebear';
+import { promiseWhen } from '../helpers/sugar';
 import whitelabel from '../../components/whitelabel/white-label-config';
 
 class PaymentsAndroid extends PaymentsBase {
@@ -50,6 +51,7 @@ class PaymentsAndroid extends PaymentsBase {
                 }
             };
             console.log(JSON.stringify(payload));
+            await promiseWhen(() => socket.authenticated);
             const serverResponse = await socket.send('/auth/paid-plans/mobile-purchase/register', payload);
             console.log(serverResponse);
             console.log(`🚲 payments-android.js: register result success ${id}`);
