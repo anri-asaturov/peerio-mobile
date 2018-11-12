@@ -15,6 +15,7 @@ import AvatarCircle from '../shared/avatar-circle';
 import DeletedCircle from '../shared/deleted-circle';
 import ListSeparator from '../shared/list-separator';
 import contactState from '../contacts/contact-state';
+import testLabel from '../helpers/test-label';
 
 const pinOn = require('../../assets/chat/icon-pin.png');
 
@@ -131,6 +132,7 @@ export default class ChatListItem extends SafeComponent {
             <TouchableOpacity
                 key={key}
                 onPress={this.onPress}
+                {...testLabel(contact.username)}
                 pressRetentionOffset={vars.pressRetentionOffset}>
                 <View style={[containerStyle, { height }]}>
                     <View>

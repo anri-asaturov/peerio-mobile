@@ -220,14 +220,15 @@ const icons = {
         );
     },
 
-    imageButtonNoPadding(source, onPress, size, opacity) {
+    imageButtonNoPadding(source, onPress, size, opacity, testID) {
         const width = size || vars.iconSize;
         const height = width;
         return (
             <TouchableOpacity
                 style={{ opacity }}
                 onPress={onPress}
-                pressRetentionOffset={vars.retentionOffset} >
+                pressRetentionOffset={vars.retentionOffset}
+                {...testLabel(testID)}>
                 <Image style={{ width, height }} source={source} />
             </TouchableOpacity>
         );

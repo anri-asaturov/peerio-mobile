@@ -16,6 +16,10 @@ class LoginPage extends Page {
     get submitButton() {
         return this.getWhenEnabled('~button_login');
     }
+
+    get backButton() {
+        return this.getWhenVisible('~button_back');
+    }
 }
 
 module.exports = LoginPage;

@@ -10,6 +10,7 @@ Feature: Room invites
    Scenario: Accept a room invite
         Given I log in as room_test user
         And   I create a new room
+        And   I exit the current chat
         When  I invite someone to join the room
         And   I sign out
         Then  they log in
@@ -18,6 +19,7 @@ Feature: Room invites
    Scenario: Decline a room invite
         Given I log in as room_test user
         And   I create a new room
+        And   I exit the current chat
         When  I invite someone to join the room
         And   I sign out
         Then  they log in
@@ -26,6 +28,7 @@ Feature: Room invites
    Scenario: Invite someone to join a room but cancel
         Given I log in as room_test user
         And   I create a new room
+        And   I exit the current chat
         When  I invite someone to join the room
         And   I cancel the invite
         And   I sign out
@@ -35,6 +38,7 @@ Feature: Room invites
    Scenario: Invite someone to rejoin a room after leaving
         Given I log in as room_test user
         And   I create a new room
+        And   I exit the current chat
         When  I invite someone to join the room
         And   I sign out
         Then  they log in
@@ -50,6 +54,7 @@ Feature: Room invites
     Scenario: Leave room and navigate to chat list
         Given I log in as leavechannelnav_inviter user
         And   I create a new room
+        And   I exit the current chat
         When  I invite leavechannelnav_invitee to join the room
         And   I sign out
         Then  I log in as leavechannelnav_invitee user

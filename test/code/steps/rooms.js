@@ -52,7 +52,8 @@ defineSupportCode(({ When, Then }) => {
         const invitedContactRemoved = await this.chatPage.invitedContactRemoved;
         invitedContactRemoved.should.be.true; // eslint-disable-line
 
-        await this.chatPage.buttonExitChat.click();
+        await this.chatPage.buttonExitChat.click(); // exit room info list
+        await this.chatPage.buttonExitChat.click(); // exit chat
     });
 
     Then('they do not have any room invites', async function () {
@@ -72,5 +73,9 @@ defineSupportCode(({ When, Then }) => {
 
     Then('they sign out', async function () {
         await this.logout();
+
+        // Go back from "welcome back screen" to "welcome screen"
+        await this.app.launch();
+        await this.loginPage.backButton.click();
     });
 });

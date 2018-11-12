@@ -11,6 +11,8 @@ export default class ButtonBack extends SafeComponent {
         return (icons.imageButtonNoPadding(
             source,
             this.props.onBackPressed,
-            vars.iconSizeMedium));
+            vars.iconSizeMedium,
+            null,
+            'button_back'));
     }
 }

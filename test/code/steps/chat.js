@@ -17,7 +17,6 @@ defineSupportCode(({ When, Then }) => {
         await this.roomCreationPage.hideKeyboardHelper();
         await this.roomCreationPage.nextButton.click();
         await this.roomCreationPage.goButton.click();
-        await this.chatPage.buttonExitChat.click();
     });
 
     When('I exit the current chat', async function () {
@@ -25,7 +24,7 @@ defineSupportCode(({ When, Then }) => {
     });
 
     Then('I can send a message to the current chat', async function () {
-        const message = `Test Message ${new Date()}`;
+        const message = `Test message ${new Date().getTime()}`;
         await this.chatPage.textInput.setValue(message);
         await this.chatPage.hideKeyboardHelper();
         await this.chatPage.buttonSendMessage.click();
@@ -75,7 +74,7 @@ defineSupportCode(({ When, Then }) => {
     });
 
     Then('They can send a message to the current chat', async function () {
-        const message = `Test Message ${new Date()}`;
+        const message = `Test Message ${new Date().getTime()}`;
         await this.chatPage.textInput.setValue(message);
         await this.chatPage.hideKeyboardHelper();
         await this.chatPage.buttonSendMessage.click();

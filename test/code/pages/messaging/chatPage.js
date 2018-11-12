@@ -34,7 +34,7 @@ class ChatPage extends Page {
     }
 
     get confirmLeaveRoomButton() {
-        return this.getWhenVisible('~popupButton-confirm');
+        return this.getWhenVisible('~popupButton-Leave');
     }
 
     get alertLeftRoom() {
