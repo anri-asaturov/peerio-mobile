@@ -59,13 +59,33 @@ export default class FileDetailView extends SafeComponent {
         fileState.download(this.file);
     }
 
-    renderThrow() {
+    get button() {
         const { file, enabled } = this;
+        if (file.downloading) {
+            return (<ButtonText
+                text={tx('button_cancel')}
+                onPress={this.onCancel}
+                disabled={!enabled}
+                testID="cancel"
+            />);
+        } else if (file.hasFileAvailableForPreview) {
+            return (<ButtonText
+                text={tx('button_open')}
+                onPress={this.onOpen}
+                disabled={!enabled}
+                testID="open"
+            />);
+        }
+        return (<ButtonText
+            text={tx('button_download')}
+            onPress={this.onDownload}
+            disabled={!enabled}
+            testID="download"
+        />);
+    }
 
-        let button;
-        if (file.downloading) button = <ButtonText text={tx('button_cancel')} onPress={this.onCancel} disabled={!enabled} />;
-        else if (file.hasFileAvailableForPreview) button = <ButtonText text={tx('button_open')} onPress={this.onOpen} disabled={!enabled} />;
-        else button = <ButtonText text={tx('button_download')} onPress={this.onDownload} disabled={!enabled} />;
+    renderThrow() {
+        const { file } = this;
 
         return (
             <View style={{ flexGrow: 1, justifyContent: 'center', backgroundColor: vars.darkBlueBackground05 }}>
@@ -79,7 +99,7 @@ export default class FileDetailView extends SafeComponent {
                     <Text style={textStyle}>
                         {tx(file.downloading ? 'title_downloadingFile' : 'title_noPreview')}
                     </Text>
-                    {button}
+                    {this.button}
                 </View>
             </View>
         );

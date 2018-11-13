@@ -6,7 +6,7 @@ class RoomInvitePage extends Page {
     }
 
     get declineButton() {
-        return this.getWhenVisible('~popupButton-decline');
+        return this.getWhenVisible('~button-decline');
     }
 }
 

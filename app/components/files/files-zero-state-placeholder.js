@@ -6,6 +6,7 @@ import SafeComponent from '../shared/safe-component';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import ViewWithDrawer from '../shared/view-with-drawer';
+import testLabel from '../helpers/test-label';
 
 const fileUploadZeroState = require('../../assets/file-upload-zero-state.png');
 
@@ -64,7 +65,8 @@ export default class FilesPlaceholder extends SafeComponent {
                     <Image
                         source={fileUploadZeroState}
                         resizeMode="contain"
-                        style={imageStyle} />
+                        style={imageStyle}
+                        {...testLabel('files-zero-state-illustration')} />
                     <Text style={labelStyle}>
                         {tx('description_empty_folder')}
                     </Text>

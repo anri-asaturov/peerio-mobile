@@ -115,7 +115,7 @@ export default class FileInnerItem extends SafeComponent {
                 {this.iconRight}
             </View>
         );
-        const testID = file.name;
+        const testID = `file${this.props.rowID}`;
         const owner = !file.fileOwner || file.fileOwner === User.current.username
             ? `` : `${contactStore.getContact(file.fileOwner).fullName} `;
         return (

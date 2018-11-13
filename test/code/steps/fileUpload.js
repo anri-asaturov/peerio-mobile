@@ -14,20 +14,30 @@ defineSupportCode(({ Then }) => {
         await this.filesListPage.fileSharePreviewPopup.click();
     });
 
+    Then('I can open the file from Files', async function () {
+        await this.homePage.filesTab.click();
+        await this.filesListPage.firstFile.click();
+
+        // Wait for open button to be enabled
+        await this.app.pause(5000);
+        await this.fileViewPage.fileOpenButton.click();
+    });
+
     Then('I can download the file from Files', async function () {
         await this.homePage.filesTab.click();
         await this.filesListPage.firstFile.click();
 
         // Wait for download button to be enabled
         await this.app.pause(5000);
-
-        await this.fileViewPage.fileDownloadTab.click();
+        await this.fileViewPage.fileDownloadButton.click();
 
         if (this.context.platform.desiredCapabilities.platformName === 'Android') {
             await this.fileViewPage.encryptionRecommendationPopup.click();
             await this.fileViewPage.filesDecryptedPopup.click();
         }
 
-        await this.fileViewPage.fileOpenTab.click();
+        // wait for file to be downloaded
+        await this.app.pause(5000);
+        await this.fileViewPage.fileOpenButton.click();
     });
 });

@@ -34,11 +34,11 @@ class ChatPage extends Page {
     }
 
     get confirmLeaveRoomButton() {
-        return this.getWhenVisible('~popupButton-confirm');
+        return this.getWhenVisible('~button-confirm');
     }
 
     get alertLeftRoom() {
-        return this.getWhenVisible('~popupButton-ok');
+        return this.getWhenVisible('~button-ok');
     }
 
     get invitedContactRemoved() {

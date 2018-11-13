@@ -2,7 +2,7 @@ const Page = require('../page');
 
 class FilesListPage extends Page {
     get placeholder() {
-        return this.getWhenVisible('~title_uploadSomething');
+        return this.getWhenVisible('~files-zero-state-illustration');
     }
 
     folderNamed(selector) {
@@ -22,7 +22,7 @@ class FilesListPage extends Page {
     }
 
     get confirmDelete() {
-        return this.getWhenVisible('~popupButton-confirm');
+        return this.getWhenVisible('~button-confirm');
     }
 
     get folderNameInput() {
@@ -38,15 +38,15 @@ class FilesListPage extends Page {
     }
 
     get fileUploadedPopup() {
-        return this.getWhenVisible(`~popupButton-ok`);
+        return this.getWhenVisible(`~button-ok`);
     }
 
     get acceptFolderName() {
-        return this.getWhenVisible(`~popupButton-ok`);
+        return this.getWhenVisible(`~button-ok`);
     }
 
     get fileSharePreviewPopup() {
-        return this.getWhenVisible(`~popupButton-share`);
+        return this.getWhenVisible(`~button-share`);
     }
 
     get uploadFileButtton() {

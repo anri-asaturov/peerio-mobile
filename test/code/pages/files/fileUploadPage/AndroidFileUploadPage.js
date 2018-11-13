@@ -23,6 +23,8 @@ class AndroidFileUploadPage extends Page {
         const galleryW = await this.app.getElementSize(galleryView, 'width');
         const galleryH = await this.app.getElementSize(galleryView, 'height');
 
+        await this.app.pause(2000);
+
         // Tap in the center of gallery
         await this.app.touchPerform([{
             action: 'tap',
@@ -31,17 +33,8 @@ class AndroidFileUploadPage extends Page {
                 y: galleryY + galleryH / 2
             }
         }]);
-
-        // Double tap is needed as it doesn't work without it
-        await this.app.touchPerform([{
-            action: 'tap',
-            options: {
-                x: galleryX + galleryW / 2,
-                y: galleryY + galleryH / 2
-            }
-        }]);
-
         await this.app.pause(2000);
+
         // Select an image from Gallery
         await this.app.waitForExist(galleryView).element(galleryView);
 

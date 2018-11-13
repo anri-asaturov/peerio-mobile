@@ -11,7 +11,7 @@ class AlertsPage extends Page {
     }
 
     get emailConfirmationPopup() {
-        return this.getWhenVisible('~popupButton-ok');
+        return this.getWhenVisible('~button-ok');
     }
 }
 

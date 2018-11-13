@@ -22,7 +22,7 @@ class SettingsPage extends Page {
     }
 
     get lockButton() {
-        return this.getWhenVisible('~popupButton-yes');
+        return this.getWhenVisible('~button-yes');
     }
 
     get showAccountKeyButton() {
@@ -34,7 +34,7 @@ class SettingsPage extends Page {
     }
 
     get copyButton() {
-        return this.getWhenVisible('~popupButton-copy');
+        return this.getWhenVisible('~button-copy');
     }
 }
 

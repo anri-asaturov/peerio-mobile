@@ -17,7 +17,6 @@ defineSupportCode(({ When, Then }) => {
         await this.roomCreationPage.hideKeyboardHelper();
         await this.roomCreationPage.nextButton.click();
         await this.roomCreationPage.goButton.click();
-        await this.chatPage.buttonExitChat.click();
     });
 
     When('I exit the current chat', async function () {

@@ -13,7 +13,7 @@ class TwoFactorAuthPrompt extends Page {
     }
 
     get submitButton() {
-        return this.getWhenVisible('~popupButton-ok');
+        return this.getWhenVisible('~button-ok');
     }
 }
 
