@@ -169,13 +169,15 @@ class World {
 
     async loginExistingAccount(username, passphrase) {
         await this.alertsPage.dismissNotificationsAlert();
+
+        // Go back from "welcome back screen" to "welcome screen"
+        if (await this.loginPage.backButtonVisible) {
+            await this.loginPage.backButton.click();
+        }
         await this.startPage.loginButton.click();
 
-        // Skip if username is cached
-        if (await this.loginPage.usernamePresent) {
-            await this.loginPage.username.setValue(username);
-            await this.loginPage.hideKeyboardHelper();
-        }
+        await this.loginPage.username.setValue(username);
+        await this.loginPage.hideKeyboardHelper();
         await this.loginPage.passphrase.setValue(passphrase);
         await this.loginPage.hideKeyboardHelper();
         await this.loginPage.submitButton.click();

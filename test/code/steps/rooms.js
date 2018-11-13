@@ -73,9 +73,5 @@ defineSupportCode(({ When, Then }) => {
 
     Then('they sign out', async function () {
         await this.logout();
-
-        // Go back from "welcome back screen" to "welcome screen"
-        await this.app.launch();
-        await this.loginPage.backButton.click();
     });
 });

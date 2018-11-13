@@ -17,6 +17,10 @@ class LoginPage extends Page {
         return this.getWhenEnabled('~button_login');
     }
 
+    get backButtonVisible() {
+        return this.checkIfVisible('~button_back');
+    }
+
     get backButton() {
         return this.getWhenVisible('~button_back');
     }
