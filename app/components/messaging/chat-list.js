@@ -29,6 +29,12 @@ const viewabilityConfig = {
     itemVisiblePercentThreshold: 40
 };
 
+// unread item, pending dm or channel invite
+// TODO: move to icebear
+function isUnread(item) {
+    return item.unreadCount || item.isInvite || item.kegDbId;
+}
+
 @observer
 export default class ChatList extends SafeComponent {
     @observable reverseRoomSorting = false;
@@ -45,17 +51,18 @@ export default class ChatList extends SafeComponent {
         );
     }
 
+    addSection = (sectionTitle, items) => {
+        if (!items || !items.length) return [];
+        return [
+            [{ sectionTitle }],
+            items
+        ];
+    };
+
     @computed get dataSource() {
-        const addSection = (sectionTitle, items) => {
-            if (!items || !items.length) return [];
-            return [
-                [{ sectionTitle }],
-                items
-            ];
-        };
         return [].concat(
-            ...addSection('title_channels', this.firstSectionItems),
-            ...addSection('title_directMessages', this.secondSectionItems)
+            ...this.addSection('title_channels', this.firstSectionItems),
+            ...this.addSection('title_directMessages', this.secondSectionItems)
         );
     }
 
@@ -148,7 +155,7 @@ export default class ChatList extends SafeComponent {
     @computed get firstUnreadItem() {
         for (let index = 0; index < this.dataSource.length; ++index) {
             const item = this.dataSource[index];
-            if (item.unreadCount) return { item, index };
+            if (isUnread(item)) return { item, index };
         }
         return null;
     }
@@ -156,7 +163,7 @@ export default class ChatList extends SafeComponent {
     @computed get lastUnreadItem() {
         for (let index = this.dataSource.length - 1; index >= 0; --index) {
             const item = this.dataSource[index];
-            if (item.unreadCount) return { item, index };
+            if (isUnread(item)) return { item, index };
         }
         return null;
     }

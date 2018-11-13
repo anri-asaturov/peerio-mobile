@@ -62,11 +62,11 @@ export default class FolderInnerItem extends SafeComponent {
     get checkbox() {
         if (!fileState.isFileSelectionMode) return null;
         const { folder } = this.props;
-        const { isShared } = folder;
+        const sharedFoldersEnabled = process.env.SHARED_FOLDERS_ENABLED;
         const checked = folder && folder.selected;
         const v = vars;
         let iconColor = checked ? v.checkboxIconActive : v.checkboxIconInactive;
-        iconColor = isShared ? iconColor : vars.checkboxDisabled;
+        iconColor = sharedFoldersEnabled ? iconColor : vars.checkboxDisabled;
         const iconBgColor = 'transparent';
         const icon = checked ? 'check-box' : 'check-box-outline-blank';
         const outer = {
@@ -84,9 +84,9 @@ export default class FolderInnerItem extends SafeComponent {
                 style={outer}
                 pointerEvents="none"
                 onPress={this.toggleSelected}
-                disabled={!isShared}
+                disabled={!sharedFoldersEnabled}
                 pressRetentionOffset={vars.pressRetentionOffset}>
-                {icons.colored(icon, this.toggleSelected, iconColor, iconBgColor, !isShared)}
+                {icons.colored(icon, this.toggleSelected, iconColor, iconBgColor, !sharedFoldersEnabled)}
             </TouchableOpacity>
         );
     }

@@ -53,16 +53,16 @@ export default class ViewReceipts extends SafeComponent {
 
             this._observer = reaction(() => this.props.receipts && this.props.receipts.length, () => {
                 if (!this.props.receipts || !this.props.receipts.length) return;
-                if (this.props.keepAvatar) return;
 
-                const firstView = this.props.receipts.length === 1;
                 const viewsIncreased = this.props.receipts.length > this.prev;
 
-                if (firstView || viewsIncreased) {
+                if (viewsIncreased) {
                     this.receiptLabel = this.receiptAvatar;
                     setTimeout(() => {
                         this.receiptLabel = this.receiptNumber;
                     }, 3000);
+                } else {
+                    this.calculateLabel();
                 }
             }, { fireImmediately: true });
         });
@@ -86,10 +86,10 @@ export default class ViewReceipts extends SafeComponent {
     }
 
     calculateLabel = () => {
-        const { receipts, keepAvatar } = this.props;
+        const { receipts } = this.props;
         if (!receipts) return;
 
-        if (keepAvatar) {
+        if (receipts.length === 1) {
             this.receiptLabel = this.receiptAvatar;
             return;
         }

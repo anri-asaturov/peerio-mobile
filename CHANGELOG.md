@@ -2,6 +2,90 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.405.0"></a>
+# [3.405.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.404.0...v3.405.0) (2018-11-13)
+
+
+
+<a name="3.404.0"></a>
+# [3.404.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.403.0...v3.404.0) (2018-11-13)
+
+
+### Features
+
+* enable sharing local folders and volumes in dms and rooms [ch16391] ([56b74e5](https://github.com/PeerioTechnologies/peerio-mobile/commit/56b74e5))
+
+
+
+<a name="3.403.0"></a>
+# [3.403.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.402.0...v3.403.0) (2018-11-12)
+
+
+### Bug Fixes
+
+* **MC:** go back after declining room ([#372](https://github.com/PeerioTechnologies/peerio-mobile/issues/372)) ([9d83d12](https://github.com/PeerioTechnologies/peerio-mobile/commit/9d83d12))
+
+
+
+<a name="3.402.0"></a>
+# [3.402.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.401.0...v3.402.0) (2018-11-11)
+
+
+### Bug Fixes
+
+* fix medcryptor route initialization [ch16983] ([affe008](https://github.com/PeerioTechnologies/peerio-mobile/commit/affe008))
+
+
+
+<a name="3.401.0"></a>
+# [3.401.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.400.0...v3.401.0) (2018-11-10)
+
+
+### Bug Fixes
+
+* incorrect AreaBeacon positioing and hacks [ch16857] ([2237185](https://github.com/PeerioTechnologies/peerio-mobile/commit/2237185))
+* MC chat list ([#368](https://github.com/PeerioTechnologies/peerio-mobile/issues/368)) ([7a6c9a8](https://github.com/PeerioTechnologies/peerio-mobile/commit/7a6c9a8))
+* remove option for rooms ([#369](https://github.com/PeerioTechnologies/peerio-mobile/issues/369)) ([612cd0d](https://github.com/PeerioTechnologies/peerio-mobile/commit/612cd0d))
+* remove test unread counter ([870881b](https://github.com/PeerioTechnologies/peerio-mobile/commit/870881b))
+
+
+
+<a name="3.400.0"></a>
+# [3.400.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.399.0...v3.400.0) (2018-11-09)
+
+
+### Bug Fixes
+
+* fix onLoadEnd for gif [ch16832] ([8a99c91](https://github.com/PeerioTechnologies/peerio-mobile/commit/8a99c91))
+
+
+
+<a name="3.399.0"></a>
+# [3.399.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.398.0...v3.399.0) (2018-11-08)
+
+
+### Bug Fixes
+
+* disable preview for GIFs in iOS [ch16832] ([38b9bf2](https://github.com/PeerioTechnologies/peerio-mobile/commit/38b9bf2))
+
+
+
+<a name="3.398.0"></a>
+# [3.398.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.397.0...v3.398.0) (2018-11-08)
+
+
+### Features
+
+* implement a separate component for rendering GIF images on iOS [ch16832] ([3f64110](https://github.com/PeerioTechnologies/peerio-mobile/commit/3f64110))
+* show unread indicator for invites and pending dms [ch16754] ([9559506](https://github.com/PeerioTechnologies/peerio-mobile/commit/9559506))
+
+
+
+<a name="3.397.0"></a>
+# [3.397.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.396.0...v3.397.0) (2018-11-07)
+
+
+
 <a name="3.396.0"></a>
 # [3.396.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.395.0...v3.396.0) (2018-11-07)
 

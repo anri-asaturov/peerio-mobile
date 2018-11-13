@@ -1,17 +1,28 @@
 import './btoa-shim';
 import mobileConfig from './mobile-config';
 
+/**
+ * This file imports peerio-icebear and provides
+ * it with platform-specific config and shims
+ */
+
+// this is for websocketio
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'react-native';
 
 const icebear = require('./peerio-icebear');
+
+// TODO: subject for removal
 const { getFirstLetterUpperCase } = require('./peerio-icebear/helpers/string');
 
+// TODO: subject for removal
 icebear.getFirstLetterUpperCase = getFirstLetterUpperCase;
 
 const { socket, config, FileStreamBase, telemetry, TinyDb } = icebear;
 mobileConfig(config, { FileStreamBase }, telemetry);
 
+// the following code adds the capability to override the server
+// using the debug menu on mobile.
 const OVERRIDE_SERVER_KEY = 'socketServerOverride';
 
 icebear.overrideServer = async function(value) {

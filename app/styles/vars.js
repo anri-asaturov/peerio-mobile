@@ -251,6 +251,7 @@ const vars = {
     fileListHorizontalPadding: scaleDim(16),
     fileInnerItemPaddingRight: 8,
     loadingScreenMarginTop: scaleDim(206),
+    loadingScreenMarginBottom: scaleDim(170),
     dmInvitePaddingTop: scaleDim(90),
     verificationMessageWidth: scaleDim(260),
     modalPaddingVertical: 40,

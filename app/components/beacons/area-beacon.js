@@ -58,7 +58,7 @@ export default class AreaBeacon extends AbstractBeacon {
 
     get pointerHorizontalLeftMost() {
         return {
-            containerPositionX: { left: this.parentHorizontalPos - vars.pointerPadding },
+            containerPositionX: { left: this.parentHorizontalPos + vars.pointerPadding },
             pointerPositionX: { left: vars.pointerPadding }
         };
     }

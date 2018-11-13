@@ -10,7 +10,6 @@ import { socket } from '../../lib/icebear';
 import { promiseWhen } from '../helpers/sugar';
 import { tx } from '../utils/translator';
 import SnackBarConnection from '../snackbars/snackbar-connection';
-import routerMain from '../routes/router-main';
 
 const logoHeight = 72; // Logo in the animation
 const logoAnimation = require('../../assets/loading_screens/loading-screen-logo-animation.json');
@@ -73,7 +72,7 @@ export default class LoadingScreen extends Component {
             useNativeDriver: true
         }).start(() => {
             this.revealAnimVisible = false;
-            routerMain.transitionToMain();
+            routes.main.transitionToMain();
             LayoutAnimation.easeInEaseOut();
         });
     }

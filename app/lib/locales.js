@@ -1,5 +1,9 @@
 import { config } from '../lib/peerio-icebear';
 
+/**
+ * This file loads localization files from local resources
+ */
+
 module.exports = {
     async loadLocaleFile(lc) {
         const defaultLocale = require('./peerio-icebear/copy/en.json');

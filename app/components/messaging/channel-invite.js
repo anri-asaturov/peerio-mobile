@@ -156,7 +156,7 @@ export default class ChannelInvite extends SafeComponent {
                             <GrayLabel contact={host} label="title_admin" />
                         </View>
                         {toRender.map(participant => (
-                            <View style={{ marginLeft: -vars.spacing.small.midi }}>
+                            <View key={participant} style={{ marginLeft: -vars.spacing.small.midi }}>
                                 <AvatarCircle key={participant} contact={contactStore.getContact(participant)} />
                             </View>
                         ))}
@@ -213,6 +213,8 @@ export default class ChannelInvite extends SafeComponent {
     }
 
     renderThrow() {
+        // TODO: why is invitation null here?
+        if (!this.invitation) return null;
         return (
             <View style={{ flex: 1, flexGrow: 1 }}>
                 {this.illustration}

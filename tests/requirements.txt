@@ -1,9 +1,0 @@
-Appium-Python-Client==0.24
-jsonpickle==0.9.3
-macholib==1.5.1
-pytest==2.9.1
-selenium==3.0.2
-tornado==4.3
-websocket-client==0.37.0
-pycurl==7.43.0
-termcolor==1.1.0

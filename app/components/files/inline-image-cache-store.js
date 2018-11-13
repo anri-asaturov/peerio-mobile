@@ -4,26 +4,34 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { TinyDb } from '../../lib/icebear';
 
 // TODO: clean up the db once in a while
-const imageCacheTinyDb = TinyDb.open('imageCaches');
+const imageCacheTinyDb = TinyDb.open('imageCaches.v3');
 
 class CachedImage {
     @observable source = null;
     @observable width = undefined;
     @observable height = undefined;
+    @observable imageType = undefined;
     @observable acquiringSize = false;
+
+    get shouldUseFLAnimated() {
+        // using CGImageSourceGetType
+        return this.imageType && this.imageType.toLowerCase().includes('.gif');
+    }
+
     get cacheKey() { return `cache:${this.source.uri}`; }
 
-    @action.bound async setImageSize(width, height) {
+    @action.bound async setImageSize(width, height, imageType) {
         this.width = width;
         this.height = height;
-        await imageCacheTinyDb.setValue(this.cacheKey, { width, height });
+        this.imageType = imageType;
+        await imageCacheTinyDb.setValue(this.cacheKey, { width, height, imageType });
     }
 
     @action.bound async loadImageSize() {
         const cache = await imageCacheTinyDb.getValue(this.cacheKey);
         if (cache) {
-            const { width, height } = cache;
-            Object.assign(this, { width, height });
+            const { width, height, imageType } = cache;
+            Object.assign(this, { width, height, imageType });
         }
         return !!cache;
     }
@@ -71,16 +79,16 @@ class InlineImageCacheStore {
         // calculate size
         if (await image.loadImageSize()) return;
         image.acquiringSize = true;
-        const { width, height } = await this.getSizeByFilename(normalizedPath);
+        const { width, height, imageType } = await this.getSizeByFilename(normalizedPath);
         image.acquiringSize = false;
-        console.debug(`local filesize: ${width}, ${height}`);
-        image.setImageSize(width, height);
+        console.debug(`local filesize: ${width}, ${height}, filetype (iOS): ${imageType}`);
+        image.setImageSize(width, height, imageType);
     }
 
     async getSizeByUrl(url) {
         return new Promise(resolve =>
             Image.getSize(url, (width, height) => {
-                console.log(width, height);
+                // console.log(width, height);
                 resolve({ width, height });
             }));
     }

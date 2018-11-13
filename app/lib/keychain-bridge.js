@@ -3,6 +3,11 @@ import { observable } from 'mobx';
 
 const { RNKeychain } = NativeModules;
 
+/**
+ * This is the interface to react-native-keychain
+ * module which ships with the app
+ */
+
 class KeychainBridge {
     get hasPlugin() { return !!RNKeychain; }
 

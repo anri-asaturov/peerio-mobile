@@ -28,7 +28,7 @@ class World {
 
     openApp() {
         this.app = webDriver.remote(this.context.platform);
-        this.app.options.waitforTimeout = 15000;
+        this.app.options.waitforTimeout = 30000;
         this.app.options.screenshotPath = 'test/screenshots';
 
         this.createPages();

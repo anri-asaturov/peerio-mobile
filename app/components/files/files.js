@@ -37,13 +37,6 @@ function backFolderAction() {
     fileState.store.folderStore.currentFolder = fileState.store.folderStore.currentFolder.parent;
 }
 
-const beaconStyle = {
-    marginLeft: 100
-};
-
-const beaconContentStyle = {
-    marginLeft: -100
-};
 @observer
 export default class Files extends SafeComponent {
     @observable findFilesText;
@@ -123,20 +116,18 @@ export default class Files extends SafeComponent {
 
     list() {
         return (
-            <MeasureableView style={beaconStyle} onMeasure={this.onMeasure}>
-                <View style={beaconContentStyle}>
-                    <FlatListWithDrawer
-                        scrollHelper={scrollHelper}
-                        setScrollViewRef={this.flatListRef}
-                        ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
-                        ListFooterComponent={this.noFilesMatchSearch}
-                        keyExtractor={this.keyExtractor}
-                        initialNumToRender={INITIAL_LIST_SIZE}
-                        pageSize={PAGE_SIZE}
-                        data={this.data}
-                        extraData={this.refresh}
-                        renderItem={this.item} />
-                </View>
+            <MeasureableView onMeasure={this.onMeasure}>
+                <FlatListWithDrawer
+                    scrollHelper={scrollHelper}
+                    setScrollViewRef={this.flatListRef}
+                    ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
+                    ListFooterComponent={this.noFilesMatchSearch}
+                    keyExtractor={this.keyExtractor}
+                    initialNumToRender={INITIAL_LIST_SIZE}
+                    pageSize={PAGE_SIZE}
+                    data={this.data}
+                    extraData={this.refresh}
+                    renderItem={this.item} />
             </MeasureableView>
         );
     }

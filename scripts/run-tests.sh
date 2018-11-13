@@ -67,13 +67,11 @@ done
 
 check "appium launched"
 
-virtualenv -p `which python2.7` .pyenv && source .pyenv/bin/activate
-py.test --platform=$PEERIO_TEST_PLATFORM -s -x tests
-deactivate
+npm run test-$PEERIO_TEST_PLATFORM
 
-if [ -z $"$CIRCLE_ARTIFACTS" ]; then
-  exit 0
-else
-  mkdir -p $CIRCLE_ARTIFACTS/py.test/
-  cp $SIM_LOG $CIRCLE_ARTIFACTS/py.test/
-fi
+# if [ -z $"$CIRCLE_ARTIFACTS" ]; then
+#   exit 0
+# else
+#   mkdir -p $CIRCLE_ARTIFACTS/py.test/
+#   cp $SIM_LOG $CIRCLE_ARTIFACTS/py.test/
+# fi

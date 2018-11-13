@@ -77,7 +77,8 @@ export default class FileActionSheet {
         }
 
         // Move
-        actionButtons.push({
+        // TODO: a better way to not show move option in DMs and rooms
+        (routes.main.route !== 'chats') && actionButtons.push({
             title: tx('button_move'),
             disabled: isLegacy,
             action: async () => {

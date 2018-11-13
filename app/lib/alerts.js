@@ -1,5 +1,9 @@
 import { Alert } from 'react-native';
 
+/**
+ * This file provides native alerts (dialogs)
+ */
+
 function button(style, text, onPress) {
     return { style, text, onPress };
 }

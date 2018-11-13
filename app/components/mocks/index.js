@@ -1,4 +1,5 @@
 import MockBeacon from './beacons/mock-beacon';
+import MockBeaconFiles from './beacons/mock-beacon-files';
 import MockChannelView from './mock-channel-view';
 import MockChannelCreate from './mock-channel-create';
 import MockChatList from './mock-chat-list';
@@ -22,6 +23,7 @@ import MockUpgrade from './mock-upgrade';
 // when checking for unused JS filex
 const mocks = { // eslint-disable-line
     MockBeacon,
+    MockBeaconFiles,
     MockChannelView,
     MockChannelCreate,
     MockChatList,

@@ -1,6 +1,13 @@
 import { NativeModules } from 'react-native';
 import { b64ToBytes, bytesToB64 } from './peerio-icebear/crypto/util';
 
+/**
+ * This is a JS bridge to native implementation of
+ * scrypt, sign and verify functions
+ * Native implementations speed up our crypto primitives
+ * 100x times
+ */
+
 function scryptNative(password, salt, options, callback) {
     const passwordB64 = bytesToB64(password);
     const saltB64 = bytesToB64(salt);

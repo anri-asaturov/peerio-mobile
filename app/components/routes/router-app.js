@@ -3,7 +3,6 @@ import { when } from 'mobx';
 import Router from './router';
 import SignupWizard from '../signup/signup-wizard';
 import LayoutMain from '../layout/layout-main';
-import LoadingScreen from '../layout/loading-screen';
 import LoginWelcome from '../login/login-welcome';
 import LoginWelcomeBack from '../login/login-welcome-back';
 import LoginClean from '../login/login-clean';
@@ -12,12 +11,13 @@ import routerMain from './router-main';
 import routes from './routes';
 import ActionSheetLayout from '../layout/action-sheet-layout';
 import SignupCancel from '../signup/signup-cancel';
+import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 
 class RouterApp extends Router {
     constructor() {
         super();
         routes.app = this;
-        this.add('loading', LoadingScreen);
+        this.add('loading', whiteLabelComponents.LoadingScreen);
         this.add('loginWelcome', LoginWelcome);
         this.add('loginWelcomeBack', LoginWelcomeBack);
         this.add('loginClean', LoginClean);

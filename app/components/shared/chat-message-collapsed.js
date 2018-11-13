@@ -43,7 +43,7 @@ export default class ChatMessageCollapsed extends SafeComponent {
                         onLegacyFileAction={onLegacyFileAction}
                         onInlineImageAction={onInlineImageAction}
                     />
-                    <ViewReceipts receipts={messageObject.receipts} keepAvatar={!chat.isChannel} />
+                    <ViewReceipts receipts={messageObject.receipts} />
                 </View>
                 <MessageSentError message={messageObject} chat={chat} />
             </View>

@@ -1,5 +1,10 @@
 import { observable, reaction } from 'mobx';
 import { TinyDb } from '../lib/icebear';
+/**
+ * This class wires regular console.log/debug/info functions
+ * into a proxy which saves the logs into an array
+ * This is mostly used to display logs to the user (via UI)
+ */
 
 const VERBOSE_LOGS_KEY = 'verboseLogs';
 

@@ -9,6 +9,7 @@ import chatState from './../../messaging/chat-state';
 import testLabel from '../../helpers/test-label';
 import icons from '../../helpers/icons';
 import { t } from '../../utils/translator';
+import routes from '../../routes/routes';
 
 const containerStyle = {
     height: vars.sectionHeaderHeight,
@@ -70,7 +71,7 @@ export default class MedcryptorSpaceListItem extends SafeComponent {
     onPress = () => {
         const { spaceId } = this.props.space;
         chatState.store.spaces.activeSpaceId = spaceId;
-        return chatState.routerMain.space();
+        return routes.main.space();
     };
 
     renderThrow() {

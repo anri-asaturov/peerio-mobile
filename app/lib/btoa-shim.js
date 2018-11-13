@@ -1,4 +1,5 @@
 /* eslint-disable */
+// Base64 encoding/decoding polyfill
 // Source: http://code.google.com/p/gflot/source/browse/trunk/flot/base64.js?r=153
 
 /* Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>

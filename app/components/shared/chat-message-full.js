@@ -70,7 +70,7 @@ export default class ChatMessageFull extends SafeComponent {
                                     onFileAction={onFileAction}
                                     onLegacyFileAction={onLegacyFileAction}
                                     onInlineImageAction={onInlineImageAction} />
-                                <ViewReceipts receipts={messageObject.receipts} keepAvatar={!chat.isChannel} />
+                                <ViewReceipts receipts={messageObject.receipts} />
                             </View>
                         </View>
                     </View>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
+import { computed, when } from 'mobx';
 import ChatList from '../../../components/messaging/chat-list';
 import chatState from '../../../components/messaging/chat-state';
 import BackIcon from '../../layout/back-icon';
@@ -11,10 +12,12 @@ import ChannelListItem from '../../../components/messaging/channel-list-item';
 export default class MedcryptorSpaceScreen extends ChatList {
     componentWillMount() {
         chatState.spaceOpen = true;
+        this.goBackReaction = when(() => !chatState.store.spaces.currentSpace, routes.main.chats);
     }
 
     componentWillUnmount() {
         chatState.spaceOpen = false;
+        this.goBackReaction && this.goBackReaction();
     }
 
     get rightIcon() {
@@ -25,11 +28,19 @@ export default class MedcryptorSpaceScreen extends ChatList {
         return <BackIcon testID="buttonBackIcon" action={routes.main.chats} />;
     }
 
-    get dataSource() {
-        return [
-            { title: 'mcr_title_internalRooms', index: 0, data: chatState.store.spaces.currentSpace.internalRooms },
-            { title: 'mcr_title_patientRooms', index: 1, data: chatState.store.spaces.currentSpace.patientRooms }
-        ];
+    @computed get firstSectionItems() {
+        return chatState.store.spaces.currentSpace ? chatState.store.spaces.currentSpace.internalRooms : [];
+    }
+
+    @computed get secondSectionItems() {
+        return chatState.store.spaces.currentSpace ? chatState.store.spaces.currentSpace.patientRooms : [];
+    }
+
+    @computed get dataSource() {
+        return [].concat(
+            ...this.addSection('mcr_title_internalRooms', this.firstSectionItems),
+            ...this.addSection('mcr_title_patientRooms', this.secondSectionItems)
+        );
     }
 
     get sectionTitles() {

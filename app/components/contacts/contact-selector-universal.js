@@ -59,7 +59,6 @@ export default class ContactSelectorUniversal extends SafeComponent {
         const items = text.split(/[ ,;]/);
         if (items.length > 1) {
             this.findUserText = items[0].trim();
-            this.onSubmit();
             return;
         }
         const { Version, OS } = Platform;
@@ -91,7 +90,6 @@ export default class ContactSelectorUniversal extends SafeComponent {
                 textValue={this.findUserText}
                 placeholderText={tx(this.props.inputPlaceholder)}
                 onChangeText={this.onChangeFindUserText}
-                onSubmit={this.onSubmit}
                 leftIcon={leftIcon}
                 rightIcon={rightIcon}
                 ref={ti => { this.textInput = ti; }}

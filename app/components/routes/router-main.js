@@ -98,9 +98,13 @@ class RouterMain extends Router {
         contactState.init();
         this.contactStateLoaded = true;
         this.loading = false;
+        // TODO: refactor all this
+        // wait for User object to be loaded
+        if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
     }
 
     @action transitionToMain() {
+        // TODO: refactor all this
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
         this.initialRoute();
