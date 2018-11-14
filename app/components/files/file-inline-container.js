@@ -69,7 +69,7 @@ export default class FileInlineContainer extends SafeComponent {
         return (
             <TouchableOpacity
                 onPress={onAction}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 <FileTypeIcon type={fileHelpers.getFileIconType(file.ext)} size="smaller" />
             </TouchableOpacity>);
     }
@@ -81,7 +81,7 @@ export default class FileInlineContainer extends SafeComponent {
             <TouchableOpacity
                 style={{ flexDirection: 'row', alignItems: 'center', flexGrow: 1, flexShrink: 1 }}
                 onPress={onAction}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 <Text numberOfLines={1} ellipsizeMode="tail" style={text}>{name}</Text>
             </TouchableOpacity>);
     }

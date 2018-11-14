@@ -172,7 +172,7 @@ export default class ContactAdd extends SafeComponent {
             <TouchableOpacity
                 {...testLabel(text)}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={{ paddingRight: vars.spacing.small.maxi2x, paddingVertical: vars.spacing.small.maxi }}>
                 <Text bold style={{ color: disabled ? vars.txtMedium : vars.peerioBlue }}>
                     {tu(text)}

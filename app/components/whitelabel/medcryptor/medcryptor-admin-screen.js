@@ -130,7 +130,7 @@ export default class MedcryptorAdminScreen extends SafeComponent {
                     </View>
                     {buttons.roundBlueBgButton('mcr_title_getAccount', this.contactMedcryptor)}
                     <TouchableOpacity
-                        pressRetentionOffset={vars.pressRetentionOffset}
+                        pressRetentionOffset={vars.retentionOffset}
                         onPress={this.skipScreen}
                         style={buttonContainerStyle}>
                         <Text style={buttonStyle}>

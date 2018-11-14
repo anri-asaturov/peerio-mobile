@@ -3,6 +3,8 @@ const { defineSupportCode } = require('cucumber');
 defineSupportCode(({ Then }) => {
     Then('I have added contacts', async function () {
         await this.homePage.contactsTab.click();
+        // New user doesn't have contact list
+        await this.contactsPage.addContactButton.click();
 
         await this.addContactWithName(process.env.CHAT_RECIPIENT_USER);
         await this.addContactWithName(process.env.CREATE_DM_TEST_USER);
@@ -12,7 +14,7 @@ defineSupportCode(({ Then }) => {
     Then('I add a contact from the contacts tab', async function () {
         await this.homePage.contactsTab.click();
         // New user doesn't have contact list
-        // await this.contactsPage.addContactButton.click();
+        await this.contactsPage.addContactButton.click();
 
         await this.addContactWithName(process.env.CHAT_RECIPIENT_USER);
         await this.homePage.contactsTab.click();

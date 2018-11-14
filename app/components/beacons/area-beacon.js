@@ -179,7 +179,7 @@ export default class AreaBeacon extends AbstractBeacon {
                 <TouchableOpacity
                     activeOpacity={1}
                     onPress={this.onPress}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={rectangle}>
                     {headerText && <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>{tx(headerText)}</Text>}
                     {descriptionText && <Text semibold={!headerText} style={textStyle} onLayout={this.onDescriptionTextLayout}>{tx(descriptionText)}</Text>}

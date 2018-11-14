@@ -99,7 +99,7 @@ export default class ContactEditPermissionItem extends SafeComponent {
     removeButton() {
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}
                 onPress={this.removeClick}>
                 <Text style={{ backgroundColor: 'transparent', color: vars.white }}>

@@ -43,7 +43,7 @@ export default class VideoCallMessage extends SafeComponent {
                 </View>
                 <TouchableOpacity
                     onPress={this.onPress}
-                    pressRetentionOffset={vars.pressRetentionOffset}>
+                    pressRetentionOffset={vars.retentionOffset}>
                     <View style={containerStyle}>
                         {icons.plaindark('videocam', vars.iconSizeSmall)}
                         <Text style={linkStyle}>

@@ -26,7 +26,7 @@
     "test": "./scripts/setup-tests.sh && ./scripts/run-tests.sh",
     "cucumber": "source env.sh && ./scripts/cucumber.sh",
     "test-ios": "source env.sh && cucumberjs test/spec/account/login.feature -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"ios\"}'",
-    "test-android": "source env.sh && cucumberjs test/spec/account/login.feature -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"android\"}'",
+    "test-android": "source env.sh && cucumberjs test/spec/contacts/contacts.feature:18 -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"android\"}'",
     "gp-peerio": "npm run build-android && bash scripts/release_android.sh && fastlane android alpha",
     "commit-msg": "validate-commit-msg"
   },

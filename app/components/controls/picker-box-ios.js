@@ -56,7 +56,7 @@ export default class PickerBoxIos extends SafeComponent {
                         <TouchableOpacity
                             testID="pickerBox"
                             onPress={this.focus}
-                            pressRetentionOffset={vars.pressRetentionOffset}>
+                            pressRetentionOffset={vars.retentionOffset}>
                             <View
                                 pointerEvents="none"
                                 style={container}>

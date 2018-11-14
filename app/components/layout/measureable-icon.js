@@ -51,7 +51,7 @@ export default class MeasureableIcon extends MeasureableView {
         const { onPress } = this.props;
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 onPress={onPress}>
                 <MeasureableView onMeasure={this.props.beacon ? this.onMeasure : null}>
                     {this.content}

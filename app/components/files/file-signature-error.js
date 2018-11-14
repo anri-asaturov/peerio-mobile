@@ -34,7 +34,7 @@ export default class FileSignatureError extends SafeComponent {
         return (
             <TouchableOpacity
                 onPress={showAlert}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 <View style={container}>
                     {icons.plainalert('error-outline')}
                     <Text style={text}>{tx('error_invalidFileSignature')}</Text>

@@ -88,7 +88,7 @@ export default class InputMain extends SafeComponent {
                 </View>
                 <TouchableOpacity
                     {...testLabel('buttonSendMessage')}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     onPress={this.send}
                     style={{ padding: vars.iconSizeSmall }}>
                     <View style={sendIconStyle}>

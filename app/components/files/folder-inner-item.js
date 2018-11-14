@@ -85,7 +85,7 @@ export default class FolderInnerItem extends SafeComponent {
                 pointerEvents="none"
                 onPress={this.toggleSelected}
                 disabled={!sharedFoldersEnabled}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 {icons.colored(icon, this.toggleSelected, iconColor, iconBgColor, !sharedFoldersEnabled)}
             </TouchableOpacity>
         );
@@ -112,7 +112,7 @@ export default class FolderInnerItem extends SafeComponent {
                 disabled={disabled}
                 style={{ opacity: disabled ? vars.opacity54 : null }}
                 onPress={this.props.onSelect}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 <View style={outer}>
                     <View style={s} />
                 </View>
@@ -180,7 +180,7 @@ export default class FolderInnerItem extends SafeComponent {
                     disabled={disabled}
                     onPress={hideOptionsIcon ? onSelect : this.onPress}
                     style={{ backgroundColor: vars.filesBg }}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     {...testLabel(folder.name)}
                     accessible={false}
                 >

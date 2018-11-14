@@ -16,7 +16,7 @@ export default {
             <TouchableOpacity
                 {...testLabel(accessibilityId)}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
                 <Text style={{ backgroundColor: 'transparent', color: disabled ? vars.txtMedium : vars.white }}>
                     {tu(text)}
@@ -33,7 +33,7 @@ export default {
         return (
             <TouchableOpacity
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={{ opacity: disabled ? 0 : 1 }}>
                 <Text style={[textStyle, buttonStyle]}>
                     {tu(text)}
@@ -54,7 +54,7 @@ export default {
                     {...testLabel(accessibilityId)}
                     disabled={disabled}
                     onPress={disabled ? null : onPress}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={[buttonStyle, style]}>
                     <Text semibold style={{ color: disabled ? vars.txtMedium : vars.peerioBlue }}>
                         {tu(text)}
@@ -76,7 +76,7 @@ export default {
                 {...testLabel(accessibilityId)}
                 disabled={disabled}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
                 <Text bold style={{ textAlign: 'center', color: vars.white }}>
                     {tu(text)}
@@ -110,7 +110,7 @@ export default {
                 {...testLabel(accessibilityId)}
                 disabled={disabled}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={[touchableStyle, containerStyle]}>
                 <View style={[buttonStyle, style]}>
                     <Text semibold style={textStyle}>{tu(text)}</Text>
@@ -146,7 +146,7 @@ export default {
                 {...testLabel(accessibilityId)}
                 disabled={disabled}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={touchableStyle}>
                 <View style={[buttonStyle, style]}>
                     <Text semibold style={textStyle}>{tu(text)}</Text>
@@ -163,7 +163,7 @@ export default {
         return (
             <TouchableOpacity
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
                 <Text bold style={{ color: disabled ? vars.txtMedium : vars.red }}>
                     {tu(text)}

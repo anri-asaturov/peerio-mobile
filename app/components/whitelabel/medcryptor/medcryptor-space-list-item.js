@@ -86,7 +86,7 @@ export default class MedcryptorSpaceListItem extends SafeComponent {
                     {...testLabel(spaceName)}
                     onPress={this.onPress}
                     style={containerStyle}
-                    pressRetentionOffset={vars.pressRetentionOffset}>
+                    pressRetentionOffset={vars.retentionOffset}>
                     <View style={nameContainerStyle}>
                         <Text
                             semibold={hasUnread}

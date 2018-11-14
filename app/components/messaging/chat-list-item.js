@@ -131,7 +131,7 @@ export default class ChatListItem extends SafeComponent {
             <TouchableOpacity
                 key={key}
                 onPress={this.onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 <View style={[containerStyle, { height }]}>
                     <View>
                         <View style={pinStyle}>

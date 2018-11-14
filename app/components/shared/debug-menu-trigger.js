@@ -20,7 +20,7 @@ export default class DebugMenuTrigger extends Component {
     render () {
         return (
             <TouchableWithoutFeedback
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 onPress={this.handleTitlePress}>
                 {this.props.children}
             </TouchableWithoutFeedback>
