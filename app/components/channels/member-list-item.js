@@ -72,7 +72,7 @@ export default class MemberListItem extends SafeComponent {
                     {isAdmin && <View style={userStyle}><GrayLabel contact={contact} label="title_admin" /></View>}
                     {channel.canIAdmin && !isCurrentUser && <Menu>
                         <MenuTrigger
-                            renderTouchable={() => <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} />}
+                            renderTouchable={() => <TouchableOpacity pressRetentionOffset={vars.retentionOffset} />}
                             style={{ padding: vars.iconPadding }}>
                             {icons.plaindark('more-vert')}
                         </MenuTrigger>

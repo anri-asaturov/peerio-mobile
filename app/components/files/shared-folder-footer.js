@@ -30,7 +30,7 @@ export default class SharedFolderFooter extends SafeComponent {
         };
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={bottomRowStyle}
                 onPress={action} >
                 {icon && icons.plaindark(icon, vars.iconSize, iconStyle)}

@@ -60,7 +60,7 @@ export default class ChannelListItem extends SafeComponent {
                     {...testLabel(channelName)}
                     onPress={this.onPress}
                     style={containerStyle}
-                    pressRetentionOffset={vars.pressRetentionOffset}>
+                    pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold={hasUnread} style={[textStyle, (hasUnread && textUnreadStyle)]}>
                         {`# ${channelName}`}
                     </Text>

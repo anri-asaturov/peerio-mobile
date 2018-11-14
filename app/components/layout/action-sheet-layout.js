@@ -102,7 +102,7 @@ export default class ActionSheetLayout extends SafeComponent {
                     {this.borderTop(i)}
                     <View style={container}>
                         <TouchableOpacity
-                            pressRetentionOffset={vars.pressRetentionOffset}
+                            pressRetentionOffset={vars.retentionOffset}
                             style={container}
                             onPress={() => this.executeAction(button)}>
                             {/* Style order is important for color override priority */}

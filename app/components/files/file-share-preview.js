@@ -130,7 +130,7 @@ export default class FileSharePreview extends SafeComponent {
                 />
                 <TouchableOpacity
                     onPress={this.props.onChooseRecipients}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={shareContainer}>
                     <View style={{ flexGrow: 1 }}>
                         <Text style={shareTextStyle}>

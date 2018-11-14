@@ -87,7 +87,7 @@ export default class ChannelInviteListItem extends SafeComponent {
                 {...testLabel(channelName)}>
                 <TouchableOpacity
                     onPress={this.onPress}
-                    style={containerStyle} pressRetentionOffset={vars.pressRetentionOffset}>
+                    style={containerStyle} pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold style={textStyle}>
                         {`# ${channelName}`}
                     </Text>

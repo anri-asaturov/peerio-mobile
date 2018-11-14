@@ -173,7 +173,7 @@ export default class FileInlineImage extends SafeComponent {
                 <Text style={text0}>
                     {tx('title_imageSizeWarning', { size: util.formatBytes(config.chat.inlineImageSizeLimit) })}
                 </Text>
-                <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} onPress={this.forceShow}>
+                <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={this.forceShow}>
                     <Text italic style={text}>{tx('button_displayThisImageAfterWarning')}</Text>
                 </TouchableOpacity>
             </View>
@@ -190,7 +190,7 @@ export default class FileInlineImage extends SafeComponent {
             color: vars.txtDark
         };
         return (
-            <TouchableOpacity style={outer} onPress={this.imageAction} pressRetentionOffset={vars.pressRetentionOffset}>
+            <TouchableOpacity style={outer} onPress={this.imageAction} pressRetentionOffset={vars.retentionOffset}>
                 <Text style={text0}>
                     {tx('title_imageTooBigCutoff', { size: util.formatBytes(config.chat.inlineImageSizeLimitCutoff) })}
                 </Text>
@@ -224,7 +224,7 @@ export default class FileInlineImage extends SafeComponent {
             marginVertical: 10
         };
         return (
-            <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} onPress={() => { this.loadImage = true; }}>
+            <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={() => { this.loadImage = true; }}>
                 <Text italic style={text}>{tx('button_displayThisImage')}</Text>
             </TouchableOpacity>
         );

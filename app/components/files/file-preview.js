@@ -83,7 +83,7 @@ export default class FilePreview extends SafeComponent {
         const width = thumbnailDim;
         const height = width;
         return (
-            <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} onPress={this.launchPreviewViewer}>
+            <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={this.launchPreviewViewer}>
                 <Thumbnail path={this.props.state.path} style={{ width, height }} />
             </TouchableOpacity>
         );

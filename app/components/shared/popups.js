@@ -495,7 +495,7 @@ function popupUpgradeNotification() {
                 .catch((err) => console.log(err.message));
         };
         const download = (text) => {
-            return (<Text style={textDownloadStyle} onPress={viewFileMigrationList} pressRetentionOffset={vars.pressRetentionOffset}>
+            return (<Text style={textDownloadStyle} onPress={viewFileMigrationList} pressRetentionOffset={vars.retentionOffset}>
                 {text}
             </Text>);
         };

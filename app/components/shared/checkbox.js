@@ -56,7 +56,7 @@ export default class CheckBox extends Component {
             <TouchableOpacity
                 {...testLabel(this.props.accessibilityLabel)}
                 onPress={() => this.toggle()}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 {alignLeft ? (
                     <View style={container}>
                         <View style={checkbox}>

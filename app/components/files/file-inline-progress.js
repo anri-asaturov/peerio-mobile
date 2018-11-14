@@ -73,7 +73,7 @@ export default class FileInlineProgress extends SafeComponent {
                 onLegacyFileAction={this.props.onLegacyFileAction}>
                 {!this.filePreviouslyDownloaded &&
                     <TouchableOpacity
-                        pressRetentionOffset={vars.pressRetentionOffset}
+                        pressRetentionOffset={vars.retentionOffset}
                         style={downloadStatusContainer}
                         onPress={onPress}>
                         <Text semibold style={textStyle}>

@@ -182,7 +182,7 @@ export default class SpotBeacon extends AbstractBeacon {
                 <TouchableOpacity
                     activeOpacity={1}
                     onPress={this.onPressContainer}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={rectangle}>
                     {headerText && (
                         <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>
@@ -198,7 +198,7 @@ export default class SpotBeacon extends AbstractBeacon {
                 <TouchableOpacity
                     activeOpacity={1}
                     onPress={this.onPressIcon}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={outerCircle}>
                     <View style={innerCircle}>
                         {this.props.content}

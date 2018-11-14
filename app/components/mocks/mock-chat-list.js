@@ -105,7 +105,7 @@ export default class MockChatList extends Component {
                 <TouchableOpacity
                     style={add1}
                     onPress={this.addGlobalDrawer}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                 >
                     <Text semibold style={{ textAlign: 'center' }}>
                         Add Global
@@ -114,7 +114,7 @@ export default class MockChatList extends Component {
                 <TouchableOpacity
                     style={add2}
                     onPress={this.addLocalDrawer}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                 >
                     <Text semibold style={{ textAlign: 'center' }}>
                         Add Local
@@ -123,7 +123,7 @@ export default class MockChatList extends Component {
                 <TouchableOpacity
                     style={remove}
                     onPress={this.removeDrawer}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                 >
                     <Text semibold style={{ textAlign: 'center' }}>
                         Delete

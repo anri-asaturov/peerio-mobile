@@ -30,7 +30,7 @@ export default class AccountUpgradeNavigator extends Component {
         return (
             <TouchableOpacity
                 onPress={() => this.props.onJumpTo(index)}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={{ alignItems: 'center' }}>
                 <View key={`${index}${filled}${checked}`} style={s}>{inner}</View>
             </TouchableOpacity>

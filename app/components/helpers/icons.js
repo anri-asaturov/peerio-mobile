@@ -93,7 +93,7 @@ const icons = {
     coloredSmall(name, onPress, colorFg) {
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 onPress={onPress}>
                 <Icon
                     name={name}

@@ -147,7 +147,7 @@ export default class FolderInlineContainer extends SafeComponent {
 
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={container}
                 onPress={this.press}>
                 <View style={outer} {...this.props}>

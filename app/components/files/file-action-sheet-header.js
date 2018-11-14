@@ -52,7 +52,7 @@ export default class FileActionSheetHeader extends SafeComponent {
         if (!file) return null;
         return (
             <View style={[container, { backgroundColor: vars.lightGrayBg }]} >
-                <TouchableOpacity style={container} onPress={onPress} disabled={!onPress} pressRetentionOffset={vars.pressRetentionOffset}>
+                <TouchableOpacity style={container} onPress={onPress} disabled={!onPress} pressRetentionOffset={vars.retentionOffset}>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
                         <Text style={infoTextStyle} numberOfLines={1} ellipsizeMode="middle">
                             {file.name} {file.isLegacy && tx('title_pending2')}

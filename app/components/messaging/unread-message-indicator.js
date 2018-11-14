@@ -44,7 +44,7 @@ export default class UnreadMessageIndicator extends SafeComponent {
         const testLabelName = isAlignedTop ? 'chatlist-unread-indicator-top' : 'chatlist-unread-indicator-bottom';
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={[container, alignmentStyle]}
                 onPress={action}
                 {...testLabel(testLabelName)} >

@@ -355,7 +355,7 @@ export default class Chat extends SafeComponent {
             <View key={contact.username} style={{ marginLeft, width: w }}>
                 <TouchableOpacity
                     style={{ flex: 0 }}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     onPress={() => contactState.contactView(contact)} key={contact.username}>
                     <AvatarCircle
                         contact={contact}

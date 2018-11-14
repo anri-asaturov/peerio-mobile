@@ -121,7 +121,7 @@ export default class FileInnerItem extends SafeComponent {
         return (
             <View style={{ backgroundColor: vars.chatItemPressedBackground }}>
                 <TouchableOpacity
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     onPress={this.onPress}
                     {...testLabel(testID)}
                     accessible={false}
