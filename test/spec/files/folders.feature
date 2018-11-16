@@ -1,7 +1,7 @@
 Feature: Non-shared folders
 
     Background: 
-        Given I log in as upload_to_files user
+        Given I log in as new user
 
     Scenario: Create/delete folder
         Given the Files tab is empty

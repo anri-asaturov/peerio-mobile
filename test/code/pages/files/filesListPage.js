@@ -5,6 +5,18 @@ class FilesListPage extends Page {
         return this.getWhenVisible('~files-zero-state-illustration');
     }
 
+    get buttonBack() {
+        return this.getWhenVisible('~buttonBackIcon');
+    }
+
+    get buttonBackPresent() {
+        return this.checkIfPresent('~buttonBackIcon');
+    }
+
+    fileNamed(selector) {
+        return this.getWhenVisible(`~${selector}`);
+    }
+
     folderNamed(selector) {
         return this.getWhenVisible(`~${selector}`);
     }
@@ -31,10 +43,6 @@ class FilesListPage extends Page {
 
     get fileNameInput() {
         return this.getWhenVisible('~title_name');
-    }
-
-    get firstFile() {
-        return this.getWhenVisible('~file0');
     }
 
     get fileUploadedPopup() {
