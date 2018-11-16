@@ -13,6 +13,10 @@ class ChatPage extends Page {
         return this.getWhenVisible('~buttonUploadToChat');
     }
 
+    get buttonCloseModal() {
+        return this.getWhenVisible('~closeModal');
+    }
+
     get buttonExitChat() {
         return this.getWhenVisible('~buttonBackIcon');
     }

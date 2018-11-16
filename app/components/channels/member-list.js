@@ -8,6 +8,7 @@ import chatState from '../messaging/chat-state';
 import ChatInfoSectionHeader from '../messaging/chat-info-section-header';
 import { tx } from '../utils/translator';
 import MemberListItem from './member-list-item';
+import uiState from '../layout/ui-state';
 
 @observer
 export default class MemberList extends SafeComponent {
@@ -37,6 +38,16 @@ export default class MemberList extends SafeComponent {
     componentWillUnmount() {
         this.reaction && this.reaction();
         this.reaction = null;
+        uiState.testAction1 = null;
+    }
+
+    componentDidMount() {
+        // used by a test roomInvites.feature - cancel a pending invite
+        uiState.testAction1 = () => {
+            if (this.channelInvites.length > 0) {
+                this.onRemove(this.channelInvites[0]);
+            }
+        };
     }
 
     headers = ({ section: { key } }) => {

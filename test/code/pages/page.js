@@ -40,6 +40,13 @@ class Page {
             .click('~endScroll');
     }
 
+    testAction1() {
+        return this.app
+            .waitForExist('~testAction1')
+            .waitForVisible('~testAction1')
+            .click('~testAction1');
+    }
+
     testAction2() {
         return this.app
             .waitForExist('~testAction2')

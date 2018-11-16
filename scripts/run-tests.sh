@@ -33,10 +33,12 @@ case "${unameOut}" in
         ;;
     Darwin*)
         info 'Mac...'
-        info 'Killing running simulators'
-        killall -9 Simulator && check 'done'
         wait 'Unbooting booted simulators'
         xcrun simctl list devices | grep -i "booted" | grep -Eo "\([A-F0-9-]+\)" | tr -d '()' | xargs xcrun simctl shutdown
+        sleep 3
+        info 'Killing running simulators'
+        (kill $(ps aux | grep '[S]imulator.app' | awk '{print $2}')) && check 'done!'
+        sleep 3
         SIM_UDID=`xcrun instruments -s | grep -E "$PEERIO_IOS_SIM \($PEERIO_IOS_VERSION.*\)" | grep -o "\[.*\]" | tr -d '[]' | head -1`
         info "Looking for simulator: $PEERIO_IOS_SIM ($PEERIO_IOS_VERSION)"
         if [ -z $"$SIM_UDID" ]; then

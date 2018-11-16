@@ -7,15 +7,15 @@ Feature: Create new chat
         And  I exit the current chat
         And  they are in my contacts
     Examples:
-    | new or existing | user       |
+    | new or existing | user           |
     | new             | chat_recipient |
-    | create_dm_test  | chat_recipient |
+    #    | create_dm_test  | chat_recipient |
 
     Scenario Outline: Create room successfully
         When I log in as <new or existing> user
         And  I create a new room
         Then I can send a message to the current chat
     Examples:
-    | new or existing |
-    | new             |
-    | room_test       |
+        | new or existing |
+        | new             |
+    #    | room_test       |

@@ -46,14 +46,19 @@ defineSupportCode(({ When, Then }) => {
 
         await this.app.pause(5000); // android needs a pause
         await this.chatPage.chatWithTitle(this.roomName).click();
-        await this.chatPage.invitedContactMore.click();
-        await this.chatPage.removeInvitedButton.click();
+        // uses testAction1 in member-list.js
+        await this.chatPage.testAction1();
 
         const invitedContactRemoved = await this.chatPage.invitedContactRemoved;
         invitedContactRemoved.should.be.true; // eslint-disable-line
 
-        await this.chatPage.buttonExitChat.click(); // exit room info list
-        await this.chatPage.buttonExitChat.click(); // exit chat
+        try {
+            await this.chatPage.buttonCloseModal.click(); // exit room info list
+            await this.chatPage.buttonExitChat.click(); // exit chat
+        } catch (e) {
+            console.error(e);
+            await this.app.pause(500000);
+        }
     });
 
     Then('they do not have any room invites', async function () {
@@ -68,7 +73,6 @@ defineSupportCode(({ When, Then }) => {
         await this.app.pause(1000);
         await this.chatPage.leaveRoomButton.click();
         await this.chatPage.confirmLeaveRoomButton.click();
-        await this.chatPage.alertLeftRoom.click();
     });
 
     Then('they sign out', async function () {

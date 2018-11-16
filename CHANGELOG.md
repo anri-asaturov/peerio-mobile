@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.406.0"></a>
+# [3.406.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.405.0...v3.406.0) (2018-11-16)
+
+
+### Bug Fixes
+
+* disable animations for android api 24 (nougat) [ch17182] ([675d670](https://github.com/PeerioTechnologies/peerio-mobile/commit/675d670))
+* fix chat.feature test [ch17090] ([65f3cad](https://github.com/PeerioTechnologies/peerio-mobile/commit/65f3cad))
+* fix roomInvites [ch17090] ([8f40cf6](https://github.com/PeerioTechnologies/peerio-mobile/commit/8f40cf6))
+* fix roomInvites test [ch17090] ([08879e8](https://github.com/PeerioTechnologies/peerio-mobile/commit/08879e8))
+* fix roomInvites test [ch17090] ([56140c3](https://github.com/PeerioTechnologies/peerio-mobile/commit/56140c3))
+* kill simulator with more passion before the test run [ch17090] ([c57cef5](https://github.com/PeerioTechnologies/peerio-mobile/commit/c57cef5))
+
+
+### Features
+
+* remove screen requirements for android app ([4036e3b](https://github.com/PeerioTechnologies/peerio-mobile/commit/4036e3b))
+
+
+
 <a name="3.405.0"></a>
 # [3.405.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.404.0...v3.405.0) (2018-11-13)
 

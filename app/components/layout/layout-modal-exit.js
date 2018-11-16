@@ -12,7 +12,7 @@ import { vars } from '../../styles/styles';
 export default class LayoutModalExit extends SafeComponent {
     exitRow() {
         const { title, rightIcon } = this.props;
-        const leftIcon = icons.dark('close', () => this.props.onClose());
+        const leftIcon = icons.dark('close', this.props.onClose, undefined, undefined, 'closeModal');
         const fontSize = vars.font.size14;
         const outerStyle = { marginBottom: 0 };
         return <ModalHeader {...{ leftIcon, rightIcon, title, fontSize, outerStyle }} />;
