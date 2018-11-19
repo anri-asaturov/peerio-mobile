@@ -15,6 +15,21 @@ class AndroidFileUploadPage extends Page {
         }
     }
 
+    async uploadCropImageFromCamera() {
+        await this.app.waitForExist(selectorWithText('Take a picture')).click(selectorWithText('Take a picture'));
+
+        try {
+            await this.app.waitForExist(selectorWithPartialResourceId('permission_allow_button')).click();
+            await this.app.waitForExist(selectorWithPartialResourceId('confirm_button')).click();
+        } catch (e) {
+            console.log('Didnt find permissons elements');
+            // no permissions alert present
+        }
+        await this.app.element('~Shutter').click();
+        await this.app.element('~Done').click();
+        await this.app.element('~Crop').click();
+    }
+
     async galleryTapCenter(galleryView) {
         // Get gallery size and position
         const galleryX = await this.app.getLocation(galleryView, 'x');

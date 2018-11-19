@@ -11,7 +11,7 @@
     "start": "npm link peerio-icebear && source env.sh && npm run icebear:compile && npm run code:packager",
     "expandoo": "source env-expandoo.sh && ./node_modules/react-native/scripts/packager.sh --reset-cache",
     "medcryptor": "APP_LABEL='medcryptor' EXECUTABLE_NAME='medcryptor' npm start",
-    "clean": "rm -rf ios/build",
+    "clean": "rm -rf ios/build && rm -rf android/build",
     "ios": "react-native run-ios",
     "ios-dev": "react-native run-ios",
     "android": "react-native run-android",

@@ -74,9 +74,9 @@ class Page {
     }
 
     // Element is visible on page
-    getWhenVisible(selector) {
+    getWhenVisible(selector, timeout) {
         return this.app
-            .waitForExist(selector)
+            .waitForExist(selector, timeout)
             .waitForVisible(selector)
             .element(selector);
     }
@@ -110,6 +110,14 @@ class Page {
     waitToDisappear(selector) {
         return this.app
             .waitForVisible(selector, 1500, true);
+    }
+
+    pressCoords(x, y) {
+        const tap = {
+            action: 'press',
+            options: { x, y }
+        };
+        return this.app.touchPerform([tap]);
     }
 }
 

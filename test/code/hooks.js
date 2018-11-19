@@ -4,6 +4,7 @@ const chai = require('chai');
 
 chai.should();
 const defaultTimeout = 240000;
+let initialReset = false;
 
 defineSupportCode(({ setDefaultTimeout, setWorldConstructor, Before, After }) => {
     setDefaultTimeout(defaultTimeout);
@@ -18,6 +19,13 @@ defineSupportCode(({ setDefaultTimeout, setWorldConstructor, Before, After }) =>
         this.attach(`Platform: ${this.context.platform.desiredCapabilities.platformName}`);
         this.attach(`Version: ${this.context.platform.desiredCapabilities.platformVersion}`);
         await this.openApp();
+        if (!initialReset) {
+            console.log(`Pre-feature app reset`);
+            initialReset = true;
+            await this.closeApp();
+            await this.openApp();
+            console.log(`Pre-feature app reset complete`);
+        }
     });
 
     After(async function (scenario) {

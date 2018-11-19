@@ -32,6 +32,12 @@ class BeaconState {
         // we are not waiting for saveBeacons because there's no visual feedback
         User.current.saveBeacons();
     };
+
+    // used for test purposes
+    @action.bound
+    dismissAll() {
+        this.beacons.clear();
+    }
 }
 
 const beaconState = new BeaconState();

@@ -27,6 +27,7 @@ import { scrollHelper } from '../helpers/test-helper';
 import filesBeacons from '../beacons/files-beacons';
 import MeasureableView from '../shared/measureable-view';
 import beaconState from '../beacons/beacon-state';
+import routes from '../routes/routes';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -73,9 +74,17 @@ export default class Files extends SafeComponent {
         return data;
     }
 
+    componentDidMount() {
+        // download last uploaded file
+        uiState.testAction1 = () => routes.main.files(this.data.filter(f => !f.isFolder)[0]);
+        uiState.testAction2 = beaconState.dismissAll;
+    }
+
     componentWillUnmount() {
         // remove icebear hook for deletion
         fileState.store.bulk.deleteFolderConfirmator = null;
+        uiState.testAction1 = null;
+        uiState.testAction2 = null;
     }
 
     onChangeFolder = folder => { fileState.store.folderStore.currentFolder = folder; };

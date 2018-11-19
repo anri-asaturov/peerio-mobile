@@ -42,6 +42,8 @@ defineSupportCode(({ When, Then }) => {
     Then('I change my existing avatar', async function () {
         await this.profileSettingsPage.currentAvatar.click();
         await this.fileUploadPage.uploadCropImageFromCamera();
+        const avatarLetterDisappeared = await this.profileSettingsPage.avatarLetterDisappeared;
+        avatarLetterDisappeared.should.be.true; // eslint-disable-line
     });
 
     When('I go to security settings', async function () {

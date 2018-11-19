@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { Image, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { observable, reaction, action } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -8,11 +8,11 @@ import SimpleTextBox from '../shared/simple-text-box';
 import { vars } from '../../styles/styles';
 import { User, contactStore, validation } from '../../lib/icebear';
 import { t, tx, tu } from '../utils/translator';
-import AvatarActionSheet, { SIZE2 } from './avatar-action-sheet';
+import AvatarActionSheet from './avatar-action-sheet';
+import AvatarCircle from '../shared/avatar-circle';
 import icons from '../helpers/icons';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
-import AvatarCircle from '../shared/avatar-circle';
 import { transitionAnimation } from '../helpers/animations';
 
 const emailFormatValidator = validation.validators.emailFormat.action;
@@ -207,44 +207,6 @@ export default class ProfileEdit extends SafeComponent {
         );
     };
 
-    get avatarLetter() {
-        const contact = contactStore.getContact(User.current.username);
-        const tryColor = contact.color || {};
-        const style = {
-            color: tryColor.isLight ? 'black' : 'white',
-            fontSize: vars.profileEditFontSize,
-            marginHorizontal: vars.spacing.medium.maxi2x,
-            marginVertical: vars.spacing.medium.mini2x
-        };
-        return (
-            <Text bold style={style}>
-                {contact.letter}
-            </Text >
-        );
-    }
-
-    get avatar() {
-        const contact = contactStore.getContact(User.current.username);
-        const uri = contact.largeAvatarUrl;
-        const size = SIZE2;
-        return (
-            <TouchableOpacity
-                pressRetentionOffset={vars.retentionOffset}
-                onPress={this.selectAvatar}
-                {...testLabel('currentAvatar')}>
-                <Image
-                    source={{ uri, cache: 'force-cache' }}
-                    key={uri}
-                    style={{
-                        borderRadius: size / 2,
-                        width: size,
-                        height: size,
-                        margin: vars.spacing.medium.mini2x
-                    }} />
-            </TouchableOpacity>
-        );
-    }
-
     selectAvatar() {
         AvatarActionSheet.show(({ buffers }) => User.current.saveAvatar(buffers));
     }
@@ -268,11 +230,9 @@ export default class ProfileEdit extends SafeComponent {
                 keyboardShouldPersistTaps="handled"
                 style={{ backgroundColor: vars.darkBlueBackground05 }}
                 ref={ref => { this._scrollView = ref; }}>
-                <View style={[flexRow, { backgroundColor: vars.darkBlueBackground05 }]}>
-                    <View style={{ padding: vars.spacing.medium.mini2x }}>
-                        <AvatarCircle contact={contact} medium />
-                    </View>
-                    <View style={{ flexGrow: 1, flexShrink: 1 }}>
+                <View style={[flexRow, { backgroundColor: vars.darkBlueBackground05, marginLeft: vars.spacing.medium.mini2x }]}>
+                    <AvatarCircle medium contact={contact} onPress={this.selectAvatar} />
+                    <View style={{ flexGrow: 1, flexShrink: 1, marginLeft: vars.spacing.medium.mini2x }}>
                         <Text
                             {...testLabel('fullName')}
                             style={{

@@ -20,6 +20,10 @@ class ProfilePage extends Page {
     get currentAvatar() {
         return this.getWhenVisible('~currentAvatar');
     }
+
+    get avatarLetterDisappeared() {
+        return this.app.waitForVisible('~avatarLetter', 5000, true);
+    }
 }
 
 module.exports = ProfilePage;

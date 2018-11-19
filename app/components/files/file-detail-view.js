@@ -64,8 +64,8 @@ export default class FileDetailView extends SafeComponent {
 
         let button;
         if (file.downloading) button = <ButtonText text={tx('button_cancel')} onPress={this.onCancel} disabled={!enabled} />;
-        else if (file.hasFileAvailableForPreview) button = <ButtonText text={tx('button_open')} onPress={this.onOpen} disabled={!enabled} />;
-        else button = <ButtonText text={tx('button_download')} onPress={this.onDownload} disabled={!enabled} />;
+        else if (file.hasFileAvailableForPreview) button = <ButtonText text={tx('button_open')} onPress={this.onOpen} disabled={!enabled} testID="open" />;
+        else button = <ButtonText text={tx('button_download')} onPress={this.onDownload} disabled={!enabled} testID="download" />;
 
         return (
             <View style={{ flexGrow: 1, justifyContent: 'center', backgroundColor: vars.darkBlueBackground05 }}>

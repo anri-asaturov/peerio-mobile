@@ -39,6 +39,7 @@ const pinDmBeacon = createBeacon({
     condition: () => {
         return routes.main.route === 'chats'; // 'chatInfo'
     },
+    overModal: true,
     priority: 8,
     component: SpotBeacon,
     descriptionText: 'description_pin_beacon'

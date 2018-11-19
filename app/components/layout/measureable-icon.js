@@ -5,6 +5,7 @@ import vars from '../../styles/vars';
 import icons from '../helpers/icons';
 import beaconState from '../beacons/beacon-state';
 import MeasureableView from '../shared/measureable-view';
+import testLabel from '../helpers/test-label';
 
 @observer
 export default class MeasureableIcon extends MeasureableView {
@@ -51,6 +52,7 @@ export default class MeasureableIcon extends MeasureableView {
         const { onPress } = this.props;
         return (
             <TouchableOpacity
+                {...testLabel(this.props.testId)}
                 pressRetentionOffset={vars.retentionOffset}
                 onPress={onPress}>
                 <MeasureableView onMeasure={this.props.beacon ? this.onMeasure : null}>

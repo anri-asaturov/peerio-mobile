@@ -99,6 +99,7 @@ class World {
 
     async tryEnterTokenInPrompt() {
         const token = otplib.authenticator.generate(this.secretKey);
+        console.log(`Trying with this token: ${token}`);
         await this.twoFactorAuthPrompt.tokenInput.setValue(token);
         await this.twoFactorAuthPrompt.hideKeyboardHelper();
         await this.twoFactorAuthPrompt.submitButton.click();
@@ -106,6 +107,8 @@ class World {
 
     async enterTokenInPrompt() {
         await this.tryEnterTokenInPrompt();
+        // wait for the token to be verified
+        await this.app.pause(3000);
         if (await this.twoFactorAuthPrompt.tokenInputPresent) { // Retry if token was expired
             await this.tryEnterTokenInPrompt();
         }
