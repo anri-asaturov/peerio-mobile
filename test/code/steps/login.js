@@ -74,6 +74,11 @@ defineSupportCode(({ Given, When, Then }) => {
         await this.createNewAccount(this.username);
     });
 
+    Then('A helper user signs up', async function () {
+        this.username = new Date().getTime();
+        await this.createNewAccount(this.username);
+    });
+
     // this.email needs to be set by a previous step definition
     Then('They confirm their email', async function () {
         await confirmPrimaryEmail(this.email);

@@ -3,8 +3,10 @@ const { existingUsers } = require('../helpers/userHelper');
 
 defineSupportCode(({ When, Then }) => {
     When('I invite {word} to join the room', async function (string) {
-        let invitee = process.env.CHAT_RECIPIENT_USER;
-        if (string !== 'someone') invitee = existingUsers[string].name;
+        let invitee;
+        if (string === 'someone') invitee = process.env.CHAT_RECIPIENT_USER;
+        else if (string === 'them') invitee = this.username;
+        else invitee = existingUsers[string].name;
 
         await this.scrollToChat();
         await this.chatListPage.chatWithTitle(this.roomName).click();
@@ -21,11 +23,11 @@ defineSupportCode(({ When, Then }) => {
     });
 
     Then('they log in', async function () {
-        await this.loginExistingAccountWithout2FA(process.env.CHAT_RECIPIENT_USER, process.env.CHAT_RECIPIENT_PASS);
+        if (this.username && this.passphrase) await this.loginExistingAccountWithout2FA(this.username, this.passphrase);
+        else console.log('they log in: username and/or passphrase does not exist.');
     });
 
     Then('they accept the room invite', async function () {
-        await this.scrollToChat();
         await this.chatListPage.chatWithTitle(this.roomName).click();
 
         await this.roomInvitePage.acceptButton.click();
@@ -62,8 +64,6 @@ defineSupportCode(({ When, Then }) => {
     });
 
     Then('they do not have any room invites', async function () {
-        await this.scrollToChat();
-
         const roomExists = await this.chatListPage.chatWithTitleExists(this.roomName);
         roomExists.should.be.false; // eslint-disable-line
     });
