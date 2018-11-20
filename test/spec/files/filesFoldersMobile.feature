@@ -1,12 +1,12 @@
 ################################################################################
 #
 # This .feature file has been written by Mona Ghassemi for use by Peerio.
-# It is part of a set of .feature files currently included in a folder 
-# called SHARED_FOLDERS_SCENARIOS.
+# It is part of a set of .feature files located in this folder for Mobile 
+# File and Folder scenarios. 
 #
 # The Scenarios have been created based on contents of the "Files Planning"
 #   document available in the Peerio Google drive, and based on the
-#   functionality of the Peerio staging app, Desktop, as of this date: 
+#   functionality of the Peerio staging app, Mobile, as of this date: 
 #   November 9, 2018. 
 #   Version 3.8.3-staging. 
 #   November 12, 2018: CONFIRMED THAT THIS FILE MATCHES CURRENT IMPLEMENTATION
