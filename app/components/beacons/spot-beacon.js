@@ -6,6 +6,7 @@ import { vars } from '../../styles/styles';
 import Text from '../controls/custom-text';
 import { tx } from '../utils/translator';
 import AbstractBeacon from './abstract-beacon';
+import testLabel from '../helpers/test-label';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -125,7 +126,7 @@ export default class SpotBeacon extends AbstractBeacon {
     }
 
     renderThrow() {
-        const { position, headerText, descriptionText } = this.props;
+        const { id, position, headerText, descriptionText } = this.props;
         if (!position || (!headerText && !descriptionText)) return null;
 
         const {
@@ -199,7 +200,8 @@ export default class SpotBeacon extends AbstractBeacon {
                     activeOpacity={1}
                     onPress={this.onPressContainer}
                     pressRetentionOffset={vars.retentionOffset}
-                    style={rectangle}>
+                    style={rectangle}
+                    {...testLabel(id)}>
                     {headerText && (
                         <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>
                             {tx(headerText)}

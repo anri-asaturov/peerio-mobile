@@ -4,9 +4,15 @@ const { defineSupportCode } = require('cucumber');
 
 defineSupportCode(({ When, Then }) => {
     When('I start a DM with {word} user', async function (string) {
+        let user;
+        if (string === 'helper') {
+            user = this.username;
+        } else {
+            user = existingUsers[string].name;
+        }
         await this.openContactsPickerForDM();
-        await this.searchForRecipient(existingUsers[string].name);
-        await this.contactSelectorPage.recipientContact(existingUsers[string].name).click();
+        await this.searchForRecipient(user);
+        await this.contactSelectorPage.recipientContact(user).click();
     });
 
     When('I create a new room', async function () {
@@ -34,6 +40,10 @@ defineSupportCode(({ When, Then }) => {
         await this.chatPage.buttonUploadToChat.click();
         await this.fileUploadPage.uploadFileFromGallery();
         await this.filesListPage.fileSharePreviewPopup.click();
+        await this.chatPage.buttonUploadToChat.click();
+        await this.fileUploadPage.uploadFileFromGallery();
+        await this.filesListPage.fileSharePreviewPopup.click();
+        await this.app.pause(3000); // give images some time to upload, otherwise they won't get sent
     });
 
     Then('I scroll down the chat list', async function () {
@@ -66,6 +76,8 @@ defineSupportCode(({ When, Then }) => {
     });
 
     Then('I click the chat unread message indicator', async function () {
+        // beacon interferes with indicator
+        if (await this.chatPage.shareFileInChatBeaconVisible) await this.chatPage.shareFileInChatBeacon.click();
         await this.chatPage.chatUnreadMessageIndicator.click();
     });
 

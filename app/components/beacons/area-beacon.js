@@ -6,6 +6,7 @@ import { vars } from '../../styles/styles';
 import Text from '../controls/custom-text';
 import { tx } from '../utils/translator';
 import AbstractBeacon from './abstract-beacon';
+import testLabel from '../helpers/test-label';
 
 const pointerUpImg = require('../../assets/beacon-pointer-up.png');
 const pointerDownImg = require('../../assets/beacon-pointer-down.png');
@@ -145,7 +146,7 @@ export default class AreaBeacon extends AbstractBeacon {
     }
 
     renderThrow() {
-        const { position, headerText, descriptionText } = this.props;
+        const { id, position, headerText, descriptionText } = this.props;
 
         if (!position || (!headerText && !descriptionText)) return null;
 
@@ -194,7 +195,8 @@ export default class AreaBeacon extends AbstractBeacon {
                     activeOpacity={1}
                     onPress={this.onPress}
                     pressRetentionOffset={vars.retentionOffset}
-                    style={rectangle}>
+                    style={rectangle}
+                    {...testLabel(id)}>
                     {headerText && (
                         <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>
                             {tx(headerText)}

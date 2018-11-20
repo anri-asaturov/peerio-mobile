@@ -68,6 +68,14 @@ class ChatPage extends Page {
     get dismissDmPlaceholder() {
         return this.getWhenVisible('~button_dismiss');
     }
+
+    get shareFileInChatBeaconVisible() {
+        return this.checkIfVisible('~shareFileInChat');
+    }
+
+    get shareFileInChatBeacon() {
+        return this.getWhenVisible('~shareFileInChat');
+    }
 }
 
 module.exports = ChatPage;

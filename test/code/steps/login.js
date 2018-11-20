@@ -61,7 +61,9 @@ defineSupportCode(({ Given, When, Then }) => {
     });
 
     When('I log in as {word} user', async function (string) {
-        if (string === 'new') {
+        if (string === 'helper') {
+            await this.loginExistingAccountWithout2FA(this.username, this.passphrase);
+        } else if (string === 'new') {
             await this.createNewAccount();
         } else {
             const credentials = existingUsers[string];
