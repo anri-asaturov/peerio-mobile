@@ -46,26 +46,33 @@ export default class ViewReceipts extends SafeComponent {
     @observable receiptLabel = null;
 
     componentDidMount() {
-        when(() => this.props.receipts && this.props.receipts.length, () => {
-            this.prev = this.props.receipts.length;
-            this.calculateLabel();
-            transitionAnimation();
+        when(
+            () => this.props.receipts && this.props.receipts.length,
+            () => {
+                this.prev = this.props.receipts.length;
+                this.calculateLabel();
+                transitionAnimation();
 
-            this._observer = reaction(() => this.props.receipts && this.props.receipts.length, () => {
-                if (!this.props.receipts || !this.props.receipts.length) return;
+                this._observer = reaction(
+                    () => this.props.receipts && this.props.receipts.length,
+                    () => {
+                        if (!this.props.receipts || !this.props.receipts.length) return;
 
-                const viewsIncreased = this.props.receipts.length > this.prev;
+                        const viewsIncreased = this.props.receipts.length > this.prev;
 
-                if (viewsIncreased) {
-                    this.receiptLabel = this.receiptAvatar;
-                    setTimeout(() => {
-                        this.receiptLabel = this.receiptNumber;
-                    }, 3000);
-                } else {
-                    this.calculateLabel();
-                }
-            }, { fireImmediately: true });
-        });
+                        if (viewsIncreased) {
+                            this.receiptLabel = this.receiptAvatar;
+                            setTimeout(() => {
+                                this.receiptLabel = this.receiptNumber;
+                            }, 3000);
+                        } else {
+                            this.calculateLabel();
+                        }
+                    },
+                    { fireImmediately: true }
+                );
+            }
+        );
     }
 
     componentWillUnmount() {
@@ -103,12 +110,8 @@ export default class ViewReceipts extends SafeComponent {
 
         return (
             <View style={receiptRow}>
-                <View style={half}>
-                    {icons.plain('remove-red-eye', 12, vars.darkBlue)}
-                </View>
-                <View style={half}>
-                    {this.receiptLabel}
-                </View>
+                <View style={half}>{icons.plain('remove-red-eye', 12, vars.darkBlue)}</View>
+                <View style={half}>{this.receiptLabel}</View>
             </View>
         );
     }

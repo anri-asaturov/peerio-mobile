@@ -7,15 +7,12 @@ const { InAppUtils } = NativeModules;
 
 const premiumYearlyID = 'com.peerio.app.messenger.premium.20.yearly';
 const premiumMonthlyID = 'com.peerio.app.messenger.premium.20.monthly';
-const professionalYearlyID = whitelabel.PRO_YEARLY_PLAN || 'com.peerio.app.messenger.professional.500.yearly';
-const professionalMonthlyID = whitelabel.PRO_MONTHLY_PLAN || 'com.peerio.app.messenger.professional.500.monthly';
+const professionalYearlyID =
+    whitelabel.PRO_YEARLY_PLAN || 'com.peerio.app.messenger.professional.500.yearly';
+const professionalMonthlyID =
+    whitelabel.PRO_MONTHLY_PLAN || 'com.peerio.app.messenger.professional.500.monthly';
 
-const products = [
-    premiumYearlyID,
-    premiumMonthlyID,
-    professionalYearlyID,
-    professionalMonthlyID
-];
+const products = [premiumYearlyID, premiumMonthlyID, professionalYearlyID, professionalMonthlyID];
 
 class PaymentsIos extends PaymentsBase {
     loaded = false;
@@ -37,19 +34,24 @@ class PaymentsIos extends PaymentsBase {
     }
 
     async purchaseProduct(id) {
-        return new Promise((resolve, reject) => InAppUtils.purchaseProduct(id, (error, response) => {
-            if (response && response.productIdentifier) {
-                console.log('payments-ios.js: purchase successful');
-                console.log(response);
-                resolve(response);
-            }
-            if (error) {
-                console.log('payments-ios.js: purchase unsuccessful');
-                console.log(error);
-                AlertIOS.alert(`Purchase is unsuccessful`, `Error purchasing ${id}, please contact support`);
-                reject(error);
-            }
-        }));
+        return new Promise((resolve, reject) =>
+            InAppUtils.purchaseProduct(id, (error, response) => {
+                if (response && response.productIdentifier) {
+                    console.log('payments-ios.js: purchase successful');
+                    console.log(response);
+                    resolve(response);
+                }
+                if (error) {
+                    console.log('payments-ios.js: purchase unsuccessful');
+                    console.log(error);
+                    AlertIOS.alert(
+                        `Purchase is unsuccessful`,
+                        `Error purchasing ${id}, please contact support`
+                    );
+                    reject(error);
+                }
+            })
+        );
     }
 
     async purchase(id) {
@@ -62,7 +64,10 @@ class PaymentsIos extends PaymentsBase {
                 store: 'ios',
                 receipt: response.transactionReceipt
             };
-            const serverResponse = await socket.send('/auth/paid-plans/mobile-purchase/register', payload);
+            const serverResponse = await socket.send(
+                '/auth/paid-plans/mobile-purchase/register',
+                payload
+            );
             console.log(serverResponse);
             console.log(`🚲 payments-ios.js: register result success ${id}`);
         } catch (e) {

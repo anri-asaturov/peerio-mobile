@@ -2,7 +2,16 @@ import { when, observable, action, reaction } from 'mobx';
 import RNRestart from 'react-native-restart';
 import mainState from '../main/main-state';
 import settingsState from '../settings/settings-state';
-import { User, fileStore, socket, TinyDb, warnings, config, overrideServer, clientApp } from '../../lib/icebear';
+import {
+    User,
+    fileStore,
+    socket,
+    TinyDb,
+    warnings,
+    config,
+    overrideServer,
+    clientApp
+} from '../../lib/icebear';
 import keychain from '../../lib/keychain-bridge';
 import { rnAlertYesNo } from '../../lib/alerts';
 import { popupSignOutAutologin } from '../shared/popups';
@@ -29,44 +38,56 @@ class LoginState extends RoutedState {
 
     constructor() {
         super();
-        reaction(() => this.passphrase, () => { this.passphraseValidationMessage = null; });
+        reaction(
+            () => this.passphrase,
+            () => {
+                this.passphraseValidationMessage = null;
+            }
+        );
     }
 
-    @action async enableAutomaticLogin(user) {
+    @action
+    async enableAutomaticLogin(user) {
         user.autologinEnabled = true;
         const key = `${user.username}::${loginConfiguredKey}`;
         await TinyDb.system.setValue(key, user.autologinEnabled);
     }
 
-    @action changeUserAction() {
+    @action
+    changeUserAction() {
         if (this.isInProgress) return;
         this.changeUser = true;
         this.clean();
         this.routes.app.loginWelcome();
     }
 
-    @action.bound async switchUser() {
+    @action.bound
+    async switchUser() {
         await User.removeLastAuthenticated();
         this.clean();
         this.routes.app.loginClean();
     }
 
-    @action.bound async clearLastUser() {
+    @action.bound
+    async clearLastUser() {
         await User.removeLastAuthenticated();
         this.clean();
         this.routes.app.loginWelcome();
     }
 
-    @action clean() {
+    @action
+    clean() {
         this.current = 0;
         this.username = '';
         this.passphrase = '';
         this.isInProgress = false;
     }
 
-    @action _login(user, manual) {
+    @action
+    _login(user, manual) {
         User.current = user;
-        return user.login()
+        return user
+            .login()
             .then(() => {
                 console.log('login-state.js: logged in');
             })
@@ -125,7 +146,8 @@ class LoginState extends RoutedState {
     }
 
     // Manual Login
-    @action login = async (pin) => {
+    @action
+    login = async pin => {
         /* if (this.username === config.appleTestUser
             && config.appleTestServer !== socket.url) {
             await overrideServer(config.appleTestServer);
@@ -142,7 +164,8 @@ class LoginState extends RoutedState {
     };
 
     // Automatic Login
-    @action loginCached = (data) => {
+    @action
+    loginCached = data => {
         const user = new User();
         user.deserializeAuthData(data);
         this.isInProgress = true;
@@ -152,11 +175,15 @@ class LoginState extends RoutedState {
         });
     };
 
-    async restart() { await RNRestart.Restart(); }
+    async restart() {
+        await RNRestart.Restart();
+    }
 
     async signOut(force) {
         const inProgress = !!fileStore.files.filter(f => f.downloading || f.uploading).length;
-        await !force && inProgress ? rnAlertYesNo(tx('dialog_confirmLogOutDuringTransfer')) : Promise.resolve(true);
+        (await !force) && inProgress
+            ? rnAlertYesNo(tx('dialog_confirmLogOutDuringTransfer'))
+            : Promise.resolve(true);
         let untrust = false;
         if (!force && User.current.autologinEnabled) {
             const popupResult = await popupSignOutAutologin();
@@ -203,7 +230,9 @@ class LoginState extends RoutedState {
             return;
         }
 
-        setTimeout(() => { this.isInProgress = false; }, 0);
+        setTimeout(() => {
+            this.isInProgress = false;
+        }, 0);
         const load = async () => {
             await new Promise(resolve => when(() => socket.connected, resolve));
             const userData = await User.getLastAuthenticated();
@@ -216,17 +245,22 @@ class LoginState extends RoutedState {
             }
         };
         // TODO: fix this android hack for LayoutAnimation easeInEaseOut on transitions
-        setTimeout(() => { this.isInProgress = true; }, 0);
+        setTimeout(() => {
+            this.isInProgress = true;
+        }, 0);
         try {
             await load();
         } catch (e) {
             console.error(e);
         }
         // TODO: fix this android hack for LayoutAnimation easeInEaseOut on transitions
-        setTimeout(() => { this.isInProgress = false; }, 0);
+        setTimeout(() => {
+            this.isInProgress = false;
+        }, 0);
     }
 
-    @action async loadFromKeychain() {
+    @action
+    async loadFromKeychain() {
         await keychain.load();
         if (!keychain.hasPlugin) return false;
         const keychainKey = await mainState.getKeychainKey(this.username);
@@ -242,7 +276,7 @@ class LoginState extends RoutedState {
         }
         try {
             const touchIdKey = `user::${this.username}::touchid`;
-            const secureWithTouchID = !!await TinyDb.system.getValue(touchIdKey);
+            const secureWithTouchID = !!(await TinyDb.system.getValue(touchIdKey));
             data = JSON.parse(data);
             await this.loginCached(data);
             User.current.secureWithTouchID = secureWithTouchID;

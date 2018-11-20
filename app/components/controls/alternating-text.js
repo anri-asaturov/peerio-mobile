@@ -17,7 +17,7 @@ export default class AlternatingText extends SafeComponent {
     // Get initial text to start from. Every 5 seconds, change the text to the next item in the array
     componentDidMount() {
         const { initialText, messageArray } = this.props;
-        let index = Math.floor((Math.random() * messageArray.length)); // random number from messageArray
+        let index = Math.floor(Math.random() * messageArray.length); // random number from messageArray
         this.textA = initialText;
         this.timer = setInterval(() => {
             if (index >= messageArray.length - 1) index = 0;
@@ -40,10 +40,9 @@ export default class AlternatingText extends SafeComponent {
         const { initialText, textStyle } = this.props;
         return (
             <View>
-                {(this.textA !== initialText) &&
-                <Text style={textStyle}>
-                    {tx('title_migrationInProgressStaticMessage')}
-                </Text>}
+                {this.textA !== initialText && (
+                    <Text style={textStyle}>{tx('title_migrationInProgressStaticMessage')}</Text>
+                )}
                 <Text style={textStyle}>
                     {tx(this.textA)} {this.emoji} {tx(this.textB)}
                 </Text>

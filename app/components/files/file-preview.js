@@ -55,35 +55,48 @@ export default class FilePreview extends SafeComponent {
     @observable previewSmallHeight;
 
     async componentWillMount() {
-        when(() => this.previewContainerWidth && this.width, () => {
-            const { previewContainerWidth, previewContainerHeight, width, height } = this;
-            const dims = vars.optimizeImageSize(width, height, previewContainerWidth, previewContainerHeight);
-            this.previewSmallWidth = dims.width;
-            this.previewSmallHeight = dims.height;
-        });
+        when(
+            () => this.previewContainerWidth && this.width,
+            () => {
+                const { previewContainerWidth, previewContainerHeight, width, height } = this;
+                const dims = vars.optimizeImageSize(
+                    width,
+                    height,
+                    previewContainerWidth,
+                    previewContainerHeight
+                );
+                this.previewSmallWidth = dims.width;
+                this.previewSmallHeight = dims.height;
+            }
+        );
         const { path } = this.props.state;
         const { width, height } = await ImagePicker.getImageDimensions(path);
         Object.assign(this, { width, height });
     }
 
-    @action.bound layoutPreviewContainer(e) {
+    @action.bound
+    layoutPreviewContainer(e) {
         const { width, height } = e.nativeEvent.layout;
         this.previewContainerWidth = width;
         this.previewContainerHeight = height;
     }
 
-    @action.bound launchPreviewViewer() {
-        config.FileStream.launchViewer(this.props.state.path, this.props.state.fileName)
-            .catch(() => {
+    @action.bound
+    launchPreviewViewer() {
+        config.FileStream.launchViewer(this.props.state.path, this.props.state.fileName).catch(
+            () => {
                 warnings.add('snackbar_couldntOpenFile');
-            });
+            }
+        );
     }
 
     get previewImage() {
         const width = thumbnailDim;
         const height = width;
         return (
-            <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={this.launchPreviewViewer}>
+            <TouchableOpacity
+                pressRetentionOffset={vars.retentionOffset}
+                onPress={this.launchPreviewViewer}>
                 <Thumbnail path={this.props.state.path} style={{ width, height }} />
             </TouchableOpacity>
         );
@@ -91,9 +104,11 @@ export default class FilePreview extends SafeComponent {
 
     renderThrow() {
         const { state } = this.props;
-        const fileImagePlaceholder = fileHelpers.isImage(state.ext)
-            ? this.previewImage
-            : <FileTypeIcon type={fileHelpers.getFileIconType(state.ext)} size="medium" />;
+        const fileImagePlaceholder = fileHelpers.isImage(state.ext) ? (
+            this.previewImage
+        ) : (
+            <FileTypeIcon type={fileHelpers.getFileIconType(state.ext)} size="medium" />
+        );
 
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -109,12 +124,14 @@ export default class FilePreview extends SafeComponent {
                         autoCorrect={false}
                         autoCapitalize="sentences"
                         value={state.name}
-                        onChangeText={text => { state.name = text; }}
+                        onChangeText={text => {
+                            state.name = text;
+                        }}
                         underlineColorAndroid="transparent"
-                        style={inputStyle} />
+                        style={inputStyle}
+                    />
                 </View>
             </View>
         );
     }
 }
-

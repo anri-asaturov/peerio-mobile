@@ -1,7 +1,16 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
 /* eslint-disable */
-import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions, LayoutAnimation, Platform, Animated } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    Dimensions,
+    LayoutAnimation,
+    Platform,
+    Animated
+} from 'react-native';
 /* eslint-enable */
 import { action, observable } from 'mobx';
 import SafeComponent from '../shared/safe-component';
@@ -21,24 +30,36 @@ const buttonContainer = {
     width: width - vars.spacing.small.midi2x * 2
 };
 
-const topButtonContainer = [buttonContainer, {
-    borderTopLeftRadius: borderRadius,
-    borderTopRightRadius: borderRadius
-}];
+const topButtonContainer = [
+    buttonContainer,
+    {
+        borderTopLeftRadius: borderRadius,
+        borderTopRightRadius: borderRadius
+    }
+];
 
-const bottomButtonContainer = [buttonContainer, {
-    borderBottomLeftRadius: borderRadius,
-    borderBottomRightRadius: borderRadius
-}];
+const bottomButtonContainer = [
+    buttonContainer,
+    {
+        borderBottomLeftRadius: borderRadius,
+        borderBottomRightRadius: borderRadius
+    }
+];
 
-const lonelyButtonContainer = [buttonContainer, {
-    borderRadius
-}];
+const lonelyButtonContainer = [
+    buttonContainer,
+    {
+        borderRadius
+    }
+];
 
-const cancelButtonContainer = [buttonContainer, {
-    backgroundColor: vars.white,
-    borderRadius
-}];
+const cancelButtonContainer = [
+    buttonContainer,
+    {
+        backgroundColor: vars.white,
+        borderRadius
+    }
+];
 
 const cancelButtonWrapper = {
     backgroundColor: vars.white,
@@ -52,9 +73,12 @@ const buttonTextStyle = {
     paddingHorizontal: vars.spacing.small.maxi2x
 };
 
-const boldButtonTextStyle = [buttonTextStyle, {
-    fontWeight: 'bold'
-}];
+const boldButtonTextStyle = [
+    buttonTextStyle,
+    {
+        fontWeight: 'bold'
+    }
+];
 
 const lineStyle = {
     height: 1,
@@ -73,7 +97,7 @@ const animatedActionsheetHeight = new Animated.Value(0);
 export default class ActionSheetLayout extends SafeComponent {
     // Android border color does not work with border radius
     // Border top will be added to all action buttons except the first one
-    borderTop (buttonPosition) {
+    borderTop(buttonPosition) {
         const line = <View style={lineStyle} />;
         if (buttonPosition !== 0) return line;
         return null;
@@ -87,16 +111,20 @@ export default class ActionSheetLayout extends SafeComponent {
 
     actionButtons() {
         const { header, actionButtons } = state.config;
-        return (actionButtons.map((button, i) => {
-            const topButton = (i === 0 && !header);
-            const bottomButton = (i === actionButtons.length - 1);
+        return actionButtons.map((button, i) => {
+            const topButton = i === 0 && !header;
+            const bottomButton = i === actionButtons.length - 1;
             let container;
             if (topButton && bottomButton) container = lonelyButtonContainer;
             else if (!topButton && !bottomButton) container = buttonContainer;
             else if (topButton) container = topButtonContainer;
             else if (bottomButton) container = bottomButtonContainer;
-            const destructiveTextstyle = button.isDestructive ? { color: vars.destructiveButtonFontColor } : null;
-            const disabledTextStyle = button.disabled ? { color: vars.disabledButtonFontColor } : null;
+            const destructiveTextstyle = button.isDestructive
+                ? { color: vars.destructiveButtonFontColor }
+                : null;
+            const disabledTextStyle = button.disabled
+                ? { color: vars.disabledButtonFontColor }
+                : null;
             return (
                 <View key={button.title}>
                     {this.borderTop(i)}
@@ -113,11 +141,13 @@ export default class ActionSheetLayout extends SafeComponent {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                </View>);
-        }));
+                </View>
+            );
+        });
     }
 
-    @action static show(config) {
+    @action
+    static show(config) {
         animatedActionsheetHeight.setValue(-height);
         state.config = config;
         state.visible = true;
@@ -128,13 +158,15 @@ export default class ActionSheetLayout extends SafeComponent {
         }).start();
     }
 
-    @action static async hide() {
+    @action
+    static async hide() {
         if (!state.visible) return;
         await new Promise(resolve =>
             Animated.timing(animatedActionsheetHeight, {
                 toValue: -height,
                 duration: 300
-            }).start(() => { // callback when animation is done
+            }).start(() => {
+                // callback when animation is done
                 state.visible = false;
                 state.config = null;
                 resolve();
@@ -146,15 +178,16 @@ export default class ActionSheetLayout extends SafeComponent {
         return state.visible;
     }
 
-    @action.bound handleCancel() { ActionSheetLayout.hide(); }
+    @action.bound
+    handleCancel() {
+        ActionSheetLayout.hide();
+    }
 
     cancelOption() {
         return (
-            <View style={cancelButtonWrapper} >
+            <View style={cancelButtonWrapper}>
                 <TouchableOpacity style={cancelButtonContainer} onPress={this.handleCancel}>
-                    <Text style={boldButtonTextStyle}>
-                        {tx('button_cancel')}
-                    </Text>
+                    <Text style={boldButtonTextStyle}>{tx('button_cancel')}</Text>
                 </TouchableOpacity>
             </View>
         );

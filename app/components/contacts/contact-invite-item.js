@@ -42,9 +42,13 @@ export default class ContactInviteItem extends SafeComponent {
                         faded={invited}
                         contact={contact}
                         invited
-                        backgroundColor={this.props.backgroundColor} />
+                        backgroundColor={this.props.backgroundColor}
+                    />
                 </View>
-                {(invited !== null) && buttons.blueTextButton(title, () => this.invite(), invited, null, null, { flexShrink: 1 })}
+                {invited !== null &&
+                    buttons.blueTextButton(title, () => this.invite(), invited, null, null, {
+                        flexShrink: 1
+                    })}
             </View>
         );
     }

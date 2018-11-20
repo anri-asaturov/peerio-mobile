@@ -67,9 +67,7 @@ export default class ChannelInfo extends SafeComponent {
             borderBottomWidth: noBorder ? 0 : 1,
             borderBottomColor: 'rgba(0, 0, 0, .12)'
         };
-        return (
-            <View style={s}>{content}</View>
-        );
+        return <View style={s}>{content}</View>;
     }
 
     get spacer() {
@@ -89,12 +87,16 @@ export default class ChannelInfo extends SafeComponent {
                     style={{ backgroundColor: vars.channelInfoBg }}
                     pressRetentionOffset={vars.retentionOffset}
                     onPress={action}
-                    {...testLabel(title)} >
+                    {...testLabel(title)}>
                     <View style={containerStyle}>
-                        {icon ?
-                            icons.darkNoPadding(icon, action) :
-                            icons.imageButtonNoPadding(image, action)}
-                        <Text style={{ marginLeft: vars.spacing.medium.maxi2x, color: vars.lighterBlackText }}>
+                        {icon
+                            ? icons.darkNoPadding(icon, action)
+                            : icons.imageButtonNoPadding(image, action)}
+                        <Text
+                            style={{
+                                marginLeft: vars.spacing.medium.maxi2x,
+                                color: vars.lighterBlackText
+                            }}>
                             {title}
                         </Text>
                     </View>
@@ -116,14 +118,19 @@ export default class ChannelInfo extends SafeComponent {
         };
         return (
             <View>
-                <Text bold style={textStyle}>{tx('title_purpose')}</Text>
+                <Text bold style={textStyle}>
+                    {tx('title_purpose')}
+                </Text>
                 <TextInput
-                    onChangeText={text => { this.channelTopic = text; }}
+                    onChangeText={text => {
+                        this.channelTopic = text;
+                    }}
                     onBlur={update}
                     onEndEditing={update}
                     value={this.channelTopic}
                     style={placeholderStyle}
-                    maxLength={config.chat.maxChatPurposeLength} />
+                    maxLength={config.chat.maxChatPurposeLength}
+                />
             </View>
         );
     }
@@ -131,7 +138,9 @@ export default class ChannelInfo extends SafeComponent {
     get topicTextView() {
         return (
             <View>
-                <Text bold style={textStyle}>{tx('title_purpose')}</Text>
+                <Text bold style={textStyle}>
+                    {tx('title_purpose')}
+                </Text>
                 <Text style={topicTextStyle}>{this.channelTopic}</Text>
             </View>
         );
@@ -147,18 +156,33 @@ export default class ChannelInfo extends SafeComponent {
                 {this.lineBlock(
                     <View>
                         {this.spacer}
-                        {canIAdmin && this.action(tx('button_inviteToChannel'), 'person-add', this.addMembers)}
-                        {canILeave && this.action(tx('button_leaveChannel'), null, this.leaveChannel, leaveRoomImage)}
-                        {canIAdmin && this.action(tx('button_deleteChannel'), 'delete', this.deleteChannel)}
+                        {canIAdmin &&
+                            this.action(
+                                tx('button_inviteToChannel'),
+                                'person-add',
+                                this.addMembers
+                            )}
+                        {canILeave &&
+                            this.action(
+                                tx('button_leaveChannel'),
+                                null,
+                                this.leaveChannel,
+                                leaveRoomImage
+                            )}
+                        {canIAdmin &&
+                            this.action(tx('button_deleteChannel'), 'delete', this.deleteChannel)}
                         {this.spacer}
-                    </View>)
-                }
+                    </View>
+                )}
                 <ChannelInfoListState />
             </View>
         );
-        return (<LayoutModalExit
-            body={body}
-            title={`# ${chatState.title}`}
-            onClose={() => chatState.routerModal.discard()} />);
+        return (
+            <LayoutModalExit
+                body={body}
+                title={`# ${chatState.title}`}
+                onClose={() => chatState.routerModal.discard()}
+            />
+        );
     }
 }

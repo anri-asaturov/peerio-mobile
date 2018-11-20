@@ -24,9 +24,7 @@ module.exports = {
         const path = config.FileStream.formatAssetsPath(`dict/${lc}.txt`);
         const def = config.FileStream.formatAssetsPath(`dict/en.txt`);
         return config.FileStream.existsAssetsFile(path)
-            .then(exists =>
-                config.FileStream.readAssetsFile(exists ? path : def)
-            )
+            .then(exists => config.FileStream.readAssetsFile(exists ? path : def))
             .catch(e => {
                 console.error(e);
                 return def;

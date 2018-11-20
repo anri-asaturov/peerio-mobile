@@ -1,7 +1,7 @@
 import { invitationState } from '../../states';
 import { tx } from '../../utils/translator';
 
-invitationState.titleFromInvite = (invite) => {
+invitationState.titleFromInvite = invite => {
     let title = '';
     if (invite) {
         if (invite.isInSpace) {
@@ -16,6 +16,5 @@ invitationState.titleFromInvite = (invite) => {
     }
     return title;
 };
-
 
 export default invitationState;

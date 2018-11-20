@@ -14,7 +14,7 @@ const { S, errorMessage } = telemetry;
 */
 
 const shared = setup({
-    textInputOnFocus: (tm) => {
+    textInputOnFocus: tm => {
         return [
             S.TEXT_INPUT,
             {
@@ -57,7 +57,7 @@ const shared = setup({
         ];
     },
 
-    textInputOnClear: (tm) => {
+    textInputOnClear: tm => {
         return [
             S.CLEAR_TEXT,
             {
@@ -68,7 +68,7 @@ const shared = setup({
         ];
     },
 
-    textInputOnMaxChars: (tm) => {
+    textInputOnMaxChars: tm => {
         return [
             S.TEXT_INPUT,
             {

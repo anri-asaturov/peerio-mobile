@@ -22,17 +22,20 @@ const helpers = {
     }
 };
 
-vars.circleTopSmall = [helpers.circle(vars.topCircleSizeSmall * 2), {
-    top: 0,
-    backgroundColor: vars.lightGrayBg,
-    position: 'absolute',
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: vars.gray54
-}];
+vars.circleTopSmall = [
+    helpers.circle(vars.topCircleSizeSmall * 2),
+    {
+        top: 0,
+        backgroundColor: vars.lightGrayBg,
+        position: 'absolute',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: vars.gray54
+    }
+];
 
 const styles = {
     vars,

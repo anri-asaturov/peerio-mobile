@@ -17,16 +17,22 @@ export default class MockChannelCreate extends Component {
         contactState.store = mockContactStore;
     }
 
-    createChannel = () => { this.isChatMode = false; };
+    createChannel = () => {
+        this.isChatMode = false;
+    };
 
-    createChat = () => { this.isChatMode = true; };
+    createChat = () => {
+        this.isChatMode = true;
+    };
 
     render() {
         return (
             <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1 }}>
-                {this.isChatMode ?
-                    <ComposeMessage createChannel={this.createChannel} /> :
-                    <CreateChannel createChat={this.createChat} />}
+                {this.isChatMode ? (
+                    <ComposeMessage createChannel={this.createChannel} />
+                ) : (
+                    <CreateChannel createChat={this.createChat} />
+                )}
                 <StatusBar barStyle="default" />
             </View>
         );

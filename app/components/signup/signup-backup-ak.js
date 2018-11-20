@@ -46,12 +46,14 @@ export default class SignupBackupAk extends SafeComponent {
         }
     }
 
-    @action.bound handleNext() {
+    @action.bound
+    handleNext() {
         signupState.next();
         tm.signup.navigate({ sublocation, option: S.NEXT });
     }
 
-    @action.bound handleSkip() {
+    @action.bound
+    handleSkip() {
         signupState.next();
         tm.signup.navigate({ sublocation, option: S.SKIP });
     }
@@ -61,7 +63,10 @@ export default class SignupBackupAk extends SafeComponent {
         return (
             <View style={signupStyles.page}>
                 <View style={signupStyles.backupAkPage}>
-                    <SignupHeading title="title_backupAk" subTitle="title_generatingAkDescription" />
+                    <SignupHeading
+                        title="title_backupAk"
+                        subTitle="title_generatingAkDescription"
+                    />
                     <SignupGenerationBox />
                     <View style={buttonContainer}>
                         {buttons.blueTextButton(
@@ -69,11 +74,10 @@ export default class SignupBackupAk extends SafeComponent {
                             this.copyAccountKey,
                             null,
                             null,
-                            'button_copy')}
+                            'button_copy'
+                        )}
                     </View>
-                    <Text style={signupStyles.description2}>
-                        {tx('title_akBackupDescription')}
-                    </Text>
+                    <Text style={signupStyles.description2}>{tx('title_akBackupDescription')}</Text>
                     <View>
                         <SignupPdfPreview telemetry={{ sublocation }} />
                     </View>
@@ -83,7 +87,8 @@ export default class SignupBackupAk extends SafeComponent {
                             signupState.keyBackedUp ? this.handleNext : this.handleSkip,
                             null,
                             null,
-                            'button_next')}
+                            'button_next'
+                        )}
                     </View>
                 </View>
             </View>

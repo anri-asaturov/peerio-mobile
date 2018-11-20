@@ -18,9 +18,18 @@ function a(text, url, style) {
             if (url.tracker) url.tracker();
             routes[type][route]();
         };
-        if (action) return <Link key={text} onPress={action} style={style}>{text}</Link>;
+        if (action)
+            return (
+                <Link key={text} onPress={action} style={style}>
+                    {text}
+                </Link>
+            );
     }
-    return <Link key={url.link} url={url} style={style}>{text}</Link>;
+    return (
+        <Link key={url.link} url={url} style={style}>
+            {text}
+        </Link>
+    );
 }
 
 function b(text) {
@@ -36,5 +45,8 @@ function br() {
 }
 
 module.exports = {
-    a, b, i, br
+    a,
+    b,
+    i,
+    br
 };

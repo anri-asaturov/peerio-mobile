@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     parser: 'babel-eslint',
     plugins: [ 'babel' ],
-    extends: [ 'peerio' ],
+    extends: [ 'peerio', 'prettier' ],
     rules: {
         'global-require': 0,
         'generator-star-spacing': 0,

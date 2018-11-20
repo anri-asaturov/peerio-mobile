@@ -28,15 +28,22 @@ export default class MedcryptorSpaceScreen extends ChatList {
         return <BackIcon testID="buttonBackIcon" action={routes.main.chats} />;
     }
 
-    @computed get firstSectionItems() {
-        return chatState.store.spaces.currentSpace ? chatState.store.spaces.currentSpace.internalRooms : [];
+    @computed
+    get firstSectionItems() {
+        return chatState.store.spaces.currentSpace
+            ? chatState.store.spaces.currentSpace.internalRooms
+            : [];
     }
 
-    @computed get secondSectionItems() {
-        return chatState.store.spaces.currentSpace ? chatState.store.spaces.currentSpace.patientRooms : [];
+    @computed
+    get secondSectionItems() {
+        return chatState.store.spaces.currentSpace
+            ? chatState.store.spaces.currentSpace.patientRooms
+            : [];
     }
 
-    @computed get dataSource() {
+    @computed
+    get dataSource() {
         return [].concat(
             ...this.addSection('mcr_title_internalRooms', this.firstSectionItems),
             ...this.addSection('mcr_title_patientRooms', this.secondSectionItems)
@@ -47,6 +54,12 @@ export default class MedcryptorSpaceScreen extends ChatList {
         return ['mcr_title_internalRooms', 'mcr_title_patientRooms'];
     }
 
-    inviteItem = (chat) => <ChannelInviteListItem id={chat.kegDbId} chat={chat} channelName={chat.chatHead.nameInSpace} />;
-    channelItem = (chat) => <ChannelListItem chat={chat} channelName={chat.chatHead.nameInSpace} />;
+    inviteItem = chat => (
+        <ChannelInviteListItem
+            id={chat.kegDbId}
+            chat={chat}
+            channelName={chat.chatHead.nameInSpace}
+        />
+    );
+    channelItem = chat => <ChannelListItem chat={chat} channelName={chat.chatHead.nameInSpace} />;
 }

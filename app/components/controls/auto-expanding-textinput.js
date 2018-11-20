@@ -32,7 +32,7 @@ export default class AutoExpandingTextInput extends Component {
         }
     }
 
-    _onContentSizeChange = (event) => {
+    _onContentSizeChange = event => {
         const curHeight = event.nativeEvent.contentSize.height;
         if (curHeight < this.props.minHeight || curHeight > this.state.maxHeight) return;
 
@@ -59,7 +59,9 @@ export default class AutoExpandingTextInput extends Component {
         return (
             <TextInput
                 {...this.props}
-                ref={ti => { this.ti = ti; }}
+                ref={ti => {
+                    this.ti = ti;
+                }}
                 placeholderTextColor={vars.extraSubtleText}
                 underlineColorAndroid="transparent"
                 multiline

@@ -53,13 +53,20 @@ const flexRow = {
 @observer
 export default class ChatMessageFull extends SafeComponent {
     renderThrow() {
-        const { errorStyle, backgroundColor, messageObject, chat, onFileAction, onLegacyFileAction, onInlineImageAction } = this.props;
+        const {
+            errorStyle,
+            backgroundColor,
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction
+        } = this.props;
 
         return (
             <View style={[itemStyle, errorStyle, backgroundColor]}>
                 <View style={msgStyle}>
-                    <View
-                        style={itemContainerStyle}>
+                    <View style={itemContainerStyle}>
                         <TouchableContactAvatar contact={messageObject.sender} />
                         <View style={[nameMessageContainerStyle]}>
                             <ChatMessageData message={messageObject} />
@@ -69,7 +76,8 @@ export default class ChatMessageFull extends SafeComponent {
                                     chat={chat}
                                     onFileAction={onFileAction}
                                     onLegacyFileAction={onLegacyFileAction}
-                                    onInlineImageAction={onInlineImageAction} />
+                                    onInlineImageAction={onInlineImageAction}
+                                />
                                 <ViewReceipts receipts={messageObject.receipts} />
                             </View>
                         </View>

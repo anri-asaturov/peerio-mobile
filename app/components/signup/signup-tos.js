@@ -58,7 +58,8 @@ export default class SignupTos extends SafeComponent {
         tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound cancelSignup() {
+    @action.bound
+    cancelSignup() {
         tm.signup.navigate({ sublocation, option: S.CANCEL });
         routes.app.signupCancel();
     }
@@ -75,32 +76,44 @@ export default class SignupTos extends SafeComponent {
         return (
             <View>
                 <Text style={signupStyles.description2}>
-                    {<T k="title_termsDescription">
-                        {{
-                            openTerms: this.openTermsLink,
-                            openPrivacy: this.openPrivacyLink
-                        }}
-                    </T>}
+                    {
+                        <T k="title_termsDescription">
+                            {{
+                                openTerms: this.openTermsLink,
+                                openPrivacy: this.openPrivacyLink
+                            }}
+                        </T>
+                    }
                 </Text>
                 <TosAccordion style={{ paddingBottom: buttonContainerHeight }} />
             </View>
         );
     }
 
-    @action.bound openTermsLink(text) {
+    @action.bound
+    openTermsLink(text) {
         const onPress = async () => {
             tm.signup.readMorePopup({ item: S.TERMS_OF_USE });
             await popupTOS();
         };
-        return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
+        return (
+            <Text style={{ color: vars.peerioBlue }} onPress={onPress}>
+                {text}
+            </Text>
+        );
     }
 
-    @action.bound openPrivacyLink(text) {
+    @action.bound
+    openPrivacyLink(text) {
         const onPress = async () => {
             tm.signup.readMorePopup({ item: S.PRIVACY_POLICY });
             await popupPrivacy();
         };
-        return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
+        return (
+            <Text style={{ color: vars.peerioBlue }} onPress={onPress}>
+                {text}
+            </Text>
+        );
     }
 
     renderThrow() {

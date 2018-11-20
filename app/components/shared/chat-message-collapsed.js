@@ -25,7 +25,15 @@ const itemContainerStyle = {
 @observer
 export default class ChatMessageCollapsed extends SafeComponent {
     renderThrow() {
-        const { errorStyle, backgroundColor, messageObject, chat, onFileAction, onLegacyFileAction, onInlineImageAction } = this.props;
+        const {
+            errorStyle,
+            backgroundColor,
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction
+        } = this.props;
 
         const { files, folders } = messageObject;
         const shrinkStrategy = { flexShrink: 1 };
@@ -34,8 +42,7 @@ export default class ChatMessageCollapsed extends SafeComponent {
         return (
             <View style={[itemStyle, errorStyle]}>
                 <CorruptedMessage visible={messageObject.signatureError} />
-                <View
-                    style={[itemContainerStyle, shrinkStrategy, backgroundColor]}>
+                <View style={[itemContainerStyle, shrinkStrategy, backgroundColor]}>
                     <ChatMessageBody
                         messageObject={messageObject}
                         chat={chat}

@@ -29,12 +29,11 @@ export default class FileSignatureError extends SafeComponent {
             marginLeft: vars.spacing.small.midi
         };
 
-        const showAlert = () => popupYes(tx('title_invalidFileSignature'), null, tx('error_invalidFileSignature'));
+        const showAlert = () =>
+            popupYes(tx('title_invalidFileSignature'), null, tx('error_invalidFileSignature'));
 
         return (
-            <TouchableOpacity
-                onPress={showAlert}
-                pressRetentionOffset={vars.retentionOffset}>
+            <TouchableOpacity onPress={showAlert} pressRetentionOffset={vars.retentionOffset}>
                 <View style={container}>
                     {icons.plainalert('error-outline')}
                     <Text style={text}>{tx('error_invalidFileSignature')}</Text>

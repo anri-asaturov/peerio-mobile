@@ -10,8 +10,7 @@ import { fileStore } from '../../lib/icebear';
 import ActionSheetLayout from '../layout/action-sheet-layout';
 
 async function doUpload(sourceFunction, inline) {
-    const uploader = inline ?
-        fileState.uploadInline : fileState.uploadInFiles;
+    const uploader = inline ? fileState.uploadInline : fileState.uploadInFiles;
     const source = observable(await sourceFunction());
     if (inline) {
         const userSelection = await FileSharePreview.popup(source.url, source.fileName);
@@ -31,17 +30,20 @@ async function doUpload(sourceFunction, inline) {
 
 export default class FileUploadActionSheet {
     static show(inline, createFolder) {
-        const actionButtons = [{
-            title: tx('button_takeAPicture'),
-            action() {
-                doUpload(imagepicker.getImageFromCamera, inline);
+        const actionButtons = [
+            {
+                title: tx('button_takeAPicture'),
+                action() {
+                    doUpload(imagepicker.getImageFromCamera, inline);
+                }
+            },
+            {
+                title: tx('title_chooseFromGallery'),
+                action() {
+                    doUpload(imagepicker.getImageFromGallery, inline);
+                }
             }
-        }, {
-            title: tx('title_chooseFromGallery'),
-            action() {
-                doUpload(imagepicker.getImageFromGallery, inline);
-            }
-        }];
+        ];
 
         if (Platform.OS === 'android') {
             actionButtons.push({
@@ -67,7 +69,10 @@ export default class FileUploadActionSheet {
                 title: tx('title_createFolder'),
                 async action() {
                     const result = await popupInputCancel(
-                        tx('title_createFolder'), tx('title_createFolderPlaceholder'), true);
+                        tx('title_createFolder'),
+                        tx('title_createFolderPlaceholder'),
+                        true
+                    );
                     if (!result) return;
                     requestAnimationFrame(() => {
                         fileStore.folderStore.currentFolder.createFolder(result.value);

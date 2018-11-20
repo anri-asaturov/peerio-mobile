@@ -10,7 +10,7 @@ import { vars } from '../../styles/styles';
 
 @observer
 export default class InputMainContainer extends SafeComponent {
-    send = (v) => {
+    send = v => {
         const message = v;
         if (!message || !message.length) {
             this.sendAck();
@@ -25,10 +25,8 @@ export default class InputMainContainer extends SafeComponent {
 
     uploadQueue() {
         const chat = chatState.currentChat;
-        const q = chat && chat.uploadQueue || [];
-        return q.map(f => (
-            <FileUploadProgress file={f} key={f.fileId} transparentOnFinishUpload />
-        ));
+        const q = (chat && chat.uploadQueue) || [];
+        return q.map(f => <FileUploadProgress file={f} key={f.fileId} transparentOnFinishUpload />);
     }
 
     renderThrow() {
@@ -42,15 +40,14 @@ export default class InputMainContainer extends SafeComponent {
         };
         return (
             <View style={outer}>
-                <View>
-                    {this.uploadQueue()}
-                </View>
+                <View>{this.uploadQueue()}</View>
                 <View style={s}>
                     <InputMain
                         {...this.props}
                         plus={this.plus}
                         sendAck={this.sendAck}
-                        send={this.send} />
+                        send={this.send}
+                    />
                 </View>
             </View>
         );

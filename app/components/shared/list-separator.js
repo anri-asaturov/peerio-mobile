@@ -7,6 +7,6 @@ import { vars } from '../../styles/styles';
 @observer
 export default class ListSeparator extends SafeComponent {
     renderThrow() {
-        return (<View style={{ borderBottomWidth: 1, borderBottomColor: vars.black12 }} />);
+        return <View style={{ borderBottomWidth: 1, borderBottomColor: vars.black12 }} />;
     }
 }

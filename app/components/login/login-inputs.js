@@ -32,8 +32,14 @@ export default class LoginInputs extends SafeComponent {
     usernameState = observable({ value: '' });
     passwordState = observable({ value: '' });
 
-    @action.bound usernameInputRef(ref) { this.usernameInput = ref; }
-    @action.bound passwordInputRef(ref) { this.passwordInput = ref; }
+    @action.bound
+    usernameInputRef(ref) {
+        this.usernameInput = ref;
+    }
+    @action.bound
+    passwordInputRef(ref) {
+        this.passwordInput = ref;
+    }
 
     tmUsername = { ...this.props.telemetry, item: S.USERNAME };
     tmAccountKey = { ...this.props.telemetry, item: S.ACCOUNT_KEY };
@@ -45,18 +51,25 @@ export default class LoginInputs extends SafeComponent {
             this.usernameState.value = user.username;
         }
         if (__DEV__ && process.env.PEERIO_USERNAME && process.env.PEERIO_PASSPHRASE) {
-            when(() => loginState.isConnected, () => {
-                this.usernameInput && this.usernameInput.onChangeText(process.env.PEERIO_USERNAME);
-                this.passwordInput && this.passwordInput.onChangeText(process.env.PEERIO_PASSPHRASE);
-                process.env.PEERIO_AUTOLOGIN && this.submit();
-            });
+            when(
+                () => loginState.isConnected,
+                () => {
+                    this.usernameInput &&
+                        this.usernameInput.onChangeText(process.env.PEERIO_USERNAME);
+                    this.passwordInput &&
+                        this.passwordInput.onChangeText(process.env.PEERIO_PASSPHRASE);
+                    process.env.PEERIO_AUTOLOGIN && this.submit();
+                }
+            );
         }
     }
 
-    @action.bound submit() {
+    @action.bound
+    submit() {
         loginState.username = this.usernameState.value;
         loginState.passphrase = this.passwordState.value;
-        uiState.hideAll()
+        uiState
+            .hideAll()
             .then(async () => {
                 tm.login.onSigninButton();
                 await loginState.login();
@@ -72,8 +85,12 @@ export default class LoginInputs extends SafeComponent {
     }
 
     get isNextDisabled() {
-        return socket.connected && (!this.passwordState.value || !this.passwordInput.isValid ||
-            (!this.props.hideUsernameInput && !this.usernameInput.isValid));
+        return (
+            socket.connected &&
+            (!this.passwordState.value ||
+                !this.passwordInput.isValid ||
+                (!this.props.hideUsernameInput && !this.usernameInput.isValid))
+        );
     }
 
     @action.bound
@@ -88,18 +105,21 @@ export default class LoginInputs extends SafeComponent {
         return (
             <View>
                 <View style={{ height: 16 }} />
-                {!hideUsernameInput && (<View>
-                    <StyledTextInput
-                        state={this.usernameState}
-                        telemetry={this.tmUsername}
-                        validations={usernameLogin}
-                        label={tx(USERNAME_LABEL)}
-                        onChange={this.tmEmailError}
-                        ref={this.usernameInputRef}
-                        lowerCase
-                        testID="usernameLogin" />
-                    <View style={{ height: 8 }} />
-                </View>)}
+                {!hideUsernameInput && (
+                    <View>
+                        <StyledTextInput
+                            state={this.usernameState}
+                            telemetry={this.tmUsername}
+                            validations={usernameLogin}
+                            label={tx(USERNAME_LABEL)}
+                            onChange={this.tmEmailError}
+                            ref={this.usernameInputRef}
+                            lowerCase
+                            testID="usernameLogin"
+                        />
+                        <View style={{ height: 8 }} />
+                    </View>
+                )}
                 <StyledTextInput
                     state={this.passwordState}
                     telemetry={this.tmAccountKey}
@@ -108,7 +128,8 @@ export default class LoginInputs extends SafeComponent {
                     secureText
                     returnKeyType="go"
                     ref={this.passwordInputRef}
-                    testID="usernamePassword" />
+                    testID="usernamePassword"
+                />
                 <View style={{ height: 8 }} />
                 <View>
                     {buttons.roundBlueBgButton(
@@ -120,9 +141,7 @@ export default class LoginInputs extends SafeComponent {
                     )}
                 </View>
                 <View style={{ height: 42 }} />
-                <Text style={findKeyText}>
-                    {tx('title_whereToFind')}
-                </Text>
+                <Text style={findKeyText}>{tx('title_whereToFind')}</Text>
             </View>
         );
     }

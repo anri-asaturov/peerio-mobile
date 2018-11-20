@@ -17,27 +17,27 @@ export default class MeasureableView extends SafeComponent {
 
     layout = () => {
         const { onMeasure } = this.props;
-        this.ref && this.ref.measure(
-            (frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-                onMeasure && onMeasure({
-                    frameX,
-                    frameY,
-                    frameWidth,
-                    frameHeight,
-                    pageX,
-                    pageY
-                });
+        this.ref &&
+            this.ref.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
+                onMeasure &&
+                    onMeasure({
+                        frameX,
+                        frameY,
+                        frameWidth,
+                        frameHeight,
+                        pageX,
+                        pageY
+                    });
             });
     };
 
-    setRef = ref => { this.ref = ref; };
+    setRef = ref => {
+        this.ref = ref;
+    };
 
     renderThrow() {
         return (
-            <View
-                {...this.props}
-                onLayout={this.layout}
-                ref={this.setRef}>
+            <View {...this.props} onLayout={this.layout} ref={this.setRef}>
                 {this.props.children}
             </View>
         );

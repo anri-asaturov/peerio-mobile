@@ -15,7 +15,6 @@ const container = {
     backgroundColor: vars.folderRemoveNotifBg,
     paddingVertical: vars.spacing.small.midi2x,
     paddingHorizontal: vars.spacing.medium.mini2x
-
 };
 const greenWarningLine = {
     height: 4,
@@ -42,13 +41,16 @@ export default class SharedFolderRemovalNotif extends SafeComponent {
         console.log('Dismissed');
     }
 
-    keyExtractor(item, index) { return `${item}-${index}`; }
+    keyExtractor(item, index) {
+        return `${item}-${index}`;
+    }
 
     folderNameListItem = ({ item }) => {
         return (
             <Text semibold style={listTextStyle}>
                 {`\u2022 ${item}`}
-            </Text>);
+            </Text>
+        );
     };
 
     get folderList() {
@@ -59,7 +61,8 @@ export default class SharedFolderRemovalNotif extends SafeComponent {
                 numColumns={2}
                 data={folderNames}
                 renderItem={this.folderNameListItem}
-                keyExtractor={this.keyExtractor} />
+                keyExtractor={this.keyExtractor}
+            />
         );
     }
 
@@ -73,12 +76,16 @@ export default class SharedFolderRemovalNotif extends SafeComponent {
                     <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                         <Text style={topTextStyle}>
                             {folderNames.length === 1
-                                ? tx('title_sharedFolderRemovalNotif', { folderName: folderNames[0] })
-                                : tx('title_sharedFoldersRemovalNotif', { number: folderNames.length })}
+                                ? tx('title_sharedFolderRemovalNotif', {
+                                      folderName: folderNames[0]
+                                  })
+                                : tx('title_sharedFoldersRemovalNotif', {
+                                      number: folderNames.length
+                                  })}
                         </Text>
                         {icons.darkNoPadding('close', this.dismiss)}
                     </View>
-                    {(folderNames.length > 1) && this.folderList}
+                    {folderNames.length > 1 && this.folderList}
                     <Text style={bottomTextStyle}>
                         {folderNames.length === 1
                             ? tx('title_sharedFolderRemovalNotifDesc')

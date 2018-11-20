@@ -41,9 +41,7 @@ global.onboardingBeacons = onboardingBeacons;
 
 function dismissAllOnboardingBeacons() {
     // mark all onboarding flow as seen
-    beaconState.markSeen(
-        Object.keys(onboardingBeacons).map(b => onboardingBeacons[b].id)
-    );
+    beaconState.markSeen(Object.keys(onboardingBeacons).map(b => onboardingBeacons[b].id));
 }
 
 function createOnboardingBeacon(props) {
@@ -57,7 +55,4 @@ function createOnboardingBeacon(props) {
     });
 }
 
-export {
-    onboardingBeacons,
-    dismissAllOnboardingBeacons
-};
+export { onboardingBeacons, dismissAllOnboardingBeacons };

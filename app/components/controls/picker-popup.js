@@ -52,8 +52,11 @@ export default class PickerPopup extends SafeComponent {
     renderThrow() {
         const keys = _.keys(this.props.data);
         const i = keys.indexOf(this.value);
-        const items = _.values(_.mapValues(this.props.data, (value, key) =>
-            <Picker.Item label={value} value={key} key={key} />));
+        const items = _.values(
+            _.mapValues(this.props.data, (value, key) => (
+                <Picker.Item label={value} value={key} key={key} />
+            ))
+        );
         const topBox = {
             flex: 0,
             flexDirection: 'row',
@@ -72,8 +75,7 @@ export default class PickerPopup extends SafeComponent {
             height: uiState.pickerVisible ? uiState.pickerHeight : 0
         };
 
-        const pickerStyle = {
-        };
+        const pickerStyle = {};
 
         const up = icons.colored(
             'keyboard-arrow-up',
@@ -84,9 +86,8 @@ export default class PickerPopup extends SafeComponent {
         const down = icons.colored(
             'keyboard-arrow-down',
             () => this.next(1),
-            (i < keys.length - 1) ? vars.bg : vars.disabled
+            i < keys.length - 1 ? vars.bg : vars.disabled
         );
-
 
         return (
             <View style={containerStyle}>

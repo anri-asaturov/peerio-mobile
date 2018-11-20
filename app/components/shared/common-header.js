@@ -7,9 +7,12 @@ import testLabel from '../helpers/test-label';
 @observer
 export default class CommonHeader extends Component {
     render() {
-        const bgContainerStyle = [{
-            paddingTop: vars.statusBarHeight
-        }, this.props.outerStyle];
+        const bgContainerStyle = [
+            {
+                paddingTop: vars.statusBarHeight
+            },
+            this.props.outerStyle
+        ];
 
         const containerStyle = {
             flexDirection: 'row',
@@ -20,12 +23,8 @@ export default class CommonHeader extends Component {
             <View style={bgContainerStyle} {...testLabel(this.props.testID)} accessible={false}>
                 <View style={containerStyle} key={this.props.unique}>
                     {this.props.titleComponent}
-                    <View style={{ position: 'absolute', left: 0 }}>
-                        {this.props.leftIcon}
-                    </View>
-                    <View style={{ position: 'absolute', right: 0 }}>
-                        {this.props.rightIcon}
-                    </View>
+                    <View style={{ position: 'absolute', left: 0 }}>{this.props.leftIcon}</View>
+                    <View style={{ position: 'absolute', right: 0 }}>{this.props.rightIcon}</View>
                 </View>
             </View>
         );

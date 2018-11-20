@@ -25,11 +25,7 @@ const icons = {
                 disabled={disabled}
                 {...testLabel(testID)}>
                 <View style={{ padding: noPadding ? 0 : vars.iconPadding }}>
-                    <Icon
-                        style={style}
-                        name={name}
-                        size={size || vars.iconSize}
-                        color={color} />
+                    <Icon style={style} name={name} size={size || vars.iconSize} color={color} />
                 </View>
             </TouchableOpacity>
         );
@@ -42,7 +38,8 @@ const icons = {
                 size={size || vars.iconSize}
                 color={color}
                 style={[{ backgroundColor: 'transparent' }, style]}
-                {...testLabel(testID)} />
+                {...testLabel(testID)}
+            />
         );
     },
 
@@ -82,7 +79,16 @@ const icons = {
     },
 
     colored(name, onPress, colorFg, backgroundColor, disabled, testId) {
-        return icons.basic(name, colorFg, onPress, backgroundColor ? { backgroundColor } : {}, null, null, testId, disabled);
+        return icons.basic(
+            name,
+            colorFg,
+            onPress,
+            backgroundColor ? { backgroundColor } : {},
+            null,
+            null,
+            testId,
+            disabled
+        );
     },
 
     coloredNoPadding(name, onPress, outerStyle, colorFg, backgroundColor, disabled, testId) {
@@ -92,14 +98,13 @@ const icons = {
 
     coloredSmall(name, onPress, colorFg) {
         return (
-            <TouchableOpacity
-                pressRetentionOffset={vars.retentionOffset}
-                onPress={onPress}>
+            <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={onPress}>
                 <Icon
                     name={name}
                     size={vars.iconSizeSmall}
                     style={{ marginRight: vars.spacing.small.midi2x }}
-                    color={colorFg} />
+                    color={colorFg}
+                />
             </TouchableOpacity>
         );
     },
@@ -114,9 +119,7 @@ const icons = {
             height: d,
             width: d
         };
-        return (
-            <View style={s} />
-        );
+        return <View style={s} />;
     },
 
     text(text, onPress, style, testID, extraWidth) {
@@ -134,7 +137,9 @@ const icons = {
                 onPress={onPress}
                 {...testLabel(testID)}>
                 <View style={containerStyle}>
-                    <Text semibold style={[goStyle, style]}>{text}</Text>
+                    <Text semibold style={[goStyle, style]}>
+                        {text}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
@@ -150,17 +155,18 @@ const icons = {
             justifyContent: 'center'
         };
         return (
-            <TouchableOpacity
-                pressRetentionOffset={vars.retentionOffset} >
+            <TouchableOpacity pressRetentionOffset={vars.retentionOffset}>
                 <View style={containerStyle}>
-                    <Text semibold style={[disabledStyle, style]}>{text}</Text>
+                    <Text semibold style={[disabledStyle, style]}>
+                        {text}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
     },
 
-    bubble: (text) => icons.circle(text, 14, 8, vars.red, vars.white),
-    unreadBubble: (text) => icons.circle(text, 24, 12, vars.peerioBlue, vars.white),
+    bubble: text => icons.circle(text, 14, 8, vars.red, vars.white),
+    unreadBubble: text => icons.circle(text, 24, 12, vars.peerioBlue, vars.white),
 
     circle(text, radius, margin, bgColor, fgColor) {
         const notificationStyle = {
@@ -180,7 +186,9 @@ const icons = {
         };
         return (
             <View style={notificationStyle}>
-                <Text bold style={textStyle}>{`${text}`} </Text>
+                <Text bold style={textStyle}>
+                    {`${text}`}{' '}
+                </Text>
             </View>
         );
     },
@@ -214,7 +222,7 @@ const icons = {
             <TouchableOpacity
                 style={{ padding, opacity }}
                 onPress={onPress}
-                pressRetentionOffset={vars.retentionOffset} >
+                pressRetentionOffset={vars.retentionOffset}>
                 <Image style={{ width, height }} source={source} />
             </TouchableOpacity>
         );

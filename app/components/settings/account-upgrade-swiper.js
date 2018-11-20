@@ -30,15 +30,17 @@ export default class AccountUpgradeSwiper extends Component {
         reaction(() => this.selected, transitionAnimation);
         const topPlanIndex = plans.topPlanIndex();
         setTimeout(() => {
-            topPlanIndex === -1 ?
-                this._scrollView.scrollToEnd({ animated: false }) :
-                this._scrollView.scrollTo({ x: topPlanIndex * width, animated: false });
+            topPlanIndex === -1
+                ? this._scrollView.scrollToEnd({ animated: false })
+                : this._scrollView.scrollTo({ x: topPlanIndex * width, animated: false });
         }, 0);
         if (User.current) {
             console.log('account-upgrade-swiper: active plans');
             User.current && console.log(User.current.activePlans);
             if (User.current.addresses.filter(e => e.confirmed).length === 0) {
-                popupYes('', '', t('error_upgradingAccountNoConfirmedEmail')).then(() => routes.modal.discard());
+                popupYes('', '', t('error_upgradingAccountNoConfirmedEmail')).then(() =>
+                    routes.modal.discard()
+                );
             }
         }
     }
@@ -60,7 +62,9 @@ export default class AccountUpgradeSwiper extends Component {
         };
         return (
             <View style={s} key="exitRow">
-                {icons.white('close', () => routes.modal.discard(), { backgroundColor: 'transparent' })}
+                {icons.white('close', () => routes.modal.discard(), {
+                    backgroundColor: 'transparent'
+                })}
             </View>
         );
     }
@@ -71,18 +75,24 @@ export default class AccountUpgradeSwiper extends Component {
                 <ScrollView
                     scrollEventThrottle={0}
                     showsHorizontalScrollIndicator={false}
-                    ref={sv => { this._scrollView = sv; }}
+                    ref={sv => {
+                        this._scrollView = sv;
+                    }}
                     onScroll={this.handleScroll}
-                    key="scroll" horizontal pagingEnabled removeClippedSubviews={false}>
-                    <AccountUpgradePlan
-                        style={card}
-                        plan={plans[0]} />
-                    <AccountUpgradePlan
-                        style={card}
-                        plan={plans[1]} />
+                    key="scroll"
+                    horizontal
+                    pagingEnabled
+                    removeClippedSubviews={false}>
+                    <AccountUpgradePlan style={card} plan={plans[0]} />
+                    <AccountUpgradePlan style={card} plan={plans[1]} />
                 </ScrollView>
                 {this.exitRow}
-                <AccountUpgradeNavigator key="navigator" selected={this.selected} onJumpTo={this.jumpTo} />
-            </View>);
+                <AccountUpgradeNavigator
+                    key="navigator"
+                    selected={this.selected}
+                    onJumpTo={this.jumpTo}
+                />
+            </View>
+        );
     }
 }

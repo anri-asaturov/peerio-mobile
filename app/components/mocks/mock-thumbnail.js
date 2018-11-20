@@ -22,7 +22,9 @@ export default class MockThumbnail extends Component {
 
     @observable path;
 
-    showActionSheet = () => { FileActionSheet.show(); };
+    showActionSheet = () => {
+        FileActionSheet.show();
+    };
 
     render() {
         const s = {

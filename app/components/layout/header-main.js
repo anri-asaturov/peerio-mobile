@@ -21,8 +21,8 @@ export default class HeaderMain extends SafeComponent {
         }
         const { titleAction } = routerMain;
         const extraMargin = titleAction ? 2 : 0;
-        const marginHorizontal = rightIcon || leftIcon ?
-            vars.iconSize + (2 * vars.headerIconMargin) + extraMargin : 0;
+        const marginHorizontal =
+            rightIcon || leftIcon ? vars.iconSize + 2 * vars.headerIconMargin + extraMargin : 0;
         const textStyle = {
             color: vars.white,
             fontSize: vars.font.size20,
@@ -53,13 +53,15 @@ export default class HeaderMain extends SafeComponent {
                 <Text semibold ellipsizeMode="middle" numberOfLines={1} style={textStyle}>
                     {title}
                 </Text>
-                {titleAction && <MeasureableIcon
-                    icon="arrow-drop-down"
-                    beacon={chatBeacons.infoPanelBeacon}
-                    color={vars.white}
-                    onPress={titleAction}
-                    spotBgColor={vars.darkBlue} />
-                }
+                {titleAction && (
+                    <MeasureableIcon
+                        icon="arrow-drop-down"
+                        beacon={chatBeacons.infoPanelBeacon}
+                        color={vars.white}
+                        onPress={titleAction}
+                        spotBgColor={vars.darkBlue}
+                    />
+                )}
             </TouchableOpacity>
         );
         // this is for animation purposes so that object gets completely redrawn on transition
@@ -67,4 +69,3 @@ export default class HeaderMain extends SafeComponent {
         return <CommonHeader {...{ unique, titleComponent, leftIcon, rightIcon, outerStyle }} />;
     }
 }
-

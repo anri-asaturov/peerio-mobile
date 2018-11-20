@@ -21,9 +21,7 @@ export default class ChatMessageText extends SafeComponent {
 
         const text = message.replace(/\n[ ]+/g, '\n') || '';
         return (
-            <Text
-                selectable
-                style={textStyle}>
+            <Text selectable style={textStyle}>
                 {tagify(text, User.current.username)}
             </Text>
         );

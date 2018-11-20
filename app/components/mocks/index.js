@@ -21,7 +21,8 @@ import MockUpgrade from './mock-upgrade';
 
 // we require all mocks to prevent them from being orphaned
 // when checking for unused JS filex
-const mocks = { // eslint-disable-line
+// eslint-disable-next-line
+const mocks = {
     MockBeacon,
     MockBeaconFiles,
     MockChannelView,

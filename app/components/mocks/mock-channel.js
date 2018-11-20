@@ -31,9 +31,12 @@ class MockChannel {
     @observable unreadCount = 0;
     @observable headLoaded = true;
 
-    get allJoinedParticipants() { return this.participants; }
-    get otherParticipants() { return this.participants; }
-
+    get allJoinedParticipants() {
+        return this.participants;
+    }
+    get otherParticipants() {
+        return this.participants;
+    }
 
     constructor() {
         TinyDb.userCollection = TinyDb.open('testuser');

@@ -50,13 +50,11 @@ export default class ChoiceItem extends SafeComponent {
                 activeOpacity={this.props.untappable ? 1 : 0.3}
                 pressRetentionOffset={offset}
                 testID={title}
-                style={{ overflow: 'hidden', height: (visible || selected) ? undefined : 0 }}
+                style={{ overflow: 'hidden', height: visible || selected ? undefined : 0 }}
                 onPress={onPress}>
                 <View style={itemContainerStyle} pointerEvents="none">
                     <View style={{ flexGrow: 1, flexShrink: 1 }}>
-                        <Text style={{ color: vars.txtDark }}>
-                            {t(title)}
-                        </Text>
+                        <Text style={{ color: vars.txtDark }}>{t(title)}</Text>
                     </View>
                     <View style={{ flex: 0, minHeight: vars.iconLayoutSize }}>
                         {this.rightIcon(selected)}
@@ -67,11 +65,17 @@ export default class ChoiceItem extends SafeComponent {
     }
 
     get items() {
-        return this.props.options.map(({ title, id }) => this.renderItem(
-            title, () => {
-                this.opened = true;
-                this.props.state.selected = id;
-            }, this.opened, id === this.props.state.selected));
+        return this.props.options.map(({ title, id }) =>
+            this.renderItem(
+                title,
+                () => {
+                    this.opened = true;
+                    this.props.state.selected = id;
+                },
+                this.opened,
+                id === this.props.state.selected
+            )
+        );
     }
 
     renderThrow() {

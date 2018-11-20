@@ -4,7 +4,9 @@ import { socket } from '../../lib/icebear';
 import { t } from '../utils/translator';
 
 export default class SnackbarConnection extends SnackbarBase {
-    get isVisible() { return uiState.appState === 'active' && !socket.connected; }
+    get isVisible() {
+        return uiState.appState === 'active' && !socket.connected;
+    }
 
     // to override
     getText() {

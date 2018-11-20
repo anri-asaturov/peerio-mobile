@@ -35,10 +35,19 @@ export default class SignupStep1 extends SafeComponent {
     firstnameState = observable({ value: '' });
     lastnameState = observable({ value: '' });
 
-    @action.bound firstNameInputRef(ref) { this.firstNameInput = ref; }
-    @action.bound lastNameInputRef(ref) { this.lastNameInput = ref; }
+    @action.bound
+    firstNameInputRef(ref) {
+        this.firstNameInput = ref;
+    }
+    @action.bound
+    lastNameInputRef(ref) {
+        this.lastNameInput = ref;
+    }
 
-    @action.bound onSubmitFirstName() { this.lastNameInput.onFocus(); }
+    @action.bound
+    onSubmitFirstName() {
+        this.lastNameInput.onFocus();
+    }
 
     tmFirstname = { ...signupTelemetryHelper, item: S.FIRST_NAME };
     tmLastname = { ...signupTelemetryHelper, item: S.LAST_NAME };
@@ -65,7 +74,8 @@ export default class SignupStep1 extends SafeComponent {
         tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound async handleNextButton() {
+    @action.bound
+    async handleNextButton() {
         if (this.isNextDisabled) return;
         signupState.firstName = this.firstnameState.value;
         signupState.lastName = this.lastnameState.value;
@@ -74,8 +84,12 @@ export default class SignupStep1 extends SafeComponent {
     }
 
     get isNextDisabled() {
-        return !socket.connected || (!this.firstnameState.value ||
-            !this.firstNameInput.isValid || !this.lastNameInput.isValid);
+        return (
+            !socket.connected ||
+            (!this.firstnameState.value ||
+                !this.firstNameInput.isValid ||
+                !this.lastNameInput.isValid)
+        );
     }
 
     renderThrow() {
@@ -92,9 +106,11 @@ export default class SignupStep1 extends SafeComponent {
                         validations={firstName}
                         telemetry={this.tmFirstname}
                         label={`${tx('title_firstName')}*`}
-                        helperText={this.firstnameState.value.length >= MAX_NAME_LENGTH ?
-                            tx('title_characterLimitReached') :
-                            null}
+                        helperText={
+                            this.firstnameState.value.length >= MAX_NAME_LENGTH
+                                ? tx('title_characterLimitReached')
+                                : null
+                        }
                         maxLength={MAX_NAME_LENGTH}
                         required
                         clearTextIcon
@@ -102,16 +118,19 @@ export default class SignupStep1 extends SafeComponent {
                         blurOnSubmit={false}
                         onSubmitEditing={this.onSubmitFirstName}
                         ref={this.firstNameInputRef}
-                        testID="firstName" />
+                        testID="firstName"
+                    />
                     <View style={{ height: spaceBetweenInputs }} />
                     <StyledTextInput
                         state={this.lastnameState}
                         validations={lastName}
                         telemetry={this.tmLastname}
                         label={`${tx('title_lastName')}*`}
-                        helperText={this.lastnameState.value.length >= MAX_NAME_LENGTH ?
-                            tx('title_characterLimitReached') :
-                            null}
+                        helperText={
+                            this.lastnameState.value.length >= MAX_NAME_LENGTH
+                                ? tx('title_characterLimitReached')
+                                : null
+                        }
                         maxLength={MAX_NAME_LENGTH}
                         required
                         clearTextIcon
@@ -119,14 +138,16 @@ export default class SignupStep1 extends SafeComponent {
                         blurOnSubmit={false}
                         onSubmitEditing={this.handleNextButton}
                         ref={this.lastNameInputRef}
-                        testID="lastName" />
+                        testID="lastName"
+                    />
                     <View style={{ alignItems: 'flex-end' }}>
                         {buttons.roundBlueBgButton(
                             tx('button_next'),
                             this.handleNextButton,
                             this.isNextDisabled,
                             'button_next',
-                            { width: vars.signupButtonWidth, marginVertical: 30 })}
+                            { width: vars.signupButtonWidth, marginVertical: 30 }
+                        )}
                     </View>
                 </View>
             </View>

@@ -23,20 +23,28 @@ export default class AccountUpgradeToggle extends Component {
             color: highlight ? 'black' : 'white'
         };
 
-        const text1Style = [textStyle, {
-            fontSize: vars.font.size12
-        }];
+        const text1Style = [
+            textStyle,
+            {
+                fontSize: vars.font.size12
+            }
+        ];
 
-        const text2Style = [textStyle, {
-            opacity: 0.7
-        }];
+        const text2Style = [
+            textStyle,
+            {
+                opacity: 0.7
+            }
+        ];
 
         return (
             <TouchableOpacity
                 onPress={this.props.onPress}
                 pressRetentionOffest={vars.pressRetentionOffest}
                 style={toggleContainer}>
-                <Text bold style={text1Style}>{text1}</Text>
+                <Text bold style={text1Style}>
+                    {text1}
+                </Text>
                 <Text style={text2Style}>{text2}</Text>
             </TouchableOpacity>
         );

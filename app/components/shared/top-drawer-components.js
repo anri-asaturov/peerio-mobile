@@ -49,12 +49,11 @@ class TopDrawerBackupAccountKey extends SafeComponent {
             <TopDrawer
                 {...this.props}
                 heading={tx('title_backupAk')}
-                image={(
+                image={
                     <View style={outerCircle}>
-                        <View style={innerCircle}>
-                            {icons.darkNoPadding('file-download')}
-                        </View>
-                    </View>)}
+                        <View style={innerCircle}>{icons.darkNoPadding('file-download')}</View>
+                    </View>
+                }
                 descriptionLine1={tx('title_backupAkReminderMobile')}
                 buttonText={tx('button_backupNow')}
                 buttonAction={action}
@@ -77,9 +76,11 @@ class TopDrawerMaintenance extends SafeComponent {
         }
         // 24 hour interval between notices
         const MIN_INFORM_INTERVAL = 24 * 60 * 60 * 1000;
-        return serverSettings.maintenanceWindow
-            && serverSettings.maintenanceWindow.length === 2
-            && informInterval > MIN_INFORM_INTERVAL;
+        return (
+            serverSettings.maintenanceWindow &&
+            serverSettings.maintenanceWindow.length === 2 &&
+            informInterval > MIN_INFORM_INTERVAL
+        );
     }
 
     static triggerAction() {
@@ -93,8 +94,9 @@ class TopDrawerMaintenance extends SafeComponent {
     renderThrow() {
         // double checking in case maintenance window was set to null right before render
         if (!TopDrawerMaintenance.trigger()) return null;
-        const [start, end] =
-            serverSettings.maintenanceWindow.map(date => moment(date).format('DD/MM/YYYY hh:mm'));
+        const [start, end] = serverSettings.maintenanceWindow.map(date =>
+            moment(date).format('DD/MM/YYYY hh:mm')
+        );
         return (
             <TopDrawer
                 {...this.props}
@@ -167,7 +169,9 @@ class TopDrawerAutoMount extends SafeComponent {
             TopDrawerPendingFiles,
             'files', // triggered when route is 'files'
             {}, // empty additional props
-            () => preferenceStore.prefs.pendingFilesBannerVisible && fileState.store.folderStore.root.hasLegacyFiles,
+            () =>
+                preferenceStore.prefs.pendingFilesBannerVisible &&
+                fileState.store.folderStore.root.hasLegacyFiles,
             () => {
                 preferenceStore.prefs.pendingFilesBannerVisible = false;
             }
@@ -181,7 +185,9 @@ class TopDrawerAutoMount extends SafeComponent {
         );
     }
 
-    renderThrow() { return null; }
+    renderThrow() {
+        return null;
+    }
 }
 
 export {

@@ -7,7 +7,7 @@ import { User } from '../../../lib/icebear';
 
 const MEDCRYPTOR_INITIAL_ROUTE = 'medcryptorAdmin';
 
-const extendRoutes = (router) => {
+const extendRoutes = router => {
     if (User.current.props.mcrRoles && User.current.props.mcrRoles.some(x => x.includes('admin'))) {
         router.add(MEDCRYPTOR_INITIAL_ROUTE, [<MedcryptorAdminScreen />], medcryptorAdminState);
         router._initialRoute = MEDCRYPTOR_INITIAL_ROUTE;

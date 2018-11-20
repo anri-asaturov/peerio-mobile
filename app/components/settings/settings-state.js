@@ -43,17 +43,21 @@ class SettingsState extends RoutedState {
         this.routerMain.isRightMenuVisible = false;
         this.routerMain.isLeftHamburgerVisible = false;
         if (this.reaction) return;
-        this.reaction = reaction(() => this.routerMain.currentIndex, (i) => {
-            if (this.routerMain.route === 'settings') {
-                while (i < this.stack.length) {
-                    this.stack.pop();
-                    this.subroute = i ? this.stack[i - 1] : null;
+        this.reaction = reaction(
+            () => this.routerMain.currentIndex,
+            i => {
+                if (this.routerMain.route === 'settings') {
+                    while (i < this.stack.length) {
+                        this.stack.pop();
+                        this.subroute = i ? this.stack[i - 1] : null;
+                    }
                 }
             }
-        });
+        );
     }
 
-    @action transition(subroute) {
+    @action
+    transition(subroute) {
         console.log(`settings-state.js: transition ${subroute}`);
         if (subroute) {
             this.subroute = subroute;
@@ -83,11 +87,7 @@ class SettingsState extends RoutedState {
                     {passphrase}
                 </Text>
             );
-            popupCopyCancel(
-                tx('title_AccountKey'),
-                tx('title_AKDetail'),
-                mp
-            ).then(r => {
+            popupCopyCancel(tx('title_AccountKey'), tx('title_AKDetail'), mp).then(r => {
                 if (!r) return;
                 Clipboard.setString(passphrase);
                 snackbarState.pushTemporary(tx('title_copied'));

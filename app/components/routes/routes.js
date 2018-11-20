@@ -1,7 +1,4 @@
-class Routes {
-
-}
-
+class Routes {}
 
 const routes = new Routes();
 global.routes = routes;

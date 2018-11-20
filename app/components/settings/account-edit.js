@@ -11,7 +11,6 @@ import { popupDeleteAccount } from '../shared/popups';
 import { User } from '../../lib/icebear';
 import { loginState } from '../states';
 
-
 const label = {
     color: vars.txtDate,
     marginVertical: vars.spacing.small.mini2x,
@@ -24,7 +23,6 @@ const label2 = {
     marginLeft: vars.spacing.small.maxi,
     marginTop: vars.spacing.medium.mini2x
 };
-
 
 @observer
 export default class AccountEdit extends SafeComponent {
@@ -43,9 +41,7 @@ export default class AccountEdit extends SafeComponent {
                 settings[prop] = !settings[prop];
             });
         };
-        return (
-            <ToggleItem {...{ prop, title, state, onPress }} />
-        );
+        return <ToggleItem {...{ prop, title, state, onPress }} />;
     }
 
     async deleteAccount() {
@@ -66,7 +62,10 @@ export default class AccountEdit extends SafeComponent {
                 contentContainerStyle={{ flex: 1, flexGrow: 1 }}
                 onScroll={this.onScroll}
                 keyboardShouldPersistTaps="handled"
-                style={{ backgroundColor: vars.darkBlueBackground05 }} ref={ref => { this._scrollView = ref; }}>
+                style={{ backgroundColor: vars.darkBlueBackground05 }}
+                ref={ref => {
+                    this._scrollView = ref;
+                }}>
                 <View style={{ margin: vars.spacing.small.midi2x }}>
                     {this.label('title_promoConsentRequestTitle')}
                     {this.toggle('title_promoConsent', 'subscribeToPromoEmails')}
@@ -76,7 +75,15 @@ export default class AccountEdit extends SafeComponent {
                     {this.label('title_dataPreferences')}
                     {this.toggle('title_dataCollectionMessage', 'dataCollection')}
                 </View>
-                <View style={{ marginTop: vars.spacing.medium.mini2x, marginLeft: vars.spacing.medium.maxi2x, marginBottom: vars.spacing.large.midi, flex: 1, flexGrow: 1, justifyContent: 'flex-end' }}>
+                <View
+                    style={{
+                        marginTop: vars.spacing.medium.mini2x,
+                        marginLeft: vars.spacing.medium.maxi2x,
+                        marginBottom: vars.spacing.large.midi,
+                        flex: 1,
+                        flexGrow: 1,
+                        justifyContent: 'flex-end'
+                    }}>
                     {buttons.redTextButton('button_accountDelete', () => this.deleteAccount())}
                 </View>
             </ScrollView>

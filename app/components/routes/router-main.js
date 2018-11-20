@@ -15,7 +15,14 @@ import ContactSyncInvite from '../contacts/contact-sync-invite';
 import ContactView from '../contacts/contact-view';
 import ContactList from '../contacts/contact-list';
 import ContactListInvite from '../contacts/contact-list-invite';
-import { fileState, chatState, settingsState, contactState, contactAddState, invitationState } from '../states';
+import {
+    fileState,
+    chatState,
+    settingsState,
+    contactState,
+    contactAddState,
+    invitationState
+} from '../states';
 // import { enablePushNotifications } from '../../lib/push';
 import routes from './routes';
 import loginState from '../login/login-state';
@@ -49,34 +56,59 @@ class RouterMain extends Router {
     constructor() {
         super();
         routes.main = this;
-        reaction(() => this.currentIndex && (this.route !== 'chats'), i => { this.isBackVisible = i > 0; });
+        reaction(
+            () => this.currentIndex && this.route !== 'chats',
+            i => {
+                this.isBackVisible = i > 0;
+            }
+        );
         reaction(() => [this.route, this.currentIndex], () => uiState.hideAll());
         this.add('welcomeZeroState', [<WelcomeZeroState />]);
         this.add('files', [<Files />, <FileDetailView />], fileState);
-        this.add('chats', [<whiteLabelComponents.ChatList />, <whiteLabelComponents.Chat />], chatState);
+        this.add(
+            'chats',
+            [<whiteLabelComponents.ChatList />, <whiteLabelComponents.Chat />],
+            chatState
+        );
         this.add('contacts', [<ContactList />, <ContactView nonModal />], contactState);
         this.add('contactAdd', [<ContactAdd />], contactAddState);
         this.add('contactSyncAdd', [<ContactSyncAdd />], contactAddState);
         this.add('contactSyncInvite', [<ContactSyncInvite />], contactAddState);
         this.add('contactInvite', [<ContactListInvite />], contactAddState);
-        this.add('settings', [<SettingsLevel1 />, <SettingsLevel2 />, <SettingsLevel3 />], settingsState);
+        this.add(
+            'settings',
+            [<SettingsLevel1 />, <SettingsLevel2 />, <SettingsLevel3 />],
+            settingsState
+        );
         this.add('channelInvite', [<whiteLabelComponents.ChannelInvite />], invitationState);
 
-        reaction(() => fileStore.migration.pending, migration => {
-            if (migration) this.filesystemUpgrade();
-        }, { fireImmediately: true });
+        reaction(
+            () => fileStore.migration.pending,
+            migration => {
+                if (migration) this.filesystemUpgrade();
+            },
+            { fireImmediately: true }
+        );
 
-        reaction(() => this.current || this.currentIndex, () => {
-            timeoutWithAction(
-                this,
-                () => { this.inactive = false; },
-                () => { this.inactive = true; },
-                INACTIVE_DELAY
-            );
-        });
+        reaction(
+            () => this.current || this.currentIndex,
+            () => {
+                timeoutWithAction(
+                    this,
+                    () => {
+                        this.inactive = false;
+                    },
+                    () => {
+                        this.inactive = true;
+                    },
+                    INACTIVE_DELAY
+                );
+            }
+        );
     }
 
-    @action initialRoute() {
+    @action
+    initialRoute() {
         this._initialRoute = uiState.isFirstLogin ? 'welcomeZeroState' : 'chats';
         this[this._initialRoute](null, true);
     }
@@ -85,7 +117,8 @@ class RouterMain extends Router {
         return this.route === this._initialRoute;
     }
 
-    @action async initialize() {
+    @action
+    async initialize() {
         if (this.invoked) return;
         this.invoked = true;
         this.loading = true;
@@ -103,7 +136,8 @@ class RouterMain extends Router {
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
     }
 
-    @action transitionToMain() {
+    @action
+    transitionToMain() {
         // TODO: refactor all this
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
@@ -111,18 +145,22 @@ class RouterMain extends Router {
         loginState.transition();
     }
 
-    @action async filesystemUpgrade() {
+    @action
+    async filesystemUpgrade() {
         if (fileStore.migration.pending) {
             if (!(fileStore.migration.started || fileStore.migration.performedByAnotherClient)) {
                 await popupUpgradeNotification();
                 fileStore.migration.confirmMigration();
             }
             popupUpgradeProgress();
-            when(() => !fileStore.migration.pending, () => {
-                popupState.discardPopup();
-                snackbarState.pushTemporary(tx('title_fileUpdateComplete'));
-                RNKeepAwake.deactivate();
-            });
+            when(
+                () => !fileStore.migration.pending,
+                () => {
+                    popupState.discardPopup();
+                    snackbarState.pushTemporary(tx('title_fileUpdateComplete'));
+                    RNKeepAwake.deactivate();
+                }
+            );
             RNKeepAwake.activate();
         }
     }
@@ -142,7 +180,7 @@ class RouterMain extends Router {
             this.route = key;
 
             let newIndex = index;
-            if (newIndex === undefined) newIndex = (components.length > 1 && item) ? 1 : 0;
+            if (newIndex === undefined) newIndex = components.length > 1 && item ? 1 : 0;
             if (newIndex !== this.currentIndex) {
                 !suppressTransition && transitionAnimation();
             }
@@ -165,24 +203,30 @@ class RouterMain extends Router {
     }
 
     get currentComponent() {
-        return this.current && (this.current.components.length > this.currentIndex)
-            ? this.current.components[this.currentIndex].type.prototype : {};
+        return this.current && this.current.components.length > this.currentIndex
+            ? this.current.components[this.currentIndex].type.prototype
+            : {};
     }
 
     onTransition(route, active, param) {
         try {
-            route && route.routeState && route.routeState.onTransition && route.routeState.onTransition(active, param);
+            route &&
+                route.routeState &&
+                route.routeState.onTransition &&
+                route.routeState.onTransition(active, param);
         } catch (e) {
             console.error(e);
         }
     }
 
-    @action fabAction() {
+    @action
+    fabAction() {
         console.log(`router-main.js: fab action`);
         this.current && this.current.routeState && this.current.routeState.fabAction();
     }
 
-    @action async back() {
+    @action
+    async back() {
         await uiState.hideAll();
         if (this.currentIndex > 0) this.currentIndex--;
         this.onTransition(this.current, true);
@@ -190,12 +234,14 @@ class RouterMain extends Router {
         console.log(`router-main: transition to ${this.route}:${this.currentIndex}`);
     }
 
-    @action resetMenus() {
+    @action
+    resetMenus() {
         this.isInputVisible = false;
         this.modalRoute = null;
     }
 
-    @action androidBackHandler() {
+    @action
+    androidBackHandler() {
         if (this.route === 'files') {
             if (fileStore.folderStore.currentFolder.parent) {
                 fileStore.folderStore.currentFolder = fileStore.folderStore.currentFolder.parent;

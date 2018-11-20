@@ -11,7 +11,10 @@ const shareFilesInChatBeacon = createBeacon({
     condition: () => {
         const inChatView = routes.main.route === 'chats';
         const firstChat = !uiState.isFirstLogin && chatStore.chats.length === 1;
-        const firstFiveMessagesSent = uiState.isFirstLogin && chatStore.chats.length === 1 && chatStore.chats[0].messages.length > 5;
+        const firstFiveMessagesSent =
+            uiState.isFirstLogin &&
+            chatStore.chats.length === 1 &&
+            chatStore.chats[0].messages.length > 5;
         return inChatView && (firstChat || firstFiveMessagesSent);
     },
     priority: 6,
@@ -25,7 +28,8 @@ const infoPanelBeacon = createBeacon({
     id: 'chatInfoPanel',
     condition: () => {
         const inChatView = routes.main.route === 'chats';
-        const recentFilesSent = chatStore.chats[0] && chatStore.chats.some(c => c.recentFiles.length > 0);
+        const recentFilesSent =
+            chatStore.chats[0] && chatStore.chats.some(c => c.recentFiles.length > 0);
         return uiState.isFirstLogin && inChatView && recentFilesSent;
     },
     priority: 7,
@@ -50,7 +54,6 @@ const chatBeacons = {
     infoPanelBeacon,
     pinDmBeacon
 };
-
 
 function createBeacon(props) {
     return observable({

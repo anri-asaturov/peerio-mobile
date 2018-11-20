@@ -29,7 +29,8 @@ const emptyProgressBar = {
 const container = {
     flex: 0,
     paddingHorizontal: pagePadding,
-    paddingTop: vars.spacing.huge.midi2x -
+    paddingTop:
+        vars.spacing.huge.midi2x -
         // because container is always below the progressBar in the signup screens
         (progressBarContainer.marginTop + progressBarContainer.height) -
         // smaller distance on smaller phones
@@ -69,17 +70,26 @@ const descriptionStyle = {
     marginBottom: vars.spacing.medium.maxi2x
 };
 
-const description = [descriptionStyle, {
-    fontSize: vars.font.size18
-}];
+const description = [
+    descriptionStyle,
+    {
+        fontSize: vars.font.size18
+    }
+];
 
-const description2 = [descriptionStyle, {
-    fontSize: vars.isDeviceScreenBig ? vars.font.size16 : vars.font.size14
-}];
+const description2 = [
+    descriptionStyle,
+    {
+        fontSize: vars.isDeviceScreenBig ? vars.font.size16 : vars.font.size14
+    }
+];
 
-const generateAkDescription = [descriptionStyle, {
-    fontSize: vars.isDeviceScreenBig ? vars.font.size18 : vars.font.size14
-}];
+const generateAkDescription = [
+    descriptionStyle,
+    {
+        fontSize: vars.isDeviceScreenBig ? vars.font.size18 : vars.font.size14
+    }
+];
 
 const subTitle = {
     color: vars.textBlack87,

@@ -97,10 +97,7 @@ class SignupState extends RoutedState {
     @action.bound
     async suggestUsernames() {
         try {
-            this.usernameSuggestions = await suggestUsername(
-                this.firstName,
-                this.lastName
-            );
+            this.usernameSuggestions = await suggestUsername(this.firstName, this.lastName);
         } catch (e) {
             console.error(e);
         }
@@ -121,20 +118,9 @@ class SignupState extends RoutedState {
 
     @action.bound
     async saveAccountKey(telemetryProps) {
-        const {
-            username,
-            firstName,
-            lastName,
-            passphrase,
-            backupFileName
-        } = this;
+        const { username, firstName, lastName, passphrase, backupFileName } = this;
         let fileSavePath = config.FileStream.getTempCachePath(backupFileName('pdf'));
-        await saveAccountKeyBackup(
-            fileSavePath,
-            `${firstName} ${lastName}`,
-            username,
-            passphrase
-        );
+        await saveAccountKeyBackup(fileSavePath, `${firstName} ${lastName}`, username, passphrase);
         this.isInProgress = true;
         this.isPdfPreviewVisible = true;
         try {
@@ -142,10 +128,13 @@ class SignupState extends RoutedState {
             if (Platform.OS !== 'android') RNShare.open({ type: 'text/pdf', url: fileSavePath });
             try {
                 await viewer;
-            } catch (e) { // No PDF reader installed on Android, or if viewer failed for any other reason
+            } catch (e) {
+                // No PDF reader installed on Android, or if viewer failed for any other reason
                 console.error(e);
                 fileSavePath = config.FileStream.getTempCachePath(backupFileName('txt'));
-                const content = `${tx('title_appName')} Username: ${username}\n${tx('title_appName')} Account Key: ${passphrase}`;
+                const content = `${tx('title_appName')} Username: ${username}\n${tx(
+                    'title_appName'
+                )} Account Key: ${passphrase}`;
 
                 await RNFS.writeFile(fileSavePath, content, 'utf8');
                 await FileOpener.open(fileSavePath, 'text/*', fileSavePath);
@@ -181,8 +170,7 @@ class SignupState extends RoutedState {
         const localeCode = uiState.locale;
         user.username = username;
         user.email = email;
-        user.passphrase =
-            __DEV__ && process.env.PEERIO_QUICK_SIGNUP ? 'icebear' : passphrase;
+        user.passphrase = __DEV__ && process.env.PEERIO_QUICK_SIGNUP ? 'icebear' : passphrase;
         user.firstName = firstName;
         user.lastName = lastName;
         user.localeCode = localeCode;

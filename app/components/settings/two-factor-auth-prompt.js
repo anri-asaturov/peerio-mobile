@@ -10,13 +10,15 @@ import StyledTextInput from '../shared/styled-text-input';
 import uiState from '../layout/ui-state';
 import { transitionAnimation } from '../helpers/animations';
 
-const tfaDefaultImage = process.env.EXECUTABLE_NAME === 'medcryptor' ?
-    require('../../assets/2fa-illustration-medcryptor.png') : require('../../assets/2fa-illustration.png');
+const tfaDefaultImage =
+    process.env.EXECUTABLE_NAME === 'medcryptor'
+        ? require('../../assets/2fa-illustration-medcryptor.png')
+        : require('../../assets/2fa-illustration.png');
 
 const tfaFailedImage = require('../../assets/2fa-illustration-failed.png');
 
 const { width } = Dimensions.get('window');
-const imageWidth = width - (2 * vars.popupHorizontalMargin);
+const imageWidth = width - 2 * vars.popupHorizontalMargin;
 const headingStyle = {
     fontSize: vars.font.size18,
     marginBottom: vars.spacing.medium.mini2x,
@@ -40,19 +42,27 @@ export default class TwoFactorAuthPrompt extends SafeComponent {
     @observable focused = false;
 
     componentDidMount() {
-        when(() => uiState.tfaFailed, () => {
-            this.tfaInput && this.tfaInput.setCustomError('title_2FAFailed', false);
-        });
+        when(
+            () => uiState.tfaFailed,
+            () => {
+                this.tfaInput && this.tfaInput.setCustomError('title_2FAFailed', false);
+            }
+        );
     }
 
-    @action.bound tfaInputRef(ref) { this.tfaInput = ref; }
+    @action.bound
+    tfaInputRef(ref) {
+        this.tfaInput = ref;
+    }
 
-    @action.bound focus() {
+    @action.bound
+    focus() {
         transitionAnimation();
         this.focused = true;
     }
 
-    @action.bound blur() {
+    @action.bound
+    blur() {
         transitionAnimation();
         this.focused = false;
     }
@@ -61,13 +71,21 @@ export default class TwoFactorAuthPrompt extends SafeComponent {
         const { placeholder, state, title, checkbox, onSubmitEditing } = this.props;
         return (
             <View style={{ minHeight: vars.popupMinHeight }}>
-                {!this.focused && <Image
-                    source={uiState.tfaFailed ? tfaFailedImage : tfaDefaultImage}
-                    style={imageStyle}
-                    resizeMode="contain"
-                />}
-                <View style={{ paddingHorizontal: vars.popupPadding, paddingTop: vars.spacing.medium.maxi }}>
-                    <Text bold style={headingStyle}>{tx(title)}</Text>
+                {!this.focused && (
+                    <Image
+                        source={uiState.tfaFailed ? tfaFailedImage : tfaDefaultImage}
+                        style={imageStyle}
+                        resizeMode="contain"
+                    />
+                )}
+                <View
+                    style={{
+                        paddingHorizontal: vars.popupPadding,
+                        paddingTop: vars.spacing.medium.maxi
+                    }}>
+                    <Text bold style={headingStyle}>
+                        {tx(title)}
+                    </Text>
                     <Text style={{ color: vars.textBlack87 }}>{tx('title_2FADetail')}</Text>
                     <View style={inputContainer}>
                         <StyledTextInput
@@ -79,7 +97,8 @@ export default class TwoFactorAuthPrompt extends SafeComponent {
                             onFocus={this.focus}
                             onBlur={this.blur}
                             testID="2faTokenInput"
-                            returnKeyType="go" />
+                            returnKeyType="go"
+                        />
                     </View>
                     {checkbox}
                 </View>

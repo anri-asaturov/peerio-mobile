@@ -17,23 +17,29 @@ class ConsoleOverride {
 
     async configureConsole() {
         this.verbose = await this.areVerboseLogsEnabled();
-        reaction(() => this.verbose, value => (value ? TinyDb.system.setValue(VERBOSE_LOGS_KEY, value) :
-            TinyDb.system.removeValue(VERBOSE_LOGS_KEY)));
+        reaction(
+            () => this.verbose,
+            value =>
+                value
+                    ? TinyDb.system.setValue(VERBOSE_LOGS_KEY, value)
+                    : TinyDb.system.removeValue(VERBOSE_LOGS_KEY)
+        );
         const { verbose } = this;
 
         if (console._errorOriginal) {
             console.error = console._errorOriginal;
         }
 
-        global.ErrorUtils && global.ErrorUtils.setGlobalHandler((error, isFatal) => {
-            console.error(`App.js: unhandled error, fatal: ${isFatal}`);
-            if (error) {
-                const { message, stack, column, line } = error;
-                if (column || line) console.error(`Error on column ${column}, line ${line}`);
-                if (message) console.error(`Message: ${message}`);
-                if (stack) console.error(`Stack: ${stack}`);
-            }
-        });
+        global.ErrorUtils &&
+            global.ErrorUtils.setGlobalHandler((error, isFatal) => {
+                console.error(`App.js: unhandled error, fatal: ${isFatal}`);
+                if (error) {
+                    const { message, stack, column, line } = error;
+                    if (column || line) console.error(`Error on column ${column}, line ${line}`);
+                    if (message) console.error(`Message: ${message}`);
+                    if (stack) console.error(`Stack: ${stack}`);
+                }
+            });
 
         console.stack = [];
         console.stackPush = (msg, color) => {
@@ -52,29 +58,38 @@ class ConsoleOverride {
         console.stackPushDebug = msg => console.stackPush(msg, 'darkblue');
 
         const { log } = console;
-        console.log = function () {
+        console.log = function() {
             __DEV__ && log.apply(console, arguments);
-            Array.from(arguments).reverse().forEach(console.stackPushLog);
+            Array.from(arguments)
+                .reverse()
+                .forEach(console.stackPushLog);
         };
 
         const { warn } = console;
-        console.warn = function () {
+        console.warn = function() {
             __DEV__ && warn.apply(console, arguments);
-            Array.from(arguments).reverse().forEach(console.stackPushWarning);
+            Array.from(arguments)
+                .reverse()
+                .forEach(console.stackPushWarning);
         };
 
         console.disableYellowBox = true;
 
         const { error } = console;
-        console.error = function () {
+        console.error = function() {
             __DEV__ && error.apply(console, arguments);
-            Array.from(arguments).reverse().forEach(console.stackPushError);
+            Array.from(arguments)
+                .reverse()
+                .forEach(console.stackPushError);
         };
 
         const { debug } = console;
-        console.debug = function () {
+        console.debug = function() {
             __DEV__ && verbose && debug.apply(console, arguments);
-            verbose && Array.from(arguments).reverse().forEach(console.stackPushDebug);
+            verbose &&
+                Array.from(arguments)
+                    .reverse()
+                    .forEach(console.stackPushDebug);
         };
 
         console.debug('console-override.js: debug logs are enabled');

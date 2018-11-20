@@ -33,7 +33,8 @@ export default class SignupShareData extends SafeComponent {
         tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound handleShareButton() {
+    @action.bound
+    handleShareButton() {
         User.current.saveSettings(settings => {
             settings.errorTracking = true;
             settings.dataCollection = true;
@@ -43,7 +44,8 @@ export default class SignupShareData extends SafeComponent {
         signupState.finishSignUp();
     }
 
-    @action.bound handleDeclineButton() {
+    @action.bound
+    handleDeclineButton() {
         tm.signup.shareData(false);
         tm.signup.finishSignup();
         signupState.finishSignUp();
@@ -65,13 +67,15 @@ export default class SignupShareData extends SafeComponent {
                             this.handleDeclineButton,
                             null,
                             null,
-                            'button_notNow')}
+                            'button_notNow'
+                        )}
                         <View style={{ width: 24 }} />
                         {buttons.roundBlueBgButton(
                             tx('button_share'),
                             this.handleShareButton,
                             null,
-                            'button_share')}
+                            'button_share'
+                        )}
                     </View>
                 </View>
             </View>

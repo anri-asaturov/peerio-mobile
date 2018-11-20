@@ -9,7 +9,8 @@ import tm from '../../telemetry';
 
 @observer
 export default class LoginButtonBack extends SafeComponent {
-    @action.bound onBackPressed() {
+    @action.bound
+    onBackPressed() {
         tm.login.navigate(this.props.telemetry);
         loginState.clearLastUser();
     }

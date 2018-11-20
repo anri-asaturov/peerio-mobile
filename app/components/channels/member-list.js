@@ -19,21 +19,31 @@ export default class MemberList extends SafeComponent {
         ];
     }
 
-    @computed get channelMembers() {
+    @computed
+    get channelMembers() {
         return this.data.allJoinedParticipants || [];
     }
 
-    @computed get channelInvites() {
+    @computed
+    get channelInvites() {
         return chatState.chatInviteStore.sent.get(this.data.id) || [];
     }
 
-    get data() { return chatState.currentChat; }
+    get data() {
+        return chatState.currentChat;
+    }
 
-    get hasData() { return !!this.channelMembers || !!this.channelInvites; }
+    get hasData() {
+        return !!this.channelMembers || !!this.channelInvites;
+    }
 
-    get hasChannelMembers() { return this.channelMembers.length; }
+    get hasChannelMembers() {
+        return this.channelMembers.length;
+    }
 
-    get hasChannelInvites() { return this.channelInvites.length; }
+    get hasChannelInvites() {
+        return this.channelInvites.length;
+    }
 
     componentWillUnmount() {
         this.reaction && this.reaction();
@@ -60,16 +70,18 @@ export default class MemberList extends SafeComponent {
             toggleCollapsed = null;
             hidden = this.props.collapsed || !this.hasChannelInvites;
         }
-        return (<ChatInfoSectionHeader
-            key={key}
-            title={key}
-            collapsed={this.props.collapsed}
-            toggleCollapsed={toggleCollapsed}
-            hidden={hidden}
-        />);
+        return (
+            <ChatInfoSectionHeader
+                key={key}
+                title={key}
+                collapsed={this.props.collapsed}
+                toggleCollapsed={toggleCollapsed}
+                hidden={hidden}
+            />
+        );
     };
 
-    onRemove = async (contact) => {
+    onRemove = async contact => {
         if (contact.signingPublicKey) {
             await this.data.removeParticipant(contact);
         } else {
@@ -83,7 +95,8 @@ export default class MemberList extends SafeComponent {
                 contact={item}
                 section={section}
                 channel={this.data}
-                onRemove={this.onRemove} />
+                onRemove={this.onRemove}
+            />
         );
     };
 

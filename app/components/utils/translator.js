@@ -27,10 +27,13 @@ function findPrefixedName(k) {
 // TODO: this doesn't need @observer, probably, never
 class T extends Component {
     componentDidMount() {
-        this.localeUpdateReaction = reaction(() => uiState.locale, () => {
-            // console.log('update reaction');
-            this.forceUpdate();
-        });
+        this.localeUpdateReaction = reaction(
+            () => uiState.locale,
+            () => {
+                // console.log('update reaction');
+                this.forceUpdate();
+            }
+        );
     }
 
     componentWillUnmount() {
@@ -46,11 +49,7 @@ class T extends Component {
         }
         let translated = t(name, this.props.children);
         if (Array.isArray(translated)) {
-            return (
-                <Text>
-                    {translated.map((o, i) => <Text key={i}>{o}</Text>)}
-                </Text>
-            );
+            return <Text>{translated.map((o, i) => <Text key={i}>{o}</Text>)}</Text>;
         }
         if (this.props.uppercase) {
             translated = translated.toUpperCase();

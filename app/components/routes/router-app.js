@@ -33,7 +33,9 @@ class RouterApp extends Router {
             }
             let blockingPopup = true;
             if (PopupState.activePopup) {
-                blockingPopup = (PopupState.activePopup.type === 'systemWarning') || (PopupState.activePopup.type === 'systemUpgrade');
+                blockingPopup =
+                    PopupState.activePopup.type === 'systemWarning' ||
+                    PopupState.activePopup.type === 'systemUpgrade';
             }
             if (!blockingPopup) {
                 PopupState.discardPopup();

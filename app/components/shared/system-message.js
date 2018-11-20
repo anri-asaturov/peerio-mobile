@@ -27,12 +27,12 @@ export default class SystemMessage extends SafeComponent {
         const systemMessage = systemMessages.getSystemMessageText(message);
         const videoCallMessage = message.systemData.link;
 
-
         if (videoCallMessage) {
             return (
                 <VideoCallMessage
                     videoCallMessage={videoCallMessage}
-                    systemMessage={systemMessage} />
+                    systemMessage={systemMessage}
+                />
             );
         }
 

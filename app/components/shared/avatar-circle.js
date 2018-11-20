@@ -14,7 +14,7 @@ export default class AvatarCircle extends SafeComponent {
     renderThrow() {
         const { large, medium, contact, loading, invited } = this.props;
         let ratio = 1;
-        if (large) ratio = 2 + (2 / 3);
+        if (large) ratio = 2 + 2 / 3;
         if (medium) ratio = 2;
         const width = vars.avatarDiameter * ratio;
         const height = width;
@@ -31,15 +31,24 @@ export default class AvatarCircle extends SafeComponent {
 
         const { color, tofuError, letter } = contact || {};
         const tryColor = color || {};
-        const coloredAvatarStyle = [avatarStyle, {
-            overflow: 'hidden',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: tryColor.value || 'gray'
-        }];
+        const coloredAvatarStyle = [
+            avatarStyle,
+            {
+                overflow: 'hidden',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: tryColor.value || 'gray'
+            }
+        ];
         const avatarLetter = (
             <View style={coloredAvatarStyle}>
-                <Text style={{ color: tryColor.isLight ? 'black' : 'white', textAlign: 'center', width: 14 * ratio, fontSize: vars.font.size12 * ratio }}>
+                <Text
+                    style={{
+                        color: tryColor.isLight ? 'black' : 'white',
+                        textAlign: 'center',
+                        width: 14 * ratio,
+                        fontSize: vars.font.size12 * ratio
+                    }}>
                     {letter}
                 </Text>
             </View>
@@ -56,7 +65,7 @@ export default class AvatarCircle extends SafeComponent {
                 );
             }
             if (contact.hasAvatar) {
-                const uri = (large || medium) ? contact.largeAvatarUrl : contact.mediumAvatarUrl;
+                const uri = large || medium ? contact.largeAvatarUrl : contact.mediumAvatarUrl;
                 // image is absolute positioned so that it doesn't jump over letter when it loads
                 avatarIcon = (
                     <Image

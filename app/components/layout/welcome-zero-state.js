@@ -10,8 +10,10 @@ import ViewWithDrawer from '../shared/view-with-drawer';
 
 const { width } = Dimensions.get('window');
 
-const zeroStateImage = process.env.EXECUTABLE_NAME === 'medcryptor' ?
-    require('../../assets/welcome-zero-state-medcryptor.png') : require('../../assets/welcome-zero-state.png');
+const zeroStateImage =
+    process.env.EXECUTABLE_NAME === 'medcryptor'
+        ? require('../../assets/welcome-zero-state-medcryptor.png')
+        : require('../../assets/welcome-zero-state.png');
 
 const container = {
     flex: 1,
@@ -47,15 +49,20 @@ export default class WelcomeZeroState extends SafeComponent {
                     source={zeroStateImage}
                     style={adjustImageDimensions(zeroStateImage, width, null)}
                 />
-            </View>);
+            </View>
+        );
     }
 
     renderThrow() {
         return (
             <View style={{ flexGrow: 1 }}>
                 <ViewWithDrawer style={container}>
-                    <Text semibold serif style={headerStyle}>{tx('title_zeroFirstLoginMessage')}</Text>
-                    <Text style={descriptionTextStyle}>{tx('title_learnFollowWalkthroughMobile')}</Text>
+                    <Text semibold serif style={headerStyle}>
+                        {tx('title_zeroFirstLoginMessage')}
+                    </Text>
+                    <Text style={descriptionTextStyle}>
+                        {tx('title_learnFollowWalkthroughMobile')}
+                    </Text>
                     {this.zeroStateIllustration}
                 </ViewWithDrawer>
             </View>

@@ -23,7 +23,10 @@ export default class MockChatList extends Component {
             <View style={{ flex: 1, flexGrow: 1 }}>
                 <StatusBar barStyle="default" />
                 {gradient(
-                    { style: { flexGrow: 1, paddingTop: vars.layoutPaddingTop }, backgroundColor: 'transparent' },
+                    {
+                        style: { flexGrow: 1, paddingTop: vars.layoutPaddingTop },
+                        backgroundColor: 'transparent'
+                    },
                     <AccountUpgradePlan plan={plans[1]} />,
                     basicColor,
                     premiumColor

@@ -40,21 +40,18 @@ const RECORD_TEST_COUNT = 5000;
 let sql = null;
 
 function sqlWrite(i) {
-    return sql.executeSql(
-        'INSERT OR REPLACE INTO key_value(key, value) VALUES(?, ?)', [i, randomWords()]
-    );
+    return sql.executeSql('INSERT OR REPLACE INTO key_value(key, value) VALUES(?, ?)', [
+        i,
+        randomWords()
+    ]);
 }
 
 function sqlRead(i) {
-    return sql.executeSql(
-        'SELECT value FROM key_value WHERE key=?', [i]
-    );
+    return sql.executeSql('SELECT value FROM key_value WHERE key=?', [i]);
 }
 
 async function sqlReadBatch() {
-    const dataset = await sql.executeSql(
-        'SELECT * FROM key_value'
-    );
+    const dataset = await sql.executeSql('SELECT * FROM key_value');
     log(dataset[0].rows.length);
 }
 
@@ -119,7 +116,7 @@ export default class MockActionSheet extends Component {
         }
         start(`Deleting key ${k}`);
         await storage.removeValue(k);
-        if (!await storage.getValue(k)) {
+        if (!(await storage.getValue(k))) {
             log('...passed');
         }
         start(`Clearing storage`);

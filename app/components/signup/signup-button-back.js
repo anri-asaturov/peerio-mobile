@@ -9,7 +9,8 @@ import tm from '../../telemetry';
 
 @observer
 export default class SignupButtonBack extends SafeComponent {
-    @action.bound onBackPressed() {
+    @action.bound
+    onBackPressed() {
         tm.signup.navigate(this.props.telemetry);
         signupState.prev();
     }

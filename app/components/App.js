@@ -1,7 +1,17 @@
 import React from 'react';
-import { View, PanResponder, Linking, DeviceEventEmitter,
-    AppState, ActivityIndicator, NativeModules,
-    Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
+import {
+    View,
+    PanResponder,
+    Linking,
+    DeviceEventEmitter,
+    AppState,
+    ActivityIndicator,
+    NativeModules,
+    Dimensions,
+    PixelRatio,
+    Platform,
+    StatusBar
+} from 'react-native';
 // import RNShakeEvent from 'react-native-shake-event';
 import KeyEvent from 'react-native-key-event';
 import { observer } from 'mobx-react/native';
@@ -43,7 +53,11 @@ export default class App extends SafeComponent {
         });
 
         console.logVersion = () => {
-            console.log(`App.js: app version ${config.appVersion}, SDK version: ${config.sdkVersion}, OS: ${Platform.OS}, OS version: ${Platform.Version}`);
+            console.log(
+                `App.js: app version ${config.appVersion}, SDK version: ${config.sdkVersion}, OS: ${
+                    Platform.OS
+                }, OS version: ${Platform.Version}`
+            );
             console.log(`App.js: screen specs: ${width}, ${height}, ${PixelRatio.get()}`);
         };
 
@@ -64,7 +78,10 @@ export default class App extends SafeComponent {
                 route = routerApp.routes.loginWelcomeBack;
             }
             // No existing user
-            if (!await User.getLastAuthenticated() && !await TinyDb.system.getValue('apple-review-login')) {
+            if (
+                !(await User.getLastAuthenticated()) &&
+                !(await TinyDb.system.getValue('apple-review-login'))
+            ) {
                 route = routerApp.routes.loginWelcome;
             }
             route.transition();
@@ -138,7 +155,7 @@ export default class App extends SafeComponent {
         if (MockComponent) return <MockComponent />;
         const tabletHack = { top: 0, height, left: 0, right: 0 };
         return (
-            <View style={(height < 500) ? tabletHack : { flex: 1, flexGrow: 1 }}>
+            <View style={height < 500 ? tabletHack : { flex: 1, flexGrow: 1 }}>
                 <RouteNavigator key="navigator" routes={routerApp} />
                 {/* BeaconLayout.debugHelper */}
                 <ModalLayout key="modals" />
@@ -147,7 +164,9 @@ export default class App extends SafeComponent {
                 <DebugMenu />
                 <ActionSheetLayout key="actionSheets" />
                 {uiState.picker}
-                <Text key="debug" style={{ height: 0 }} testID="debugText">{uiState.debugText}</Text>
+                <Text key="debug" style={{ height: 0 }} testID="debugText">
+                    {uiState.debugText}
+                </Text>
                 <StatusBar barStyle="light-content" hidden={false} key="statusBar" />
                 <TopDrawerAutoMount />
                 {!process.env.NO_DEV_BAR && <TestHelper key="testHelper" />}

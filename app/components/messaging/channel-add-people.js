@@ -11,19 +11,19 @@ const fillView = { flex: 1, flexGrow: 1 };
 
 @observer
 export default class ChannelAddPeople extends SafeComponent {
-    @computed get excluded() {
+    @computed
+    get excluded() {
         const excluded = {};
-        chatState.currentChat.allJoinedParticipants.forEach(
-            i => { excluded[i.username] = i; console.log(`excluded: ${i.username}`); }
-        );
+        chatState.currentChat.allJoinedParticipants.forEach(i => {
+            excluded[i.username] = i;
+            console.log(`excluded: ${i.username}`);
+        });
         return excluded;
     }
 
-    addPeople = (contacts) => {
+    addPeople = contacts => {
         const { excluded } = this;
-        chatState.currentChat.addParticipants(
-            contacts.filter(c => !excluded[c.username])
-        );
+        chatState.currentChat.addParticipants(contacts.filter(c => !excluded[c.username]));
     };
 
     render() {
@@ -32,8 +32,10 @@ export default class ChannelAddPeople extends SafeComponent {
                 <ContactSelectorUniversal
                     exclude={this.excluded}
                     onExit={() => chatState.routerModal.discard()}
-                    action={this.addPeople} title={tx('title_addPeopleToRoom')}
-                    inputPlaceholder={tx('title_TryUsernameOrEmail')} />
+                    action={this.addPeople}
+                    title={tx('title_addPeopleToRoom')}
+                    inputPlaceholder={tx('title_TryUsernameOrEmail')}
+                />
             </View>
         );
     }

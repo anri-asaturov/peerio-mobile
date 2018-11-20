@@ -75,12 +75,16 @@ export default class ContactEditPermissionItem extends SafeComponent {
         currentContactItem._showWarning = true;
     }
 
-    @action.bound handleShowWarningClick() { this.showWarning = true; }
+    @action.bound
+    handleShowWarningClick() {
+        this.showWarning = true;
+    }
 
     // To prevent animation bug caused by how react native updates lists
     // We hide the item, then do "unshare" logic after hide animation ends
     // Finally reset the UI state of the list item
-    @action.bound removeClick() {
+    @action.bound
+    removeClick() {
         transitionAnimation();
         this.collapsed = true;
         // wait for animation to finish before removing item
@@ -91,9 +95,9 @@ export default class ContactEditPermissionItem extends SafeComponent {
     }
 
     get removeLabel() {
-        return this.showWarning ?
-            this.removeButton() :
-            icons.darkNoPadding('remove-circle-outline', this.handleShowWarningClick, iconStyle);
+        return this.showWarning
+            ? this.removeButton()
+            : icons.darkNoPadding('remove-circle-outline', this.handleShowWarningClick, iconStyle);
     }
 
     removeButton() {
@@ -105,7 +109,8 @@ export default class ContactEditPermissionItem extends SafeComponent {
                 <Text style={{ backgroundColor: 'transparent', color: vars.white }}>
                     {tu('button_remove')}
                 </Text>
-            </TouchableOpacity>);
+            </TouchableOpacity>
+        );
     }
 
     deleteWarning() {
@@ -140,23 +145,27 @@ export default class ContactEditPermissionItem extends SafeComponent {
         const { contact } = this.props;
         const { fullName } = contact;
         return (
-            <View style={{
-                backgroundColor: this.showWarning ? vars.black05 : vars.white,
-                height: this.collapsed ? 0 : undefined
-            }}>
+            <View
+                style={{
+                    backgroundColor: this.showWarning ? vars.black05 : vars.white,
+                    height: this.collapsed ? 0 : undefined
+                }}>
                 <View style={outerContainerStyle}>
-                    <View style={{ flex: 1, flexGrow: 1, flexDirection: 'row', alignItems: 'center' }}>
-                        <AvatarCircle
-                            contact={this.props.contact}
-                        />
-                        <Text style={nameStyle}>
-                            {fullName}
-                        </Text>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexGrow: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                        }}>
+                        <AvatarCircle contact={this.props.contact} />
+                        <Text style={nameStyle}>{fullName}</Text>
                     </View>
                     {this.rightButton}
                 </View>
                 {this.showWarning && this.deleteWarning()}
-            </View>);
+            </View>
+        );
     }
 }
 

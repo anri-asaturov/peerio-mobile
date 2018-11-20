@@ -21,7 +21,10 @@ export default class ActivityOverlay extends Component {
         };
         return this.props.visible ? (
             <View style={[activityOverlay, center]}>
-                <ActivityIndicator size={this.props.large ? 'large' : 'small'} color={vars.txtDark} />
+                <ActivityIndicator
+                    size={this.props.large ? 'large' : 'small'}
+                    color={vars.txtDark}
+                />
             </View>
         ) : null;
     }

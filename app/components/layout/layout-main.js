@@ -25,8 +25,13 @@ export default class LayoutMain extends SafeComponent {
     }
 
     get snackBar() {
-        return !this.modal && !routerMain.currentComponent.suppressMainSnackBar ?
-            <SnackBar ref={sb => { this._snackBar = sb; }} /> : null;
+        return !this.modal && !routerMain.currentComponent.suppressMainSnackBar ? (
+            <SnackBar
+                ref={sb => {
+                    this._snackBar = sb;
+                }}
+            />
+        ) : null;
     }
 
     renderThrow() {
@@ -44,12 +49,10 @@ export default class LayoutMain extends SafeComponent {
         const { actionsBar, showInput, leftIcon, rightIcon, layoutTitle } = currentComponent;
 
         const animatedBlock = (
-            <View
-                style={outerStyle}>
+            <View style={outerStyle}>
                 <HeaderMain leftIcon={leftIcon} rightIcon={rightIcon} title={layoutTitle} />
                 <SnackBarConnection />
-                <View
-                    style={{ flex: 1, flexGrow: 1 }}>
+                <View style={{ flex: 1, flexGrow: 1 }}>
                     {currentPage}
                     <Bottom>
                         <CustomOverlay />
@@ -61,14 +64,17 @@ export default class LayoutMain extends SafeComponent {
             </View>
         );
         return (
-            <View
-                testID="mainLayout"
-                style={[common.container.root]}>
+            <View testID="mainLayout" style={[common.container.root]}>
                 {animatedBlock}
                 <ProgressOverlay enabled={routerMain.loading} />
                 <StatusBar
-                    barStyle={uiState.externalViewer || routerModal.isBlackStatusBar ? 'default' : 'light-content'}
-                    hidden={false} />
+                    barStyle={
+                        uiState.externalViewer || routerModal.isBlackStatusBar
+                            ? 'default'
+                            : 'light-content'
+                    }
+                    hidden={false}
+                />
             </View>
         );
     }

@@ -26,9 +26,9 @@ mobileConfig(config, { FileStreamBase }, telemetry);
 const OVERRIDE_SERVER_KEY = 'socketServerOverride';
 
 icebear.overrideServer = async function(value) {
-    return value ?
-        TinyDb.system.setValue(OVERRIDE_SERVER_KEY, value) :
-        TinyDb.system.removeValue(OVERRIDE_SERVER_KEY);
+    return value
+        ? TinyDb.system.setValue(OVERRIDE_SERVER_KEY, value)
+        : TinyDb.system.removeValue(OVERRIDE_SERVER_KEY);
 };
 
 icebear.startSocket = async function() {

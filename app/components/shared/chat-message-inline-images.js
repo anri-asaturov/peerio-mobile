@@ -9,11 +9,13 @@ import fileState from '../files/file-state';
 
 @observer
 export default class ChatMessageInlineImages extends SafeComponent {
-    @computed get images() {
+    @computed
+    get images() {
         const { message, chat } = this.props;
-        const files = (message.files || [])
-            .map(id => fileState.store.getByIdInChat(id, chat.id))
-            .filter(f => f) || [];
+        const files =
+            (message.files || [])
+                .map(id => fileState.store.getByIdInChat(id, chat.id))
+                .filter(f => f) || [];
 
         const images = files.filter(f => f.isImage) || [];
 
@@ -27,13 +29,13 @@ export default class ChatMessageInlineImages extends SafeComponent {
     get renderImages() {
         const { onInlineImageAction, onLegacyFileAction } = this.props;
 
-
         return this.images.map(image => {
             const key = image.fileId || image.url;
             return (
                 <FileInlineImage
                     {...{ key, image, onLegacyFileAction }}
-                    onAction={onInlineImageAction} />
+                    onAction={onInlineImageAction}
+                />
             );
         });
     }
@@ -41,11 +43,7 @@ export default class ChatMessageInlineImages extends SafeComponent {
     renderThrow() {
         if (!this.images.length) return null;
 
-        return (
-            <View>
-                {this.renderImages}
-            </View>
-        );
+        return <View>{this.renderImages}</View>;
     }
 }
 

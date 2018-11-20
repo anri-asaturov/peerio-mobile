@@ -37,7 +37,9 @@ export default class ReadReceipt extends SafeComponent {
             </View>
         );
         const uri = mediumAvatarUrl;
-        const avatarView = <Image style={circleStyle} source={{ uri, cache: 'force-cache' }} key={uri} />;
+        const avatarView = (
+            <Image style={circleStyle} source={{ uri, cache: 'force-cache' }} key={uri} />
+        );
         return mediumAvatarUrl ? avatarView : letterView;
     }
 }

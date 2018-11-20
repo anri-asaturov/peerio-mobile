@@ -27,13 +27,14 @@ export default class SpotBeacon extends AbstractBeacon {
             // Description text height (taken from onLayout); is equivalent to lineHeight * numberOfLines
             (descriptionText ? this.descriptionTextHeight : 0) +
             // Container padding
-            (vars.beaconPadding) +
+            vars.beaconPadding +
             // Icon adds height to the container equal to half the size of the icon
-            (this.bubbleDiameter / 2));
+            this.bubbleDiameter / 2
+        );
     }
 
     get bubbleDiameter() {
-        const outerDiameter = this.props.position.frameWidth + 8 + (2 * vars.beaconBorderWidth);
+        const outerDiameter = this.props.position.frameWidth + 8 + 2 * vars.beaconBorderWidth;
         return outerDiameter >= MINIMUM_BUBBLE_DIAMETER ? outerDiameter : MINIMUM_BUBBLE_DIAMETER;
     }
 
@@ -47,7 +48,7 @@ export default class SpotBeacon extends AbstractBeacon {
 
     get horizontalMeasuresLeftMost() {
         return {
-            containerWidth: vars.beaconWidth + (this.bubbleDiameter / 2),
+            containerWidth: vars.beaconWidth + this.bubbleDiameter / 2,
             containerPositionX: { left: this.contentPositionLeft },
             circlePositionX: { left: 0 },
             rectanglePositionX: { left: this.bubbleDiameter / 2 },
@@ -70,7 +71,9 @@ export default class SpotBeacon extends AbstractBeacon {
     get horizontalMeasuresTwoThirds() {
         return {
             containerWidth: vars.beaconWidth,
-            containerPositionX: { right: windowWidth - this.contentPositionLeft - vars.beaconWidth / 3 },
+            containerPositionX: {
+                right: windowWidth - this.contentPositionLeft - vars.beaconWidth / 3
+            },
             circlePositionX: { right: vars.beaconWidth / 3 - this.bubbleDiameter },
             rectanglePositionX: { right: -this.bubbleDiameter / 2 },
             rectanglePaddingLeft: vars.beaconPadding,
@@ -80,8 +83,10 @@ export default class SpotBeacon extends AbstractBeacon {
 
     get horizontalMeasuresRightMost() {
         return {
-            containerWidth: vars.beaconWidth + (this.bubbleDiameter / 2),
-            containerPositionX: { right: windowWidth - this.contentPositionLeft - this.bubbleDiameter },
+            containerWidth: vars.beaconWidth + this.bubbleDiameter / 2,
+            containerPositionX: {
+                right: windowWidth - this.contentPositionLeft - this.bubbleDiameter
+            },
             circlePositionX: { right: 0 },
             rectanglePositionX: { left: 0 },
             rectanglePaddingLeft: vars.beaconPadding,
@@ -99,17 +104,16 @@ export default class SpotBeacon extends AbstractBeacon {
         let measure = 'horizontalMeasuresLeftMost';
         if (x >= windowWidth / 4) measure = 'horizontalMeasuresOneThird';
         if (x >= windowWidth / 2) measure = 'horizontalMeasuresTwoThirds';
-        if (x >= windowWidth * 3 / 4) measure = 'horizontalMeasuresRightMost';
+        if (x >= (windowWidth * 3) / 4) measure = 'horizontalMeasuresRightMost';
 
         return this[measure];
     }
 
     get containerPositionY() {
         const { pageY, frameHeight } = this.props.position;
-        return (this.isParentTop ?
-            { top: pageY - (this.bubbleDiameter - frameHeight) / 2 } :
-            { top: pageY - (this.beaconHeight - frameHeight / 2) }
-        );
+        return this.isParentTop
+            ? { top: pageY - (this.bubbleDiameter - frameHeight) / 2 }
+            : { top: pageY - (this.beaconHeight - frameHeight / 2) };
     }
 
     get rectanglePositionY() {
@@ -122,7 +126,7 @@ export default class SpotBeacon extends AbstractBeacon {
 
     renderThrow() {
         const { position, headerText, descriptionText } = this.props;
-        if (!position || !headerText && !descriptionText) return null;
+        if (!position || (!headerText && !descriptionText)) return null;
 
         const {
             containerWidth,
@@ -137,35 +141,47 @@ export default class SpotBeacon extends AbstractBeacon {
         const paddingTop = this.isParentTop ? this.bubbleDiameter / 4 : vars.beaconPadding;
         const paddingBottom = this.isParentTop ? vars.beaconPadding : this.bubbleDiameter / 4;
 
-        const container = [containerPositionX, this.containerPositionY, {
-            width: containerWidth,
-            height: this.beaconHeight + (this.bubbleDiameter / 2),
-            position: 'absolute'
-        }];
+        const container = [
+            containerPositionX,
+            this.containerPositionY,
+            {
+                width: containerWidth,
+                height: this.beaconHeight + this.bubbleDiameter / 2,
+                position: 'absolute'
+            }
+        ];
 
-        const rectangle = [rectanglePositionX, this.rectanglePositionY, {
-            position: 'absolute',
-            width: vars.beaconWidth,
-            height: this.beaconHeight,
-            backgroundColor: vars.beaconBg,
-            borderRadius: 8,
-            paddingLeft: rectanglePaddingLeft,
-            paddingRight: rectanglePaddingRight,
-            paddingTop,
-            paddingBottom
-        }];
+        const rectangle = [
+            rectanglePositionX,
+            this.rectanglePositionY,
+            {
+                position: 'absolute',
+                width: vars.beaconWidth,
+                height: this.beaconHeight,
+                backgroundColor: vars.beaconBg,
+                borderRadius: 8,
+                paddingLeft: rectanglePaddingLeft,
+                paddingRight: rectanglePaddingRight,
+                paddingTop,
+                paddingBottom
+            }
+        ];
 
-        const outerCircle = [circlePositionX, this.circlePositionY, {
-            position: 'absolute',
-            width: this.bubbleDiameter,
-            height: this.bubbleDiameter,
-            borderRadius: this.bubbleDiameter / 2,
-            borderColor: vars.beaconBg,
-            borderWidth: vars.beaconBorderWidth,
-            backgroundColor: vars.beaconBg,
-            justifyContent: 'center',
-            alignItems: 'center'
-        }];
+        const outerCircle = [
+            circlePositionX,
+            this.circlePositionY,
+            {
+                position: 'absolute',
+                width: this.bubbleDiameter,
+                height: this.bubbleDiameter,
+                borderRadius: this.bubbleDiameter / 2,
+                borderColor: vars.beaconBg,
+                borderWidth: vars.beaconBorderWidth,
+                backgroundColor: vars.beaconBg,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }
+        ];
 
         const innerCircle = {
             position: 'relative',
@@ -190,7 +206,10 @@ export default class SpotBeacon extends AbstractBeacon {
                         </Text>
                     )}
                     {descriptionText && (
-                        <Text semibold={!headerText} style={textStyle} onLayout={this.onDescriptionTextLayout} >
+                        <Text
+                            semibold={!headerText}
+                            style={textStyle}
+                            onLayout={this.onDescriptionTextLayout}>
                             {tx(descriptionText)}
                         </Text>
                     )}
@@ -200,9 +219,7 @@ export default class SpotBeacon extends AbstractBeacon {
                     onPress={this.onPressIcon}
                     pressRetentionOffset={vars.retentionOffset}
                     style={outerCircle}>
-                    <View style={innerCircle}>
-                        {this.props.content}
-                    </View>
+                    <View style={innerCircle}>{this.props.content}</View>
                 </TouchableOpacity>
             </View>
         );

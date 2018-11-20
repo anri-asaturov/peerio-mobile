@@ -35,7 +35,10 @@ export default {
 
     sendIconStyleNormal,
 
-    sendIconStyleActive: [sendIconStyleNormal, {
-        backgroundColor: vars.peerioBlue
-    }]
+    sendIconStyleActive: [
+        sendIconStyleNormal,
+        {
+            backgroundColor: vars.peerioBlue
+        }
+    ]
 };

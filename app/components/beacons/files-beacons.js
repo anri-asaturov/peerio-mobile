@@ -38,7 +38,9 @@ const fileReceivedBeacon = createBeacon({
     condition: () => {
         const inFilesView = routes.main.route === 'files';
         const hasChats = chatStore.directMessages.length > 0;
-        const recentFilesReceived = chatStore.directMessages.filter(c => (c.recentFiles.filter(f => f.owner !== User.current.username).length > 1));
+        const recentFilesReceived = chatStore.directMessages.filter(
+            c => c.recentFiles.filter(f => f.owner !== User.current.username).length > 1
+        );
         const hasLessThan4Folders = fileStore.folderStore.root.folders.length < 4;
         return inFilesView && hasChats && recentFilesReceived && hasLessThan4Folders;
     },
@@ -52,7 +54,6 @@ const filesBeacons = {
     fileOptionsBeacon,
     fileReceivedBeacon
 };
-
 
 function createBeacon(props) {
     return observable({

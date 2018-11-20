@@ -32,4 +32,3 @@ PreferenceToggleItem.propTypes = {
     title: PropTypes.any.isRequired,
     description: PropTypes.any
 };
-

@@ -19,7 +19,7 @@ const upload = async (path, fileName, extension) => {
     fileState.uploadInFiles(fileProps);
 };
 
-const uploadFileiOS = async (event) => {
+const uploadFileiOS = async event => {
     await promiseWhen(() => socket.authenticated);
     if (event && event.url) {
         const url = decodeURIComponent(event.url);
@@ -31,13 +31,15 @@ const uploadFileiOS = async (event) => {
     }
 };
 
-const wakeUpAndUploadFileiOS = (event) => {
+const wakeUpAndUploadFileiOS = event => {
     uploadFileiOS({ url: event });
 };
 
 const getStoragePermission = async () => {
     try {
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             return true;
         }
@@ -47,7 +49,7 @@ const getStoragePermission = async () => {
     return false;
 };
 
-const uploadFileAndroid = async (sharedFile) => {
+const uploadFileAndroid = async sharedFile => {
     if (sharedFile) {
         await promiseWhen(() => socket.authenticated);
         const readPermission = await getStoragePermission();
@@ -57,7 +59,12 @@ const uploadFileAndroid = async (sharedFile) => {
             // for contentUri's
             const fileInfo = await RNFS.stat(sharedFile);
             // we prefer display name if it is set
-            const file = fileInfo.displayName || fileInfo.originalFilepath.split('/').slice(-1).toString();
+            const file =
+                fileInfo.displayName ||
+                fileInfo.originalFilepath
+                    .split('/')
+                    .slice(-1)
+                    .toString();
             const fileName = file.split('.')[0];
             // we fallback to mimeType determined extension if filename doesn't have one
             const ext = file.split('.')[1] || fileInfo.extension || '';

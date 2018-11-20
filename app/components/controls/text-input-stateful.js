@@ -11,14 +11,28 @@ export default class TextInputStateful extends SafeComponent {
     renderThrow() {
         const s = this.props.state;
         return (
-            <View style={{ borderColor: vars.checkboxIconInactive, borderWidth: 1, marginTop: vars.spacing.small.midi2x }}>
+            <View
+                style={{
+                    borderColor: vars.checkboxIconInactive,
+                    borderWidth: 1,
+                    marginTop: vars.spacing.small.midi2x
+                }}>
                 <TextInput
                     {...testLabel(this.props.placeholder)}
-                    style={[{ height: vars.inputHeight, paddingLeft: vars.iconPadding, fontFamily: vars.peerioFontFamily }, this.props.style]}
+                    style={[
+                        {
+                            height: vars.inputHeight,
+                            paddingLeft: vars.iconPadding,
+                            fontFamily: vars.peerioFontFamily
+                        },
+                        this.props.style
+                    ]}
                     underlineColorAndroid="transparent"
                     value={s.value}
                     selectTextOnFocus
-                    onChangeText={text => { s.value = text; }}
+                    onChangeText={text => {
+                        s.value = text;
+                    }}
                     placeholder={this.props.placeholder}
                     autoCapitalize="none"
                     autoCorrect={false}

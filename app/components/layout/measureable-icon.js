@@ -18,7 +18,7 @@ export default class MeasureableIcon extends MeasureableView {
         beaconState.requestBeacon(beacon);
     };
 
-    onMeasure = (position) => {
+    onMeasure = position => {
         const { beacon } = this.props;
         if (!beacon) {
             console.log('MeasureableIcon: ignoring empty beacon');
@@ -59,7 +59,6 @@ export default class MeasureableIcon extends MeasureableView {
                     {this.content}
                 </MeasureableView>
             </TouchableOpacity>
-
         );
     }
 }

@@ -31,9 +31,11 @@ const spacer = {
 @observer
 export default class SettingsLevel2 extends SafeComponent {
     testTwoFactorAuthPrompt(cancelable) {
-        clientApp.create2FARequest(cancelable ? 'backupCodes' : 'login',
+        clientApp.create2FARequest(
+            cancelable ? 'backupCodes' : 'login',
             (result, trust) => console.log(`settings-level-2.js: ${result}, ${trust}`),
-            () => console.log(`settings-level-2.js: cancelled 2fa`));
+            () => console.log(`settings-level-2.js: cancelled 2fa`)
+        );
     }
 
     security = () => {
@@ -41,17 +43,25 @@ export default class SettingsLevel2 extends SafeComponent {
             <View style={bgStyle}>
                 <BasicSettingsItem
                     title="title_2FA"
-                    onPress={() => settingsState.transition('twoFactorAuth')} />
-                {__DEV__ && <BasicSettingsItem
-                    title="2FA prompt"
-                    onPress={() => this.testTwoFactorAuthPrompt(false)} />}
-                {__DEV__ && <BasicSettingsItem
-                    title="2FA prompt cancellable"
-                    onPress={() => this.testTwoFactorAuthPrompt(true)} />}
+                    onPress={() => settingsState.transition('twoFactorAuth')}
+                />
+                {__DEV__ && (
+                    <BasicSettingsItem
+                        title="2FA prompt"
+                        onPress={() => this.testTwoFactorAuthPrompt(false)}
+                    />
+                )}
+                {__DEV__ && (
+                    <BasicSettingsItem
+                        title="2FA prompt cancellable"
+                        onPress={() => this.testTwoFactorAuthPrompt(true)}
+                    />
+                )}
                 <BasicSettingsItem
                     title="title_showAccountKey"
                     icon="visibility"
-                    onPress={() => settingsState.showPassphrase()} />
+                    onPress={() => settingsState.showPassphrase()}
+                />
                 {this.touchIdToggle()}
             </View>
         );
@@ -60,9 +70,7 @@ export default class SettingsLevel2 extends SafeComponent {
     payments() {
         return (
             <View style={bgStyle}>
-                <BasicSettingsItem
-                    title="test_payment"
-                    onPress={() => payments.test()} />
+                <BasicSettingsItem title="test_payment" onPress={() => payments.test()} />
             </View>
         );
     }
@@ -86,9 +94,7 @@ export default class SettingsLevel2 extends SafeComponent {
             user.autologinEnabled = !user.autologinEnabled;
             mainState.saveUser();
         };
-        return (
-            <ToggleItem {...{ prop, title, state, onPress }} />
-        );
+        return <ToggleItem {...{ prop, title, state, onPress }} />;
     }
 
     touchIdToggle() {
@@ -100,9 +106,7 @@ export default class SettingsLevel2 extends SafeComponent {
         const onPress = () => {
             mainState.saveUserTouchID(!user.secureWithTouchID);
         };
-        return (
-            <ToggleItem {...{ prop, title, state, onPress }} />
-        );
+        return <ToggleItem {...{ prop, title, state, onPress }} />;
     }
 
     preferences = () => {
@@ -116,10 +120,12 @@ export default class SettingsLevel2 extends SafeComponent {
             <View style={bgStyle}>
                 <BasicSettingsItem
                     title={tx('title_notifications')}
-                    onPress={() => settingsState.transition('notifications')} />
+                    onPress={() => settingsState.transition('notifications')}
+                />
                 <BasicSettingsItem
                     title={tx('title_displayPreferences')}
-                    onPress={() => settingsState.transition('display')} />
+                    onPress={() => settingsState.transition('display')}
+                />
                 {/* <Text style={text}>{t('title_soundsDetail')}</Text> */}
                 {/* <ToggleItem title="title_notificationsEmailMessage" /> */}
                 <View style={spacer} />

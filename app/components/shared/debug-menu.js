@@ -58,12 +58,20 @@ export default class DebugMenu extends SafeComponent {
     @observable disableButtons = true;
 
     componentDidMount() {
-        when(() => socket.connected, () => { this.switchServerValue = config.socketServerUrl; });
-        when(() => uiState.showDebugMenu, () => {
-            setTimeout(() => {
-                this.disableButtons = false;
-            }, 2000);
-        });
+        when(
+            () => socket.connected,
+            () => {
+                this.switchServerValue = config.socketServerUrl;
+            }
+        );
+        when(
+            () => uiState.showDebugMenu,
+            () => {
+                setTimeout(() => {
+                    this.disableButtons = false;
+                }, 2000);
+            }
+        );
     }
 
     async debugServer(serverName) {
@@ -79,24 +87,33 @@ export default class DebugMenu extends SafeComponent {
                     <View>
                         <Button
                             style={button}
-                            onPress={() => { uiState.showDebugMenu = false; }}
+                            onPress={() => {
+                                uiState.showDebugMenu = false;
+                            }}
                             text="Hide Debug Menu"
-                            textStyle={{ textAlign: 'center' }} />
+                            textStyle={{ textAlign: 'center' }}
+                        />
                     </View>
                     <View style={buttonContainer}>
                         <View style={{ flex: 1 }}>
                             <Button
                                 style={button}
-                                onPress={() => { this.showDebugLogs = !this.showDebugLogs; }}
+                                onPress={() => {
+                                    this.showDebugLogs = !this.showDebugLogs;
+                                }}
                                 text="Toggle logs"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                             <Button
                                 style={button}
-                                onPress={() => { consoleOverride.verbose = !consoleOverride.verbose; }}
+                                onPress={() => {
+                                    consoleOverride.verbose = !consoleOverride.verbose;
+                                }}
                                 text="Toggle Verbose"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                         </View>
                         <View style={{ flex: 1 }}>
                             <Button
@@ -104,13 +121,15 @@ export default class DebugMenu extends SafeComponent {
                                 onPress={() => this.debugServer(this.switchServerValue)}
                                 text="Override server"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                             <Button
                                 style={button}
                                 onPress={() => this.debugServer(null)}
                                 text="Reset Server"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                         </View>
                     </View>
                     <View style={{ flex: 0 }}>
@@ -118,8 +137,11 @@ export default class DebugMenu extends SafeComponent {
                             autoCorrect={false}
                             autoCapitalize="none"
                             value={this.switchServerValue}
-                            onChangeText={text => { this.switchServerValue = text; }}
-                            style={input} />
+                            onChangeText={text => {
+                                this.switchServerValue = text;
+                            }}
+                            style={input}
+                        />
                     </View>
                 </View>
                 {this.debugLogs}
@@ -128,9 +150,10 @@ export default class DebugMenu extends SafeComponent {
     }
 
     get debugLogs() {
-        return this.showDebugLogs ?
+        return this.showDebugLogs ? (
             <View style={{ backgroundColor: 'white', height: height * 0.6, marginHorizontal: 8 }}>
                 <Logs />
-            </View> : null;
+            </View>
+        ) : null;
     }
 }

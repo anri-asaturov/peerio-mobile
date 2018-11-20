@@ -6,19 +6,21 @@ import MockChannel from './mock-channel';
 import MockChat from './mock-chat';
 
 const channelPaywallTitle = `2 Channels`;
-const channelPaywallMessage =
-`Peerio's basic account gets you access to 2 free channels.
+const channelPaywallMessage = `Peerio's basic account gets you access to 2 free channels.
 If you would like to join or create another channel, please delete an existing one or check out our upgrade plans`;
 
 class MockChatStore {
     @observable chats = [];
     @observable invites = [];
     @observable loaded = true;
-    @computed get channels() {
+    @computed
+    get channels() {
         return this.chats.filter(chat => chat.isChannel);
     }
 
-    get allRooms() { return this.channels; }
+    get allRooms() {
+        return this.channels;
+    }
 
     constructor() {
         for (let i = 0; i < 15; ++i) {
@@ -62,8 +64,7 @@ class MockChatStore {
         return invite;
     }
 
-    loadAllChats() {
-    }
+    loadAllChats() {}
 }
 
 export default new MockChatStore();

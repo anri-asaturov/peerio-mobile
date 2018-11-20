@@ -52,15 +52,18 @@ export default class LoginWelcomeBack extends SafeComponent {
         tm.login.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound onSignupPress() {
+    @action.bound
+    onSignupPress() {
         loginState.routes.app.signupStep1();
     }
 
-    @action.bound onLoginPress() {
+    @action.bound
+    onLoginPress() {
         loginState.routes.app.loginClean();
     }
 
-    @action.bound switchUserLink(text) {
+    @action.bound
+    switchUserLink(text) {
         const onPress = () => {
             tm.login.changeUser();
             loginState.switchUser();
@@ -87,12 +90,18 @@ export default class LoginWelcomeBack extends SafeComponent {
         return (
             <View style={signupStyles.page}>
                 <IntroStepIndicator max={1} current={1} />
-                <View style={[signupStyles.container, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
+                <View
+                    style={[
+                        signupStyles.container,
+                        { paddingHorizontal: signupStyles.pagePaddingLarge }
+                    ]}>
                     <LoginButtonBack telemetry={{ sublocation, option: S.BACK }} />
                     <DebugMenuTrigger>
                         <View style={{ marginTop }}>
                             <Text semibold serif style={titleStyle}>
-                                {tx('title_welcomeBackFirstname', { firstName: this.lastUser.firstName })}
+                                {tx('title_welcomeBackFirstname', {
+                                    firstName: this.lastUser.firstName
+                                })}
                             </Text>
                             <T k="title_switchUser" style={subtitleStyle}>
                                 {{

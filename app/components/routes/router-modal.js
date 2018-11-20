@@ -43,7 +43,7 @@ class RouterModal extends Router {
     add(route, component, isWhite) {
         const r = super.add(route, component);
         r.isWhite = isWhite;
-        this[route] = async (props) => {
+        this[route] = async props => {
             await uiState.hideAll();
             popupState.discardAllPopups();
             this.flushResolver();
@@ -76,7 +76,8 @@ class RouterModal extends Router {
         return !this.animating && this.current && !this.current.isWhite;
     }
 
-    @computed get modal() {
+    @computed
+    get modal() {
         return this.current ? React.createElement(this.current.component, this.modalProps) : null;
     }
 }

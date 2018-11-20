@@ -18,7 +18,11 @@ export default {
                 onPress={disabled ? null : onPress}
                 pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
-                <Text style={{ backgroundColor: 'transparent', color: disabled ? vars.txtMedium : vars.white }}>
+                <Text
+                    style={{
+                        backgroundColor: 'transparent',
+                        color: disabled ? vars.txtMedium : vars.white
+                    }}>
                     {tu(text)}
                 </Text>
             </TouchableOpacity>
@@ -35,9 +39,7 @@ export default {
                 onPress={disabled ? null : onPress}
                 pressRetentionOffset={vars.retentionOffset}
                 style={{ opacity: disabled ? 0 : 1 }}>
-                <Text style={[textStyle, buttonStyle]}>
-                    {tu(text)}
-                </Text>
+                <Text style={[textStyle, buttonStyle]}>{tu(text)}</Text>
             </TouchableOpacity>
         );
     },
@@ -113,7 +115,9 @@ export default {
                 pressRetentionOffset={vars.retentionOffset}
                 style={[touchableStyle, containerStyle]}>
                 <View style={[buttonStyle, style]}>
-                    <Text semibold style={textStyle}>{tu(text)}</Text>
+                    <Text semibold style={textStyle}>
+                        {tu(text)}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
@@ -149,7 +153,9 @@ export default {
                 pressRetentionOffset={vars.retentionOffset}
                 style={touchableStyle}>
                 <View style={[buttonStyle, style]}>
-                    <Text semibold style={textStyle}>{tu(text)}</Text>
+                    <Text semibold style={textStyle}>
+                        {tu(text)}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );

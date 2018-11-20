@@ -11,12 +11,14 @@ import ChatMessageFull from './chat-message-full';
 @observer
 export default class ChatMessageContainer extends SafeComponent {
     get errorStyle() {
-        return this.props.messageObject.sendError ? {
-            backgroundColor: '#ff000020',
-            borderRadius: 14,
-            marginVertical: vars.spacing.small.mini,
-            marginHorizontal: vars.spacing.small.mini2x
-        } : null;
+        return this.props.messageObject.sendError
+            ? {
+                  backgroundColor: '#ff000020',
+                  borderRadius: 14,
+                  marginVertical: vars.spacing.small.mini,
+                  marginHorizontal: vars.spacing.small.mini2x
+              }
+            : null;
     }
 
     get backgroundColor() {
@@ -44,20 +46,24 @@ export default class ChatMessageContainer extends SafeComponent {
         const opacity = messageObject.sending ? 0.5 : 1;
         const activeOpacity = !messageObject.signatureError && !messageObject.sendError ? 1 : 0.2;
 
-        const inner = collapsed ? <ChatMessageCollapsed {...this.innerProps} /> : <ChatMessageFull {...this.innerProps} />;
+        const inner = collapsed ? (
+            <ChatMessageCollapsed {...this.innerProps} />
+        ) : (
+            <ChatMessageFull {...this.innerProps} />
+        );
 
         return (
-            <View
-                style={{ backgroundColor: vars.chatItemPressedBackground }}>
+            <View style={{ backgroundColor: vars.chatItemPressedBackground }}>
                 <TouchableOpacity
                     pressRetentionOffset={vars.retentionOffset}
                     activeOpacity={activeOpacity}
                     style={this.backgroundColor}>
-                    <DateSeparator visible={messageObject.firstOfTheDay} timestamp={messageObject.timestamp} />
-                    <View style={{ opacity }}>
-                        {inner}
-                    </View>
-                </TouchableOpacity >
+                    <DateSeparator
+                        visible={messageObject.firstOfTheDay}
+                        timestamp={messageObject.timestamp}
+                    />
+                    <View style={{ opacity }}>{inner}</View>
+                </TouchableOpacity>
             </View>
         );
     }

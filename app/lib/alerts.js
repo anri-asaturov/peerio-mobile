@@ -13,12 +13,15 @@ const ok = onPress => button('default', 'OK', onPress);
 
 function rnAlertYesNo(title, message) {
     return new Promise((resolve, reject) => {
-        Alert.alert(title, message, [cancel(() => reject(new Error('user cancelled'))), ok(resolve)]);
+        Alert.alert(title, message, [
+            cancel(() => reject(new Error('user cancelled'))),
+            ok(resolve)
+        ]);
     });
 }
 
 function rnAlertYes(title, message) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         Alert.alert(title, message, [ok(resolve)]);
     });
 }

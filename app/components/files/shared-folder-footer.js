@@ -32,15 +32,14 @@ export default class SharedFolderFooter extends SafeComponent {
             <TouchableOpacity
                 pressRetentionOffset={vars.retentionOffset}
                 style={bottomRowStyle}
-                onPress={action} >
+                onPress={action}>
                 {icon && icons.plaindark(icon, vars.iconSize, iconStyle)}
                 <View style={{ padding: vars.spacing.medium.mini }}>
-                    <Text style={{ fontWeight: 'bold', color: vars.peerioBlue }}>
-                        {tu(title)}
-                    </Text>
+                    <Text style={{ fontWeight: 'bold', color: vars.peerioBlue }}>{tu(title)}</Text>
                 </View>
                 {showAvatars && <SharedWithRow contacts={volume.otherParticipants} rooms={[]} />}
-            </TouchableOpacity>);
+            </TouchableOpacity>
+        );
     }
 }
 

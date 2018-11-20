@@ -8,17 +8,17 @@ const { width, height } = Dimensions.get('window');
 function getDevicePixelRatio() {
     const result = PixelRatio.get();
     switch (result) {
-        case (1):
+        case 1:
             return 160;
-        case (1.5):
+        case 1.5:
             return 240;
-        case (2):
+        case 2:
             return 320;
-        case (3):
+        case 3:
             return 480;
-        case (3.5):
+        case 3.5:
             return 560;
-        case (4):
+        case 4:
             return 640;
         default:
             return -1;
@@ -32,7 +32,7 @@ function isIphoneX() {
 }
 
 const iPhoneXTop = isIphoneX() ? 16 : 0;
-const iPhoneStatusBar = (Platform.OS === 'ios' ? 18 + iPhoneXTop : 0);
+const iPhoneStatusBar = Platform.OS === 'ios' ? 18 + iPhoneXTop : 0;
 const iPhoneXBottom = isIphoneX() ? 16 : 0;
 
 const isDeviceScreenBig = isBigScreenSize();
@@ -45,11 +45,29 @@ function isBigScreenSize() {
 }
 
 const { bg, bgGradient, tabsFg } = branding;
-const { darkBlue, darkTeal, peerioBlue, peerioPurple, confirmColor,
-    peerioTeal, yellow, red, badgeText, filesBg, usernameHighlight,
-    chatItemPressedBackground, invitedBadgeColor, invitedBadgeText,
-    peerioBlueBackground15, darkBlueBackground15, snackbarBg, lightGrayBg,
-    darkBlueBackground05, channelInfoBg, separatorColor } = branding;
+const {
+    darkBlue,
+    darkTeal,
+    peerioBlue,
+    peerioPurple,
+    confirmColor,
+    peerioTeal,
+    yellow,
+    red,
+    badgeText,
+    filesBg,
+    usernameHighlight,
+    chatItemPressedBackground,
+    invitedBadgeColor,
+    invitedBadgeText,
+    peerioBlueBackground15,
+    darkBlueBackground15,
+    snackbarBg,
+    lightGrayBg,
+    darkBlueBackground05,
+    channelInfoBg,
+    separatorColor
+} = branding;
 const statusBarHeight = iPhoneStatusBar;
 const layoutPaddingTop = iPhoneStatusBar;
 
@@ -207,7 +225,7 @@ const vars = {
     footerMarginX: 24,
     statusBarHeight,
     layoutPaddingTop,
-    welcomeHeaderHeight: (isDeviceScreenBig ? 80 + iPhoneXTop : 64),
+    welcomeHeaderHeight: isDeviceScreenBig ? 80 + iPhoneXTop : 64,
     headerHeight: 56,
     headerSpacing: 56 + layoutPaddingTop,
     headerIconMargin: 16,
@@ -369,7 +387,8 @@ const vars = {
 vars.iconLayoutSize = vars.iconSize + vars.iconPadding * 2;
 
 vars.optimizeImageSize = (sourceWidth, sourceHeight, containerWidth, containerHeight) => {
-    let w = sourceWidth + 0.0, h = sourceHeight + 0.0;
+    let w = sourceWidth + 0.0,
+        h = sourceHeight + 0.0;
     if (w > containerWidth) {
         h *= containerWidth / w;
         w = containerWidth;

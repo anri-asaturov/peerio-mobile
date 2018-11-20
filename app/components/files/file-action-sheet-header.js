@@ -45,14 +45,20 @@ const infoTextStyle = {
 @observer
 export default class FileActionSheetHeader extends SafeComponent {
     // Android border color does not work with border radius
-    get borderBottom () { return <View style={lineStyle} />; }
+    get borderBottom() {
+        return <View style={lineStyle} />;
+    }
 
     renderThrow() {
         const { file, onPress } = this.props;
         if (!file) return null;
         return (
-            <View style={[container, { backgroundColor: vars.lightGrayBg }]} >
-                <TouchableOpacity style={container} onPress={onPress} disabled={!onPress} pressRetentionOffset={vars.retentionOffset}>
+            <View style={[container, { backgroundColor: vars.lightGrayBg }]}>
+                <TouchableOpacity
+                    style={container}
+                    onPress={onPress}
+                    disabled={!onPress}
+                    pressRetentionOffset={vars.retentionOffset}>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
                         <Text style={infoTextStyle} numberOfLines={1} ellipsizeMode="middle">
                             {file.name} {file.isLegacy && tx('title_pending2')}

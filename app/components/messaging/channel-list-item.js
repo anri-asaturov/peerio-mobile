@@ -61,10 +61,16 @@ export default class ChannelListItem extends SafeComponent {
                     onPress={this.onPress}
                     style={containerStyle}
                     pressRetentionOffset={vars.retentionOffset}>
-                    <Text semibold={hasUnread} style={[textStyle, (hasUnread && textUnreadStyle)]}>
+                    <Text semibold={hasUnread} style={[textStyle, hasUnread && textUnreadStyle]}>
                         {`# ${channelName}`}
                     </Text>
-                    {unreadCount > 0 && <View style={circleStyle}><Text semibold style={textCircleStyle}>{unreadCount}</Text></View>}
+                    {unreadCount > 0 && (
+                        <View style={circleStyle}>
+                            <Text semibold style={textCircleStyle}>
+                                {unreadCount}
+                            </Text>
+                        </View>
+                    )}
                 </TouchableOpacity>
             </View>
         );

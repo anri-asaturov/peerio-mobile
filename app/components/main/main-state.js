@@ -16,18 +16,21 @@ class MainState extends RoutedState {
         this._loading = v;
     }
 
-    @action async activate() {
+    @action
+    async activate() {
         // preload app while we ask user about automatic login
         this.routerMain.initialize();
     }
 
-    @action async activateAndTransition(/* user */) {
+    @action
+    async activateAndTransition(/* user */) {
         await this.routerMain.initialize();
         this.routes.app.main();
         this.routes.main.initialRoute();
     }
 
-    @action async load() {
+    @action
+    async load() {
         console.log('main-state.js: loading');
         this.loading = true;
         const s = await TinyDb.user.getValue('main-state');
@@ -38,24 +41,27 @@ class MainState extends RoutedState {
         console.log('main-state.js: loaded');
     }
 
-    @action async checkPin() {
+    @action
+    async checkPin() {
         const user = User.current;
         const hasPin = await user.hasPasscode();
         if (!hasPin) {
             const skipPIN = `${user.username}::skipPIN`;
-            if (!await TinyDb.system.getValue(skipPIN)) {
+            if (!(await TinyDb.system.getValue(skipPIN))) {
                 await this.routes.modal.createPin();
             }
             await TinyDb.system.setValue(skipPIN, true);
         }
     }
 
-    @action async getKeychainKey(cachedUsername) {
+    @action
+    async getKeychainKey(cachedUsername) {
         const username = cachedUsername || User.current.username;
         return (await TinyDb.system.getValue(`user::${username}::keychain`)) || `user::${username}`;
     }
 
-    @action async saveUserKeychain(secureWithTouchID) {
+    @action
+    async saveUserKeychain(secureWithTouchID) {
         const user = User.current;
         let keychainKey = await this.getKeychainKey();
         try {
@@ -63,10 +69,10 @@ class MainState extends RoutedState {
         } catch (e) {
             console.error(e);
         }
-        keychainKey = `user::${user.username}::${(new Date().getTime())}`;
+        keychainKey = `user::${user.username}::${new Date().getTime()}`;
         console.log(`main-state.js: keychain key: ${keychainKey}`);
         await TinyDb.system.setValue(`user::${user.username}::keychain`, keychainKey);
-        if (!await keychain.save(keychainKey, user.serializeAuthData(), secureWithTouchID)) {
+        if (!(await keychain.save(keychainKey, user.serializeAuthData(), secureWithTouchID))) {
             await popupYes(null, tx('title_autologinSetFail'));
             console.log('main-state.js: keychain is not saved');
             return;
@@ -75,7 +81,8 @@ class MainState extends RoutedState {
         user.hasTouchIdCached = true;
     }
 
-    @action async damageUserTouchId() {
+    @action
+    async damageUserTouchId() {
         const user = User.current;
         const keychainKey = await this.getKeychainKey();
         await keychain.delete(keychainKey);
@@ -84,7 +91,8 @@ class MainState extends RoutedState {
         user.hasTouchIdCached = true;
     }
 
-    @action async destroyUserTouchId() {
+    @action
+    async destroyUserTouchId() {
         const user = User.current;
         const keychainKey = await this.getKeychainKey();
         await keychain.delete(keychainKey);
@@ -92,7 +100,8 @@ class MainState extends RoutedState {
         user.hasTouchIdCached = true;
     }
 
-    @action async saveUser() {
+    @action
+    async saveUser() {
         const user = User.current;
         console.log(`mainstate.js: ${user.autologinEnabled}`);
         if (!user.autologinEnabled) {
@@ -131,7 +140,8 @@ class MainState extends RoutedState {
         await this.saveUserKeychain(secureWithTouchID);
     }
 
-    @action async saveUserTouchID(value) {
+    @action
+    async saveUserTouchID(value) {
         const user = User.current;
         const touchIdKey = `user::${user.username}::touchid`;
         let { secureWithTouchID } = user;

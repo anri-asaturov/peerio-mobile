@@ -16,7 +16,6 @@
     "ios-dev": "react-native run-ios",
     "android": "react-native run-android",
     "android-signed": "npm run build-android && ./scripts/release_android.sh",
-    "lint": "eslint --max-warnings=0 app && ./scripts/test-observer-decorator.sh",
     "localize": "tx pull -af",
     "release": "standard-version -r minor && git push --follow-tags origin",
     "link": "react-native link",
@@ -38,7 +37,10 @@
     "test-ios-contacts": "TEST_FEATURE=contacts/contacts npm run test-ios-feature",
     "test-android": "source env.sh && cucumberjs test/spec/contacts/contacts.feature:18 -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"android\"}'",
     "gp-peerio": "npm run build-android && bash scripts/release_android.sh && fastlane android alpha",
-    "commit-msg": "validate-commit-msg"
+    "commit-msg": "validate-commit-msg",
+    "prettier": "prettier -l --write 'app/**/*.js'",
+    "test:lint": "eslint --max-warnings=0 app && ./scripts/test-observer-decorator.sh",
+    "test:prettier": "prettier -l 'app/**/*.js'"
   },
   "dependencies": {
     "@babel/cli": "7.0.0",
@@ -130,6 +132,7 @@
   "devDependencies": {
     "appium": "1.9.2-beta.2",
     "authorize-ios": "1.0.4",
+    "babel-core": "^6.26.3",
     "babel-eslint": "8.2.3",
     "babel-plugin-transform-async-to-bluebird": "1.1.1",
     "babel-plugin-transform-decorators-legacy": "1.3.4",
@@ -138,6 +141,7 @@
     "babel-preset-es2015": "6.24.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
+    "babel-runtime": "^6.26.0",
     "chai": "3.5.0",
     "commitizen": "2.9.6",
     "cucumber": "3.1.0",
@@ -146,12 +150,14 @@
     "cz-conventional-changelog": "2.1.0",
     "detect-indent-cli": "1.0.1",
     "eslint-config-peerio": "1.21.7",
+    "eslint-config-prettier": "3.1.0",
     "eslint-plugin-babel": "4.1.2",
     "eslint-plugin-react": "7.6.1",
     "glob": "7.1.1",
-    "husky": "0.14.3",
+    "husky": "1.1.3",
     "madge": "1.6.0",
     "mocha": "3.2.0",
+    "node-simctl": "3.16.0",
     "npm-run-all": "4.1.2",
     "opt-cli": "1.6.0",
     "otplib": "7.0.0",
@@ -163,10 +169,7 @@
     "typescript": "2.0.10",
     "user-home-cli": "1.0.1",
     "validate-commit-message": "3.0.1",
-    "webdriverio": "4.9.10",
-    "babel-core": "^6.26.3",
-    "babel-runtime": "^6.26.0",
-    "node-simctl": "3.16.0"
+    "webdriverio": "4.9.10"
   },
   "config": {
     "commitizen": {
@@ -188,6 +191,11 @@
       "maxSubjectLength": 100,
       "subjectPattern": ".+",
       "helpMessage": "Convention: https://goo.gl/3TgTsh"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run test:lint && npm run test:prettier"
     }
   }
 }

@@ -14,10 +14,11 @@ export default class Progress extends SafeComponent {
         const { value, max } = this.props;
         const { width } = this;
         if (!width || !max) return 0;
-        return width * value / max;
+        return (width * value) / max;
     }
 
-    @action.bound layout(evt) {
+    @action.bound
+    layout(evt) {
         this.width = evt.nativeEvent.layout.width;
     }
 
@@ -55,4 +56,3 @@ Progress.propTypes = {
     max: PropTypes.any,
     hidden: PropTypes.any
 };
-

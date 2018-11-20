@@ -47,7 +47,10 @@ export default class Toggle extends SafeComponent {
         };
 
         return (
-            <TouchableOpacity style={outer} pressRetentionOffset={vars.retentionOffset} onPress={this.props.onPress}>
+            <TouchableOpacity
+                style={outer}
+                pressRetentionOffset={vars.retentionOffset}
+                onPress={this.props.onPress}>
                 <View style={under} />
                 <View style={circleOuter}>
                     <View style={[circle, circleAll]} />

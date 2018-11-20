@@ -34,15 +34,18 @@ export default class InputMain extends SafeComponent {
         }
     }
 
-    @action.bound onChangeText(text) {
+    @action.bound
+    onChangeText(text) {
         this.value = text;
     }
 
-    @action.bound plus() {
+    @action.bound
+    plus() {
         this.props.plus();
     }
 
-    @action.bound send() {
+    @action.bound
+    send() {
         if (!this.canSend) return;
         this.hasText ? this.props.send(this.value) : this.props.sendAck();
         this.value = '';
@@ -53,13 +56,28 @@ export default class InputMain extends SafeComponent {
     }
 
     get canSend() {
-        return this.props.canSend || uiState.isAuthenticated && (this.hasText ? chatState.canSend : chatState.canSendAck);
+        return (
+            this.props.canSend ||
+            (uiState.isAuthenticated && (this.hasText ? chatState.canSend : chatState.canSendAck))
+        );
     }
 
     renderThrow() {
-        const { tiStyle, iconStyle, outerStyle, autoExpandingInputContainerStyle,
-            sendIconStyleNormal, sendIconStyleActive } = inputMain;
-        const icon = icons.white(this.hasText ? 'send' : 'thumb-up', this.send, iconStyle, vars.iconSizeSmall, 'buttonSendMessage');
+        const {
+            tiStyle,
+            iconStyle,
+            outerStyle,
+            autoExpandingInputContainerStyle,
+            sendIconStyleNormal,
+            sendIconStyleActive
+        } = inputMain;
+        const icon = icons.white(
+            this.hasText ? 'send' : 'thumb-up',
+            this.send,
+            iconStyle,
+            vars.iconSizeSmall,
+            'buttonSendMessage'
+        );
         const sendIconStyle = this.canSend ? sendIconStyleActive : sendIconStyleNormal;
         const chatName = chatState.title;
         return (
@@ -71,7 +89,8 @@ export default class InputMain extends SafeComponent {
                         beacon={chatBeacons.shareFilesInChatBeacon}
                         color={vars.darkIcon}
                         onPress={this.plus}
-                        spotBgColor={vars.white} />
+                        spotBgColor={vars.white}
+                    />
                 </View>
                 <View style={autoExpandingInputContainerStyle}>
                     <AutoExpandingTextInput
@@ -82,7 +101,9 @@ export default class InputMain extends SafeComponent {
                         maxHeight={146}
                         style={tiStyle}
                         blurOnSubmit={false}
-                        ref={ref => { this.input = ref; }}
+                        ref={ref => {
+                            this.input = ref;
+                        }}
                         {...testLabel('textInputMessage')}
                     />
                 </View>
@@ -91,15 +112,12 @@ export default class InputMain extends SafeComponent {
                     pressRetentionOffset={vars.retentionOffset}
                     onPress={this.send}
                     style={{ padding: vars.iconSizeSmall }}>
-                    <View style={sendIconStyle}>
-                        {icon}
-                    </View>
+                    <View style={sendIconStyle}>{icon}</View>
                 </TouchableOpacity>
             </View>
         );
     }
 }
-
 
 InputMain.propTypes = {
     value: PropTypes.any,

@@ -27,16 +27,8 @@ export default class MedcryptorContactAddWarning extends SafeComponent {
     renderThrow() {
         return (
             <View style={container}>
-                <Icon
-                    style={icon}
-                    name="security"
-                    size={vars.iconSize}
-                    color="gray"
-                />
-                <Text
-                    style={text}>
-                    {tx('mcr_warning_addContact')}
-                </Text>
+                <Icon style={icon} name="security" size={vars.iconSize} color="gray" />
+                <Text style={text}>{tx('mcr_warning_addContact')}</Text>
             </View>
         );
     }

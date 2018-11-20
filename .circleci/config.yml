@@ -44,7 +44,10 @@ jobs:
           command: npm install
       - run:
           name: "Eslint"
-          command: npm run lint
+          command: npm run test:lint
+      - run:
+          name: "Prettier"
+          command: npm run test:prettier
       - run:
           name: "Compile and run"
           command: ./node_modules/.bin/react-native run-ios

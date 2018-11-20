@@ -41,9 +41,4 @@ function fadeOutAnimation() {
     });
 }
 
-export {
-    transitionAnimation,
-    transitionAnimationTimed,
-    fadeInAnimation,
-    fadeOutAnimation
-};
+export { transitionAnimation, transitionAnimationTimed, fadeInAnimation, fadeOutAnimation };

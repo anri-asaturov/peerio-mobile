@@ -23,7 +23,8 @@ export default class FileUploadProgress extends SafeComponent {
         return fileId && fileState.localFileMap.get(fileId);
     }
 
-    @action.bound cancel() {
+    @action.bound
+    cancel() {
         this.props.file.cancelUpload();
     }
 
@@ -37,7 +38,8 @@ export default class FileUploadProgress extends SafeComponent {
                 {...this.props}
                 onCancel={this.cancel}
                 value={this.value}
-                max={this.max} />
+                max={this.max}
+            />
         );
     }
 }

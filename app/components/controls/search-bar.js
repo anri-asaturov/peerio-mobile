@@ -35,7 +35,15 @@ const placeholderStyle = {
 @observer
 export default class SearchBar extends Component {
     render() {
-        const { textValue, placeholderText, onChangeText, onSubmit, leftIcon, rightIcon, testId } = this.props;
+        const {
+            textValue,
+            placeholderText,
+            onChangeText,
+            onSubmit,
+            leftIcon,
+            rightIcon,
+            testId
+        } = this.props;
         return (
             <View>
                 <View style={container}>

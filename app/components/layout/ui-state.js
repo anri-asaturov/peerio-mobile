@@ -35,7 +35,8 @@ class UIState extends RoutedState {
     @observable tfaFailed = false;
     @observable declinedChannelId = null;
     @observable hideTabs = false;
-    @observable languages = {
+    @observable
+    languages = {
         en: `English`
         // fr: `French`,
         // es: `Spanish`,
@@ -50,34 +51,45 @@ class UIState extends RoutedState {
         return this.keyboardHeight || pickerHeight;
     }
 
-    @action focusTextBox(textbox) {
+    @action
+    focusTextBox(textbox) {
         this.focusedTextBox = textbox;
     }
 
-    @action showPicker(picker) {
+    @action
+    showPicker(picker) {
         this.hideKeyboard();
         this.picker = picker;
-        setTimeout(() => { this.pickerVisible = true; }, 0);
+        setTimeout(() => {
+            this.pickerVisible = true;
+        }, 0);
     }
 
-    @action hidePicker() {
+    @action
+    hidePicker() {
         this.hideKeyboard();
     }
 
-    @action hideKeyboard() {
+    @action
+    hideKeyboard() {
         Keyboard.dismiss();
-        setTimeout(() => { this.pickerVisible = false; }, 0);
+        setTimeout(() => {
+            this.pickerVisible = false;
+        }, 0);
     }
 
-    @action.bound hideAll() {
+    @action.bound
+    hideAll() {
         this.hideKeyboard();
         this.hidePicker();
         this.customOverlayComponent = null;
         return new Promise(resolve => when(() => this.keyboardHeight === 0, resolve));
     }
 
-    @action setLocale(lc) {
-        return locales.loadLocaleFile(lc)
+    @action
+    setLocale(lc) {
+        return locales
+            .loadLocaleFile(lc)
             .then(locale => {
                 console.log(`ui-state.js: ${lc}`);
                 console.log(lc);
@@ -93,24 +105,37 @@ class UIState extends RoutedState {
             });
     }
 
-    @action load() {
-        return TinyDb.system.getValue('state')
-            .then(s => this.setLocale(s && s.locale || 'en'));
+    @action
+    load() {
+        return TinyDb.system.getValue('state').then(s => this.setLocale((s && s.locale) || 'en'));
     }
 
-    @action save() {
+    @action
+    save() {
         const locale = this.locale || 'en';
         return TinyDb.system.setValue('state', { locale });
     }
 
-    @action scrollToTextBox() {
+    @action
+    scrollToTextBox() {
         const { focusedTextBox, currentScrollView, keyboardHeight } = this;
         if (focusedTextBox && currentScrollView) {
-            const y = focusedTextBox.offsetY - (height - keyboardHeight) + focusedTextBox.offsetHeight + this.currentScrollViewPosition;
+            const y =
+                focusedTextBox.offsetY -
+                (height - keyboardHeight) +
+                focusedTextBox.offsetHeight +
+                this.currentScrollViewPosition;
             if (y > 0) {
-                console.log(`scroll to ${y}, for ${focusedTextBox.offsetY}, ${this.currentScrollViewPosition}`);
+                console.log(
+                    `scroll to ${y}, for ${focusedTextBox.offsetY}, ${
+                        this.currentScrollViewPosition
+                    }`
+                );
                 currentScrollView.scrollTo({ y, animated: true });
-                when(() => this.keyboardHeight === 0, () => currentScrollView.scrollTo({ y: 0, animated: true }));
+                when(
+                    () => this.keyboardHeight === 0,
+                    () => currentScrollView.scrollTo({ y: 0, animated: true })
+                );
             }
         }
     }
@@ -141,19 +166,22 @@ reaction(() => uiState.languageSelected, ls => uiState.setLocale(ls));
 
 reaction(() => uiState.keyboardHeight, () => uiState.scrollToTextBox());
 
-reaction(() => uiState.focusedTextBox, () => {
-    const { focusedTextBox } = uiState;
-    if (focusedTextBox) {
-        uiState.pickerVisible = false;
-        uiState.scrollToTextBox();
+reaction(
+    () => uiState.focusedTextBox,
+    () => {
+        const { focusedTextBox } = uiState;
+        if (focusedTextBox) {
+            uiState.pickerVisible = false;
+            uiState.scrollToTextBox();
+        }
     }
-});
+);
 
-Keyboard.addListener('keyboardWillShow', (e) => {
+Keyboard.addListener('keyboardWillShow', e => {
     uiState.keyboardHeight = e.endCoordinates.height;
 });
 
-Keyboard.addListener('keyboardDidShow', (e) => {
+Keyboard.addListener('keyboardDidShow', e => {
     uiState.keyboardHeight = e.endCoordinates.height;
     console.log(`ui-state.js: keyboard height ${uiState.keyboardHeight}`);
 });

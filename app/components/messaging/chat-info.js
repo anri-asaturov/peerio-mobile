@@ -31,9 +31,7 @@ export default class ChatInfo extends SafeComponent {
             borderBottomWidth: 1,
             borderBottomColor: 'rgba(0, 0, 0, .12)'
         };
-        return (
-            <View style={s}>{content}</View>
-        );
+        return <View style={s}>{content}</View>;
     }
 
     action(title, icon, action) {
@@ -52,7 +50,8 @@ export default class ChatInfo extends SafeComponent {
             <ContactCard
                 contact={contact}
                 key={contact.username || i}
-                backgroundColor={vars.darkBlueBackground05} />
+                backgroundColor={vars.darkBlueBackground05}
+            />
         );
     };
 
@@ -60,11 +59,16 @@ export default class ChatInfo extends SafeComponent {
         const chat = chatState.currentChat;
         const body = (
             <View>
-                {chat.otherParticipants && this.lineBlock(
-                    <View style={{ paddingVertical: vars.spacing.small.midi2x, backgroundColor: vars.subtleBlueBackground }}>
-                        {chat.otherParticipants.map(this.participant)}
-                    </View>
-                )}
+                {chat.otherParticipants &&
+                    this.lineBlock(
+                        <View
+                            style={{
+                                paddingVertical: vars.spacing.small.midi2x,
+                                backgroundColor: vars.subtleBlueBackground
+                            }}>
+                            {chat.otherParticipants.map(this.participant)}
+                        </View>
+                    )}
                 <RecentFilesList collapsed={false} />
             </View>
         );
@@ -73,7 +77,8 @@ export default class ChatInfo extends SafeComponent {
                 iconSource={chat.isFavorite ? pinOn : pinOff}
                 onPress={chat.toggleFavoriteState}
                 beacon={chatBeacons.pinDmBeacon}
-                spotBgColor={vars.peerioBlueBackground15} />
+                spotBgColor={vars.peerioBlueBackground15}
+            />
         );
 
         return (
@@ -81,7 +86,8 @@ export default class ChatInfo extends SafeComponent {
                 body={body}
                 title={chatState.title}
                 rightIcon={rightIcon}
-                onClose={() => chatState.routerModal.discard()} />
+                onClose={() => chatState.routerModal.discard()}
+            />
         );
     }
 }

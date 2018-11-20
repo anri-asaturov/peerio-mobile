@@ -15,10 +15,13 @@ const textNormal = {
     textAlign: 'center'
 };
 
-const titleDark = [textNormal, {
-    color: vars.black,
-    fontSize: vars.font.size16
-}];
+const titleDark = [
+    textNormal,
+    {
+        color: vars.black,
+        fontSize: vars.font.size16
+    }
+];
 
 const container = {
     flex: 1,
@@ -73,5 +76,15 @@ const footerContainer = {
     borderTopColor: vars.black25
 };
 
-export { formStyle, textNormal, titleDark, container, headerContainer, textStyle, skipButtonStyle,
-    listHeader, textListTitle, footerContainer };
+export {
+    formStyle,
+    textNormal,
+    titleDark,
+    container,
+    headerContainer,
+    textStyle,
+    skipButtonStyle,
+    listHeader,
+    textListTitle,
+    footerContainer
+};

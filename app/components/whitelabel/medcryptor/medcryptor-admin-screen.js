@@ -71,7 +71,6 @@ const buttonStyle = {
     color: vars.textBlack38
 };
 
-
 @observer
 export default class MedcryptorAdminScreen extends SafeComponent {
     constructor(props) {
@@ -89,7 +88,11 @@ export default class MedcryptorAdminScreen extends SafeComponent {
 
     helpAccountUsername = 'team_medcryptor';
     buyAccountUrl = 'https://medcryptor.com/';
-    features = ['mcr_title_patientInvites', 'mcr_title_consultationRooms', 'mcr_title_discussionRooms'];
+    features = [
+        'mcr_title_patientInvites',
+        'mcr_title_consultationRooms',
+        'mcr_title_discussionRooms'
+    ];
 
     contactMedcryptor = async () => {
         return chatState.startChat([this.helpAccount]);
@@ -104,10 +107,9 @@ export default class MedcryptorAdminScreen extends SafeComponent {
                     style={featureIcon}
                     name="chevron-right"
                     size={vars.iconSizeSmall}
-                    color={vars.textBlack54} />
-                <Text style={featureStyle}>
-                    {t(title)}
-                </Text>
+                    color={vars.textBlack54}
+                />
+                <Text style={featureStyle}>{t(title)}</Text>
             </View>
         );
     }
@@ -118,14 +120,10 @@ export default class MedcryptorAdminScreen extends SafeComponent {
                 <View style={wrapper}>
                     <View style={welcomeContainerStyle}>
                         {icons.coloredAsText('check-circle', vars.confirmColor, 60)}
-                        <Text style={welcomeHeaderStyle}>
-                            {t('mcr_title_thankYou')}
-                        </Text>
+                        <Text style={welcomeHeaderStyle}>{t('mcr_title_thankYou')}</Text>
                     </View>
                     <View style={featureContainerStyle}>
-                        <Text style={upgradeDescriptionStyle}>
-                            {t('mcr_title_upgrade')}
-                        </Text>
+                        <Text style={upgradeDescriptionStyle}>{t('mcr_title_upgrade')}</Text>
                         {this.features.map(f => this.renderFeature(f))}
                     </View>
                     {buttons.roundBlueBgButton('mcr_title_getAccount', this.contactMedcryptor)}
@@ -133,9 +131,7 @@ export default class MedcryptorAdminScreen extends SafeComponent {
                         pressRetentionOffset={vars.retentionOffset}
                         onPress={this.skipScreen}
                         style={buttonContainerStyle}>
-                        <Text style={buttonStyle}>
-                            {tu('mcr_title_skip')}
-                        </Text>
+                        <Text style={buttonStyle}>{tu('mcr_title_skip')}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

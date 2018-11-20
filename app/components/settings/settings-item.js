@@ -27,18 +27,20 @@ const descriptionStyle = {
 
 @observer
 export default class SettingsItem extends SafeComponent {
-    press() { this.props.onPress && this.props.onPress(); }
+    press() {
+        this.props.onPress && this.props.onPress();
+    }
 
     get leftComponent() {
-        return this.props.leftComponent !== null ?
-            this.props.leftComponent
-            : null;
+        return this.props.leftComponent !== null ? this.props.leftComponent : null;
     }
 
     get rightIcon() {
-        return this.props.rightIcon !== null ?
-            icons.darkNoPadding(this.props.rightIcon || 'keyboard-arrow-right', null,
-                { paddingLeft: vars.spacing.small.mini2x, paddingRight: vars.iconPadding })
+        return this.props.rightIcon !== null
+            ? icons.darkNoPadding(this.props.rightIcon || 'keyboard-arrow-right', null, {
+                  paddingLeft: vars.spacing.small.mini2x,
+                  paddingRight: vars.iconPadding
+              })
             : null;
     }
 
@@ -57,24 +59,20 @@ export default class SettingsItem extends SafeComponent {
                 activeOpacity={untappable ? 1 : 0.3}
                 pressRetentionOffset={offset}
                 onPress={() => !untappable && !disabled && this.press()}>
-                <View style={[itemContainerStyle, { height }]} pointerEvents={untappable ? undefined : 'none'}>
+                <View
+                    style={[itemContainerStyle, { height }]}
+                    pointerEvents={untappable ? undefined : 'none'}>
                     <View style={{ flexGrow: 1, flexShrink: 1, marginLeft }}>
                         <Text semibold={semibold} style={titleStyle}>
                             {tx(title)}
                         </Text>
-                        {!!description && <Text style={descriptionStyle}>
-                            {description}
-                        </Text>}
+                        {!!description && <Text style={descriptionStyle}>{description}</Text>}
                     </View>
                     <View style={{ position: 'absolute', left: 0, flex: 0 }}>
                         {this.leftComponent}
                     </View>
-                    <View style={{ flex: 0, justifyContent: 'center' }}>
-                        {children}
-                    </View>
-                    <View style={{ flex: 0 }}>
-                        {this.rightIcon}
-                    </View>
+                    <View style={{ flex: 0, justifyContent: 'center' }}>{children}</View>
+                    <View style={{ flex: 0 }}>{this.rightIcon}</View>
                 </View>
             </TouchableOpacity>
         );

@@ -30,7 +30,8 @@ export default class AreaBeacon extends AbstractBeacon {
             // Description text height (taken from onLayout); is equivalent to lineHeight * numberOfLines
             (descriptionText ? this.descriptionTextHeight : 0) +
             // Container padding
-            (2 * vars.beaconPadding));
+            2 * vars.beaconPadding
+        );
     }
 
     get parentHorizontalPos() {
@@ -73,7 +74,9 @@ export default class AreaBeacon extends AbstractBeacon {
     get pointerHorizontalTwoThirds() {
         const { frameWidth } = this.props.position;
         return {
-            containerPositionX: { right: windowWidth - (this.parentHorizontalPos + vars.beaconWidth / 3 + frameWidth) },
+            containerPositionX: {
+                right: windowWidth - (this.parentHorizontalPos + vars.beaconWidth / 3 + frameWidth)
+            },
             pointerPositionX: { right: vars.beaconWidth / 3 }
         };
     }
@@ -81,7 +84,9 @@ export default class AreaBeacon extends AbstractBeacon {
     get pointerHorizontalRightMost() {
         const { frameWidth } = this.props.position;
         return {
-            containerPositionX: { right: windowWidth - (this.parentHorizontalPos + vars.pointerPadding + frameWidth) },
+            containerPositionX: {
+                right: windowWidth - (this.parentHorizontalPos + vars.pointerPadding + frameWidth)
+            },
             pointerPositionX: { right: vars.pointerPadding }
         };
     }
@@ -97,7 +102,7 @@ export default class AreaBeacon extends AbstractBeacon {
         let measure = 'pointerHorizontalLeftMost';
         if (x >= windowWidth / 4) measure = 'pointerHorizontalOneThird';
         if (x >= windowWidth / 2) measure = 'pointerHorizontalTwoThirds';
-        if (x >= windowWidth * 3 / 4) measure = 'pointerHorizontalRightMost';
+        if (x >= (windowWidth * 3) / 4) measure = 'pointerHorizontalRightMost';
 
         return this[measure];
     }
@@ -106,25 +111,26 @@ export default class AreaBeacon extends AbstractBeacon {
     get horizontalPointerMeasures() {
         const { pageX, frameWidth } = this.props.position;
 
-        return (this.isParentLeft ? {
-            containerPositionX: { left: pageX + frameWidth },
-            rectanglePositionX: { right: 0 },
-            pointerPositionX: { left: 1 }
-        } : {
-            containerPositionX: { right: windowWidth - pageX },
-            rectanglePositionX: { left: 0 },
-            pointerPositionX: { right: 1 }
-        });
+        return this.isParentLeft
+            ? {
+                  containerPositionX: { left: pageX + frameWidth },
+                  rectanglePositionX: { right: 0 },
+                  pointerPositionX: { left: 1 }
+              }
+            : {
+                  containerPositionX: { right: windowWidth - pageX },
+                  rectanglePositionX: { left: 0 },
+                  pointerPositionX: { right: 1 }
+              };
     }
 
     get containerPositionY() {
         const { pageY, frameHeight } = this.props.position;
 
         if (!this.props.sidePointer) {
-            return (this.isParentTop ?
-                { top: pageY + frameHeight } :
-                { top: pageY - this.beaconHeight - this.pointerHeight }
-            );
+            return this.isParentTop
+                ? { top: pageY + frameHeight }
+                : { top: pageY - this.beaconHeight - this.pointerHeight };
         }
         return { bottom: pageY - this.beaconHeight / 2 + frameHeight / 2 };
     }
@@ -133,7 +139,7 @@ export default class AreaBeacon extends AbstractBeacon {
         return this.isParentTop ? { bottom: 0 } : { top: 0 };
     }
 
-    get pointerPositionY () {
+    get pointerPositionY() {
         if (!this.props.sidePointer) return this.isParentTop ? { top: 1 } : { bottom: 1 };
         return { top: this.beaconHeight / 2 - this.pointerHeight / 2 };
     }
@@ -141,38 +147,46 @@ export default class AreaBeacon extends AbstractBeacon {
     renderThrow() {
         const { position, headerText, descriptionText } = this.props;
 
-        if (!position || !headerText && !descriptionText) return null;
+        if (!position || (!headerText && !descriptionText)) return null;
 
         let pointerMeasures;
         if (!this.props.sidePointer) pointerMeasures = this.verticalPointerMeasures;
         else if (this.props.sidePointer) pointerMeasures = this.horizontalPointerMeasures;
 
-        const {
+        const { containerPositionX, rectanglePositionX, pointerPositionX } = pointerMeasures;
+
+        const container = [
             containerPositionX,
+            this.containerPositionY,
+            {
+                position: 'absolute',
+                width: vars.beaconWidth + (this.props.sidePointer ? vars.pointerHeight : 0),
+                height: this.beaconHeight + (!this.props.sidePointer ? vars.pointerHeight : 0)
+            }
+        ];
+
+        const rectangle = [
             rectanglePositionX,
-            pointerPositionX
-        } = pointerMeasures;
+            this.rectanglePositionY,
+            {
+                position: 'absolute',
+                width: vars.beaconWidth,
+                height: this.beaconHeight,
+                backgroundColor: vars.beaconBg,
+                padding: vars.beaconPadding,
+                borderRadius: 8
+            }
+        ];
 
-        const container = [containerPositionX, this.containerPositionY, {
-            position: 'absolute',
-            width: vars.beaconWidth + (this.props.sidePointer ? vars.pointerHeight : 0),
-            height: this.beaconHeight + (!this.props.sidePointer ? vars.pointerHeight : 0)
-        }];
-
-        const rectangle = [rectanglePositionX, this.rectanglePositionY, {
-            position: 'absolute',
-            width: vars.beaconWidth,
-            height: this.beaconHeight,
-            backgroundColor: vars.beaconBg,
-            padding: vars.beaconPadding,
-            borderRadius: 8
-        }];
-
-        const pointer = [pointerPositionX, this.pointerPositionY, {
-            position: 'absolute',
-            width: this.pointerWidth,
-            height: this.pointerHeight
-        }];
+        const pointer = [
+            pointerPositionX,
+            this.pointerPositionY,
+            {
+                position: 'absolute',
+                width: this.pointerWidth,
+                height: this.pointerHeight
+            }
+        ];
 
         return (
             <View style={container} pointerEvents="box-none">
@@ -181,8 +195,19 @@ export default class AreaBeacon extends AbstractBeacon {
                     onPress={this.onPress}
                     pressRetentionOffset={vars.retentionOffset}
                     style={rectangle}>
-                    {headerText && <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>{tx(headerText)}</Text>}
-                    {descriptionText && <Text semibold={!headerText} style={textStyle} onLayout={this.onDescriptionTextLayout}>{tx(descriptionText)}</Text>}
+                    {headerText && (
+                        <Text bold style={[textStyle, { paddingBottom: vars.beaconPadding }]}>
+                            {tx(headerText)}
+                        </Text>
+                    )}
+                    {descriptionText && (
+                        <Text
+                            semibold={!headerText}
+                            style={textStyle}
+                            onLayout={this.onDescriptionTextLayout}>
+                            {tx(descriptionText)}
+                        </Text>
+                    )}
                 </TouchableOpacity>
                 <Image style={pointer} source={this.pointerImgSource} />
             </View>

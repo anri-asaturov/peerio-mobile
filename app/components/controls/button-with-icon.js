@@ -40,7 +40,9 @@ export default class ButtonWithIcon extends Component {
                         size={vars.iconSize}
                         color={color || 'gray'}
                     />
-                    <Text bold={this.props.bold} style={[{ color: vars.highlight }, defaultTextStyle, textStyle, opacity]}>
+                    <Text
+                        bold={this.props.bold}
+                        style={[{ color: vars.highlight }, defaultTextStyle, textStyle, opacity]}>
                         {text}
                     </Text>
                 </View>

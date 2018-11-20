@@ -28,47 +28,45 @@ export default class PickerBoxIos extends SafeComponent {
         uiState.showPicker(this.picker);
     }
 
-
     get errorSpacer() {
-        return (<View style={{ height: vars.spacing.medium.mini2x }} />);
+        return <View style={{ height: vars.spacing.medium.mini2x }} />;
     }
 
     get errorMessage() {
         if (!this.props.value && this.opened) {
-            return (
-                <Text style={this.props.style.errorStyle}>
-                    {this.props.errorMessage}
-                </Text>);
+            return <Text style={this.props.style.errorStyle}>{this.props.errorMessage}</Text>;
         }
         return this.errorSpacer;
     }
 
     renderThrow() {
         const focused = uiState.pickerVisible && uiState.picker === this.picker;
-        const { shadow, background, textview, container, iconContainer, icon } =
-            focused ? this.props.style.active : this.props.style.normal;
+        const { shadow, background, textview, container, iconContainer, icon } = focused
+            ? this.props.style.active
+            : this.props.style.normal;
         const value = this.props.value ? this.props.data[this.props.value] : this.props.hint;
         return (
             <View>
                 <View style={shadow}>
-                    <View
-                        style={background}>
+                    <View style={background}>
                         <TouchableOpacity
                             testID="pickerBox"
                             onPress={this.focus}
                             pressRetentionOffset={vars.retentionOffset}>
-                            <View
-                                pointerEvents="none"
-                                style={container}>
-                                <Text style={[textview, (this.props.value ? { color: vars.textBlack87 } : { color: vars.textBlack38 })]}>
+                            <View pointerEvents="none" style={container}>
+                                <Text
+                                    style={[
+                                        textview,
+                                        this.props.value
+                                            ? { color: vars.textBlack87 }
+                                            : { color: vars.textBlack38 }
+                                    ]}>
                                     {value}
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <View
-                            pointerEvents="none"
-                            style={iconContainer}>
-                            {icons.dark('arrow-drop-down', () => { }, icon)}
+                        <View pointerEvents="none" style={iconContainer}>
+                            {icons.dark('arrow-drop-down', () => {}, icon)}
                         </View>
                     </View>
                 </View>

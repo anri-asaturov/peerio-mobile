@@ -13,23 +13,29 @@ import ChatMessageSendError from './chat-message-error';
 @observer
 export default class ChatMessageBody extends SafeComponent {
     renderThrow() {
-        const { messageObject, chat, onFileAction, onLegacyFileAction, onInlineImageAction } = this.props;
+        const {
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction
+        } = this.props;
 
         return (
             <View style={{ flex: 1, flexGrow: 1, flexShrink: 1 }}>
-                <ChatMessageFolders
-                    folders={messageObject.folders}
-                    chat={chat} />
+                <ChatMessageFolders folders={messageObject.folders} chat={chat} />
                 <ChatMessageFiles
                     message={messageObject}
                     chat={chat}
                     onFileAction={onFileAction}
-                    onLegacyFileAction={onLegacyFileAction} />
+                    onLegacyFileAction={onLegacyFileAction}
+                />
                 <ChatMessageInlineImages
                     message={messageObject}
                     chat={chat}
                     onInlineImageAction={onInlineImageAction}
-                    onLegacyFileAction={onLegacyFileAction} />
+                    onLegacyFileAction={onLegacyFileAction}
+                />
                 <ChatMessageText message={messageObject.text} />
                 <SystemMessage message={messageObject} />
                 <ChatMessageSendError visible={messageObject.sendError} />

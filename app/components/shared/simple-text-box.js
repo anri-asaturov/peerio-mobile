@@ -37,7 +37,10 @@ export default class SimpleTextBox extends SafeComponent {
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
                 onLayout={this.onLayout}
-                ref={ref => { this._ref = ref; }} />
+                ref={ref => {
+                    this._ref = ref;
+                }}
+            />
         );
     }
 }

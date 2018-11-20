@@ -22,17 +22,10 @@ export default class Layout3 extends SafeComponent {
         };
 
         return (
-            <View
-                style={[boxStyle, this.props.style]}>
-                <View style={{ flex: 0 }}>
-                    {this.props.header}
-                </View>
-                <View style={fillerStyle}>
-                    {this.props.body}
-                </View>
-                <View style={{ flex: 0 }}>
-                    {this.props.footer}
-                </View>
+            <View style={[boxStyle, this.props.style]}>
+                <View style={{ flex: 0 }}>{this.props.header}</View>
+                <View style={fillerStyle}>{this.props.body}</View>
+                <View style={{ flex: 0 }}>{this.props.footer}</View>
                 {this.props.footerAbsolute}
                 <View style={{ position: 'absolute', bottom: 0, right: 0, left: 0 }}>
                     <SnackBarConnection />
@@ -42,6 +35,4 @@ export default class Layout3 extends SafeComponent {
     }
 }
 
-Layout3.propTypes = {
-
-};
+Layout3.propTypes = {};

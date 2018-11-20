@@ -36,17 +36,28 @@ const descLabel = {
     fontSize: vars.font.size12
 };
 
-const descIncludesLabel = [descLabel, {
-    marginBottom: margin
-}];
+const descIncludesLabel = [
+    descLabel,
+    {
+        marginBottom: margin
+    }
+];
 
 @observer
 export default class AccountUpgrade extends SafeComponent {
     titleBlock(boldText, normalText, rightBlock) {
         return (
-            <View style={{ margin, marginBottom, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View
+                style={{
+                    margin,
+                    marginBottom,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                }}>
                 <Text>
-                    <Text bold style={boldLabel}>{boldText}</Text>
+                    <Text bold style={boldLabel}>
+                        {boldText}
+                    </Text>
                     <Text> - </Text>
                     <Text style={mediumLabel}>{normalText}</Text>
                 </Text>
@@ -77,7 +88,7 @@ export default class AccountUpgrade extends SafeComponent {
         plans.forEach(s => s.setDefaultSelected());
     }
 
-    renderPlan = (plan) => {
+    renderPlan = plan => {
         let actionButton = null;
         if (plan.isCurrent) actionButton = <Text style={smallLabel}>(current)</Text>;
         let { price } = plan;
@@ -88,32 +99,31 @@ export default class AccountUpgrade extends SafeComponent {
             ({ price } = priceOptions);
 
             if (!plan.isCurrent && plan.canUpgradeTo) {
-                actionButton = this.renderButton1(
-                    'button_upgrade', () => payments.purchase(plan.selected)
+                actionButton = this.renderButton1('button_upgrade', () =>
+                    payments.purchase(plan.selected)
                 );
             }
             if (plan.isCurrent) {
-                actionButton = this.renderButton1(
-                    'button_active', null, true
-                );
+                actionButton = this.renderButton1('button_active', null, true);
             }
             choiceItem = <ChoiceItem options={plan.priceOptions} state={plan} />;
         }
         return (
             <View key={plan.title}>
-                {this.titleBlock(
-                    plan.title,
-                    price,
-                    actionButton
-                )}
-                <View style={{ marginLeft }}>
-                    {this.label(tx('title_features'))}
-                </View>
-                <View style={{ margin: marginWhite }}>
-                    {choiceItem}
-                </View>
-                <View style={{ backgroundColor: vars.white, margin: marginWhite, padding: paddingWhite }}>
-                    {plan.includes && <Text italic style={descIncludesLabel}>{plan.includes}</Text>}
+                {this.titleBlock(plan.title, price, actionButton)}
+                <View style={{ marginLeft }}>{this.label(tx('title_features'))}</View>
+                <View style={{ margin: marginWhite }}>{choiceItem}</View>
+                <View
+                    style={{
+                        backgroundColor: vars.white,
+                        margin: marginWhite,
+                        padding: paddingWhite
+                    }}>
+                    {plan.includes && (
+                        <Text italic style={descIncludesLabel}>
+                            {plan.includes}
+                        </Text>
+                    )}
                     <Text style={descLabel}>{plan.info}</Text>
                 </View>
             </View>

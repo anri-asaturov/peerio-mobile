@@ -12,11 +12,7 @@ export default class Center extends Component {
             justifyContent: 'center',
             alignItems: 'center'
         };
-        return (
-            <View style={[style, this.props.style]}>
-                {this.props.children}
-            </View>
-        );
+        return <View style={[style, this.props.style]}>{this.props.children}</View>;
     }
 }
 
