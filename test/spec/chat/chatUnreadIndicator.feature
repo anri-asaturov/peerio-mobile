@@ -1,5 +1,9 @@
 Feature: Chat list unread message indicator
 
+    Background: A helper user signs up
+        Given A helper user signs up
+        And   they sign out
+
     Scenario: Use top unread message indicator to find chat in chat list
         When I log in as chatunreadsender user
         Then I start a DM with chatunreadreciever user
