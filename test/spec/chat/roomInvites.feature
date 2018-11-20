@@ -6,9 +6,11 @@ Feature: Room invites
     - decline the invite
     - accept an invite and then leave the room and be navigated to chat list
 
-    Scenario: Accept a room invite
+    Background:
         Given A helper user signs up
         And   they sign out
+
+    Scenario: Accept a room invite
         Given I log in as room_test user
         And   I create a new room
         And   I exit the current chat
@@ -19,8 +21,6 @@ Feature: Room invites
 
     @noCacheReset
     Scenario: Decline a room invite
-        Given A helper user signs up
-        And   they sign out
         Given I log in as room_test user
         And   I create a new room
         And   I exit the current chat
@@ -30,8 +30,6 @@ Feature: Room invites
         And   they decline the room invite
 
     Scenario: Invite user to join a room but cancel
-        Given A helper user signs up
-        And   they sign out
         Given I log in as room_test user
         And   I create a new room
         And   I exit the current chat
@@ -42,8 +40,6 @@ Feature: Room invites
         And   they do not have any room invites
 
     Scenario: Invite user to rejoin a room after leaving
-        Given A helper user signs up
-        And   they sign out
         Given I log in as room_test user
         And   I create a new room
         And   I exit the current chat
@@ -61,9 +57,7 @@ Feature: Room invites
 
     @noCacheReset
     Scenario: Leave room and navigate to chat list
-        Given A helper user signs up
-        And   they sign out
-        Given I log in as leavechannelnav_inviter user
+        Given I log in as room_test user
         And   I create a new room
         And   I exit the current chat
         When  I invite them to join the room
