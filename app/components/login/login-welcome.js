@@ -12,6 +12,7 @@ import LoginHeading from './login-heading';
 import { adjustImageDimensions } from '../helpers/image';
 import { telemetry } from '../../lib/icebear';
 import tm from '../../telemetry';
+import DebugMenuTrigger from '../shared/debug-menu-trigger';
 
 const { S } = telemetry;
 
@@ -76,14 +77,16 @@ export default class LoginWelcome extends SafeComponent {
                     />
                 </View>
                 <View style={logoBar}>
-                    <Image
-                        source={logoWelcome}
-                        style={adjustImageDimensions(
-                            logoWelcome,
-                            undefined,
-                            vars.welcomeHeaderHeight
-                        )}
-                    />
+                    <DebugMenuTrigger>
+                        <Image
+                            source={logoWelcome}
+                            style={adjustImageDimensions(
+                                logoWelcome,
+                                undefined,
+                                vars.welcomeHeaderHeight
+                            )}
+                        />
+                    </DebugMenuTrigger>
                 </View>
                 <View
                     style={[headerContainer, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>

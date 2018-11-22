@@ -37,6 +37,7 @@ import loginState from './login/login-state';
 import { uploadFileAndroid, uploadFileiOS, wakeUpAndUploadFileiOS } from './utils/shared-files';
 import { TopDrawerAutoMount } from './shared/top-drawer-components';
 import DebugMenu from './shared/debug-menu';
+import createAutomationSocket from '../lib/create-automation-socket';
 
 const { height, width } = Dimensions.get('window');
 @observer
@@ -66,6 +67,9 @@ export default class App extends SafeComponent {
 
         consoleOverride.configureConsole().then(() => {
             startSocket();
+            if (__DEV__) {
+                this.automationSocket = createAutomationSocket();
+            }
         });
     }
 

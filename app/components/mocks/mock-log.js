@@ -1,7 +1,11 @@
 import { observable } from 'mobx';
 
 class MockLog {
-    @observable list = '';
+    @observable lines = [];
+    get list() {
+        return this.lines.join('\n');
+    }
+
     beacon = null;
     lastTitle = '';
 
@@ -20,8 +24,22 @@ class MockLog {
         this.lastTitle = '';
     }
 
-    log(line) {
-        this.list += `${line}\n`;
+    log = line => {
+        let data = `${line}`;
+        const isString = typeof line === 'string' || line instanceof String;
+        if (!isString) {
+            try {
+                data = JSON.stringify(line);
+            } catch (e) {
+                // no action
+            }
+        }
+        this.lines.unshift(data);
+    };
+
+    inject() {
+        console.debug = this.log;
+        console.error = this.log;
     }
 }
 

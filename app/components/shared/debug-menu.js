@@ -10,6 +10,7 @@ import Logs from '../logs/logs';
 import consoleOverride from '../../lib/console-override';
 import SafeComponent from './safe-component';
 import uiState from '../layout/ui-state';
+import { transitionAnimation } from '../helpers/animations';
 
 const { height } = Dimensions.get('window');
 
@@ -67,12 +68,16 @@ export default class DebugMenu extends SafeComponent {
         when(
             () => uiState.showDebugMenu,
             () => {
+                transitionAnimation();
                 setTimeout(() => {
+                    transitionAnimation();
                     this.disableButtons = false;
                 }, 2000);
             }
         );
     }
+
+    componentWillUnmount() {}
 
     async debugServer(serverName) {
         await overrideServer(serverName);
@@ -82,7 +87,7 @@ export default class DebugMenu extends SafeComponent {
     renderThrow() {
         if (!uiState.showDebugMenu) return null;
         return (
-            <View style={container}>
+            <View style={[container, { opacity: this.disableButtons ? 0.5 : 1 }]}>
                 <View style={debugContainer}>
                     <View>
                         <Button
@@ -92,6 +97,7 @@ export default class DebugMenu extends SafeComponent {
                             }}
                             text="Hide Debug Menu"
                             textStyle={{ textAlign: 'center' }}
+                            disabled={this.disableButtons}
                         />
                     </View>
                     <View style={buttonContainer}>
