@@ -28,12 +28,6 @@ export default class InputMain extends SafeComponent {
         this.value = this.props.value;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.value) {
-            this.value = nextProps.value;
-        }
-    }
-
     @action.bound
     onChangeText(text) {
         this.value = text;

@@ -30,6 +30,7 @@
     "test-ios-profileSettings": "TEST_FEATURE=account/profileSettings npm run test-ios-feature",
     "test-ios-fileUpload": "TEST_FEATURE=files/fileUpload npm run test-ios-feature",
     "test-ios-chatUnreadIndicator": "TEST_FEATURE=chat/chatUnreadIndicator npm run test-ios-feature",
+    "test-ios-chatListUnreadIndicator": "TEST_FEATURE=chat/chatListUnreadIndicator npm run test-ios-feature",
     "test-ios-chat": "TEST_FEATURE=chat/chat npm run test-ios-feature",
     "test-ios-folders": "TEST_FEATURE=files/folders npm run test-ios-feature",
     "test-ios-2fa": "TEST_FEATURE=account/2fa npm run test-ios-feature",
