@@ -35,7 +35,7 @@
     "test-ios-folders": "TEST_FEATURE=files/folders npm run test-ios-feature",
     "test-ios-2fa": "TEST_FEATURE=account/2fa npm run test-ios-feature",
     "test-ios-contacts": "TEST_FEATURE=contacts/contacts npm run test-ios-feature",
-    "test-android": "source env.sh && cucumberjs test/spec/chat/roomInvites.feature -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"android\"}'",
+    "test-android": "source env.sh && cucumber-js test/spec/chat/roomInvites.feature -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"android\"}'",
     "test-ios-listener": "TEST_FEATURE=listener/listener npm run test-ios-feature",
     "gp-peerio": "npm run build-android && bash scripts/release_android.sh && fastlane android alpha",
     "commit-msg": "validate-commit-msg",
