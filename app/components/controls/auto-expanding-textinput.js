@@ -48,7 +48,7 @@ export default class AutoExpandingTextInput extends Component {
     };
 
     render() {
-        const tmpHeight = Math.min(this.state.maxHeight, this.state.height);
+        // const tmpHeight = Math.min(this.state.maxHeight, this.state.height);
 
         const style = {
             textAlign: 'left',
@@ -59,14 +59,10 @@ export default class AutoExpandingTextInput extends Component {
         return (
             <TextInput
                 {...this.props}
-                ref={ti => {
-                    this.ti = ti;
-                }}
                 placeholderTextColor={vars.extraSubtleText}
                 underlineColorAndroid="transparent"
                 multiline
-                onContentSizeChange={this._onContentSizeChange}
-                style={[style, this.props.style, { height: tmpHeight }]}
+                style={[style, this.props.style]}
             />
         );
     }
