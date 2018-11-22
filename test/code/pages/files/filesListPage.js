@@ -33,10 +33,6 @@ class FilesListPage extends Page {
         return this.getWhenVisible('~title_name');
     }
 
-    get firstFile() {
-        return this.getWhenVisible('~file0');
-    }
-
     get fileUploadedPopup() {
         return this.getWhenVisible(`~popupButton-ok`);
     }
