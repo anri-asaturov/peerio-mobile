@@ -4,7 +4,7 @@ const { existingUsers } = require('../helpers/userHelper');
 When('I invite {word} to join the room', async function(string) {
     let invitee;
     if (string === 'someone') invitee = process.env.CHAT_RECIPIENT_USER;
-    else if (string === 'them') invitee = this.username;
+    else if (string === 'them') invitee = this.helperUsername;
     else invitee = existingUsers[string].name;
 
     await this.scrollToChat();
@@ -19,31 +19,9 @@ When('I invite {word} to join the room', async function(string) {
     await this.contactSelectorPage.recipientContact(invitee).click();
 });
 
-Then('they log in', async function() {
-    if (this.username && this.passphrase)
-        await this.loginExistingAccountWithout2FA(this.username, this.passphrase);
-    else console.log('they log in: username and/or passphrase does not exist.');
-});
-
 Then('they accept the room invite', async function() {
     await this.chatListPage.chatWithTitle(this.roomName).click();
-
     await this.roomInvitePage.acceptButton.click();
-});
-
-Then('they log in', async function() {
-    await this.loginExistingAccountWithout2FA(
-        process.env.CHAT_RECIPIENT_USER,
-        process.env.CHAT_RECIPIENT_PASS
-    );
-});
-
-Then('they accept the room invite', async function() {
-    await this.scrollToChat();
-    await this.chatListPage.chatWithTitle(this.roomName).click();
-
-    await this.roomInvitePage.acceptButton.click();
-
     await this.chatPage.buttonSendMessage;
 });
 
@@ -85,8 +63,4 @@ Then('they leave the room', async function() {
     await this.app.pause(1000);
     await this.chatPage.leaveRoomButton.click();
     await this.chatPage.confirmLeaveRoomButton.click();
-});
-
-Then('they sign out', async function() {
-    await this.logout();
 });

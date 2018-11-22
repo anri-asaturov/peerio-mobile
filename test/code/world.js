@@ -128,13 +128,8 @@ class World {
     }
 
     async typePersonalInfo(username) {
-        this.username = new Date().getTime();
-        if (username) {
-            this.username = username;
-        }
-
-        const email = `${this.username}@test.lan`;
-        console.log('Creating account with username', this.username);
+        const email = `${username}@test.lan`;
+        console.log('Creating account with username', username);
 
         await this.createAccountPage.firstName.setValue('first');
         await this.createAccountPage.hideKeyboardHelper();
@@ -142,7 +137,7 @@ class World {
         await this.createAccountPage.hideKeyboardHelper();
         await this.createAccountPage.nextButton.click();
 
-        await this.createAccountPage.username.setValue(this.username);
+        await this.createAccountPage.username.setValue(username);
         await this.createAccountPage.hideKeyboardHelper();
         await this.createAccountPage.nextButton.click();
 
@@ -153,11 +148,15 @@ class World {
     }
 
     async savePasscode() {
+        let passphrase;
         await this.createAccountPage.passphrase.getText().then(innerText => {
-            this.passphrase = innerText;
+            passphrase = innerText;
         });
-        console.log('Creating account with passphrase', this.passphrase);
+        console.log('Creating account with passphrase', passphrase);
+        return passphrase;
+    }
 
+    async acceptTerms() {
         await this.createAccountPage.copyButton.click();
         await this.createAccountPage.nextButton.click();
 
@@ -211,10 +210,22 @@ class World {
     }
 
     // username is optional
-    async createNewAccount(username) {
+    async createNewAccount() {
         await this.selectCreateAccount();
-        await this.typePersonalInfo(username);
-        await this.savePasscode();
+        this.username = new Date().getTime();
+        await this.typePersonalInfo(this.username);
+        this.passphrase = await this.savePasscode();
+        await this.acceptTerms();
+        await this.seeWelcomeScreen();
+        await this.dismissEmailConfirmationPopup();
+    }
+
+    async createHelperAccount() {
+        await this.selectCreateAccount();
+        this.helperUsername = new Date().getTime();
+        await this.typePersonalInfo(this.helperUsername);
+        this.helperPassphrase = await this.savePasscode();
+        await this.acceptTerms();
         await this.seeWelcomeScreen();
         await this.dismissEmailConfirmationPopup();
     }

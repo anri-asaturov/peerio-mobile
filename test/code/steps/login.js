@@ -35,7 +35,7 @@ When('I open Peerio', async function() {
     await this.app.launch();
 });
 
-Given('I sign out', async function() {
+Given(/(?:I|they) sign out/, async function() {
     await this.logout();
 });
 
@@ -57,8 +57,11 @@ When('I log in as {word} user', async function(string) {
 });
 
 Then('A helper user signs up', async function() {
-    this.username = new Date().getTime();
-    await this.createNewAccount(this.username);
+    await this.createHelperAccount();
+});
+
+Then('the helper user logs in', async function() {
+    await this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
 });
 
 // this.username needs to be set by a previous step definition
