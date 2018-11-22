@@ -27,10 +27,16 @@ Before(async function() {
     }
 });
 
+After(async function() {
+    await this.closeApp();
+});
+
+After(async function() {
+    this.destroy();
+});
+
 After(async function(scenario) {
     if (scenario.result.status === Status.FAILED) {
         await this.takeScreenshot();
     }
-    await this.closeApp();
-    this.destroy();
 });

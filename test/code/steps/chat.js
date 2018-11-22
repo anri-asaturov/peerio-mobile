@@ -107,6 +107,6 @@ Then('User dismisses placeholder DM', async function() {
     await this.chatPage.dismissDmPlaceholder.click();
 });
 
-Then('I am in the chat list page', async function() {
+Then(/(?:I am|they are) in the chat list page/, async function() {
     await this.chatListPage.buttonCreateNewChat;
 });

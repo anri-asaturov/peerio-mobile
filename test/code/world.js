@@ -70,6 +70,7 @@ class World {
 
     closeApp() {
         return this.app
+            .closeApp()
             .removeApp(this.context.bundleId) // remove app so it doesn't influence next test
             .end(); // end server session and close webdriver
     }
