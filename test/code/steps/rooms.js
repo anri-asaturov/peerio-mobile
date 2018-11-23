@@ -1,11 +1,7 @@
 const { When, Then } = require('cucumber');
-const { existingUsers } = require('../helpers/userHelper');
 
-When('I invite {word} to join the room', async function(string) {
-    let invitee;
-    if (string === 'someone') invitee = process.env.CHAT_RECIPIENT_USER;
-    else if (string === 'them') invitee = this.helperUsername;
-    else invitee = existingUsers[string].name;
+When('I invite them to join the room', async function() {
+    const invitee = this.helperUsername;
 
     await this.scrollToChat();
     await this.chatListPage.chatWithTitle(this.roomName).click();
@@ -17,6 +13,8 @@ When('I invite {word} to join the room', async function(string) {
     await this.contactSelectorPage.textInput.setValue(invitee);
     await this.contactSelectorPage.hideKeyboardHelper();
     await this.contactSelectorPage.recipientContact(invitee).click();
+
+    await this.chatPage.buttonExitChat.click();
 });
 
 Then('they accept the room invite', async function() {
