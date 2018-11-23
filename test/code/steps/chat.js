@@ -4,12 +4,7 @@ const { When, Then } = require('cucumber');
 
 When('I start a DM with {word} user', async function(string) {
     await this.openContactsPickerForDM();
-    let user;
-    if (string === 'helper') {
-        user = this.username;
-    } else {
-        user = existingUsers[string].name;
-    }
+    const user = string === 'helper' ? this.helperUsename : existingUsers[string].name;
     await this.searchForRecipient(user);
     await this.contactSelectorPage.recipientContact(user).click();
 });
