@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.407.0"></a>
+# [3.407.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.406.0...v3.407.0) (2018-11-21)
+
+
+### Features
+
+* add a listener server ([188c14a](https://github.com/PeerioTechnologies/peerio-mobile/commit/188c14a))
+* listener helper ([f239675](https://github.com/PeerioTechnologies/peerio-mobile/commit/f239675))
+
+
+
 <a name="3.406.0"></a>
 # [3.406.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.405.0...v3.406.0) (2018-11-16)
 

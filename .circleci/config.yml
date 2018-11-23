@@ -1,69 +1,69 @@
 version: 2
 jobs:
-  build:
-    macos:
-      xcode: "10.0.0"
-    environment:
-      XCODE_SCHEME: peeriomobile
-      PEERIO_IOS_SIM: 'iPhone 6 Plus'
-      PEERIO_IOS_VERSION: '12.0'
-      PEERIO_TEST_PLATFORM: 'ios'
-      CIRCLE_TEST_REPORTS: ~/reports
-      CIRCLE_ARTIFACTS: ~/artifacts
-    steps:
-      - checkout
-      - run:
-          name: "Set PATH"
-          command: echo "export PATH=\"$PATH:$HOME/node/node-v8.4.0-darwin-x64/bin:./node_modules/.bin\"" >> $BASH_ENV
-      - run:
-          name: "Make node dir"
-          command: ls "$HOME/node/node-v8.4.0-darwin-x64" || mkdir "$HOME/node"
-      - run:
-          name: "Download node"
-          command: ls "$HOME/node/node-v8.4.0-darwin-x64" || curl -L "https://nodejs.org/dist/v8.4.0/node-v8.4.0-darwin-x64.tar.gz" -o "$HOME/node/node-v8.4.0-darwin-x64.tar.gz"
-      - run:
-          name: "Extract node"
-          command: ls "$HOME/node/node-v8.4.0-darwin-x64" || tar -xzf "$HOME/node/node-v8.4.0-darwin-x64.tar.gz" -C "$HOME/node/"
-      - run:
-          name: "Install node-gyp"
-          command: npm install node-gyp -g
-      - run:
-          name: "Cleanup node installation"
-          command: rm -f "$HOME/node/node-v8.4.0-darwin-x64.tar.gz"
-      - run:
-          name: "Check node installation"
-          command: ls "$HOME/node/node-v8.4.0-darwin-x64"
-      - run:
-          name: "Checking $PATH"
-          command: echo $PATH
-      - run:
-          name: "Check working dir"
-          command: pwd
-      - run:
-          name: "Install npm modules"
-          command: npm install
-      - run:
-          name: "Eslint"
-          command: npm run test:lint
-      - run:
-          name: "Prettier"
-          command: npm run test:prettier
-      - run:
-          name: "Compile and run"
-          command: ./node_modules/.bin/react-native run-ios
-      - run:
-          name: "Create artifact folder"
-          command: mkdir ~/reports && mkdir ~/reports/py.test && mkdir ~/artifacts
-      # - run:
-          name: "Run tests"
-          command: npm test
-      - store_test_results:
-          path: ~/reports/py.test
-      - store_artifacts:
-          path: ~/artifacts
+    build:
+        macos:
+            xcode: '10.0.0'
+        environment:
+            XCODE_SCHEME: peeriomobile
+            PEERIO_IOS_SIM: 'iPhone 7'
+            PEERIO_IOS_VERSION: '12.0'
+            PEERIO_TEST_PLATFORM: 'ios'
+            CIRCLE_TEST_REPORTS: circle_reports
+            CIRCLE_ARTIFACTS: circle_artifacts
+        steps:
+            - checkout
+            - run:
+                  name: 'Set PATH'
+                  command: echo "export PATH=\"$PATH:$HOME/node/node-v8.4.0-darwin-x64/bin:./node_modules/.bin\"" >> $BASH_ENV
+            - run:
+                  name: 'Make node dir'
+                  command: ls "$HOME/node/node-v8.4.0-darwin-x64" || mkdir "$HOME/node"
+            - run:
+                  name: 'Download node'
+                  command: ls "$HOME/node/node-v8.4.0-darwin-x64" || curl -L "https://nodejs.org/dist/v8.4.0/node-v8.4.0-darwin-x64.tar.gz" -o "$HOME/node/node-v8.4.0-darwin-x64.tar.gz"
+            - run:
+                  name: 'Extract node'
+                  command: ls "$HOME/node/node-v8.4.0-darwin-x64" || tar -xzf "$HOME/node/node-v8.4.0-darwin-x64.tar.gz" -C "$HOME/node/"
+            - run:
+                  name: 'Install node-gyp'
+                  command: npm install node-gyp -g
+            - run:
+                  name: 'Cleanup node installation'
+                  command: rm -f "$HOME/node/node-v8.4.0-darwin-x64.tar.gz"
+            - run:
+                  name: 'Check node installation'
+                  command: ls "$HOME/node/node-v8.4.0-darwin-x64"
+            - run:
+                  name: 'Checking $PATH'
+                  command: echo $PATH
+            - run:
+                  name: 'Check working dir'
+                  command: pwd
+            - run:
+                  name: 'Install npm modules'
+                  command: npm install
+            - run:
+                  name: 'Eslint'
+                  command: npm run test:lint
+            - run:
+                  name: 'Prettier'
+                  command: npm run test:prettier
+            - run:
+                  name: 'Compile and run'
+                  command: ./scripts/run-ios.sh
+            - run:
+                  name: 'Create artifact folder'
+                  command: mkdir circle_reports && mkdir circle_artifacts
+            - run:
+                  name: 'Run tests'
+                  command: npm test
+            - store_test_results:
+                  path: circle_reports
+            - store_artifacts:
+                  path: circle_artifacts
 
 workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
+    version: 2
+    build_and_test:
+        jobs:
+            - build

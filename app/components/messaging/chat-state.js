@@ -1,5 +1,5 @@
 import { observable, action, when, reaction } from 'mobx';
-import { chatStore, chatInviteStore, clientApp, warnings } from '../../lib/icebear';
+import { chatStore, chatInviteStore, clientApp, warnings, contactStore } from '../../lib/icebear';
 import RoutedState from '../routes/routed-state';
 import sounds from '../../lib/sounds';
 import { tx } from '../utils/translator';
@@ -190,6 +190,13 @@ class ChatState extends RoutedState {
         console.log(`chat-state.js: fab action`);
         routes.modal.compose();
     }
+
+    @action
+    startDMWithUsername(username) {
+        this.startChat([contactStore.getContact(username)]);
+    }
 }
 
-export default new ChatState();
+const chatState = new ChatState();
+global.chatState = chatState;
+export default chatState;

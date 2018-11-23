@@ -6,6 +6,7 @@ import SafeComponent from '../shared/safe-component';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import ViewWithDrawer from '../shared/view-with-drawer';
+import testLabel from '../helpers/test-label';
 
 const fileUploadZeroState = require('../../assets/file-upload-zero-state.png');
 
@@ -58,7 +59,7 @@ export default class FilesPlaceholder extends SafeComponent {
 
     renderThrow() {
         return (
-            <ViewWithDrawer>
+            <ViewWithDrawer {...testLabel('filesZeroState')}>
                 <View style={outerContainer}>
                     {this.title}
                     <Image source={fileUploadZeroState} resizeMode="contain" style={imageStyle} />

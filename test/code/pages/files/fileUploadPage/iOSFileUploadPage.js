@@ -17,8 +17,7 @@ class iOSFileUploadPage extends Page {
         await this.uploadFromGallery();
         await this.getWhenVisible('~Moments').click();
         // TODO: make this universal
-        // TODO: move to env vars
-        await this.getWhenVisible('~Photo, Portrait, August 08, 2012, 5:29 PM').click();
+        await this.getWhenVisible(`~${process.env.IOS_PHOTO_NAME}`).click();
     }
 
     async uploadCropImageFromCamera() {

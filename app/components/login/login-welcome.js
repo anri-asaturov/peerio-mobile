@@ -12,6 +12,9 @@ import LoginHeading from './login-heading';
 import { adjustImageDimensions } from '../helpers/image';
 import { telemetry } from '../../lib/icebear';
 import tm from '../../telemetry';
+import DebugMenuTrigger from '../shared/debug-menu-trigger';
+import { uiState } from '../states';
+import signupState from '../signup/signup-state';
 
 const { S } = telemetry;
 
@@ -55,10 +58,12 @@ export default class LoginWelcome extends SafeComponent {
 
     componentDidMount() {
         this.startTime = Date.now();
+        uiState.testAction3 = signupState.testQuickSignup;
     }
 
     componentWillUnmount() {
         tm.signup.duration({ sublocation, startTime: this.startTime });
+        uiState.testAction3 = null;
     }
 
     render() {
@@ -76,14 +81,16 @@ export default class LoginWelcome extends SafeComponent {
                     />
                 </View>
                 <View style={logoBar}>
-                    <Image
-                        source={logoWelcome}
-                        style={adjustImageDimensions(
-                            logoWelcome,
-                            undefined,
-                            vars.welcomeHeaderHeight
-                        )}
-                    />
+                    <DebugMenuTrigger>
+                        <Image
+                            source={logoWelcome}
+                            style={adjustImageDimensions(
+                                logoWelcome,
+                                undefined,
+                                vars.welcomeHeaderHeight
+                            )}
+                        />
+                    </DebugMenuTrigger>
                 </View>
                 <View
                     style={[headerContainer, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>

@@ -137,7 +137,6 @@ export default class Files extends SafeComponent {
             <MeasureableView onMeasure={this.onMeasure}>
                 <FlatListWithDrawer
                     scrollHelper={scrollHelper}
-                    setScrollViewRef={this.flatListRef}
                     ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
                     ListFooterComponent={this.noFilesMatchSearch}
                     keyExtractor={this.keyExtractor}
@@ -297,7 +296,7 @@ export default class Files extends SafeComponent {
     renderThrow() {
         const { noFilesInFolder } = this;
         return (
-            <View style={{ flex: 1, flexGrow: 1 }}>
+            <View ref={this.flatListRef} style={{ flex: 1, flexGrow: 1 }}>
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.darkBlueBackground05 }}>
                     {upgradeForFiles()}
                     {noFilesInFolder || this.body()}

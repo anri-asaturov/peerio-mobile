@@ -13,7 +13,6 @@ class TwoStepVerificationPage extends Page {
         return this.getWhenVisible('~button_confirm');
     }
 
-
     get backupCodesVisible() {
         return this.checkIfVisible('~title_2FABackupCode');
     }

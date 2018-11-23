@@ -58,6 +58,11 @@ misc
 test/screenshots
 test/reports/*.json
 test/reports/*.html
+test/reports/*.xml
+circle_artifacts
+circle_test_reports
+screenshots
+appium.log
 
 # env settings
 env.sh
@@ -86,7 +91,3 @@ add-legacy.json
 temp
 signup-step-*.png
 
-# py.test reports
-py.test
-screenshots
-appium.log

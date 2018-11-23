@@ -1,9 +1,14 @@
 const Page = require('../../page');
-const { selectorWithText, selectorWithPartialResourceId } = require('../../../helpers/androidHelper');
+const {
+    selectorWithText,
+    selectorWithPartialResourceId
+} = require('../../../helpers/androidHelper');
 
 class AndroidFileUploadPage extends Page {
     async uploadFileFromGallery() {
-        await this.app.waitForExist(selectorWithText('Upload from gallery')).click(selectorWithText('Upload from gallery'));
+        await this.app
+            .waitForExist(selectorWithText('Upload from gallery'))
+            .click(selectorWithText('Upload from gallery'));
 
         // Select an album from Gallery
         const galleryView = selectorWithPartialResourceId('(.*)root_view');
@@ -16,10 +21,14 @@ class AndroidFileUploadPage extends Page {
     }
 
     async uploadCropImageFromCamera() {
-        await this.app.waitForExist(selectorWithText('Take a picture')).click(selectorWithText('Take a picture'));
+        await this.app
+            .waitForExist(selectorWithText('Take a picture'))
+            .click(selectorWithText('Take a picture'));
 
         try {
-            await this.app.waitForExist(selectorWithPartialResourceId('permission_allow_button')).click();
+            await this.app
+                .waitForExist(selectorWithPartialResourceId('permission_allow_button'))
+                .click();
             await this.app.waitForExist(selectorWithPartialResourceId('confirm_button')).click();
         } catch (e) {
             console.log('Didnt find permissons elements');
@@ -39,22 +48,26 @@ class AndroidFileUploadPage extends Page {
         const galleryH = await this.app.getElementSize(galleryView, 'height');
 
         // Tap in the center of gallery
-        await this.app.touchPerform([{
-            action: 'tap',
-            options: {
-                x: galleryX + galleryW / 2,
-                y: galleryY + galleryH / 2
+        await this.app.touchPerform([
+            {
+                action: 'tap',
+                options: {
+                    x: galleryX + galleryW / 2,
+                    y: galleryY + galleryH / 2
+                }
             }
-        }]);
+        ]);
 
         // Double tap is needed as it doesn't work without it
-        await this.app.touchPerform([{
-            action: 'tap',
-            options: {
-                x: galleryX + galleryW / 2,
-                y: galleryY + galleryH / 2
+        await this.app.touchPerform([
+            {
+                action: 'tap',
+                options: {
+                    x: galleryX + galleryW / 2,
+                    y: galleryY + galleryH / 2
+                }
             }
-        }]);
+        ]);
 
         await this.app.pause(2000);
         // Select an image from Gallery
@@ -68,13 +81,15 @@ class AndroidFileUploadPage extends Page {
         const photosH = await this.app.getElementSize(galleryView, 'height');
 
         // Tap in the center of gallery
-        await this.app.touchPerform([{
-            action: 'tap',
-            options: {
-                x: photosX + photosW / 2,
-                y: photosY + photosH / 2
+        await this.app.touchPerform([
+            {
+                action: 'tap',
+                options: {
+                    x: photosX + photosW / 2,
+                    y: photosY + photosH / 2
+                }
             }
-        }]);
+        ]);
     }
 
     async galleryTapFirstItem(galleryView) {
@@ -90,13 +105,15 @@ class AndroidFileUploadPage extends Page {
         const albumsPerRow = 2;
         const albumsPerColumn = 3;
         // Tap in the center of first album
-        await this.app.touchPerform([{
-            action: 'tap',
-            options: {
-                x: galleryX + (galleryW / albumsPerRow) / 2,
-                y: galleryY + (galleryH / albumsPerColumn) / 2
+        await this.app.touchPerform([
+            {
+                action: 'tap',
+                options: {
+                    x: galleryX + galleryW / albumsPerRow / 2,
+                    y: galleryY + galleryH / albumsPerColumn / 2
+                }
             }
-        }]);
+        ]);
 
         await this.app.pause(4000);
         // Select an image from Gallery
@@ -114,13 +131,15 @@ class AndroidFileUploadPage extends Page {
         const photosPerRow = 3;
         const photosPerColumn = 4;
         // Tap in the center of first photo
-        await this.app.touchPerform([{
-            action: 'tap',
-            options: {
-                x: photosX + (photosW / photosPerRow) / 2,
-                y: photosY + (photosH / photosPerColumn) / 2
+        await this.app.touchPerform([
+            {
+                action: 'tap',
+                options: {
+                    x: photosX + photosW / photosPerRow / 2,
+                    y: photosY + photosH / photosPerColumn / 2
+                }
             }
-        }]);
+        ]);
     }
 }
 

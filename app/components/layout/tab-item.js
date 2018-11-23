@@ -36,8 +36,8 @@ export default class TabItem extends SafeComponent {
     @action.bound
     onPress() {
         const { route } = this.props;
+        if (routerMain.route === 'files') fileState.goToRoot();
         if (routerMain.route === route && uiState.currentScrollView) {
-            if (routerMain.route === 'files') fileState.goToRoot();
             uiState.emit(uiState.EVENTS.HOME);
         } else {
             routerMain[route]();
