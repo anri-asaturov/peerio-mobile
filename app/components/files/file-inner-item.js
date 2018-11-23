@@ -122,7 +122,7 @@ export default class FileInnerItem extends SafeComponent {
             this.props.hideArrow || fileState.isFileSelectionMode ? null : (
                 <View style={{ flex: 0 }}>{this.iconRight}</View>
             );
-        const testID = file.name;
+        const testID = file.nameWithoutExtension;
         const owner =
             !file.fileOwner || file.fileOwner === User.current.username
                 ? ``

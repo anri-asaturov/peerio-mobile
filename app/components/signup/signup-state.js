@@ -3,6 +3,8 @@ import RNFS from 'react-native-fs';
 import FileOpener from 'react-native-file-opener';
 import { Platform } from 'react-native';
 import { observable, action } from 'mobx';
+import randomWords from 'random-words';
+import capitalize from 'capitalize';
 import { mainState, uiState, loginState } from '../states';
 import RoutedState from '../routes/routed-state';
 import {
@@ -206,6 +208,26 @@ class SignupState extends RoutedState {
             .finally(() => {
                 this.isInProgress = false;
             });
+    }
+
+    @action.bound
+    async testQuickSignup() {
+        // for parallel tests we add Math.random();
+        const randomId = `${Math.ceil(Math.random() * 10000)}${new Date().getTime() % 100000000}`;
+        const firstName = capitalize(randomWords());
+        const lastName = capitalize(randomWords());
+        const passphrase = await this.generatePassphrase();
+        const testUserData = {
+            username: `u${randomId}`,
+            email: `${randomId}@123.com`,
+            firstName,
+            lastName,
+            passphrase
+        };
+        Object.assign(this, testUserData);
+        await this.finishAccountCreation();
+        await this.finishSignUp();
+        return testUserData;
     }
 }
 

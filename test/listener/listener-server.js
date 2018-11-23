@@ -16,24 +16,41 @@ class ListenerServer {
 
         // event fired every time a new client connects:
         io.on('connection', socket => {
-            console.log(`Client connected [id=${socket.id}]`);
+            const { id } = socket;
+            console.log(`Client connected [id=${id}]`);
+            this.clientMap[socket.id] = socket;
 
             socket.on('message', message => {
-                console.log(`Incoming message`);
+                console.log(`Incoming message from ${socket.id}`);
                 console.log(message);
                 this.processIncomingMessage(message);
             });
             // when socket disconnects, remove it from the list:
             socket.on('disconnect', () => {
-                console.log(`Client gone [id=${socket.id}]`);
+                console.log(`Client gone [id=${id}]`);
+                delete this.clientMap[socket.id];
             });
         });
         Object.assign(this, { io, server });
         this.messageMap = {};
+        this.clientMap = {};
         this.index = 0;
     }
 
-    request(data) {
+    checkClients() {
+        const clientCount = Object.keys(this.clientMap).length;
+        if (clientCount !== 1) {
+            console.error(`Error: ${clientCount} clients connected to the listener`);
+            return false;
+        }
+        return true;
+    }
+
+    async request(data) {
+        if (!this.checkClients()) {
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+        this.checkClients();
         const message = this.formatMessage(data);
         this.messageMap[message.id] = message;
         const promise = new Promise((resolve, reject) => {
@@ -55,6 +72,7 @@ class ListenerServer {
     }
 
     processIncomingMessage(message) {
+        this.checkClients();
         if (!message) {
             throw new Error('Message is a non-value');
         }
@@ -76,11 +94,6 @@ class ListenerServer {
 
         delete this.messageMap[id];
     }
-
-    close() {
-        this.io.close();
-        this.server.close();
-    }
 }
 
 ListenerServer.create = () => {
@@ -88,6 +101,12 @@ ListenerServer.create = () => {
         ListenerServer.instance = new ListenerServer();
     }
     return ListenerServer.instance;
+};
+
+ListenerServer.close = () => {
+    ListenerServer.instance.io.close();
+    ListenerServer.instance.server.close();
+    ListenerServer.instance = null;
 };
 
 module.exports = ListenerServer;

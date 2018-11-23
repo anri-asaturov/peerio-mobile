@@ -27,6 +27,10 @@ Given('I have signed up', async function() {
     await this.createNewAccount();
 });
 
+Given('I have quickly signed up', async function() {
+    await this.callQuickSignup();
+});
+
 Given('I close Peerio', async function() {
     await this.app.closeApp();
 });

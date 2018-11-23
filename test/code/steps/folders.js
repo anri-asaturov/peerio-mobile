@@ -36,14 +36,14 @@ Then('I delete the folder named {string}', async function(word) {
 Then('I move the file in the folder named {string}', async function(word) {
     await this.homePage.filesTab.click();
 
-    await this.filesListPage.optionsButttonFor('Iceland.jpg').click();
+    await this.filesListPage.optionsButttonFor('Iceland').click();
     await this.filesListPage.moveOption.click();
 
     await this.filesListPage.folderNamed(word).click();
 });
 
 Then('the file is present', async function() {
-    await this.filesListPage.folderNamed('Iceland.jpg');
+    await this.filesListPage.folderNamed('Iceland');
 });
 
 Then('the {string} folder is present', async function(word) {
