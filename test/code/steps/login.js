@@ -52,12 +52,16 @@ When('I sign in with 2fa', async function() {
 });
 
 When('I log in as {word} user', async function(string) {
-    if (string === 'new') {
-        await this.createNewAccount();
-    } else {
-        const credentials = existingUsers[string];
-        await this.loginExistingAccountWithout2FA(credentials.name, credentials.passphrase);
+    if (string === 'helper') {
+        return this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
     }
+
+    if (string === 'new') {
+        return this.createNewAccount();
+    }
+
+    const credentials = existingUsers[string];
+    return this.loginExistingAccountWithout2FA(credentials.name, credentials.passphrase);
 });
 
 Then('a helper user signs up', async function() {

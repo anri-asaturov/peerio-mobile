@@ -4,7 +4,7 @@ const { When, Then } = require('cucumber');
 
 When('I start a DM with {word} user', async function(string) {
     await this.openContactsPickerForDM();
-    const user = string === 'helper' ? this.helperUsename : existingUsers[string].name;
+    const user = string === 'helper' ? this.helperUsername : existingUsers[string].name;
     await this.searchForRecipient(user);
     await this.contactSelectorPage.recipientContact(user).click();
 });
@@ -31,9 +31,12 @@ Then('I can send a message to the current chat', async function() {
 });
 
 Then('I send several messages to the current chat', async function() {
-    await this.chatPage.buttonUploadToChat.click();
-    await this.fileUploadPage.uploadFileFromGallery();
-    await this.filesListPage.fileSharePreviewPopup.click();
+    for (let i = 0; i < 3; i++) {
+        await this.chatPage.buttonUploadToChat.click();
+        await this.fileUploadPage.uploadFileFromGallery();
+        await this.filesListPage.fileSharePreviewPopup.click();
+        await this.app.pause(1000); // time to upload
+    }
 });
 
 Then('I scroll down the chat list', async function() {
@@ -58,6 +61,10 @@ Then('I can see the bottom unread chat', async function() {
 
 Then('I can open a chat with {word}', async function(string) {
     await this.chatListPage.chatWithTitle(string).click();
+});
+
+Then('I open the chat', async function() {
+    await this.chatListPage.chatWithTitle(this.username).click();
 });
 
 Then('I scroll up the chat', async function() {
