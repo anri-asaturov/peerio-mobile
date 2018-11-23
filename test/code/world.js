@@ -126,6 +126,7 @@ class World {
 
     async selectCreateAccount() {
         await this.alertsPage.dismissNotificationsAlert();
+        if (await this.loginPage.backButtonVisible) await this.loginPage.backButton.click();
         await this.startPage.createAccountButton.click();
     }
 

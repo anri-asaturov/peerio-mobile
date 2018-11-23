@@ -31,6 +31,9 @@ Then('I can send a message to the current chat', async function() {
 });
 
 Then('I send several messages to the current chat', async function() {
+    if (await this.chatPage.shareFileInChatBeaconVisible)
+        await this.chatPage.shareFileInChatBeacon.click();
+
     for (let i = 0; i < 3; i++) {
         await this.chatPage.buttonUploadToChat.click();
         await this.fileUploadPage.uploadFileFromGallery();
@@ -69,6 +72,8 @@ Then('I open the chat', async function() {
 
 Then('I scroll up the chat', async function() {
     await this.app.pause(5000); // wait till chat loads
+    if (await this.chatPage.shareFileInChatBeaconVisible)
+        await this.chatPage.shareFileInChatBeacon.click();
     await this.chatPage.testAction2();
 });
 
@@ -77,8 +82,6 @@ Then('I click the chat unread message indicator', async function() {
 });
 
 Then('I can no longer see the unread message indicator', async function() {
-    if (await this.chatPage.shareFileInChatBeaconVisible)
-        await this.chatPage.shareFileInChatBeacon.click();
     await this.chatPage.chatUnreadMessageIndicatorDisappeared;
 });
 
