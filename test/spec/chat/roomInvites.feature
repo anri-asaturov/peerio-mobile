@@ -68,4 +68,4 @@ Feature: Room invites
         Then  the helper user logs in
         And   they accept the room invite
         And   they leave the room
-        Then  I am in the chat list page
+        Then  they are in the chat list page
