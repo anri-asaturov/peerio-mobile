@@ -213,7 +213,7 @@ class World {
     // username is optional
     async createNewAccount() {
         await this.selectCreateAccount();
-        await this.typePersonalInfo(this.username);
+        await this.typePersonalInfo();
         await this.savePasscode();
         await this.acceptTerms();
         await this.seeWelcomeScreen();
