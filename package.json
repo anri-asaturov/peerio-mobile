@@ -34,7 +34,7 @@
     "test-ios-folders": "TEST_FEATURE=files/folders npm run test-ios-feature",
     "test-ios-2fa": "TEST_FEATURE=account/2fa npm run test-ios-feature",
     "test-ios-contacts": "TEST_FEATURE=contacts/contacts npm run test-ios-feature",
-    "test-android-invites": "source env.sh && cucumber-js test/spec/chat/roomInvites.feature -r test/code -f node_modules/cucumber-pretty --world-parameters '{\"platform\": \"android\"}'",
+    "test-android-invites": "TEST_FEATURE=chat/roomInvites npm run test-android-feature",
     "test-ios-listener": "TEST_FEATURE=listener/listener npm run test-ios-feature",
     "test-android": "TEST_FEATURE=account/login npm run test-android-feature",
     "test-android-feature": "source env.sh && ./scripts/forward-android-listener.sh && cucumber-js test/spec/$TEST_FEATURE.feature -r test/code -f node_modules/cucumber-pretty -f json:test/reports/result-android.json --world-parameters '{\"platform\": \"android\"}'",
