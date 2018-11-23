@@ -60,7 +60,7 @@ When('I log in as {word} user', async function(string) {
     }
 });
 
-Then('A helper user signs up', async function() {
+Then('a helper user signs up', async function() {
     await this.createHelperAccount();
 });
 

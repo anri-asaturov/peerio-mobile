@@ -129,9 +129,10 @@ class World {
         await this.startPage.createAccountButton.click();
     }
 
-    async typePersonalInfo(username) {
-        const email = `${username}@test.lan`;
-        console.log('Creating account with username', username);
+    async typePersonalInfo() {
+        this.username = new Date().getTime();
+        const email = `${this.username}@test.lan`;
+        console.log('Creating account with username', this.username);
 
         await this.createAccountPage.firstName.setValue('first');
         await this.createAccountPage.hideKeyboardHelper();
@@ -139,7 +140,7 @@ class World {
         await this.createAccountPage.hideKeyboardHelper();
         await this.createAccountPage.nextButton.click();
 
-        await this.createAccountPage.username.setValue(username);
+        await this.createAccountPage.username.setValue(this.username);
         await this.createAccountPage.hideKeyboardHelper();
         await this.createAccountPage.nextButton.click();
 
@@ -150,12 +151,10 @@ class World {
     }
 
     async savePasscode() {
-        let passphrase;
         await this.createAccountPage.passphrase.getText().then(innerText => {
-            passphrase = innerText;
+            this.passphrase = innerText;
         });
-        console.log('Creating account with passphrase', passphrase);
-        return passphrase;
+        console.log('Creating account with passphrase', this.passphrase);
     }
 
     async acceptTerms() {
@@ -214,9 +213,8 @@ class World {
     // username is optional
     async createNewAccount() {
         await this.selectCreateAccount();
-        this.username = new Date().getTime();
         await this.typePersonalInfo(this.username);
-        this.passphrase = await this.savePasscode();
+        await this.savePasscode();
         await this.acceptTerms();
         await this.seeWelcomeScreen();
         await this.dismissEmailConfirmationPopup();
@@ -224,12 +222,10 @@ class World {
 
     async createHelperAccount() {
         await this.selectCreateAccount();
-        this.helperUsername = new Date().getTime();
-        await this.typePersonalInfo(this.helperUsername);
-        this.helperPassphrase = await this.savePasscode();
-        await this.acceptTerms();
-        await this.seeWelcomeScreen();
-        await this.dismissEmailConfirmationPopup();
+        const { username, passphrase } = await this.listener.request(
+            'signupState.testQuickSignup()'
+        );
+        Object.assign(this, { helperUsername: username, helperPassphrase: passphrase });
     }
 
     async callQuickSignup() {
