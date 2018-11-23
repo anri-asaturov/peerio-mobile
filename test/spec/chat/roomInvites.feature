@@ -10,6 +10,7 @@ Feature: Room invites
         Given A helper user signs up
         And   they sign out
 
+    @noCacheReset
     Scenario: Accept a room invite
         Given I log in as room_test user
         And   I create a new room
@@ -29,6 +30,7 @@ Feature: Room invites
         Then  they log in
         And   they decline the room invite
 
+    @noCacheReset
     Scenario: Invite user to join a room but cancel
         Given I log in as room_test user
         And   I create a new room
@@ -39,6 +41,7 @@ Feature: Room invites
         Then  they log in
         And   they do not have any room invites
 
+    @noCacheReset
     Scenario: Invite user to rejoin a room after leaving
         Given I log in as room_test user
         And   I create a new room
