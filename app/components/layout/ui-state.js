@@ -1,7 +1,7 @@
 import { Keyboard, Dimensions } from 'react-native';
 import moment from 'moment';
 import { observable, action, reaction, when } from 'mobx';
-import translator from 'peerio-translator';
+import { setLocale } from 'peerio-translator';
 import locales from '../../lib/locales';
 import { TinyDb, PhraseDictionary } from '../../lib/icebear';
 import RoutedState from '../routes/routed-state';
@@ -93,7 +93,7 @@ class UIState extends RoutedState {
             .then(locale => {
                 console.log(`ui-state.js: ${lc}`);
                 console.log(lc);
-                translator.setLocale(lc, locale);
+                setLocale(lc, locale);
                 this.locale = lc;
                 this.languageSelected = lc;
                 this.save();

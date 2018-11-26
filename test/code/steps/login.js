@@ -72,6 +72,14 @@ Then('the helper user logs in', async function() {
     await this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
 });
 
+Then('a helper user signs up', async function() {
+    await this.createHelperAccount();
+});
+
+Then('the helper user logs in', async function() {
+    await this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
+});
+
 // this.username needs to be set by a previous step definition
 Then('They sign up', async function() {
     await this.createNewAccount(this.username);
