@@ -163,7 +163,7 @@
     "madge": "1.6.0",
     "mocha": "3.2.0",
     "node-simctl": "3.16.0",
-    "npm-run-all": "4.1.2",
+    "npm-run-all": "4.1.5",
     "opt-cli": "1.6.0",
     "otplib": "7.0.0",
     "prettier": "1.13.7",
