@@ -1,4 +1,4 @@
-Feature: Chat list unread message indicator
+Feature: Chat view unread message indicator
 
     Background:
         Given a helper user signs up
