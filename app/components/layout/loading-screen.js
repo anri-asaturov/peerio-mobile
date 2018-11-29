@@ -35,7 +35,7 @@ export default class LoadingScreen extends Component {
             await promiseWhen(() => routes.main.chatStateLoaded);
             await promiseWhen(() => routes.main.fileStateLoaded);
             await promiseWhen(() => routes.main.contactStateLoaded);
-
+            // await new Promise(resolve => setTimeout(resolve, 15000));
             this.animateReveal();
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
@@ -46,14 +46,14 @@ export default class LoadingScreen extends Component {
 
     @action.bound
     animateLogo() {
-        this.logoAnimValue.setValue(0);
+        /* this.logoAnimValue.setValue(0);
         Animated.timing(this.logoAnimValue, {
             toValue: 1,
             duration: 1500,
             useNativeDriver: true
         }).start(() => {
             if (this.logoAnimVisible) this.animateLogo();
-        });
+        }); */
     }
 
     @action.bound
@@ -124,7 +124,8 @@ export default class LoadingScreen extends Component {
                 )}
                 {this.logoAnimVisible && (
                     <LottieView
-                        progress={this.logoAnimValue}
+                        autoPlay
+                        loop
                         style={[animationContainer, { backgroundColor: vars.darkBlueBackground05 }]}
                         source={logoAnimation}
                         resizeMode="cover"
