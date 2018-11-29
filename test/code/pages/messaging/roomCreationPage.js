@@ -20,6 +20,10 @@ class roomCreationPage extends Page {
     recipientContact(contact) {
         return this.getElementInContainer('~foundContacts', `~${contact}`);
     }
+
+    get startChatBeacon() {
+        return this.getWhenVisible('~startChat', 3000);
+    }
 }
 
 module.exports = roomCreationPage;
