@@ -89,7 +89,6 @@ export default class InputMain extends SafeComponent {
                 <View style={autoExpandingInputContainerStyle}>
                     <AutoExpandingTextInput
                         onChangeText={this.onChangeText}
-                        value={this.value}
                         placeholder={tx('title_messageInputPlaceholder', { chatName })}
                         minHeight={vars.iconSizeSmall * 2}
                         maxHeight={146}

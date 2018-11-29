@@ -100,7 +100,7 @@
     "react": "16.3.1",
     "react-addons-pure-render-mixin": "15.5.2",
     "react-dom": "16.5.0",
-    "react-native": "github:PeerioTechnologies/react-native#0.55",
+    "react-native": "github:PeerioTechnologies/react-native#0.55-fix",
     "react-native-actionsheet": "2.3.0",
     "react-native-animatable": "1.1.0",
     "react-native-billing": "2.10.0",
