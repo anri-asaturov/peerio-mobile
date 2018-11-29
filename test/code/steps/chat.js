@@ -12,7 +12,7 @@ When('I start a DM with {word} user', async function(string) {
 When('I create a new room', async function() {
     try {
         await this.roomCreationPage.startChatBeacon.click();
-    } catch(e) {
+    } catch (e) {
         console.log('"I create a new room" Step: startChat beacon was not found');
     }
     this.roomName = new Date().getTime();
@@ -27,7 +27,7 @@ When('I create a new room', async function() {
 When('I create a new room named {word}', async function(string) {
     try {
         await this.roomCreationPage.startChatBeacon.click();
-    } catch(e) {
+    } catch (e) {
         console.log(`"I create a new room ${string}" Step: startChat beacon was not found`);
     }
 
