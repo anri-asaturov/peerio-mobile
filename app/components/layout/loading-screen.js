@@ -27,15 +27,14 @@ export default class LoadingScreen extends Component {
 
     async componentDidMount() {
         try {
-            this.animateLogo();
             await loginState.load();
             if (!loginState.loaded) throw new Error('error logging in after return');
             await promiseWhen(() => socket.authenticated);
             this.authenticated = true;
             await promiseWhen(() => routes.main.chatStateLoaded);
             await promiseWhen(() => routes.main.fileStateLoaded);
-            await promiseWhen(() => routes.main.contactStateLoaded);
-
+            // TODO: this actually causes a 1000 ms delay in rendering the app
+            // there should be a better way to handle this transition
             this.animateReveal();
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
@@ -45,22 +44,9 @@ export default class LoadingScreen extends Component {
     }
 
     @action.bound
-    animateLogo() {
-        this.logoAnimValue.setValue(0);
-        Animated.timing(this.logoAnimValue, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true
-        }).start(() => {
-            if (this.logoAnimVisible) this.animateLogo();
-        });
-    }
-
-    @action.bound
     animateReveal() {
         this.revealAnimVisible = true;
         this.logoAnimVisible = false;
-        this.revealAnimValue = new Animated.Value(0);
 
         Animated.timing(this.statusTextOpacity, {
             toValue: 0,
@@ -68,15 +54,13 @@ export default class LoadingScreen extends Component {
             useNativeDriver: true
         }).start();
 
-        Animated.timing(this.revealAnimValue, {
-            toValue: 1,
-            duration: 2500,
-            useNativeDriver: true
-        }).start(() => {
+        // TODO: this actually causes a 1000 ms delay in rendering the app
+        // there should be a better way to handle this transition
+        setTimeout(() => {
             this.revealAnimVisible = false;
             routes.main.transitionToMain();
             LayoutAnimation.easeInEaseOut();
-        });
+        }, 1000);
     }
 
     @computed
@@ -116,7 +100,8 @@ export default class LoadingScreen extends Component {
             <View style={container}>
                 {this.revealAnimVisible && (
                     <LottieView
-                        progress={this.revealAnimValue}
+                        autoPlay
+                        loop={false}
                         style={[animationContainer, { backgroundColor: vars.darkBlue }]}
                         source={revealAnimation}
                         resizeMode="cover"
@@ -124,7 +109,8 @@ export default class LoadingScreen extends Component {
                 )}
                 {this.logoAnimVisible && (
                     <LottieView
-                        progress={this.logoAnimValue}
+                        autoPlay
+                        loop
                         style={[animationContainer, { backgroundColor: vars.darkBlueBackground05 }]}
                         source={logoAnimation}
                         resizeMode="cover"
