@@ -76,10 +76,6 @@ Then('the helper user logs in', async function() {
     await this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
 });
 
-Then('the helper user logs in', async function() {
-    await this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
-});
-
 // this.email needs to be set by a previous step definition
 Then('They sign up', async function() {
     await this.callQuickSignup({ email: this.email });

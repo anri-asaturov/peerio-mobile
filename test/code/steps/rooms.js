@@ -23,7 +23,7 @@ Then('they accept the room invite', async function() {
     await this.chatPage.buttonSendMessage;
 });
 
-Then('I decline the room invite', async function() {
+Then('they decline the room invite', async function() {
     await this.scrollToChat();
     await this.chatListPage.chatWithTitle(this.roomName).click();
 
@@ -56,7 +56,7 @@ Then('they do not have any room invites', async function() {
     roomExists.should.be.false; // eslint-disable-line
 });
 
-Then('I leave the room', async function() {
+Then('they leave the room', async function() {
     await this.chatPage.chatWithTitle(this.roomName).click();
     await this.app.pause(1000);
     await this.chatPage.leaveRoomButton.click();
