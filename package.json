@@ -1,6 +1,6 @@
 {
   "name": "peeriomobile",
-  "version": "3.417.0",
+  "version": "3.418.0",
   "private": true,
   "scripts": {
     "postinstall": "./scripts/setup-env.sh && npm run icebear:compile && ./scripts/setup-rn-debugging.sh && ./scripts/copy-android-resources.sh && ./scripts/android-switch-to-rn-fork.sh && node scripts/test-deps.js",
@@ -138,7 +138,7 @@
     "url-regex": "4.1.1"
   },
   "devDependencies": {
-    "appium": "1.9.2-beta.2",
+    "appium": "1.10.0",
     "authorize-ios": "1.0.4",
     "babel-core": "^6.26.3",
     "babel-eslint": "8.2.3",
