@@ -4,19 +4,6 @@
 # It is part of a set of .feature files located in this folder for Mobile 
 # File and Folder scenarios. 
 #
-# The Scenarios have been created based on contents of the "Files Planning"
-#   document available in the Peerio Google drive, and based on the
-#   functionality of the Peerio staging app, Mobile, as of this date: 
-#   November 9, 2018. 
-#   Version 3.8.3-staging. 
-#   November 12, 2018: CONFIRMED THAT THIS FILE MATCHES CURRENT IMPLEMENTATION
-#   AND/OR EXPECTED FUNCTIONALITY. 
-#   
-# This file is a DRAFT. 
-# It is intended to be used as documentation for the features here specified.
-# It is also intended as a starting point for future regression testing. 
-# It may contain inconsistencies with actual or intended functionality. 
-# 
 # If you have any questions, comments, or concerns regarding the contents 
 # of this file, please contact Mona Ghassemi, @bluemona, on Peerio. 
 #
@@ -40,7 +27,7 @@ Scenari Outline: I want to add a file from my device <origin> to a folder (inclu
     Then  a dialog opens prompting me to choose the file origin
     Then  I choose the <origin>
     When  I choose a file and tap "ok"
-    Then  the file uploads to Peerio and is added to the folder
+    Then  the file uploads to Peerio and is added to the folder to which I had navigated
     And   the file is visible in "All Files"
     And   I become the owner of the file
     | origin  |
@@ -81,9 +68,9 @@ Scenario: I want to move a file into a folder
 
 #current mobile implementation allows user to see / select same folder as destination (move fails)
 Scenario: I cannot move a folder into its own child
-    Given I have created a folder
-    And   I tap on the file options
+    Given I have created at least one folder
+    And   I tap on the options for this folder
     And   I tap "Move"
-    Then  A dialog shows prompting me to choose a folder
+    Then  A dialog shows prompting me to choose a folder into which to move 
     And   The folder I have selected is not an available option
     And   Children of the folder I have selected are not available options
