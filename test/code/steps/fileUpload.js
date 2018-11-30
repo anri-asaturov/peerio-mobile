@@ -6,6 +6,7 @@ Then('I upload a file from gallery to Files', async function() {
     await this.filesListPage.testAction2();
     await this.filesListPage.uploadFileButtton.click();
     await this.fileUploadPage.uploadFileFromGallery();
+    await this.filesListPage.fileUploadedPopup.click();
     // TOOD: do an actual check
     await this.app.pause(3000);
 });
