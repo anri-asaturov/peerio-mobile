@@ -35,7 +35,7 @@ export default class LoadingScreen extends Component {
             await promiseWhen(() => routes.main.chatStateLoaded);
             await promiseWhen(() => routes.main.fileStateLoaded);
             await promiseWhen(() => routes.main.contactStateLoaded);
-            // await new Promise(resolve => setTimeout(resolve, 15000));
+            await new Promise(resolve => setTimeout(resolve, 15000));
             this.animateReveal();
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
