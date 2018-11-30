@@ -45,6 +45,7 @@
     "test-android-chat": "TEST_FEATURE=chat/chat npm run test-android-feature",
     "test-android-chatUnreadIndicator": "TEST_FEATURE=chat/chatUnreadIndicator npm run test-android-feature",
     "test-android-chatListUnreadIndicator": "TEST_FEATURE=chat/chatListUnreadIndicator npm run test-android-feature",
+    "test-android-placeholderDm": "TEST_FEATURE=chat/placeholderDm npm run test-android-feature",
     "test-android-contacts": "TEST_FEATURE=contacts/contacts npm run test-android-feature",
     "test-android-folders": "TEST_FEATURE=files/folders npm run test-android-feature",
     "gp-peerio": "npm run build-android && bash scripts/release_android.sh && fastlane android alpha",
