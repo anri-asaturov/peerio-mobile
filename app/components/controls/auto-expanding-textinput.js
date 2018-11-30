@@ -1,54 +1,50 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { TextInput } from 'react-native';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { TextInput, Platform } from 'react-native';
+import { observer } from 'mobx-react/native';
+import { observable } from 'mobx';
 import { vars } from '../../styles/styles';
 
-// TODO: @observer needs to be refactored here
+@observer
 export default class AutoExpandingTextInput extends Component {
-    constructor(props) {
-        super(props);
-        // initial state
-        this.state = {
-            height: this.props.minHeight,
-            maxHeight: this.props.maxHeight || this.props.minHeight * 3
-        };
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    @observable height;
+
+    get maxHeight() {
+        return this.props.maxHeight || this.props.minHeight * 3;
     }
 
-    static propTypes = {
-        onChangeHeight: PropTypes.func.isRequired,
-        minHeight: PropTypes.number.isRequired,
-        maxHeight: PropTypes.number
-    };
-
-    static defaultProps = {};
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.value === '') {
-            this.setState({
-                height: this.props.minHeight
-            });
-        }
+    componentWillMount() {
+        this.height = this.props.minHeight;
     }
 
     _onContentSizeChange = event => {
         const curHeight = event.nativeEvent.contentSize.height;
         if (curHeight < this.props.minHeight || curHeight > this.state.maxHeight) return;
-
-        if (this.state.height !== curHeight) {
-            if (this.props.onChangeHeight) {
-                this.props.onChangeHeight(this.state.height, curHeight);
-            }
-        }
-
-        this.setState({
-            height: curHeight
-        });
+        this.height = curHeight;
     };
 
+    setRef = ref => {
+        this.textInputRef = ref;
+    };
+
+    clear() {
+        console.log('clearing text input');
+        // HACK FOR CLEARING textInput in RN0.55
+        // to be removed
+        if (Platform.OS === 'ios') {
+            this.textInputRef.setNativeProps({ text: ' ' });
+        }
+        requestAnimationFrame(() => {
+            this.textInputRef.setNativeProps({ text: '' });
+        });
+    }
+
+    focus() {
+        this.textInputRef.focus();
+    }
+
     render() {
-        const tmpHeight = Math.min(this.state.maxHeight, this.state.height);
+        const height = Math.min(this.maxHeight, this.height);
 
         const style = {
             textAlign: 'left',
@@ -59,14 +55,12 @@ export default class AutoExpandingTextInput extends Component {
         return (
             <TextInput
                 {...this.props}
-                ref={ti => {
-                    this.ti = ti;
-                }}
+                ref={this.setRef}
                 placeholderTextColor={vars.extraSubtleText}
                 underlineColorAndroid="transparent"
                 multiline
                 onContentSizeChange={this._onContentSizeChange}
-                style={[style, this.props.style, { height: tmpHeight }]}
+                style={[style, this.props.style, { height }]}
             />
         );
     }
