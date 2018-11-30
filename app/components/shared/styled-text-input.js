@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, action, reaction } from 'mobx';
-import { TextInput, View, Platform, Animated } from 'react-native';
+import { View, Platform, Animated } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import uiState from '../layout/ui-state';
@@ -12,6 +12,7 @@ import testLabel from '../helpers/test-label';
 import { tx } from '../utils/translator';
 import { socket } from '../../lib/icebear';
 import tm from '../../telemetry';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 // Because JS has no enums
 const VALID = true;
@@ -343,7 +344,7 @@ export default class StyledTextInput extends SafeComponent {
             <View style={styledTextInput.inputContainer}>
                 <View style={fieldStyle}>
                     {this.rightIcon}
-                    <TextInput
+                    <TextInputUncontrolled
                         style={[styledTextInput.textinputStyle, style, marginRight]}
                         value={state.value}
                         secureTextEntry={secureText && !this.showSecret}

@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react/native';
-import { View, TextInput, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { vars } from '../../styles/styles';
 import testLabel from '../helpers/test-label';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const height = vars.searchInputHeight;
 const fontSize = vars.font.size16;
@@ -48,7 +49,7 @@ export default class SearchBar extends Component {
             <View>
                 <View style={container}>
                     {leftIcon}
-                    <TextInput
+                    <TextInputUncontrolled
                         underlineColorAndroid="transparent"
                         value={textValue}
                         returnKeyType="done"

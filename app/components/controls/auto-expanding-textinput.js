@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { TextInput, Platform } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { observable } from 'mobx';
 import { vars } from '../../styles/styles';
+import TextInputUncontrolled from './text-input-uncontrolled';
 
 @observer
 export default class AutoExpandingTextInput extends Component {
@@ -28,15 +28,7 @@ export default class AutoExpandingTextInput extends Component {
     };
 
     clear() {
-        console.log('clearing text input');
-        // HACK FOR CLEARING textInput in RN0.55
-        // to be removed
-        if (Platform.OS === 'ios') {
-            this.textInputRef.setNativeProps({ text: ' ' });
-        }
-        requestAnimationFrame(() => {
-            this.textInputRef.setNativeProps({ text: '' });
-        });
+        this.textInputRef.clear();
     }
 
     focus() {
@@ -53,11 +45,9 @@ export default class AutoExpandingTextInput extends Component {
         };
 
         return (
-            <TextInput
+            <TextInputUncontrolled
                 {...this.props}
                 ref={this.setRef}
-                placeholderTextColor={vars.extraSubtleText}
-                underlineColorAndroid="transparent"
                 multiline
                 onContentSizeChange={this._onContentSizeChange}
                 style={[style, this.props.style, { height }]}

@@ -43,7 +43,6 @@ export default class InputMain extends SafeComponent {
         if (!this.canSend) return;
         this.hasText ? this.props.send(this.value) : this.props.sendAck();
         this.value = '';
-        this.textInputRef.clear();
     }
 
     setFocus() {
@@ -94,6 +93,7 @@ export default class InputMain extends SafeComponent {
                 <View style={autoExpandingInputContainerStyle}>
                     <AutoExpandingTextInput
                         onChangeText={this.onChangeText}
+                        value={this.value}
                         placeholder={tx('title_messageInputPlaceholder', { chatName })}
                         minHeight={vars.iconSizeSmall * 2}
                         maxHeight={146}

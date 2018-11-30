@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { when, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { config, overrideServer, socket } from '../../lib/icebear';
@@ -11,6 +11,7 @@ import consoleOverride from '../../lib/console-override';
 import SafeComponent from './safe-component';
 import uiState from '../layout/ui-state';
 import { transitionAnimation } from '../helpers/animations';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const { height } = Dimensions.get('window');
 
@@ -139,7 +140,7 @@ export default class DebugMenu extends SafeComponent {
                         </View>
                     </View>
                     <View style={{ flex: 0 }}>
-                        <TextInput
+                        <TextInputUncontrolled
                             autoCorrect={false}
                             autoCapitalize="none"
                             value={this.switchServerValue}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { reaction, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { ScrollView, View, TextInput, Clipboard, ActivityIndicator, Keyboard } from 'react-native';
+import { ScrollView, View, Clipboard, ActivityIndicator, Keyboard } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -16,6 +16,7 @@ import TwoFactorAuthCodesGenerate from './two-factor-auth-codes-generate';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
 import tm from '../../telemetry';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -126,6 +127,10 @@ export default class TwoFactorAuth extends SafeComponent {
         );
     }
 
+    onChangeText = text => {
+        this.confirmCode = text;
+    };
+
     renderThrow() {
         if (this.showReissueCodes) return <TwoFactorAuthCodesGenerate />;
         if (this.backupCodes) return <TwoFactorAuthCodes codes={this.backupCodes} />;
@@ -164,7 +169,7 @@ export default class TwoFactorAuth extends SafeComponent {
                             backgroundColor: vars.white,
                             paddingHorizontal
                         }}>
-                        <TextInput
+                        <TextInputUncontrolled
                             style={{
                                 color: vars.txtDark,
                                 marginVertical: vars.spacing.small.midi2x,
@@ -175,9 +180,7 @@ export default class TwoFactorAuth extends SafeComponent {
                             {...testLabel('confirmationCodeInput')}
                             placeholderTextColor={vars.txtDate}
                             placeholder={tx('title_2FAHelperText')}
-                            onChangeText={text => {
-                                this.confirmCode = text;
-                            }}
+                            onChangeText={this.onChangeText}
                             value={this.confirmCode}
                         />
                         {buttons.blueTextButton(

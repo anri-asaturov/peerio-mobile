@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, TextInput, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { action } from 'mobx';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const height = vars.inputHeight;
 const fontSize = vars.font.size14;
@@ -67,7 +68,7 @@ export default class CreateChannelTextBox extends Component {
             <View>
                 <View style={container}>
                     <Text style={titleStyle}>{tx(labelText)}</Text>
-                    <TextInput
+                    <TextInputUncontrolled
                         underlineColorAndroid="transparent"
                         value={this[property]}
                         returnKeyType="done"

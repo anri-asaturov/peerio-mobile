@@ -163,7 +163,6 @@ export default class Files extends SafeComponent {
         const items = text.split(/[ ,;]/);
         if (items.length > 1) {
             fileState.findFilesText = items[0].trim();
-            this.onSubmit();
             return;
         }
         fileState.findFilesText = text;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, TouchableOpacity, TextInput } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { observable } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -13,6 +13,7 @@ import { config } from '../../lib/icebear';
 import ChannelInfoListState from '../channels/channel-info-list-state';
 import testLabel from '../helpers/test-label';
 import imagePopups from '../shared/image-popups';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const leaveRoomImage = require('../../assets/chat/icon-M-leave.png');
 
@@ -105,6 +106,10 @@ export default class ChannelInfo extends SafeComponent {
         );
     }
 
+    onChangeChannelTopic = text => {
+        this.channelTopic = text;
+    };
+
     get topicTextBox() {
         const chat = chatState.currentChat;
         const update = () => {
@@ -121,10 +126,8 @@ export default class ChannelInfo extends SafeComponent {
                 <Text bold style={textStyle}>
                     {tx('title_purpose')}
                 </Text>
-                <TextInput
-                    onChangeText={text => {
-                        this.channelTopic = text;
-                    }}
+                <TextInputUncontrolled
+                    onChangeText={this.onChangeChannelTopic}
                     onBlur={update}
                     onEndEditing={update}
                     value={this.channelTopic}

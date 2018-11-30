@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { TextInput } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 import uiState from '../layout/ui-state';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 @observer
 export default class SimpleTextBox extends SafeComponent {
@@ -29,17 +29,19 @@ export default class SimpleTextBox extends SafeComponent {
         }
     };
 
+    setRef = ref => {
+        this._ref = ref;
+    };
+
     renderThrow() {
         return (
-            <TextInput
+            <TextInputUncontrolled
                 {...this.props}
                 underlineColorAndroid="transparent"
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
                 onLayout={this.onLayout}
-                ref={ref => {
-                    this._ref = ref;
-                }}
+                ref={this.setRef}
             />
         );
     }

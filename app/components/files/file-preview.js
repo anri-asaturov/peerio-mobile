@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { observable, action, when } from 'mobx';
 import { observer } from 'mobx-react/native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -11,6 +11,7 @@ import SafeComponent from '../shared/safe-component';
 import { fileHelpers, config, warnings } from '../../lib/icebear';
 import Thumbnail from '../shared/thumbnail';
 import testLabel from '../helpers/test-label';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const nameContainer = {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -102,6 +103,10 @@ export default class FilePreview extends SafeComponent {
         );
     }
 
+    onChangeText = text => {
+        this.props.state.name = text;
+    };
+
     renderThrow() {
         const { state } = this.props;
         const fileImagePlaceholder = fileHelpers.isImage(state.ext) ? (
@@ -119,14 +124,12 @@ export default class FilePreview extends SafeComponent {
                     <Text style={{ fontSize: vars.font.size12, color: vars.txtLightGrey }}>
                         {tx('title_name')}
                     </Text>
-                    <TextInput
+                    <TextInputUncontrolled
                         {...testLabel('title_name')}
                         autoCorrect={false}
                         autoCapitalize="sentences"
                         value={state.name}
-                        onChangeText={text => {
-                            state.name = text;
-                        }}
+                        onChangeText={this.onChangeText}
                         underlineColorAndroid="transparent"
                         style={inputStyle}
                     />
