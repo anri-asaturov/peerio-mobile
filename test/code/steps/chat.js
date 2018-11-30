@@ -76,6 +76,11 @@ Then('I can see the top unread chat', async function() {
 });
 
 Then('I press the bottom unread message indicator', async function() {
+    try {
+        await this.chatListPage.snackbar.click();
+    } catch (e) {
+        console.log('"I press the bottom unread message indicator" Step: snackbar was not found');
+    }
     await this.chatListPage.bottomUnreadMessageIndicator.click();
 });
 
