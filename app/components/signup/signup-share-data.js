@@ -8,7 +8,7 @@ import signupState from './signup-state';
 import { tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
-import { User, telemetry  } from '../../lib/icebear';
+import { User, telemetry } from '../../lib/icebear';
 import { uiState } from '../states';
 import tm from '../../telemetry';
 
@@ -50,7 +50,6 @@ export default class SignupShareData extends SafeComponent {
         });
         tm.signup.shareData(true);
         tm.signup.finishSignup();
-
     }
 
     @action.bound
