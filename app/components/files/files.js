@@ -80,14 +80,12 @@ export default class Files extends SafeComponent {
     componentDidMount() {
         // download last uploaded file
         uiState.testAction1 = () => routes.main.files(this.data.filter(f => !f.isFolder)[0]);
-        uiState.testAction2 = beaconState.dismissAll;
     }
 
     componentWillUnmount() {
         // remove icebear hook for deletion
         fileState.store.bulk.deleteFolderConfirmator = null;
         uiState.testAction1 = null;
-        uiState.testAction2 = null;
     }
 
     onChangeFolder = folder => {
