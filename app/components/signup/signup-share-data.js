@@ -8,7 +8,8 @@ import signupState from './signup-state';
 import { tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
-import { User, telemetry } from '../../lib/icebear';
+import { User, telemetry  } from '../../lib/icebear';
+import { uiState } from '../states';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -34,21 +35,29 @@ export default class SignupShareData extends SafeComponent {
     }
 
     @action.bound
-    handleShareButton() {
+    async finishAccountCreation() {
+        await signupState.finishAccountCreation();
+        await signupState.finishSignUp();
+        uiState.isFirstLogin = true;
+    }
+
+    @action.bound
+    async handleShareButton() {
+        await this.finishAccountCreation();
         User.current.saveSettings(settings => {
             settings.errorTracking = true;
             settings.dataCollection = true;
         });
         tm.signup.shareData(true);
         tm.signup.finishSignup();
-        signupState.finishSignUp();
+
     }
 
     @action.bound
-    handleDeclineButton() {
+    async handleDeclineButton() {
+        await this.finishAccountCreation();
         tm.signup.shareData(false);
         tm.signup.finishSignup();
-        signupState.finishSignUp();
     }
 
     renderThrow() {
@@ -65,7 +74,7 @@ export default class SignupShareData extends SafeComponent {
                         {buttons.blueTextButton(
                             tx('button_notNow'),
                             this.handleDeclineButton,
-                            null,
+                            User.current,
                             null,
                             'button_notNow'
                         )}
@@ -73,7 +82,7 @@ export default class SignupShareData extends SafeComponent {
                         {buttons.roundBlueBgButton(
                             tx('button_share'),
                             this.handleShareButton,
-                            null,
+                            User.current,
                             'button_share'
                         )}
                     </View>

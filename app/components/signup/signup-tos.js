@@ -10,7 +10,7 @@ import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { TopDrawerBackupAccountKey } from '../shared/top-drawer-components';
-import { drawerState, uiState } from '../states';
+import { drawerState } from '../states';
 import { socket, telemetry } from '../../lib/icebear';
 import routes from '../routes/routes';
 import TosAccordion from './tos-accordion';
@@ -65,10 +65,8 @@ export default class SignupTos extends SafeComponent {
     }
 
     @action.bound
-    async finishSignup() {
+    finishSignup() {
         tm.signup.acceptTos();
-        await signupState.finishAccountCreation();
-        uiState.isFirstLogin = true;
         signupState.next();
     }
 
