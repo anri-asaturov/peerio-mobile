@@ -1,8 +1,8 @@
 ################################################################################
 #
 # This .feature file has been written by Mona Ghassemi for use by Peerio.
-# It is part of a set of .feature files located in the desktop repository
-# branch files-folders-scenarios
+# It is part of a set of .feature files located in the mobile repository, 
+# tests-folder-scenarios
 # 
 # If you have any questions, comments, or concerns regarding the contents 
 # of this file, please contact Mona Ghassemi, @bluemona, on Peerio. 
