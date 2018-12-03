@@ -2,17 +2,15 @@ const { Then } = require('cucumber');
 
 Then('I upload a file from gallery to Files', async function() {
     await this.homePage.filesTab.click();
-    await this.listener.request(`beaconState.dismissAll()`);
+    // dismiss all beacons (files.js:testAction2)
+    await this.filesListPage.testAction2();
     await this.filesListPage.uploadFileButtton.click();
     await this.fileUploadPage.uploadFileFromGallery();
-    await this.filesListPage.fileUploadedPopup.click();
     // TOOD: do an actual check
     await this.app.pause(3000);
 });
 
 Then('I upload a file from gallery to the current Chat', async function() {
-    await this.app.pause(1000);
-    await this.listener.request(`beaconState.dismissAll()`);
     await this.chatPage.buttonUploadToChat.click();
     await this.fileUploadPage.uploadFileFromGallery();
     await this.filesListPage.fileSharePreviewPopup.click();

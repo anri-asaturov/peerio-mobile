@@ -10,7 +10,6 @@ When('I start a DM with {word} user', async function(string) {
 });
 
 When('I create a new room', async function() {
-    await this.listener.request(`beaconState.dismissAll()`);
     this.roomName = new Date().getTime();
     await this.chatListPage.buttonCreateNewChat.click();
     await this.chatActionSheetPage.newRoomOption.click();
@@ -21,7 +20,6 @@ When('I create a new room', async function() {
 });
 
 When('I create a new room named {word}', async function(string) {
-    await this.listener.request(`beaconState.dismissAll()`);
     this.roomName = string;
     await this.chatListPage.buttonCreateNewChat.click();
     await this.chatActionSheetPage.newRoomOption.click();
@@ -68,11 +66,6 @@ Then('I can see the top unread chat', async function() {
 });
 
 Then('I press the bottom unread message indicator', async function() {
-    try {
-        await this.chatListPage.snackbar.click();
-    } catch (e) {
-        console.log('"I press the bottom unread message indicator" Step: snackbar was not found');
-    }
     await this.chatListPage.bottomUnreadMessageIndicator.click();
 });
 

@@ -5,7 +5,7 @@ class Page {
 
     get snackbar() {
         return this.app
-            .waitForExist('~snackbar', 3000)
+            .waitForExist('~snackbar')
             .waitForVisible('~snackbar')
             .element('~snackbar');
     }
