@@ -65,7 +65,8 @@ export default class FolderInnerItem extends SafeComponent {
     get checkbox() {
         if (!fileState.isFileSelectionMode) return null;
         const { folder } = this.props;
-        const sharedFoldersEnabled = process.env.SHARED_FOLDERS_ENABLED;
+        const sharedFoldersEnabled =
+            process.env.SHARED_FOLDERS_ENABLED && !fileState.disableFoldersInSelection;
         const checked = folder && folder.selected;
         const v = vars;
         let iconColor = checked ? v.checkboxIconActive : v.checkboxIconInactive;

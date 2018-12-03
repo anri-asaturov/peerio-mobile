@@ -413,6 +413,9 @@ export default class FileInlineImage extends SafeComponent {
             minHeight: loaded ? undefined : vars.imageInnerContainerHeight,
             justifyContent: 'center'
         };
+
+        const borderRadius = 2;
+        const imageStyle = { width, height, borderRadius };
         return (
             <View>
                 <FileInlineContainer
@@ -443,7 +446,7 @@ export default class FileInlineImage extends SafeComponent {
                                         <FLAnimatedImage
                                             source={{ uri: source.uri }}
                                             onLoadEnd={this.onLoadGif}
-                                            style={{ width, height }}
+                                            style={imageStyle}
                                         />
                                     ) : (
                                         <Image
@@ -452,7 +455,7 @@ export default class FileInlineImage extends SafeComponent {
                                             onLoad={this.onLoad}
                                             onError={this.onErrorLoadingImage}
                                             source={{ uri: source.uri, width, height }}
-                                            style={{ width, height }}
+                                            style={imageStyle}
                                         />
                                     )}
                                 </TouchableOpacity>

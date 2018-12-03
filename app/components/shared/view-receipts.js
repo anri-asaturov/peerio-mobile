@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import _ from 'lodash';
 import { View } from 'react-native';
-import { reaction, observable, when } from 'mobx';
+import { reaction, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import SafeComponent from '../shared/safe-component';
 import ReadReceipt from './read-receipt';
@@ -10,6 +10,7 @@ import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
 import Text from '../controls/custom-text';
 import { transitionAnimation } from '../helpers/animations';
+import { action } from '../../../node_modules/mobx/lib/mobx';
 
 const receiptRow = {
     backgroundColor: vars.black25,
@@ -43,45 +44,37 @@ const textStyle = {
 
 @observer
 export default class ViewReceipts extends SafeComponent {
-    @observable receiptLabel = null;
+    @observable forceLastAvatar;
+    prev = 1;
 
     componentDidMount() {
-        when(
+        this._observer = reaction(
             () => this.props.receipts && this.props.receipts.length,
-            () => {
-                this.prev = this.props.receipts.length;
-                this.calculateLabel();
-                transitionAnimation();
-
-                this._observer = reaction(
-                    () => this.props.receipts && this.props.receipts.length,
-                    () => {
-                        if (!this.props.receipts || !this.props.receipts.length) return;
-
-                        const viewsIncreased = this.props.receipts.length > this.prev;
-
-                        if (viewsIncreased) {
-                            this.receiptLabel = this.receiptAvatar;
-                            setTimeout(() => {
-                                this.receiptLabel = this.receiptNumber;
-                            }, 3000);
-                        } else {
-                            this.calculateLabel();
-                        }
-                    },
-                    { fireImmediately: true }
-                );
-            }
+            this.updateAnimation,
+            { fireImmediately: true }
         );
     }
 
     componentWillUnmount() {
         if (this._observer) this._observer();
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+        }
+    }
+
+    componentWillUpdate() {
+        transitionAnimation();
+    }
+
+    get receiptComponent() {
+        if (this.props.receipts.length > 1 && !this.forceLastAvatar) return this.receiptNumber;
+        return this.receiptAvatar;
     }
 
     get receiptAvatar() {
         const { receipts } = this.props;
-        return <ReadReceipt username={_.last(receipts).username} avatarSize={vars.iconSizeSmall} />;
+        const { username } = _.last(receipts);
+        return <ReadReceipt username={username} avatarSize={vars.iconSizeSmall} />;
     }
 
     get receiptNumber() {
@@ -92,17 +85,23 @@ export default class ViewReceipts extends SafeComponent {
         return <Text style={textStyle}>9+</Text>;
     }
 
-    calculateLabel = () => {
+    @action.bound
+    updateAnimation() {
         const { receipts } = this.props;
-        if (!receipts) return;
-
-        if (receipts.length === 1) {
-            this.receiptLabel = this.receiptAvatar;
-            return;
+        if (!receipts || !receipts.length) return;
+        const viewsIncreased = receipts.length > this.prev;
+        if (viewsIncreased) {
+            this.forceLastAvatar = true;
+            if (this.updateTimeout) {
+                clearTimeout(this.updateTimeout);
+            }
+            this.updateTimeout = setTimeout(() => {
+                this.forceLastAvatar = false;
+                this.updateTimeout = null;
+            }, 3000);
         }
-
-        this.receiptLabel = this.receiptNumber;
-    };
+        this.prev = receipts.length;
+    }
 
     renderThrow() {
         const { receipts } = this.props;
@@ -111,7 +110,7 @@ export default class ViewReceipts extends SafeComponent {
         return (
             <View style={receiptRow}>
                 <View style={half}>{icons.plain('remove-red-eye', 12, vars.darkBlue)}</View>
-                <View style={half}>{this.receiptLabel}</View>
+                <View style={half}>{this.receiptComponent}</View>
             </View>
         );
     }

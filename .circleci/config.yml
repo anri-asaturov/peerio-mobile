@@ -10,6 +10,7 @@ jobs:
             PEERIO_TEST_PLATFORM: 'ios'
             CIRCLE_TEST_REPORTS: circle_reports
             CIRCLE_ARTIFACTS: circle_artifacts
+            TEST_LISTENER_PORT: 1337
         steps:
             - checkout
             - run:

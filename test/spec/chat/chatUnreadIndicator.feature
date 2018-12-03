@@ -4,9 +4,8 @@ Feature: Chat view unread message indicator
         Given a helper user signs up
         And   they sign out
 
-    @noCacheReset
     Scenario: Use top unread message indicator to find chat in chat list
-        Given I have signed up
+        Given I have quickly signed up
         And   I start a DM with helper user
         And   I send several messages to the current chat
         And   I exit the current chat

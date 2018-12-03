@@ -56,10 +56,11 @@ Then('I send several messages to the current chat', async function() {
         await this.chatPage.shareFileInChatBeacon.click();
 
     for (let i = 0; i < 3; i++) {
-        await this.chatPage.buttonUploadToChat.click();
-        await this.fileUploadPage.uploadFileFromGallery();
-        await this.filesListPage.fileSharePreviewPopup.click();
-        await this.app.pause(1000); // time to upload
+        // trying to fill the screen with messages
+        const message = `Test message ${new Date().getTime()}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n--`;
+        await this.chatPage.textInput.setValue(message);
+        await this.chatPage.hideKeyboardHelper();
+        await this.chatPage.buttonSendMessage.click();
     }
 });
 

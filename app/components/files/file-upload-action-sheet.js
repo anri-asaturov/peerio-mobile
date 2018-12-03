@@ -29,7 +29,8 @@ async function doUpload(sourceFunction, inline) {
 }
 
 export default class FileUploadActionSheet {
-    static show(inline, createFolder) {
+    static show(params = {}) {
+        const { inline, createFolder, disableFolders } = params;
         const actionButtons = [
             {
                 title: tx('button_takeAPicture'),
@@ -59,7 +60,9 @@ export default class FileUploadActionSheet {
                 title: tx('title_shareFromFiles'),
                 disabled: fileState.store.isEmpty,
                 async action() {
-                    chatState.shareFilesAndFolders(await fileState.selectFilesAndFolders());
+                    chatState.shareFilesAndFolders(
+                        await fileState.selectFilesAndFolders({ disableFolders })
+                    );
                 }
             });
         }

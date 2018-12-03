@@ -157,7 +157,7 @@ export default class FolderInlineContainer extends SafeComponent {
     render() {
         const { folder } = this;
         const dmRecipient = chatState.currentChat.otherParticipants[0];
-
+        if (!dmRecipient) return null;
         // TODO temporary solution until SDK supports "owner, editor, viewer" logic
         // If the folder has been unshared, we need to show appropriate UX feedback
         // Check that either the User or Recipient have lost access to the folder

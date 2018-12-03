@@ -21,7 +21,12 @@ export default class InputMainContainer extends SafeComponent {
 
     sendAck = () => chatState.addAck();
 
-    plus = () => FileUploadActionSheet.show(true, false);
+    plus = () =>
+        FileUploadActionSheet.show({
+            inline: true,
+            createFolder: false,
+            disableFolders: chatState.chatStore.activeChat.isChannel
+        });
 
     uploadQueue() {
         const chat = chatState.currentChat;

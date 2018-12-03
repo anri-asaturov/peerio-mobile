@@ -56,6 +56,10 @@ When('I sign in with 2fa', async function() {
 });
 
 When('I log in as {word} user', async function(string) {
+    if (string === 'recent') {
+        return this.loginExistingAccountWithout2FA(this.username, this.passphrase);
+    }
+
     if (string === 'helper') {
         return this.loginExistingAccountWithout2FA(this.helperUsername, this.helperPassphrase);
     }

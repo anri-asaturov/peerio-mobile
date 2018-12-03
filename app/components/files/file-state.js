@@ -21,6 +21,7 @@ class FileState extends RoutedState {
     @observable currentFile = null;
     @observable previewFile = null;
     @observable isFileSelectionMode = null;
+    @observable disableFoldersInSelection;
     @observable findFilesText;
     localFileMap = observable.map();
     forceShowMap = observable.map();
@@ -136,10 +137,12 @@ class FileState extends RoutedState {
     }
 
     @action
-    selectFilesAndFolders() {
+    selectFilesAndFolders(params = {}) {
+        const { disableFolders } = params;
         this.resetSelection();
         fileStore.folderStore.currentFolder = this.store.folderStore.root;
         this.isFileSelectionMode = true;
+        this.disableFoldersInSelection = disableFolders;
         return new Promise((resolve, reject) => {
             this.resolveFileSelection = resolve;
             this.rejectFileSelection = reject;
@@ -152,6 +155,7 @@ class FileState extends RoutedState {
     exitFileSelect() {
         this.resetSelection();
         this.isFileSelectionMode = false;
+        this.disableFoldersInSelection = false;
         this.routerMain.chats(chatStore.activeChat);
         this.rejectFileSelection &&
             this.rejectFileSelection(new Error(`file-state.js: user cancel`));
@@ -163,6 +167,7 @@ class FileState extends RoutedState {
         this.resolveFileSelection(this.selected.slice());
         this.resolveFileSelection = null;
         this.isFileSelectionMode = false;
+        this.disableFoldersInSelection = false;
         this.exitFileSelect();
     }
 

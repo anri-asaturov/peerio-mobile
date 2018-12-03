@@ -4,7 +4,7 @@ const options = {
     theme: 'hierarchy',
     jsonDir: 'test/reports',
     output: `${process.env.CIRCLE_ARTIFACTS}/result.html`,
-    reportSuiteAsScenarios: true,
+    reportSuiteAsScenarios: false,
     launchReport: false
 };
 

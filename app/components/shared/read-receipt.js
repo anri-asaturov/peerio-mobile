@@ -9,14 +9,10 @@ import { vars } from '../../styles/styles';
 
 @observer
 export default class ReadReceipt extends SafeComponent {
-    constructor(props) {
-        super(props);
-        this.contact = contactStore.getContact(props.username);
-    }
-
     renderThrow() {
         const { avatarSize } = this.props;
-        const { color, letter, mediumAvatarUrl } = this.contact;
+        const contact = contactStore.getContact(this.props.username);
+        const { color, letter, mediumAvatarUrl } = contact;
         const tryColor = color || {};
         const circleDiameter = avatarSize || 18;
         const circleStyle = {

@@ -54,7 +54,7 @@ const descriptionTextStyle = [
 ];
 
 const titleContainerStyle = {
-    marginTop: vars.spacing.small.maxi2x
+    marginTop: 2
 };
 
 const descriptionContainerStyle = [
@@ -68,7 +68,7 @@ const imageSizeTextStyle = {
     fontSize: vars.font.size12,
     color: vars.textBlack54,
     marginTop: vars.spacing.small.midi2x,
-    marginBottom: vars.spacing.medium.maxi2x
+    marginBottom: 8
 };
 
 @observer
@@ -167,7 +167,12 @@ export default class InlineUrlContainer extends SafeComponent {
             optimalContentWidth,
             optimalContentHeight
         );
-        return <Image style={dimensions} source={{ uri: image.url, ...dimensions }} />;
+        const imageStyle = {
+            borderRadius: 2
+        };
+        return (
+            <Image style={[dimensions, imageStyle]} source={{ uri: image.url, ...dimensions }} />
+        );
     }
 
     onLayout = evt => {
@@ -179,16 +184,21 @@ export default class InlineUrlContainer extends SafeComponent {
         const { title, description, image } = this.props.externalWebsite;
         const container = {
             marginTop: vars.spacing.small.midi2x,
-            paddingVertical: vars.spacing.small.maxi + borderWidth,
-            paddingHorizontal: vars.spacing.medium.mini2x,
+            paddingTop: 8,
+            paddingBottom: image ? 8 : 12, // if there's no image, text padding is 16px
+            paddingHorizontal: 8,
             borderWidth,
-            borderColor: vars.black12
+            borderColor: vars.lightGrayBg
         };
         const headerContainer = {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: 24
+            paddingHorizontal: 8, // additional padding for text to equal 16
+            height: 30 // same as file-inline-container
+        };
+        const titleDescriptionContainer = {
+            paddingHorizontal: 8
         };
         const showToggleIcon = title || description || image;
         return (
@@ -200,12 +210,12 @@ export default class InlineUrlContainer extends SafeComponent {
                 </View>
                 {this.isOpen && (
                     <View>
-                        <View onLayout={this.onLayout}>
+                        <View style={titleDescriptionContainer}>
                             {this.title}
                             {this.description}
                             {this.imageSize}
-                            {this.image}
                         </View>
+                        <View onLayout={this.onLayout}>{this.image}</View>
                     </View>
                 )}
             </View>
@@ -226,6 +236,7 @@ export default class InlineUrlContainer extends SafeComponent {
         if (!clientApp.uiUserPrefs.externalContentConsented) return this.externalUrlConsent;
         if (!this.props.externalWebsite || !clientApp.uiUserPrefs.externalContentEnabled)
             return null;
+        // console.log(JSON.stringify(this.props.externalWebsite));
         return this.urlPreview;
     }
 }
