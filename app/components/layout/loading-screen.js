@@ -74,7 +74,7 @@ export default class LoadingScreen extends Component {
             useNativeDriver: true
         }).start(() => {
             this.revealAnimVisible = false;
-            routes.main.transitionToMain();
+            routes.app.main();
             LayoutAnimation.easeInEaseOut();
         });
     }

@@ -79,6 +79,10 @@ export default class LoginInputs extends SafeComponent {
                 if (e.deleted || e.blacklisted) {
                     errorMessage = 'error_accountSuspendedTitle';
                 }
+                // error message is displayed with a systemWarning
+                if (e.clientVersionDeprecated) {
+                    errorMessage = 'error_deprecated';
+                }
                 this.passwordInput.setCustomError(errorMessage, false);
                 tm.login.onUserLoginFailed(false);
             });

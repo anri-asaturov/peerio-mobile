@@ -34,7 +34,6 @@ class LoginState extends RoutedState {
     @observable loaded = false;
     @observable tfaRequested = false;
     _prefix = 'login';
-    _resetTouchId = null;
 
     constructor() {
         super();
@@ -80,61 +79,41 @@ class LoginState extends RoutedState {
         this.current = 0;
         this.username = '';
         this.passphrase = '';
+        this.passphraseValidationMessage = '';
         this.isInProgress = false;
     }
 
-    async _login(user, manual) {
+    async _login(user) {
         User.current = user;
         try {
             await user.login();
             console.log('login-state.js: logged in');
-            if (manual) {
-                await mainState.activateAndTransition(user);
-            } else {
-                await mainState.activate(user);
-            }
-            if (user.autologinEnabled) {
-                tm.login.onUserLogin(true, this.tfaRequested);
-                return;
-            }
-            tm.login.onUserLogin(false, this.tfaRequested);
+            await routes.app.main();
             await this.enableAutomaticLogin(user);
+            tm.login.onUserLogin(user.autologinEnabled, this.tfaRequested);
         } catch (e) {
             const error = new Error(e);
-            error.deleted = User.current.deleted;
-            error.blacklisted = User.current.blacklisted;
+            const { deleted, blacklisted } = User.current;
+            Object.assign(error, { deleted, blacklisted });
             User.current = null;
-            console.error(error);
-            throw error;
-        } finally {
-            this.isInProgress = false;
-        }
-    }
-
-    async transition() {
-        const user = User.current;
-        try {
-            await mainState.activateAndTransition(user);
-            this.clean();
-        } catch (e) {
-            if (this._resetTouchId) {
-                console.log('login-state.js: fixing touch id');
-                await keychain.delete(`user::${this.username}`);
-                await mainState.saveUserTouchID();
-                this._resetTouchId = false;
-            }
-            console.error(e);
             if (user.deleted) {
-                console.error('deleted');
+                console.error('server returned that user has been deleted');
                 this.passphraseValidationMessage = tx('title_accountDeleted');
-                warnings.addSevere('title_accountDeleted', 'error_accountSuspendedTitle');
+                warnings.addSevere('title_accountDeleted', 'title_accountDeleted');
             }
             if (user.blacklisted) {
-                console.error('suspended');
+                console.error('server returned that user has been suspended');
                 this.passphraseValidationMessage = tx('error_accountSuspendedTitle');
                 warnings.addSevere('error_accountSuspendedText', 'error_accountSuspendedTitle');
             }
-            throw e;
+            if (clientApp.clientVersionDeprecated) {
+                console.error('server says client is deprecated');
+                this.passphraseValidationMessage = '';
+                warnings.addSevere('warning_deprecated');
+                error.clientVersionDeprecated = true;
+            }
+            // error is caught by login-inputs to provide feedback on login
+            throw error;
         } finally {
             this.isInProgress = false;
         }
@@ -148,7 +127,7 @@ class LoginState extends RoutedState {
         user.passphrase = this.passphrase.trim();
         this.isInProgress = true;
         await promiseWhen(() => socket.connected);
-        await this._login(user, true);
+        await this._login(user);
         await mainState.saveUser();
     };
 
@@ -268,7 +247,6 @@ class LoginState extends RoutedState {
             return true;
         } catch (e) {
             console.log('login-state.js: logging in with keychain failed');
-            this._resetTouchId = true;
         }
         return false;
     }

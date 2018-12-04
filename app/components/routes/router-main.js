@@ -25,7 +25,6 @@ import {
 } from '../states';
 // import { enablePushNotifications } from '../../lib/push';
 import routes from './routes';
-import loginState from '../login/login-state';
 import snackbarState from '../snackbars/snackbar-state';
 import { tx } from '../utils/translator';
 import popupState from '../layout/popup-state';
@@ -134,15 +133,6 @@ class RouterMain extends Router {
         // TODO: refactor all this
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
-    }
-
-    @action
-    transitionToMain() {
-        // TODO: refactor all this
-        // wait for User object to be loaded
-        if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
-        this.initialRoute();
-        loginState.transition();
     }
 
     @action

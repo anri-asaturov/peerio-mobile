@@ -16,7 +16,6 @@ import {
     telemetry
 } from '../../lib/icebear';
 import { tx } from '../utils/translator';
-import { when } from '../../../node_modules/mobx/lib/mobx';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -107,11 +106,13 @@ class SignupState extends RoutedState {
 
     @action
     async finishSignUp() {
-        return mainState.activateAndTransition(User.current).catch(e => {
+        try {
+            await this.routes.app.main();
+        } catch (e) {
             console.log(e);
             User.current = null;
             this.reset();
-        });
+        }
     }
 
     backupFileName = ext => {
@@ -195,15 +196,9 @@ class SignupState extends RoutedState {
             .then(() => keyBackedUp && User.current.setAccountKeyBackedUp())
             .then(() => avatarBuffers && User.current.saveAvatar(avatarBuffers))
             .then(() => {
-                // TODO: replace with icebear version after it's merged
-                const { settings } = User.current;
-                when(
-                    () => !settings.loading,
-                    () => {
-                        settings.subscribeToPromoEmails = subscribeToPromoEmails;
-                        User.current.saveSettings();
-                    }
-                );
+                User.current.saveSettings(settings => {
+                    settings.subscribeToPromoEmails = subscribeToPromoEmails;
+                });
             })
             .finally(() => {
                 this.isInProgress = false;

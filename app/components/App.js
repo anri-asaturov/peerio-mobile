@@ -27,7 +27,7 @@ import push from '../lib/push';
 import consoleOverride from '../lib/console-override';
 import '../lib/sounds';
 import './utils/bridge';
-import socketResetIfDead from './utils/socket-reset';
+// import socketResetIfDead from './utils/socket-reset';
 import TestHelper from './helpers/test-helper';
 import MockComponent from './mocks';
 import ActionSheetLayout from './layout/action-sheet-layout';
@@ -127,9 +127,9 @@ export default class App extends SafeComponent {
 
     _handleAppStateChange(appState) {
         console.log(`App.js: AppState change: ${appState}`);
-        if (uiState.appState === 'background' && appState === 'active') {
+        /* if (uiState.appState === 'background' && appState === 'active') {
             socketResetIfDead();
-        }
+        } */
         uiState.appState = appState;
         if (appState === 'active') {
             push.clearBadge();

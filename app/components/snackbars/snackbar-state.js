@@ -24,8 +24,9 @@ class SnackBarState extends RoutedState {
                     }
                 );
 
+                // this is when clientApp gets deprecated with a logged in user
                 reaction(
-                    () => clientApp.clientVersionDeprecated,
+                    () => socket.authenticated && clientApp.clientVersionDeprecated,
                     value => {
                         if (value) warnings.addSevere('warning_deprecated');
                     },

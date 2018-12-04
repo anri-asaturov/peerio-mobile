@@ -17,19 +17,6 @@ class MainState extends RoutedState {
     }
 
     @action
-    async activate() {
-        // preload app while we ask user about automatic login
-        this.routerMain.initialize();
-    }
-
-    @action
-    async activateAndTransition(/* user */) {
-        await this.routerMain.initialize();
-        this.routes.app.main();
-        this.routes.main.initialRoute();
-    }
-
-    @action
     async load() {
         console.log('main-state.js: loading');
         this.loading = true;
@@ -103,7 +90,7 @@ class MainState extends RoutedState {
     @action
     async saveUser() {
         const user = User.current;
-        console.log(`mainstate.js: ${user.autologinEnabled}`);
+        console.log(`mainstate.js: autologin ${user.autologinEnabled}`);
         if (!user.autologinEnabled) {
             const keychainKey = await this.getKeychainKey();
             try {
@@ -145,7 +132,9 @@ class MainState extends RoutedState {
         const user = User.current;
         const touchIdKey = `user::${user.username}::touchid`;
         let { secureWithTouchID } = user;
-        secureWithTouchID = value;
+        if (value !== undefined) {
+            secureWithTouchID = value;
+        }
         try {
             await this.saveUserKeychain(secureWithTouchID);
             await TinyDb.system.setValue(touchIdKey, secureWithTouchID);

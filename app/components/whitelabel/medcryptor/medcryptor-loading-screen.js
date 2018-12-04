@@ -61,8 +61,7 @@ export default class MedcryptorLoadingScreen extends Component {
             await promiseWhen(() => routes.main.fileStateLoaded);
             this.goToNextStep();
             await promiseWhen(() => routes.main.contactStateLoaded);
-
-            setTimeout(() => routes.main.transitionToMain(), 0);
+            routes.app.main();
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
             if (!loginState.loaded) routes.app.routes.loginWelcomeBack.transition();
