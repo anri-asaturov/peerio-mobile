@@ -12,11 +12,12 @@
 ################################################################################
 
 @folders @files @sharing @move  
-Feature: Shared Folders (volumes) moving 
-    As a Peerio user, I have access to shared folders called volumes. I may have different 
+Feature: Volume moving 
+     As a Peerio user, I have access to volume called "Test Volume". I may have different 
     privileges (editor, owner) with respect to a given volume. This feature contains 
     volume-related move operations.
 
+# TODO (Mona): Adjust Background to fit all scenarios in this file
 Background: 
     Given I am any user, or viewer of the file_or_folder in question
     And   I have navigated to the file_or_folder
@@ -24,15 +25,17 @@ Background:
     And   I click on move 
     Then  I am prompted to move the file_or_folder 
 
-#this is a case for viewers only (unimplemented)
-#THIS IS ONE THAT NEEDS TO BE OVERWRIDDEN IF I AM AN EDITOR OR OWNER
-#A DIFFERENT VERSION IS INCLUDED IN THE EDITOR FILE (shared_folders_editor.feature)
-#Scenario: move file from volume (shared folder) into regular folder
-#    Given I choose a destination folder that is not a volume 
-#    Then  The file will be copied to the destination folder 
-
-### CHECK DOC TO SEE SPECIFICALLY WHAT IS INCLUDED IN THE LAST STEP ####
-Scenario: move file from regular folder into shared folder
+Scenario: move file from regular folder into volume
     Given I choose a destination volume
     Then  The file will be copied to the destination volume
     And   The users with whom that volume is shared will gain access to file 
+
+Scenario: move file from volume into regular folder
+    Given I am the editor or owner of the folder
+    Given I have navigated to the file
+    When  I select the file options
+    And   I select move
+    Then  I am prompted to move the file
+    And   The file will be copied to the destination folder
+    And   The file will be removed from the volume
+    And   The file will be unshared from users of the volume except the file owner 

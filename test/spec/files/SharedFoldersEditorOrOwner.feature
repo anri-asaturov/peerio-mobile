@@ -12,8 +12,8 @@
 ################################################################################
 
 @folders @sharing @editor
-Feature: Shared Folders (volumes) editor
-    As a Peerio user, I have access to shared folders called volumes. I may have different 
+Feature: Volume editor
+     As a Peerio user, I have access to volume called "Test Volume". I may have different 
     privileges (editor, owner) with respect to a given volume.
     This feature contains volume operations available both to editors and owners. 
     It does not contain operations available exclusively to volume owners. 
@@ -42,12 +42,15 @@ Scenario: I want to share a folder via chat
     And   The volume will be added to the recipient(s) "Files"
     And   The recipient(s) will be able to navigate to the volume by clicking on the volume's icon in the chat
 
-Scenario: I can not share a folder to a room 
-    Given I have navigated to the chat tab
-    And   I have selected a room
-    When  I select "Share to chat"
-    Then  a menu pops up to share files 
-    And   I do not have the option to select folders
+# TODO (Mona): See if this needs to be implemented now
+#Not implemented
+#Scenario: add a user (as the owner)
+#    Given I am the owner of the folder
+#    When  I share a folder in a chat (DM or room)
+#    Then  I will be prompted to specify what permissions to grant recipients
+#    And the users in the DM or room will receive an invitation to accept or decline with permissions specified
+    #When the recipient accepts the invite
+    #Then the volume will be added to their "Your Drive" with the specified role applied
 
 Scenario Outline: remove a user from file tab 
     Given I have navigated to the files tab
@@ -77,12 +80,3 @@ Scenario Outline: I begin to remove a user from file tab but I change my mind (a
     When  I select "Undo"
     And   The user's privileges to the volume will NOT be revoked
     And   The file volume will be NOT removed from the user's "Files"
-
-Scenario: move file from volume (shared folder) into regular folder
-    Given I have navigated to the file
-    When  I select the file options
-    And   I select move
-    Then  I am prompted to move the file
-    And   The file will be copied to the destination folder
-    And   The file will be removed from the volume
-    And   The file will be unshared from users of the volume except the file owner 

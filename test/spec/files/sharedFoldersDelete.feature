@@ -12,8 +12,8 @@
 ################################################################################
 
 @folders @files @delete @remove @viewer @editor 
-Feature: Shared Folders (volumes) user 
-    As a Peerio user, I have access to shared folders called volumes. I may have different 
+Feature: Volume user 
+    As a Peerio user, I have access to volume called "Test Volume". I may have different 
     privileges (editor, owner) with respect to a given volume. This feature contains 
     volume operations available to all users (editors and owners).
     This feature file contains volume operations specifically related to deleting / removing files 
@@ -24,18 +24,8 @@ Background:
     And   I have selected the FileActions (...)
     And   I have selected Delete 
 
-#users who are not editors are not implemented in this release
-#Scenario: I want to remove a file (as user) 
-#    Then  the file is removed from "Your Drive"
-#    But   the owner will retain access
-#    And   any other users will retain access
-#    And   the file binary will remain on Peerio servers (Azure)
-#    And   users in rooms or chats where the file has been shared will retain access 
-#    And   if I am in rooms or chats where the file has been shared
-#    Then  the file will still be available to me in "All Files" 
-#    And   I will retain the privileges specified in the context where the file was shared with me
-
-Scenario: I want to leave a folder (when a non owner "deletes" a shared folder, they leave it)
+# TODO (Mona): Adjust for having a scenario outline with examples
+Scenario Outline: I want to delete a file or folder (as an editor)
     Then  the folder is removed from "Files"
     But   the owner will retain access
     And   any other users will retain access
@@ -43,4 +33,18 @@ Scenario: I want to leave a folder (when a non owner "deletes" a shared folder, 
     And   users in rooms or chats where the file has been shared will retain access 
     And   if I am in rooms or chats where the file has been shared
     Then  the folder will still be available to me in those rooms or chats 
-    #And  I will retain the privileges specified in the context where the file was shared with me
+Examples: 
+    | file or folder | 
+    | file           |
+    | folder         |
+
+Scenario Outline: I want to delete a file or folder (as an owner)
+    Given I am the owner of the <file or folder>
+    And   I delete the <file or folder>
+    Then  the <file or folder> is removed from Peerio servers
+    And   the <file or folder> is unshared and deleted for every user who ever received it
+    And   I will have my storage freed for the capacity of the <file or folder>
+Examples: 
+    | file or folder | 
+    | file           |
+    | folder         |
