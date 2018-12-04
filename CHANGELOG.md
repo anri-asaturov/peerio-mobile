@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.419.0"></a>
+# [3.419.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.419.0) (2018-12-04)
+
+
+### Bug Fixes
+
+* fix and refactor login process [ch17758][ch17303][ch17127] ([159aa41](https://github.com/PeerioTechnologies/peerio-mobile/commit/159aa41))
+* fix crash on a shared folder in self chat [ch17742] ([7b65721](https://github.com/PeerioTechnologies/peerio-mobile/commit/7b65721))
+
+
+
 <a name="3.418.0"></a>
 # [3.418.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.416.0...v3.418.0) (2018-11-30)
 
