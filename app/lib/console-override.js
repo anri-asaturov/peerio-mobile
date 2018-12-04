@@ -43,7 +43,7 @@ class ConsoleOverride {
 
         console.stack = [];
         console.stackPush = (msg, color) => {
-            const MAX = 300;
+            const MAX = 600;
             const STEP = 50;
             const index = console.stack.length;
             const delta = index - MAX;
