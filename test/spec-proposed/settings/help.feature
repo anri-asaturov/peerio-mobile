@@ -21,7 +21,11 @@ Scenario: I want to chat with support
 Scenario: I want to send logs to Peerio Support
     When  I tap "Send" 
     Then  an e-mail opens in the native e-mail app
-    And   all the logs are copied into the e-mail
-    And   the "to" field contains "support@peerio.com"
-    When  I tap send in the e-mail app
-    Then  I return to the "Help" screen
+
+#   Native email check to be done 
+#   We do not currently support testing this but the following should happen: 
+
+#   And   all the logs are copied into the e-mail
+#   And   the "to" field contains "support@peerio.com"
+#   When  I tap send in the e-mail app
+#   Then  I return to the "Help" screen
