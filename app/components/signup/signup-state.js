@@ -50,6 +50,7 @@ class SignupState extends RoutedState {
     @observable medicalId = '';
     @observable usernameSuggestions = [];
     @observable subscribeToPromoEmails = false;
+    @observable dataCollection = false;
     @observable isPdfPreviewVisible = false;
 
     get isFirst() {
@@ -164,6 +165,7 @@ class SignupState extends RoutedState {
             avatarBuffers,
             keyBackedUp,
             subscribeToPromoEmails,
+            dataCollection,
             country,
             specialty,
             role,
@@ -201,6 +203,7 @@ class SignupState extends RoutedState {
                     () => !settings.loading,
                     () => {
                         settings.subscribeToPromoEmails = subscribeToPromoEmails;
+                        settings.dataCollection = dataCollection;
                         User.current.saveSettings();
                     }
                 );
