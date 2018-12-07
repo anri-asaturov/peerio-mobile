@@ -43,18 +43,18 @@ export default class SignupShareData extends SafeComponent {
 
     @action.bound
     async handleShareButton() {
-        signupState.dataCollection = true;
-        await this.finishAccountCreation();
         tm.signup.shareData(true);
         tm.signup.finishSignup();
+        signupState.dataCollection = true;
+        await this.finishAccountCreation();
     }
 
     @action.bound
     async handleDeclineButton() {
-        signupState.dataCollection = false;
-        await this.finishAccountCreation();
         tm.signup.shareData(false);
         tm.signup.finishSignup();
+        signupState.dataCollection = false;
+        await this.finishAccountCreation();
     }
 
     renderThrow() {
