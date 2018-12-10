@@ -9,7 +9,8 @@ import { vars } from '../../styles/styles';
 export default class DebugMenuTrigger extends Component {
     countDebugPress = 0;
 
-    @action.bound handleTitlePress() {
+    @action.bound
+    handleTitlePress() {
         this.countDebugPress++;
         if (this.countDebugPress >= 10) {
             uiState.showDebugMenu = true;
@@ -17,7 +18,7 @@ export default class DebugMenuTrigger extends Component {
         }
     }
 
-    render () {
+    render() {
         return (
             <TouchableWithoutFeedback
                 pressRetentionOffset={vars.retentionOffset}
@@ -27,4 +28,3 @@ export default class DebugMenuTrigger extends Component {
         );
     }
 }
-

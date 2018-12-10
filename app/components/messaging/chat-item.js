@@ -8,16 +8,23 @@ import { vars } from '../../styles/styles';
 import ChatMessageContainer from '../shared/chat-message-container';
 @observer
 export default class ChatItem extends SafeComponent {
-    setRef = ref => { this._ref = ref; };
+    setRef = ref => {
+        this._ref = ref;
+    };
 
     get notice() {
         const { message } = this.props;
-        const shouldDisplayIdentityNotice = message.systemData && message.systemData.action === 'join';
+        const shouldDisplayIdentityNotice =
+            message.systemData && message.systemData.action === 'join';
 
         if (!shouldDisplayIdentityNotice) return null;
 
         return (
-            <View style={{ padding: vars.spacing.medium.mini2x, paddingVertical: vars.spacing.small.midi }}>
+            <View
+                style={{
+                    padding: vars.spacing.medium.mini2x,
+                    paddingVertical: vars.spacing.small.midi
+                }}>
                 <IdentityVerificationNotice />
             </View>
         );

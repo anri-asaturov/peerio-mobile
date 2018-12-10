@@ -19,7 +19,6 @@ export default {
             justifyContent: 'space-between',
             backgroundColor: vars.peerioBluebg
         },
-        footer: {
-        }
+        footer: {}
     }
 };

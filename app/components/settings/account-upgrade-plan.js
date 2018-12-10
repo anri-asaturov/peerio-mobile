@@ -24,16 +24,21 @@ const smallText = {
     marginLeft: vars.spacing.small.midi2x
 };
 
-const featureListText = [topTitleText, {
-}];
+const featureListText = [topTitleText, {}];
 
-const featureListTextMedium = [featureListText, {
-    fontSize: vars.accountListFontSize
-}];
+const featureListTextMedium = [
+    featureListText,
+    {
+        fontSize: vars.accountListFontSize
+    }
+];
 
-const planFooterInfo = [featureListTextMedium, {
-    textAlign: 'center'
-}];
+const planFooterInfo = [
+    featureListTextMedium,
+    {
+        textAlign: 'center'
+    }
+];
 
 const featureSmallText = {
     color: 'white',
@@ -44,9 +49,12 @@ const block0 = {
     paddingHorizontal: vars.spacing.medium.maxi2x
 };
 
-const block1 = [block0, {
-    marginBottom: vars.spacing.medium.maxi2x
-}];
+const block1 = [
+    block0,
+    {
+        marginBottom: vars.spacing.medium.maxi2x
+    }
+];
 
 const textRow = {
     flexDirection: 'row',
@@ -67,12 +75,8 @@ export default class AccountUpgradePlan extends Component {
     largeSmallTextRow(largeTextString, smallTextString) {
         return (
             <View style={textRow}>
-                <Text style={featureListText}>
-                    {largeTextString}
-                </Text>
-                <Text style={smallText}>
-                    {smallTextString}
-                </Text>
+                <Text style={featureListText}>{largeTextString}</Text>
+                <Text style={smallText}>{smallTextString}</Text>
             </View>
         );
     }
@@ -80,12 +84,8 @@ export default class AccountUpgradePlan extends Component {
     mediumSmallTextRow(largeTextString, smallTextString) {
         return (
             <View style={textRow}>
-                <Text style={featureListTextMedium}>
-                    {largeTextString}
-                </Text>
-                <Text style={smallText}>
-                    {smallTextString}
-                </Text>
+                <Text style={featureListTextMedium}>{largeTextString}</Text>
+                <Text style={smallText}>{smallTextString}</Text>
             </View>
         );
     }
@@ -93,14 +93,22 @@ export default class AccountUpgradePlan extends Component {
     featureText(text) {
         return (
             <View style={{ marginBottom: vars.spacing.small.maxi }} key={text}>
-                <Text bold style={featureSmallText}>{text}</Text>
+                <Text bold style={featureSmallText}>
+                    {text}
+                </Text>
             </View>
         );
     }
 
     get alwaysFree() {
         return (
-            <View style={{ alignItems: 'center', justifyContent: 'center', flexGrow: 1, height: 100 }}>
+            <View
+                style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexGrow: 1,
+                    height: 100
+                }}>
                 <Text style={featureListTextMedium}>{tx('title_alwaysFree')}</Text>
             </View>
         );
@@ -110,33 +118,49 @@ export default class AccountUpgradePlan extends Component {
         const { priceOptions, canUpgradeTo, isCurrent, paymentInfo } = this.props.plan;
         // if (!priceOptions) return this.alwaysFree;
         if (isCurrent) return <Text style={planFooterInfo}>{tx('title_yourCurrentPlan')}</Text>;
-        if (!canUpgradeTo) return <Text style={planFooterInfo}>{tx('title_cannotUpgradePlan')}</Text>;
+        if (!canUpgradeTo)
+            return <Text style={planFooterInfo}>{tx('title_cannotUpgradePlan')}</Text>;
         return (
             <View style={{ flexDirection: 'row' }}>
                 {priceOptions.map(({ title, price, id }, i) => (
                     <AccountUpgradeToggle
                         key={i}
                         onPress={async () => {
-                            await popupControl(<PaymentsInfoPopup text={paymentInfo} />, 'button_upgrade');
+                            await popupControl(
+                                <PaymentsInfoPopup text={paymentInfo} />,
+                                'button_upgrade'
+                            );
                             payments.purchase(id);
                         }}
                         text1={price}
                         text2={tx(title).toLowerCase()}
                         left={i === 0}
-                        highlight={i > 0} />
+                        highlight={i > 0}
+                    />
                 ))}
             </View>
         );
     }
 
     get footer() {
-        return payments.inProgress ? <ActivityIndicator color="white" style={{ marginBottom: vars.spacing.large.mini2x }} /> : this.priceOptions;
+        return payments.inProgress ? (
+            <ActivityIndicator color="white" style={{ marginBottom: vars.spacing.large.mini2x }} />
+        ) : (
+            this.priceOptions
+        );
     }
 
     render() {
         const { title, includes, info, storage } = this.props.plan;
         return (
-            <View style={{ width, flexDirection: 'column', flexGrow: 1, flex: 1, justifyContent: 'space-between' }}>
+            <View
+                style={{
+                    width,
+                    flexDirection: 'column',
+                    flexGrow: 1,
+                    flex: 1,
+                    justifyContent: 'space-between'
+                }}>
                 <ScrollView>
                     <View style={block1}>
                         <Text style={topTitleText}>
@@ -151,9 +175,7 @@ export default class AccountUpgradePlan extends Component {
                         {info.split('\n').map(this.featureText)}
                     </View>
                 </ScrollView>
-                <View style={block1}>
-                    {this.footer}
-                </View>
+                <View style={block1}>{this.footer}</View>
             </View>
         );
     }

@@ -17,12 +17,24 @@ class ChatListPage extends Page {
         return this.checkIfPresent(`~${selector}`, 25000);
     }
 
+    chatWithTitleDisappeared(selector) {
+        return this.waitToDisappear(`~${selector}`);
+    }
+
     get topUnreadMessageIndicator() {
         return this.getWhenVisible('~chatlist-unread-indicator-top');
     }
 
     get bottomUnreadMessageIndicator() {
         return this.getWhenVisible('~chatlist-unread-indicator-bottom');
+    }
+
+    get topUnreadMessageIndicatorVisible() {
+        return this.checkIfVisible('~chatlist-unread-indicator-top');
+    }
+
+    get bottomUnreadMessageIndicatorVisible() {
+        return this.checkIfVisible('~chatlist-unread-indicator-bottom');
     }
 
     get patientSpace() {

@@ -8,22 +8,18 @@ import testLabel from './test-label';
 let currentScrollView = null;
 let currentScrollPosition = 0;
 
-/**
- * Scroll helper is used to provide scrolling capability
- * to the test script. Note that it overrides ref and onScroll
- * event handlers
- */
-const scrollHelper = __DEV__ ? {
-    ref: ref => {
-        currentScrollPosition = 0;
-        currentScrollView = ref;
-    },
-    onScroll: e => {
-        currentScrollPosition = e.nativeEvent.contentOffset.y;
-    }
-} : null;
+function setScrollHelperRef(ref) {
+    if (!__DEV__) return;
+    currentScrollPosition = 0;
+    currentScrollView = ref;
+}
 
-export { scrollHelper };
+function setScrollHelperOnScroll(e) {
+    if (!__DEV__) return;
+    currentScrollPosition = e.nativeEvent.contentOffset.y;
+}
+
+export { setScrollHelperRef, setScrollHelperOnScroll };
 
 const { height } = Dimensions.get('window');
 
@@ -40,26 +36,56 @@ export default class TestHelper extends Component {
             const lastSection = sectionList.length - 1;
             const itemList = sectionList[lastSection].data;
             const lastItem = itemList.length - 1;
-            currentScrollView.scrollToLocation({ itemIndex: lastItem, sectionIndex: lastSection, animated: false }); // SectionList
-        } else if (currentScrollView.scrollToEnd) currentScrollView.scrollToEnd({ animated: false }); // Scroll View + FlatList
+            currentScrollView.scrollToLocation({
+                itemIndex: lastItem,
+                sectionIndex: lastSection,
+                animated: false
+            }); // SectionList
+        } else if (currentScrollView.scrollToEnd)
+            currentScrollView.scrollToEnd({ animated: false }); // Scroll View + FlatList
     };
 
     scrollHome = () => {
-        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y: 0, animated: false }); // Scroll View
-        else if (currentScrollView.scrollToOffset) currentScrollView.scrollToOffset({ offset: 0, animated: false }); // FlatList
-        else if (currentScrollView.scrollToLocation) currentScrollView.scrollToLocation({ itemIndex: 0, sectionIndex: 0, viewPosition: 0, animated: false }); // SectionList
+        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y: 0, animated: false });
+        // Scroll View
+        else if (currentScrollView.scrollToOffset)
+            currentScrollView.scrollToOffset({ offset: 0, animated: false });
+        // FlatList
+        else if (currentScrollView.scrollToLocation)
+            currentScrollView.scrollToLocation({
+                itemIndex: 0,
+                sectionIndex: 0,
+                viewPosition: 0,
+                animated: false
+            }); // SectionList
     };
 
     scrollUp = () => {
         const y = Math.max(0, currentScrollPosition - height / 2);
-        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y, animated: false }); // Scroll View
-        else if (currentScrollView.scrollToOffset) currentScrollView.scrollToOffset({ offset: 0, animated: false }); // FlatList
-        else if (currentScrollView.scrollToLocation) currentScrollView.scrollToLocation({ itemIndex: 0, sectionIndex: 0, viewOffset: 0, animated: false }); // SectionList
+        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y, animated: false });
+        // Scroll View
+        else if (currentScrollView.scrollToOffset)
+            currentScrollView.scrollToOffset({ offset: 0, animated: false });
+        // FlatList
+        else if (currentScrollView.scrollToLocation)
+            currentScrollView.scrollToLocation({
+                itemIndex: 0,
+                sectionIndex: 0,
+                viewOffset: 0,
+                animated: false
+            }); // SectionList
     };
 
     scrollDown = () => {
-        if (currentScrollView.scrollTo) currentScrollView.scrollTo({ y: currentScrollPosition + height / 2, animated: false }); // Scroll View
-        else if (currentScrollView.scrollToOffset) currentScrollView.scrollToOffset({ offset: currentScrollPosition + height / 2, animated: false }); // FlatList
+        if (currentScrollView.scrollTo)
+            currentScrollView.scrollTo({ y: currentScrollPosition + height / 2, animated: false });
+        // Scroll View
+        else if (currentScrollView.scrollToOffset)
+            currentScrollView.scrollToOffset({
+                offset: currentScrollPosition + height / 2,
+                animated: false
+            });
+        // FlatList
         else if (currentScrollView.scrollToLocation) {
             let itemIndex = 0;
             const sectionList = currentScrollView.props.sections;
@@ -73,9 +99,7 @@ export default class TestHelper extends Component {
 
     item(letter, id, action) {
         return (
-            <TouchableOpacity
-                {...testLabel(id)}
-                onPress={action}>
+            <TouchableOpacity {...testLabel(id)} onPress={action}>
                 <Text style={{ color: 'black' }}>{letter}</Text>
             </TouchableOpacity>
         );

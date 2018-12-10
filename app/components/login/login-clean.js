@@ -35,7 +35,11 @@ export default class LoginClean extends SafeComponent {
         return (
             <View style={signupStyles.page}>
                 <IntroStepIndicator max={1} current={1} />
-                <View style={[signupStyles.container, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
+                <View
+                    style={[
+                        signupStyles.container,
+                        { paddingHorizontal: signupStyles.pagePaddingLarge }
+                    ]}>
                     <LoginButtonBack telemetry={{ sublocation, option: S.BACK }} />
                     <SignupHeading title="title_welcomeBack" />
                     <LoginInputs telemetry={loginTelemetryHelper} />

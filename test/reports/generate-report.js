@@ -9,4 +9,3 @@ const options = {
 };
 
 reporter.generate(options);
-

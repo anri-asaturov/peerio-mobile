@@ -33,7 +33,6 @@ export default class SignupTermsOfUseMedcryptor extends SignupTos {
                     {tx('title_privacyPolicy')}
                 </Text>
             </View>
-
         );
     }
 }

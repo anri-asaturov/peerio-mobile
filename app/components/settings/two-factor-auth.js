@@ -1,7 +1,7 @@
 import React from 'react';
 import { reaction, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { ScrollView, View, TextInput, Clipboard, ActivityIndicator, Keyboard } from 'react-native';
+import { ScrollView, View, Clipboard, ActivityIndicator, Keyboard } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -16,6 +16,7 @@ import TwoFactorAuthCodesGenerate from './two-factor-auth-codes-generate';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
 import tm from '../../telemetry';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -31,11 +32,14 @@ const bgStyle = {
 };
 
 const labelStyle = {
-    color: vars.txtDate, marginBottom
+    color: vars.txtDate,
+    marginBottom
 };
 
 const whiteStyle = {
-    backgroundColor: vars.white, paddingTop: vars.spacing.small.maxi, paddingHorizontal
+    backgroundColor: vars.white,
+    paddingTop: vars.spacing.small.maxi,
+    paddingHorizontal
 };
 
 async function twoFactorAuthPopup(active2FARequest) {
@@ -69,10 +73,13 @@ async function twoFactorAuthPopup(active2FARequest) {
     }
 }
 
-reaction(() => clientApp.active2FARequest, active2FARequest => {
-    loginState.tfaRequested = active2FARequest.type === 'login';
-    twoFactorAuthPopup(active2FARequest);
-});
+reaction(
+    () => clientApp.active2FARequest,
+    active2FARequest => {
+        loginState.tfaRequested = active2FARequest.type === 'login';
+        twoFactorAuthPopup(active2FARequest);
+    }
+);
 
 export { twoFactorAuthPopup };
 
@@ -120,49 +127,49 @@ export default class TwoFactorAuth extends SafeComponent {
         );
     }
 
+    onChangeText = text => {
+        this.confirmCode = text;
+    };
+
     renderThrow() {
         if (this.showReissueCodes) return <TwoFactorAuthCodesGenerate />;
         if (this.backupCodes) return <TwoFactorAuthCodes codes={this.backupCodes} />;
         return (
-            <ScrollView
-                style={bgStyle}
-                keyboardShouldPersistTaps="handled">
+            <ScrollView style={bgStyle} keyboardShouldPersistTaps="handled">
                 <View>
-                    <Text style={{ color: vars.txtDark }}>
-                        {tx('title_2FADetailDesktop')}
-                    </Text>
+                    <Text style={{ color: vars.txtDark }}>{tx('title_2FADetailDesktop')}</Text>
                 </View>
                 <View style={{ marginVertical }}>
-                    <Text style={labelStyle}>
-                        {tx('title_2FASecretKey')}
-                    </Text>
+                    <Text style={labelStyle}>{tx('title_2FASecretKey')}</Text>
                     <View style={whiteStyle}>
                         {this.key2FAControl}
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'flex-end'
-                        }}>
-                            {buttons.blueTextButton(tx('button_2FACopyKey'), () => this.copyKey(), !this.key2fa)}
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'flex-end'
+                            }}>
+                            {buttons.blueTextButton(
+                                tx('button_2FACopyKey'),
+                                () => this.copyKey(),
+                                !this.key2fa
+                            )}
                         </View>
                     </View>
                 </View>
                 <View>
-                    <Text>
-                        {tx('title_2FAHelperText')}
-                    </Text>
+                    <Text>{tx('title_2FAHelperText')}</Text>
                 </View>
                 <View style={{ marginVertical }}>
-                    <Text style={labelStyle}>
-                        {tx('title_2FACode')}
-                    </Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        backgroundColor: vars.white,
-                        paddingHorizontal
-                    }}>
-                        <TextInput
+                    <Text style={labelStyle}>{tx('title_2FACode')}</Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            backgroundColor: vars.white,
+                            paddingHorizontal
+                        }}>
+                        <TextInputUncontrolled
                             style={{
                                 color: vars.txtDark,
                                 marginVertical: vars.spacing.small.midi2x,
@@ -173,16 +180,20 @@ export default class TwoFactorAuth extends SafeComponent {
                             {...testLabel('confirmationCodeInput')}
                             placeholderTextColor={vars.txtDate}
                             placeholder={tx('title_2FAHelperText')}
-                            onChangeText={text => { this.confirmCode = text; }}
-                            value={this.confirmCode} />
-                        {buttons.blueTextButton(tx('button_confirm'),
-                            () => this.confirm(), !this.confirmCode || !this.key2fa, false, 'button_confirm')}
+                            onChangeText={this.onChangeText}
+                            value={this.confirmCode}
+                        />
+                        {buttons.blueTextButton(
+                            tx('button_confirm'),
+                            () => this.confirm(),
+                            !this.confirmCode || !this.key2fa,
+                            false,
+                            'button_confirm'
+                        )}
                     </View>
                 </View>
                 <View>
-                    <Text style={{ color: vars.txtDark }}>
-                        {tx('title_authAppsDetails')}
-                    </Text>
+                    <Text style={{ color: vars.txtDark }}>{tx('title_authAppsDetails')}</Text>
                 </View>
             </ScrollView>
         );

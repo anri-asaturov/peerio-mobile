@@ -15,7 +15,8 @@ export default class FileChooseRecipient extends Component {
                 onExit={() => routes.modal.discard()}
                 action={selection => {
                     routes.modal.discard();
-                    let chat = null, contact = null;
+                    let chat = null,
+                        contact = null;
                     if (selection.username) {
                         contact = selection;
                     } else {
@@ -25,7 +26,8 @@ export default class FileChooseRecipient extends Component {
                     Object.assign(fileState.previewFile, { chat, contact });
                 }}
                 title={t('title_shareWith')}
-                inputPlaceholder={tx('title_TryUsernameOrEmail')} />
+                inputPlaceholder={tx('title_TryUsernameOrEmail')}
+            />
         );
     }
 }

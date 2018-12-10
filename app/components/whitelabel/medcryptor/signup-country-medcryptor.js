@@ -39,9 +39,13 @@ export default class SignupCountryMedcryptor extends SafeComponent {
     }
 
     medicalIdState = observable({ value: '' });
-    @action.bound medicalIdInputRef(ref) { this.medicalIdInput = ref; }
+    @action.bound
+    medicalIdInputRef(ref) {
+        this.medicalIdInput = ref;
+    }
 
-    @action.bound handleNextButton() {
+    @action.bound
+    handleNextButton() {
         signupState.country = medcryptorUiState.countrySelected;
         signupState.medicalId = this.medicalIdState.value;
         signupState.next();
@@ -52,9 +56,11 @@ export default class SignupCountryMedcryptor extends SafeComponent {
     }
 
     get isValidForAU() {
-        return medcryptorUiState.countrySelected &&
+        return (
+            medcryptorUiState.countrySelected &&
             this.medicalIdState.value &&
-            this.medicalIdInput.isValid;
+            this.medicalIdInput.isValid
+        );
     }
 
     get isValidForNonAU() {
@@ -74,18 +80,21 @@ export default class SignupCountryMedcryptor extends SafeComponent {
                 <View style={{ marginHorizontal: vars.inputMarginHorizontal }}>
                     <MedcryptorCountryPickerBox />
                 </View>
-                {this.selectedAU && <View>
-                    <StyledTextInput
-                        state={this.medicalIdState}
-                        validations={[this.ahpraValidator, medicalIdFormat]}
-                        label={tx('title_medicalId')}
-                        lowerCase
-                        returnKeyType="go"
-                        required
-                        ref={this.medicalIdInputRef}
-                        helperText={tx('title_medicalIdDescription')}
-                        testID="medicalId" />
-                </View>}
+                {this.selectedAU && (
+                    <View>
+                        <StyledTextInput
+                            state={this.medicalIdState}
+                            validations={[this.ahpraValidator, medicalIdFormat]}
+                            label={tx('title_medicalId')}
+                            lowerCase
+                            returnKeyType="go"
+                            required
+                            ref={this.medicalIdInputRef}
+                            helperText={tx('title_medicalIdDescription')}
+                            testID="medicalId"
+                        />
+                    </View>
+                )}
             </View>
         );
     }
@@ -97,7 +106,10 @@ export default class SignupCountryMedcryptor extends SafeComponent {
                 <View style={signupStyles.container}>
                     <View>
                         <SignupButtonBack />
-                        <SignupHeading title="title_createYourAccount" subTitle="mcr_title_practitionerDetails" />
+                        <SignupHeading
+                            title="title_createYourAccount"
+                            subTitle="mcr_title_practitionerDetails"
+                        />
                         {this.body}
                     </View>
                     <View style={{ alignItems: 'flex-end' }}>
@@ -106,7 +118,8 @@ export default class SignupCountryMedcryptor extends SafeComponent {
                             this.handleNextButton,
                             this.isNextDisabled,
                             'button_next',
-                            { width: vars.signupButtonWidth, marginVertical: 30 })}
+                            { width: vars.signupButtonWidth, marginVertical: 30 }
+                        )}
                     </View>
                 </View>
             </View>

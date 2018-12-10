@@ -17,17 +17,24 @@ export default class SnackbarBase extends SafeComponent {
 
     componentDidMount() {
         this.show();
-        reaction(() => this.isVisible, vis => {
-            vis ? this.show() : this.hide();
-        });
+        reaction(
+            () => this.isVisible,
+            vis => {
+                vis ? this.show() : this.hide();
+            }
+        );
     }
 
     // to override
-    getText() { return null; }
+    getText() {
+        return null;
+    }
 
     get isVisible() {
         const w = warnings.current;
-        return !!(w && w.level === this.level && w.state === warningStates.SHOWING) && this.getText();
+        return (
+            !!(w && w.level === this.level && w.state === warningStates.SHOWING) && this.getText()
+        );
     }
 
     // to override
@@ -62,8 +69,7 @@ export default class SnackbarBase extends SafeComponent {
 
     animate(toValue, cb) {
         const duration = vars.animatedDuration;
-        Animated.timing(this.animatedHeight, { toValue, duration })
-            .start(cb);
+        Animated.timing(this.animatedHeight, { toValue, duration }).start(cb);
     }
 
     renderThrow() {
@@ -84,11 +90,15 @@ export default class SnackbarBase extends SafeComponent {
             marginRight: vars.spacing.medium.mini2x
         };
         return (
-            <TouchableWithoutFeedback
-                accessible={false}
-                onPress={() => this.tap()}>
+            <TouchableWithoutFeedback accessible={false} onPress={() => this.tap()}>
                 <Animated.View style={s}>
-                    <Text {...testLabel('snackbar')} numberOfLines={2} ellipsizeMode="tail" style={textStyle}>{this.getText()}</Text>
+                    <Text
+                        {...testLabel('snackbar')}
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                        style={textStyle}>
+                        {this.getText()}
+                    </Text>
                 </Animated.View>
             </TouchableWithoutFeedback>
         );

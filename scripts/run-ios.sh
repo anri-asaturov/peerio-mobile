@@ -2,6 +2,10 @@
 
 source env.sh
 
-./node_modules/.bin/react-native run-ios --simulator="$PEERIO_IOS_UDID"
+# import detectIosUDID, info, error, check, wait
+source scripts/common.sh
+
+detectIosUDID
+./node_modules/.bin/react-native run-ios --simulator="$SIM_UDID"
 
 

@@ -3,6 +3,8 @@ import RNFS from 'react-native-fs';
 import FileOpener from 'react-native-file-opener';
 import { Platform } from 'react-native';
 import { observable, action } from 'mobx';
+import randomWords from 'random-words';
+import capitalize from 'capitalize';
 import { mainState, uiState, loginState } from '../states';
 import RoutedState from '../routes/routed-state';
 import {
@@ -14,7 +16,6 @@ import {
     telemetry
 } from '../../lib/icebear';
 import { tx } from '../utils/translator';
-import { when } from '../../../node_modules/mobx/lib/mobx';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -48,6 +49,7 @@ class SignupState extends RoutedState {
     @observable medicalId = '';
     @observable usernameSuggestions = [];
     @observable subscribeToPromoEmails = false;
+    @observable dataCollection = false;
     @observable isPdfPreviewVisible = false;
 
     get isFirst() {
@@ -97,10 +99,7 @@ class SignupState extends RoutedState {
     @action.bound
     async suggestUsernames() {
         try {
-            this.usernameSuggestions = await suggestUsername(
-                this.firstName,
-                this.lastName
-            );
+            this.usernameSuggestions = await suggestUsername(this.firstName, this.lastName);
         } catch (e) {
             console.error(e);
         }
@@ -108,11 +107,13 @@ class SignupState extends RoutedState {
 
     @action
     async finishSignUp() {
-        return mainState.activateAndTransition(User.current).catch(e => {
+        try {
+            await this.routes.app.main();
+        } catch (e) {
             console.log(e);
             User.current = null;
             this.reset();
-        });
+        }
     }
 
     backupFileName = ext => {
@@ -121,20 +122,9 @@ class SignupState extends RoutedState {
 
     @action.bound
     async saveAccountKey(telemetryProps) {
-        const {
-            username,
-            firstName,
-            lastName,
-            passphrase,
-            backupFileName
-        } = this;
+        const { username, firstName, lastName, passphrase, backupFileName } = this;
         let fileSavePath = config.FileStream.getTempCachePath(backupFileName('pdf'));
-        await saveAccountKeyBackup(
-            fileSavePath,
-            `${firstName} ${lastName}`,
-            username,
-            passphrase
-        );
+        await saveAccountKeyBackup(fileSavePath, `${firstName} ${lastName}`, username, passphrase);
         this.isInProgress = true;
         this.isPdfPreviewVisible = true;
         try {
@@ -142,10 +132,13 @@ class SignupState extends RoutedState {
             if (Platform.OS !== 'android') RNShare.open({ type: 'text/pdf', url: fileSavePath });
             try {
                 await viewer;
-            } catch (e) { // No PDF reader installed on Android, or if viewer failed for any other reason
+            } catch (e) {
+                // No PDF reader installed on Android, or if viewer failed for any other reason
                 console.error(e);
                 fileSavePath = config.FileStream.getTempCachePath(backupFileName('txt'));
-                const content = `${tx('title_appName')} Username: ${username}\n${tx('title_appName')} Account Key: ${passphrase}`;
+                const content = `${tx('title_appName')} Username: ${username}\n${tx(
+                    'title_appName'
+                )} Account Key: ${passphrase}`;
 
                 await RNFS.writeFile(fileSavePath, content, 'utf8');
                 await FileOpener.open(fileSavePath, 'text/*', fileSavePath);
@@ -173,6 +166,7 @@ class SignupState extends RoutedState {
             avatarBuffers,
             keyBackedUp,
             subscribeToPromoEmails,
+            dataCollection,
             country,
             specialty,
             role,
@@ -181,8 +175,7 @@ class SignupState extends RoutedState {
         const localeCode = uiState.locale;
         user.username = username;
         user.email = email;
-        user.passphrase =
-            __DEV__ && process.env.PEERIO_QUICK_SIGNUP ? 'icebear' : passphrase;
+        user.passphrase = __DEV__ && process.env.PEERIO_QUICK_SIGNUP ? 'icebear' : passphrase;
         user.firstName = firstName;
         user.lastName = lastName;
         user.localeCode = localeCode;
@@ -205,19 +198,35 @@ class SignupState extends RoutedState {
             .then(() => keyBackedUp && User.current.setAccountKeyBackedUp())
             .then(() => avatarBuffers && User.current.saveAvatar(avatarBuffers))
             .then(() => {
-                // TODO: replace with icebear version after it's merged
-                const { settings } = User.current;
-                when(
-                    () => !settings.loading,
-                    () => {
-                        settings.subscribeToPromoEmails = subscribeToPromoEmails;
-                        User.current.saveSettings();
-                    }
-                );
+                User.current.saveSettings(settings => {
+                    settings.subscribeToPromoEmails = subscribeToPromoEmails;
+                    settings.dataCollection = dataCollection;
+                });
             })
             .finally(() => {
                 this.isInProgress = false;
             });
+    }
+
+    @action.bound
+    async testQuickSignup(params = {}) {
+        // for parallel tests we add Math.random();
+        const randomId = `${Math.ceil(Math.random() * 10000)}${new Date().getTime() % 100000000}`;
+        const firstName = `First${capitalize(randomWords())}`;
+        const lastName = `Last${capitalize(randomWords())}`;
+        const passphrase = await this.generatePassphrase();
+        const email = params.email || `${randomId}@123.com`;
+        const testUserData = {
+            username: `u${randomId}`,
+            email,
+            firstName,
+            lastName,
+            passphrase
+        };
+        Object.assign(this, testUserData);
+        await this.finishAccountCreation();
+        await this.finishSignUp();
+        return testUserData;
     }
 }
 

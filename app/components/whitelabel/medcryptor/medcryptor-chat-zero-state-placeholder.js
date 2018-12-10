@@ -26,8 +26,12 @@ export default class MedcryptorChatZeroStatePlaceholder extends ChatZeroStatePla
     }
 
     get findContactsButton() {
-        return (
-            buttons.roundBlueBgButton('title_findContactsZeroState', () => routes.main.contactAdd(), false, '', { backgroundColor: vars.peerioPurple })
+        return buttons.roundBlueBgButton(
+            'title_findContactsZeroState',
+            () => routes.main.contactAdd(),
+            false,
+            '',
+            { backgroundColor: vars.peerioPurple }
         );
     }
 }

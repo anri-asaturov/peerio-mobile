@@ -1,0 +1,13 @@
+{
+    "singleQuote": true,
+    "jsxBracketSameLine": true,
+    "printWidth": 100,
+    "overrides": [
+        {
+            "files": "*.json",
+            "options": {
+                "printWidth": 1000
+            }
+        }
+    ]
+}

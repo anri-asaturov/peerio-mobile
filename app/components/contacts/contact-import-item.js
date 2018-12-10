@@ -60,7 +60,7 @@ export default class ContactImportItem extends SafeComponent {
         const iconBgColor = 'transparent';
         const icon = checked ? 'check-box' : 'check-box-outline-blank';
         return (
-            <View style={checkboxStyle} >
+            <View style={checkboxStyle}>
                 {icons.colored(icon, onPress, iconColor, iconBgColor)}
             </View>
         );
@@ -76,7 +76,9 @@ export default class ContactImportItem extends SafeComponent {
                 {!hideAvatar && this.avatar}
                 <View style={textContainer}>
                     <Text style={fullNameStyle}>{fullName || phoneContactName}</Text>
-                    <Text italic style={contactInfoStyle}>{fullName ? usernameTag : username}</Text>
+                    <Text italic style={contactInfoStyle}>
+                        {fullName ? usernameTag : username}
+                    </Text>
                 </View>
                 {this.checkbox}
             </View>

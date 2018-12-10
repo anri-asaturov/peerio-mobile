@@ -80,11 +80,14 @@ export default class ContactAdd extends SafeComponent {
 
     componentDidMount() {
         uiState.currentScrollView = this._scrollView;
-        reaction(() => this.query, () => {
-            transitionAnimation();
-            this.toInvite = null;
-            if (this.showValidationError) this.showValidationError = false;
-        });
+        reaction(
+            () => this.query,
+            () => {
+                transitionAnimation();
+                this.toInvite = null;
+                if (this.showValidationError) this.showValidationError = false;
+            }
+        );
     }
 
     componentWillUnmount() {
@@ -92,7 +95,11 @@ export default class ContactAdd extends SafeComponent {
         uiState.currentScrollViewPosition = 0;
     }
 
-    onScroll = ({ nativeEvent: { contentOffset: { y } } }) => {
+    onScroll = ({
+        nativeEvent: {
+            contentOffset: { y }
+        }
+    }) => {
         uiState.currentScrollViewPosition = y;
     };
 
@@ -155,7 +162,11 @@ export default class ContactAdd extends SafeComponent {
         if (this.showAddEmail) {
             text = this.newEmailText ? 'button_save' : 'button_cancel';
         }
-        return this.renderButton1(text, () => this.emailAction(), this.newEmailText && this.showAddEmail && !this.newEmailTextValid);
+        return this.renderButton1(
+            text,
+            () => this.emailAction(),
+            this.newEmailText && this.showAddEmail && !this.newEmailTextValid
+        );
     }
 
     get validationError() {
@@ -173,7 +184,10 @@ export default class ContactAdd extends SafeComponent {
                 {...testLabel(text)}
                 onPress={disabled ? null : onPress}
                 pressRetentionOffset={vars.retentionOffset}
-                style={{ paddingRight: vars.spacing.small.maxi2x, paddingVertical: vars.spacing.small.maxi }}>
+                style={{
+                    paddingRight: vars.spacing.small.maxi2x,
+                    paddingVertical: vars.spacing.small.maxi
+                }}>
                 <Text bold style={{ color: disabled ? vars.txtMedium : vars.peerioBlue }}>
                     {tu(text)}
                 </Text>
@@ -215,16 +229,23 @@ export default class ContactAdd extends SafeComponent {
                     <Text style={textStyle}>{tx('title_couldntLocateContact1')}</Text>
                     <Text style={textStyle}>{tx('title_couldntLocateContact2')}</Text>
                 </View>
-                {buttons.blueTextButton(tx('button_invite'), () => {
-                    mockContact.invited = true;
-                    contactStore.invite(email);
-                    this.query = '';
-                }, invited, null, 'button_invite')}
-            </View >
+                {buttons.blueTextButton(
+                    tx('button_invite'),
+                    () => {
+                        mockContact.invited = true;
+                        contactStore.invite(email);
+                        this.query = '';
+                    },
+                    invited,
+                    null,
+                    'button_invite'
+                )}
+            </View>
         );
     }
 
-    @action.bound onChangeFindUserText(text) {
+    @action.bound
+    onChangeFindUserText(text) {
         const { Version, OS } = Platform;
         if (OS !== 'android' || Version > 22) {
             this.query = text.toLowerCase();
@@ -240,11 +261,15 @@ export default class ContactAdd extends SafeComponent {
                     onScroll={this.onScroll}
                     keyboardShouldPersistTaps="handled"
                     style={{ backgroundColor: vars.darkBlueBackground05 }}
-                    setScrollViewRef={ref => { this._scrollView = ref; }}>
+                    setScrollViewRef={ref => {
+                        this._scrollView = ref;
+                    }}>
                     <View style={{ marginTop: vars.spacing.medium.midi2x }}>
-                        {contactState.empty && <View style={{ margin: vars.spacing.small.midi2x }}>
-                            <Text style={labelDark}>{tx('title_contactZeroState')}</Text>
-                        </View>}
+                        {contactState.empty && (
+                            <View style={{ margin: vars.spacing.small.midi2x }}>
+                                <Text style={labelDark}>{tx('title_contactZeroState')}</Text>
+                            </View>
+                        )}
                         <View style={{ marginRight: vars.spacing.small.midi2x }}>
                             <whiteLabelComponents.ContactAddWarning />
                         </View>
@@ -260,22 +285,34 @@ export default class ContactAdd extends SafeComponent {
                                     value={this.query}
                                     {...testLabel('contactSearchInput')}
                                 />
-                                {(this.toInvite || this.showValidationError)
-                                    ? icons.dark('close', () => { this.query = null; })
-                                    : this.renderButton1('button_add', () => this.tryAdding(), !this.query)}
+                                {this.toInvite || this.showValidationError
+                                    ? icons.dark('close', () => {
+                                          this.query = null;
+                                      })
+                                    : this.renderButton1(
+                                          'button_add',
+                                          () => this.tryAdding(),
+                                          !this.query
+                                      )}
                             </View>
                             {this.inviteBlock}
                             {this.validationError}
                         </View>
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>
                             <View style={buttonRow}>
-                                <Text semibold style={labelDark}>{tx('title_findContacts')}</Text>
-                                {this.renderButton1('title_importContacts', () => contactState.inviteContacts())}
+                                <Text semibold style={labelDark}>
+                                    {tx('title_findContacts')}
+                                </Text>
+                                {this.renderButton1('title_importContacts', () =>
+                                    contactState.inviteContacts()
+                                )}
                             </View>
                         </View>
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>
                             <View style={buttonRow}>
-                                <Text semibold style={labelDark}>{tx('title_shareSocial')}</Text>
+                                <Text semibold style={labelDark}>
+                                    {tx('title_shareSocial')}
+                                </Text>
                                 {this.renderButton1('button_share', () => this.share())}
                             </View>
                         </View>

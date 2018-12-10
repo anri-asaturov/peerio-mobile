@@ -15,12 +15,16 @@ class DrawerState {
     @observable.shallow drawers = [];
 
     addDrawerTrigger(componentClass, context, propsParam, trigger, onDismiss) {
-        reaction(trigger, value => {
-            if (value) {
-                const drawerConfig = this.addDrawer(componentClass, context, propsParam);
-                drawerConfig.onDismiss = onDismiss;
-            }
-        }, { fireImmediately: true });
+        reaction(
+            trigger,
+            value => {
+                if (value) {
+                    const drawerConfig = this.addDrawer(componentClass, context, propsParam);
+                    drawerConfig.onDismiss = onDismiss;
+                }
+            },
+            { fireImmediately: true }
+        );
     }
 
     addDrawer(componentClass, context, propsParam) {
@@ -46,7 +50,9 @@ class DrawerState {
     getDrawer() {
         // hide drawers when keyboard is visible
         if (uiState.keyboardHeight) return null;
-        return this.globalDrawer || this.drawers.find(drawer => drawer.context === routes.main.route);
+        return (
+            this.globalDrawer || this.drawers.find(drawer => drawer.context === routes.main.route)
+        );
     }
 
     // Try to dismiss top drawer in the specified context.
@@ -66,7 +72,8 @@ class DrawerState {
         }
     }
 
-    @action.bound dismissAll() {
+    @action.bound
+    dismissAll() {
         this.drawers.clear();
     }
 }

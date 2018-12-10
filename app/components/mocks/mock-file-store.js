@@ -13,8 +13,7 @@ class MockFileStore {
         }
     }
 
-    bulk = {
-    };
+    bulk = {};
 
     get folderStore() {
         return {

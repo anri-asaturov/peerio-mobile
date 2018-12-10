@@ -29,7 +29,8 @@ export default class GrayLabel extends SafeComponent {
                 <Text semibold style={this.adminTextStyle}>
                     {tx(label)}
                 </Text>
-            </View>);
+            </View>
+        );
     }
 }
 

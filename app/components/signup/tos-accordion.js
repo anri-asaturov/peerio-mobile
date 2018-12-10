@@ -12,7 +12,12 @@ const listData = [
     {
         title: 'title_termsDataCollection',
         leftIcon: {
-            on: icons.coloredNoPadding('help-outline', null, { padding: iconPadding }, vars.peerioBlue),
+            on: icons.coloredNoPadding(
+                'help-outline',
+                null,
+                { padding: iconPadding },
+                vars.peerioBlue
+            ),
             off: icons.darkNoPadding('help-outline', null, { padding: iconPadding })
         },
         content: [
@@ -54,8 +59,14 @@ const listData = [
     {
         title: 'title_termsOfUse',
         leftIcon: {
-            on: icons.imageIconNoPadding(require('../../assets/icons/tos-read-icon-on.png'), null, { padding: iconPadding }),
-            off: icons.imageIconNoPadding(require('../../assets/icons/tos-read-icon-off.png'), null, { padding: iconPadding })
+            on: icons.imageIconNoPadding(require('../../assets/icons/tos-read-icon-on.png'), null, {
+                padding: iconPadding
+            }),
+            off: icons.imageIconNoPadding(
+                require('../../assets/icons/tos-read-icon-off.png'),
+                null,
+                { padding: iconPadding }
+            )
         },
         content: [
             {
@@ -79,7 +90,7 @@ export default class TosAccordion extends SafeComponent {
     keyExtractor = item => item.title;
 
     listItem({ item, index }) {
-        return (<TosAccordionItem index={index} data={item} />);
+        return <TosAccordionItem index={index} data={item} />;
     }
 
     renderThrow() {
@@ -88,6 +99,8 @@ export default class TosAccordion extends SafeComponent {
                 keyExtractor={this.keyExtractor}
                 data={listData}
                 renderItem={this.listItem}
-                style={[{ marginBottom: vars.spacing.medium.midi2x }, this.props.style]} />);
+                style={[{ marginBottom: vars.spacing.medium.midi2x }, this.props.style]}
+            />
+        );
     }
 }

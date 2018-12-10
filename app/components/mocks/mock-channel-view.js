@@ -47,7 +47,9 @@ export default class MockChannel extends Component {
         routerMain.current = observable({
             routeState: observable({
                 title: '# channel-mock',
-                titleAction: () => { this.showChannelInfo = true; }
+                titleAction: () => {
+                    this.showChannelInfo = true;
+                }
             })
         });
         const discard = routerModal.discard.bind(routerModal);
@@ -60,12 +62,15 @@ export default class MockChannel extends Component {
             discard();
         };
 
-        reaction(() => routerModal.route, route => {
-            if (route === 'channelAddPeople') {
-                this.showChannelInfo = false;
-                this.showAddPeople = true;
+        reaction(
+            () => routerModal.route,
+            route => {
+                if (route === 'channelAddPeople') {
+                    this.showChannelInfo = false;
+                    this.showAddPeople = true;
+                }
             }
-        });
+        );
 
         this.imagePath = await TinyDb.system.getValue('mock-thumbnail');
         fileState.localFileMap.set(1, this.imagePath);

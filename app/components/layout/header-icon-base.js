@@ -18,7 +18,7 @@ const itemStyle = {
 @observer
 export default class HeaderIconBase extends SafeComponent {
     icon = '';
-    action = () => { };
+    action = () => {};
     disabled = false;
     beacon = null;
     iconSource = null;
@@ -35,8 +35,8 @@ export default class HeaderIconBase extends SafeComponent {
                     pressRetentionOffset={vars.retentionOffset}
                     onPress={this.onPress}
                     activeOpacity={this.disabled ? 0.5 : 1}
-                    {...testLabel(this.props.testID)} >
-                    <View style={[itemStyle, this.innerStyle]} >
+                    {...testLabel(this.props.testID)}>
+                    <View style={[itemStyle, this.innerStyle]}>
                         <MeasureableIcon
                             icon={this.icon}
                             iconSource={this.iconSource}

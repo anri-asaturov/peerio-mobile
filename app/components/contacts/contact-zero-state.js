@@ -55,23 +55,34 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
                 <Text style={headerStyle} {...testLabel('title_addYourContacts')}>
                     {tx('title_addYourContacts')}
                 </Text>
-                {!drawerState.getDrawer() && <Image
-                    source={blueArrowSrc}
-                    style={{
-                        width: vars.isDeviceScreenBig ? vars.contactZeroStateArrowWidth : vars.contactZeroStateArrowWidthSmall,
-                        height: vars.isDeviceScreenBig ? vars.contactZeroStateArrowHeight : vars.contactZeroStateArrowHeightSmall,
-                        position: 'absolute',
-                        top: vars.isDeviceScreenBig ? vars.spacing.small.midi2x : vars.spacing.small.maxi,
-                        right: vars.isDeviceScreenBig ? vars.spacing.large.mini : vars.spacing.medium.maxi2x
-                    }}
-                />}
+                {!drawerState.getDrawer() && (
+                    <Image
+                        source={blueArrowSrc}
+                        style={{
+                            width: vars.isDeviceScreenBig
+                                ? vars.contactZeroStateArrowWidth
+                                : vars.contactZeroStateArrowWidthSmall,
+                            height: vars.isDeviceScreenBig
+                                ? vars.contactZeroStateArrowHeight
+                                : vars.contactZeroStateArrowHeightSmall,
+                            position: 'absolute',
+                            top: vars.isDeviceScreenBig
+                                ? vars.spacing.small.midi2x
+                                : vars.spacing.small.maxi,
+                            right: vars.isDeviceScreenBig
+                                ? vars.spacing.large.mini
+                                : vars.spacing.medium.maxi2x
+                        }}
+                    />
+                )}
             </View>
         );
     }
 
     get bottomTitle() {
-        const text = preferenceStore.prefs.importContactsInBackground ? 'title_contacts_zeroState1' :
-            'title_contacts_zeroState0';
+        const text = preferenceStore.prefs.importContactsInBackground
+            ? 'title_contacts_zeroState1'
+            : 'title_contacts_zeroState0';
         return (
             <View style={{ alignItems: 'center' }}>
                 <Text style={textStyle} {...testLabel('title_addYourContacts')}>
@@ -88,7 +99,8 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
                     source={zeroStateImage}
                     style={adjustImageDimensions(zeroStateImage, width, null)}
                 />
-            </View>);
+            </View>
+        );
     }
 
     renderThrow() {
@@ -98,8 +110,9 @@ export default class ContactZeroStatePlaceholder extends SafeComponent {
                     {this.title}
                     {this.zeroStateIllustration}
                     {this.bottomTitle}
-                    {preferenceStore.prefs.importContactsInBackground
-                        ? null : <SyncContactsButton beacon={zeroStateBeacons.syncBeacon} />}
+                    {preferenceStore.prefs.importContactsInBackground ? null : (
+                        <SyncContactsButton beacon={zeroStateBeacons.syncBeacon} />
+                    )}
                 </ViewWithDrawer>
             </View>
         );

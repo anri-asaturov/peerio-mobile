@@ -8,7 +8,7 @@ import { popupConfirmCancelIllustration } from '../shared/popups';
 import { tx } from '../utils/translator';
 
 const { width } = Dimensions.get('window');
-const imageWidth = Math.ceil(width - (2 * vars.popupHorizontalMargin));
+const imageWidth = Math.ceil(width - 2 * vars.popupHorizontalMargin);
 
 const leaveRoomIllustration = require('../../assets/chat/leave-room-confirmation-mobile.png');
 const deleteRoomIllustration = require('../../assets/chat/delete-room.png');
@@ -56,9 +56,12 @@ class ImagePopups extends SafeComponent {
                 <Image
                     style={this.style(illustration)}
                     source={illustration}
-                    resizeMode="contain" />
+                    resizeMode="contain"
+                />
                 <View style={contentStyle}>
-                    <Text bold style={titleStyle}>{tx(title)}</Text>
+                    <Text bold style={titleStyle}>
+                        {tx(title)}
+                    </Text>
                     <Text style={descriptionStyle}>{tx(description)}</Text>
                 </View>
             </View>
@@ -72,7 +75,8 @@ class ImagePopups extends SafeComponent {
             'title_confirmChannelDelete',
             deleteRoomIllustration,
             'button_deleteChannel',
-            true);
+            true
+        );
     }
 
     async confirmLeave() {
@@ -80,7 +84,8 @@ class ImagePopups extends SafeComponent {
             'title_confirmChannelLeave',
             'title_confirmChannelLeaveDescription',
             leaveRoomIllustration,
-            'button_leave');
+            'button_leave'
+        );
     }
 
     async confirmInvites(description) {
@@ -88,7 +93,8 @@ class ImagePopups extends SafeComponent {
             'title_confirmEmailInvitesHeading',
             description,
             emailInvitesIllustration,
-            'button_confirm');
+            'button_confirm'
+        );
     }
 }
 

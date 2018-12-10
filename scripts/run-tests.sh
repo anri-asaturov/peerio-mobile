@@ -1,28 +1,9 @@
 #!/bin/bash
 
 source env.sh
-RED=`tput setaf 1`
-GREEN=`tput setaf 2`
-YELLOW=`tput setaf 3`
-BRIGHT=`tput bold`
-R=`tput sgr0`
 
-info() {
-  echo -e "${BRIGHT}$1${R}"
-}
-
-error() {
-  echo -e "${BRIGHT}$1${R}"
-}
-
-
-wait() {
-  echo -e "💤  ${BRIGHT}$1${R}"
-}
-
-check() {
-  echo "${GREEN}✔ $1${R}"
-}
+# import detectIosUDID, info, error, check, wait
+source scripts/common.sh
 
 unameOut="$(uname -s)"
 case "${unameOut}" in
@@ -39,15 +20,7 @@ case "${unameOut}" in
         info 'Killing running simulators'
         (kill $(ps aux | grep '[S]imulator.app' | awk '{print $2}')) && check 'done!'
         sleep 3
-        SIM_UDID=`xcrun instruments -s | grep -E "$PEERIO_IOS_SIM \($PEERIO_IOS_VERSION.*\)" | grep -o "\[.*\]" | tr -d '[]' | head -1`
-        info "Looking for simulator: $PEERIO_IOS_SIM ($PEERIO_IOS_VERSION)"
-        if [ -z $"$SIM_UDID" ]; then
-          error "Could not find simulator: $PEERIO_IOS_SIM ($PEERIO_IOS_VERSION)"
-          echo "Available simulators:"
-          xcrun instruments -s
-          exit 1
-        fi
-        check "found $PEERIO_IOS_SIM ($PEERIO_IOS_VERSION) $SIM_UDID$"
+        detectIosUDID
         SIM_LOG="$HOME/Library/Logs/CoreSimulator/$SIM_UDID/system.log"
         check "logs ${SIM_LOG}"
         # ./node_modules/.bin/react-native run-ios --simulator=$SIM_UDID
@@ -56,11 +29,18 @@ esac
 
 ./node_modules/.bin/appium > /dev/null &
 APPIUM_PID=$!
+TEST_EXITCODE=0
 
-trap "exit" INT TERM
-trap "kill $APPIUM_PID" EXIT
+cleanup() {
+  echo "...cleanup"
+  trap "" EXIT
+  kill $APPIUM_PID
+  exit $TEST_EXITCODE
+}
+
+trap cleanup INT TERM EXIT
+
 sleep 1
-
 wait "Waiting appium to launch on 4723..."
 
 while ! nc -z localhost 4723; do
@@ -70,10 +50,23 @@ done
 check "appium launched"
 
 npm run test-$PEERIO_TEST_PLATFORM
+TEST_EXITCODE=$?
 
-# if [ -z $"$CIRCLE_ARTIFACTS" ]; then
-#   exit 0
-# else
-#   mkdir -p $CIRCLE_ARTIFACTS/py.test/
-#   cp $SIM_LOG $CIRCLE_ARTIFACTS/py.test/
-# fi
+if [ -z $"$CIRCLE_TEST_REPORTS" ]; then
+  echo "Skipping CircleCI report generation"
+else
+  echo "Generating CircleCI report in $CIRCLE_TEST_REPORTS"
+  mkdir -p $CIRCLE_TEST_REPORTS/cucumberjs
+  cat test/reports/result-$PEERIO_TEST_PLATFORM.json | node_modules/.bin/cucumber-junit > "$CIRCLE_TEST_REPORTS/cucumberjs/report.xml"
+  node test/reports/generate-circleci-report.js
+fi
+
+
+if [ -z $"$CIRCLE_ARTIFACTS" ]; then
+  echo "Skipping CircleCI artifact generation"
+else
+  echo "Generating CircleCI artifact report in $CIRCLE_ARTIFACTS"
+  mkdir -p $CIRCLE_ARTIFACTS
+  node test/reports/generate-circleci-report.js
+  cp -r test/reports/* $CIRCLE_ARTIFACTS/
+fi

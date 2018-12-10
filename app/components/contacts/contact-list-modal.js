@@ -23,10 +23,11 @@ export default class ContactListModal extends SafeComponent {
         contactState.store.uiViewFilter = 'all';
     }
 
-    @computed get sections() {
+    @computed
+    get sections() {
         const { uiView, contacts } = contactState.store;
         const sections = uiView.map(({ letter, items }) => {
-            return ({ data: items, key: letter });
+            return { data: items, key: letter };
         });
         sections.unshift({ data: [], key: `All (${contacts.length})` });
         const { channels } = chatState.store;
@@ -36,9 +37,11 @@ export default class ContactListModal extends SafeComponent {
 
     item = ({ item }) => {
         const onPress = () => this.props.action(item);
-        return item.isChannel ?
-            <ChannelListItem chat={item} channelName={item.name} onPress={onPress} /> :
-            <ContactItem contact={item} onPress={onPress} />;
+        return item.isChannel ? (
+            <ChannelListItem chat={item} channelName={item.name} onPress={onPress} />
+        ) : (
+            <ContactItem contact={item} onPress={onPress} />
+        );
     };
 
     header({ section: /* data, */ { key } }) {
@@ -58,8 +61,9 @@ export default class ContactListModal extends SafeComponent {
     }
 
     get contactListComponent() {
-        return !contactState.empty ?
-            this.listView() : !contactState.store.loading && <ContactsPlaceholder />;
+        return !contactState.empty
+            ? this.listView()
+            : !contactState.store.loading && <ContactsPlaceholder />;
     }
 
     get exitRow() {
@@ -81,7 +85,11 @@ export default class ContactListModal extends SafeComponent {
         return (
             <View style={container}>
                 {icons.dark('close', this.props.onExit)}
-                <Center style={style}><Text semibold style={textStyle}>{this.props.title}</Text></Center>
+                <Center style={style}>
+                    <Text semibold style={textStyle}>
+                        {this.props.title}
+                    </Text>
+                </Center>
                 {icons.placeholder()}
             </View>
         );
@@ -89,12 +97,9 @@ export default class ContactListModal extends SafeComponent {
 
     renderThrow() {
         return (
-            <View
-                style={{ flex: 1, backgroundColor: vars.lightGrayBg }}>
+            <View style={{ flex: 1, backgroundColor: vars.lightGrayBg }}>
                 {this.exitRow}
-                <View style={{ flex: 1 }}>
-                    {this.contactListComponent}
-                </View>
+                <View style={{ flex: 1 }}>{this.contactListComponent}</View>
                 <ProgressOverlay enabled={contactState.store.loading} />
             </View>
         );

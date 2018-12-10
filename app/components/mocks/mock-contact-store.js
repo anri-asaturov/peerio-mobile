@@ -17,13 +17,15 @@ class MockContactStore {
     }
 
     get uiView() {
-        return [{
-            letter: 'A',
-            items: this.contacts
-        }];
+        return [
+            {
+                letter: 'A',
+                items: this.contacts
+            }
+        ];
     }
 
-    filter = (text) => {
+    filter = text => {
         return text ? this.contacts.filter(c => c.username.indexOf(text) !== -1) : this.contacts;
     };
 
@@ -36,9 +38,7 @@ class MockContactStore {
             username,
             firstName,
             lastName,
-            addresses: [
-                address
-            ],
+            addresses: [address],
             loading: false,
             notFound: false,
             fullName: `${firstName} ${lastName}`

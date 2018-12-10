@@ -6,8 +6,6 @@ import SafeComponent from '../../shared/safe-component';
 @observer
 export default class PeerioContactAddWarning extends SafeComponent {
     renderThrow() {
-        return (
-            <View />
-        );
+        return <View />;
     }
 }

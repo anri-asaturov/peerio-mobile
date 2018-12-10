@@ -9,21 +9,29 @@ import chatState from '../messaging/chat-state';
 
 @observer
 export default class ChannelInfoListState extends SafeComponent {
-    @action.bound toggleCollapsed() {
+    @action.bound
+    toggleCollapsed() {
         chatState.collapseFirstChannelInfoList = !chatState.collapseFirstChannelInfoList;
     }
 
-    get isCollapsed() { return chatState.collapseFirstChannelInfoList; }
+    get isCollapsed() {
+        return chatState.collapseFirstChannelInfoList;
+    }
 
     renderThrow() {
         return (
             <View>
                 <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(0, 0, 0, .12)' }}>
-                    <MemberList toggleCollapsed={this.toggleCollapsed} collapsed={this.isCollapsed} />
+                    <MemberList
+                        toggleCollapsed={this.toggleCollapsed}
+                        collapsed={this.isCollapsed}
+                    />
                 </View>
-                <RecentFilesList toggleCollapsed={this.toggleCollapsed} collapsed={!this.isCollapsed} />
+                <RecentFilesList
+                    toggleCollapsed={this.toggleCollapsed}
+                    collapsed={!this.isCollapsed}
+                />
             </View>
         );
     }
 }
-

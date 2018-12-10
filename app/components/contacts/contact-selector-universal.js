@@ -35,7 +35,10 @@ export default class ContactSelectorUniversal extends SafeComponent {
     @observable foundContact = null;
 
     componentDidMount() {
-        this._recipientReaction = reaction(() => !!this.recipients.items.length, transitionAnimation);
+        this._recipientReaction = reaction(
+            () => !!this.recipients.items.length,
+            transitionAnimation
+        );
     }
 
     componentWillUnmount() {
@@ -49,7 +52,8 @@ export default class ContactSelectorUniversal extends SafeComponent {
         return result && <ContactInviteItemPrompt email={this.toInvite} />;
     }
 
-    @action.bound onChangeFindUserText(text) {
+    @action.bound
+    onChangeFindUserText(text) {
         this.clean = !text.length;
         this.foundContact = null;
         this.toInvite = null;
@@ -73,17 +77,22 @@ export default class ContactSelectorUniversal extends SafeComponent {
     searchBar() {
         let rightIcon = null;
         if (this.findUserText) {
-            rightIcon = icons.coloredSmall('close', () => {
-                this.findUserText = '';
-                this.onChangeFindUserText('');
-            }, vars.peerioBlue);
+            rightIcon = icons.coloredSmall(
+                'close',
+                () => {
+                    this.findUserText = '';
+                    this.onChangeFindUserText('');
+                },
+                vars.peerioBlue
+            );
         }
 
         if (this.inProgress || contactState.inProgress) {
             rightIcon = <ActivityIndicator style={{ marginRight: vars.spacing.small.midi2x }} />;
         }
 
-        const leftIcon = this.props.leftIconComponent || icons.plain('search', vars.iconSize, vars.black12);
+        const leftIcon =
+            this.props.leftIconComponent || icons.plain('search', vars.iconSize, vars.black12);
 
         return (
             <SearchBar
@@ -92,9 +101,12 @@ export default class ContactSelectorUniversal extends SafeComponent {
                 onChangeText={this.onChangeFindUserText}
                 leftIcon={leftIcon}
                 rightIcon={rightIcon}
-                ref={ti => { this.textInput = ti; }}
+                ref={ti => {
+                    this.textInput = ti;
+                }}
                 testId="textInputContactSearch"
-            />);
+            />
+        );
     }
 
     exitRow() {
@@ -110,7 +122,8 @@ export default class ContactSelectorUniversal extends SafeComponent {
         return icons.disabledText(tu('share'));
     }
 
-    @action.bound async action() {
+    @action.bound
+    async action() {
         const selectorAction = this.props.action;
         if (!selectorAction) return;
         this.inProgress = true;
@@ -153,21 +166,24 @@ export default class ContactSelectorUniversal extends SafeComponent {
         }
     }
 
-    @computed get dataSource() {
+    @computed
+    get dataSource() {
         const filteredContacts = contactState.getFiltered(this.findUserText).slice();
-        const result = [
-            { data: filteredContacts, key: 'title_contactsNumber' }
-        ];
+        const result = [{ data: filteredContacts, key: 'title_contactsNumber' }];
         if (this.foundContact) {
             result.unshift({ data: [this.foundContact], key: null });
         }
         if (!this.findUserText) {
-            result.push({ data: contactState.store.invitedNotJoinedContacts.slice(), key: 'title_allYourInvited' });
+            result.push({
+                data: contactState.store.invitedNotJoinedContacts.slice(),
+                key: 'title_allYourInvited'
+            });
         }
         return result;
     }
 
-    @action.bound onContactPress(contact) {
+    @action.bound
+    onContactPress(contact) {
         if (this.props.multiselect) {
             this.findUserText = '';
             this.recipients.toggle(contact);
@@ -178,12 +194,25 @@ export default class ContactSelectorUniversal extends SafeComponent {
     }
 
     body() {
-        const notFound = !this.inProgress && !!this.notFound && (
-            <View style={{ flexDirection: 'row', marginHorizontal: vars.spacing.large.midi2x, marginVertical: vars.spacing.small.maxi }}>
-                <Icon name="help-outline" size={24} color={vars.txtDate} style={{ marginRight: vars.spacing.small.midi2x }} />
-                <Text style={{ color: vars.txtDate }}>{t('error_userNotFoundTryEmail', { user: this.notFound })}</Text>
-            </View>
-        );
+        const notFound = !this.inProgress &&
+            !!this.notFound && (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        marginHorizontal: vars.spacing.large.midi2x,
+                        marginVertical: vars.spacing.small.maxi
+                    }}>
+                    <Icon
+                        name="help-outline"
+                        size={24}
+                        color={vars.txtDate}
+                        style={{ marginRight: vars.spacing.small.midi2x }}
+                    />
+                    <Text style={{ color: vars.txtDate }}>
+                        {t('error_userNotFoundTryEmail', { user: this.notFound })}
+                    </Text>
+                </View>
+            );
         const containerStyle = {
             marginHorizontal: vars.spacing.small.midi2x,
             flex: 1,
@@ -195,16 +224,21 @@ export default class ContactSelectorUniversal extends SafeComponent {
             <View style={{ flex: 1, flexGrow: 1 }}>
                 <View style={{ flex: 0 }}>
                     {this.searchBar()}
-                    {this.props.multiselect &&
+                    {this.props.multiselect && (
                         <ContactSelectorUserBoxLine
-                            contacts={this.recipients.items} onPress={this.recipients.remove} />}
+                            contacts={this.recipients.items}
+                            onPress={this.recipients.remove}
+                        />
+                    )}
                 </View>
                 <View style={containerStyle}>
                     {notFound}
                     {this.inviteContact}
-                    {!!this.legacyContact &&
-                        <ContactLegacyItem contact={this.legacyContact} />}
-                    <ContactSelectorSectionList dataSource={this.dataSource} onPress={this.onContactPress} />
+                    {!!this.legacyContact && <ContactLegacyItem contact={this.legacyContact} />}
+                    <ContactSelectorSectionList
+                        dataSource={this.dataSource}
+                        onPress={this.onContactPress}
+                    />
                 </View>
             </View>
         );
@@ -242,7 +276,8 @@ export default class ContactSelectorUniversal extends SafeComponent {
                 noFitHeight
                 footer={this.props.footer}
                 footerAbsolute={snackbar}
-                style={layoutStyle} />
+                style={layoutStyle}
+            />
         );
     }
 }

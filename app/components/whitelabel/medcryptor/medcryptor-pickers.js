@@ -18,12 +18,7 @@ class GenericPicker extends SafeComponent {
     }
 
     renderThrow() {
-        return (
-            <PickerPopup
-                name={this.name}
-                data={this.data}
-                state={medcryptorUiState} />
-        );
+        return <PickerPopup name={this.name} data={this.data} state={medcryptorUiState} />;
     }
 }
 

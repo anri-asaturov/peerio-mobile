@@ -17,7 +17,11 @@ import { vars } from '../../styles/styles';
 import mockContactStore from './mock-contact-store';
 import mockFileStore from './mock-file-store';
 import TabContainer from '../layout/tab-container';
-import { TopDrawerMaintenance, /* TopDrawerNewContact, */ TopDrawerPendingFiles, TopDrawerAutoMount } from '../shared/top-drawer-components';
+import {
+    TopDrawerMaintenance,
+    /* TopDrawerNewContact, */ TopDrawerPendingFiles,
+    TopDrawerAutoMount
+} from '../shared/top-drawer-components';
 
 const button = {
     position: 'absolute',
@@ -105,8 +109,7 @@ export default class MockChatList extends Component {
                 <TouchableOpacity
                     style={add1}
                     onPress={this.addGlobalDrawer}
-                    pressRetentionOffset={vars.retentionOffset}
-                >
+                    pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold style={{ textAlign: 'center' }}>
                         Add Global
                     </Text>
@@ -114,8 +117,7 @@ export default class MockChatList extends Component {
                 <TouchableOpacity
                     style={add2}
                     onPress={this.addLocalDrawer}
-                    pressRetentionOffset={vars.retentionOffset}
-                >
+                    pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold style={{ textAlign: 'center' }}>
                         Add Local
                     </Text>
@@ -123,8 +125,7 @@ export default class MockChatList extends Component {
                 <TouchableOpacity
                     style={remove}
                     onPress={this.removeDrawer}
-                    pressRetentionOffset={vars.retentionOffset}
-                >
+                    pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold style={{ textAlign: 'center' }}>
                         Delete
                     </Text>
@@ -135,7 +136,13 @@ export default class MockChatList extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
+            <View
+                style={{
+                    backgroundColor: 'white',
+                    flex: 1,
+                    flexGrow: 1,
+                    paddingTop: vars.layoutPaddingTop
+                }}>
                 {this.list}
                 <TabContainer />
                 <PopupLayout key="popups" />

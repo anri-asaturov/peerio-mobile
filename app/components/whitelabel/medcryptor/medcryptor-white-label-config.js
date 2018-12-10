@@ -7,10 +7,12 @@ const whiteLabelConfig = {
     PRO_YEARLY_PRICE: '$300 AUD/year',
     TERMS_URL: 'https://medcryptor.com/legal/terms-of-use',
     PRIVACY: 'https://medcryptor.com/legal/privacy-policy',
-    stringReplacements: [{
-        original: 'Peerio',
-        replacement: 'MedCryptor'
-    }],
+    stringReplacements: [
+        {
+            original: 'Peerio',
+            replacement: 'MedCryptor'
+        }
+    ],
     LOCALE_PREFIX: 'mcr_',
     SIGNUP_STEP_COUNT: 5
 };

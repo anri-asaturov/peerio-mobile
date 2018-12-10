@@ -38,24 +38,28 @@ export default class MockTabContainer extends SafeComponent {
                     icon="forum"
                     highlightList={['space']}
                     bubble={chatStore.unreadMessages + chatInviteStore.received.length}
-                    beacon={mockTabBeacons.chatBeacon} />
+                    beacon={mockTabBeacons.chatBeacon}
+                />
                 <TabItem
                     text={t('title_files')}
                     route="files"
                     icon="folder"
                     bubble={fileStore.unreadFiles}
-                    beacon={mockTabBeacons.filesBeacon} />
+                    beacon={mockTabBeacons.filesBeacon}
+                />
                 <TabItem
                     text={t('title_contacts')}
                     route="contacts"
                     icon="people"
                     highlightList={['contactAdd', 'contactInvite']}
-                    beacon={mockTabBeacons.contactBeacon} />
+                    beacon={mockTabBeacons.contactBeacon}
+                />
                 <TabItem
                     text={t('title_settings')}
                     route="settings"
                     icon="settings"
-                    beacon={mockTabBeacons.settingsBeacon} />
+                    beacon={mockTabBeacons.settingsBeacon}
+                />
             </View>
         );
     }

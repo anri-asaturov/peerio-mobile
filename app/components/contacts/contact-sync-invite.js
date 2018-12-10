@@ -45,11 +45,13 @@ export default class ContactSyncInvite extends SafeComponent {
         return tx('title_inviteContacts');
     }
 
-    @computed get selectedContacts() {
+    @computed
+    get selectedContacts() {
         return this.contactList.filter(item => item.selected);
     }
 
-    @computed get selectedEmails() {
+    @computed
+    get selectedEmails() {
         const selectedEmails = [];
         this.contactList.forEach(listItem => {
             if (listItem.selected) selectedEmails.push(listItem.contact.username);
@@ -59,7 +61,7 @@ export default class ContactSyncInvite extends SafeComponent {
 
     silentInvite(onlyNonSelected) {
         const silentSyncEmails = this.contactList
-            .filter(li => onlyNonSelected ? !li.selected : true)
+            .filter(li => (onlyNonSelected ? !li.selected : true))
             .map(li => li.contact.username);
         contactState.batchInvite(silentSyncEmails, true);
     }
@@ -82,27 +84,31 @@ export default class ContactSyncInvite extends SafeComponent {
      * Fills this.contactList with phone contacts who are not on Peerio
      * @param {array} phoneContacts
      */
-    @action getNonPeerioContacts(phoneContacts) {
+    @action
+    getNonPeerioContacts(phoneContacts) {
         const promises = [];
         phoneContacts.forEach(c => {
-            promises.push((async () => {
-                try {
-                    const contact = await contactState.resolveAndCache(c.email);
-                    if (contact.notFound || contact.isHidden) {
-                        const listItem = new ListItem(contact, c.fullName, false);
-                        listItem.visible = true;
-                        this.contactList.push(listItem);
-                        this.refreshList();
+            promises.push(
+                (async () => {
+                    try {
+                        const contact = await contactState.resolveAndCache(c.email);
+                        if (contact.notFound || contact.isHidden) {
+                            const listItem = new ListItem(contact, c.fullName, false);
+                            listItem.visible = true;
+                            this.contactList.push(listItem);
+                            this.refreshList();
+                        }
+                    } catch (e) {
+                        console.error(e);
                     }
-                } catch (e) {
-                    console.error(e);
-                }
-            })());
+                })()
+            );
         });
         return Promise.all(promises);
     }
 
-    @action.bound onChangeSearchBarText(text) {
+    @action.bound
+    onChangeSearchBarText(text) {
         this.searchBarValue = text.trim();
         if (this._searchTimeout) {
             clearTimeout(this._searchTimeout);
@@ -115,7 +121,8 @@ export default class ContactSyncInvite extends SafeComponent {
         this._searchTimeout = setTimeout(() => this.filter(text), 500);
     }
 
-    @action.bound clearSearch() {
+    @action.bound
+    clearSearch() {
         this.searchBarValue = '';
         this.contactList.forEach((listItem, i, contactList) => {
             contactList[i].visible = true;
@@ -123,7 +130,8 @@ export default class ContactSyncInvite extends SafeComponent {
         this.refreshList();
     }
 
-    @action.bound filter(query) {
+    @action.bound
+    filter(query) {
         const regex = new RegExp(_.escapeRegExp(query), 'i');
         this.contactList.forEach(listItem => {
             const { username } = listItem.contact;
@@ -142,7 +150,9 @@ export default class ContactSyncInvite extends SafeComponent {
                 <SearchBar
                     textValue={this.searchBarValue}
                     placeholderText={tx('title_searchContacts')}
-                    onChangeText={text => { this.onChangeSearchBarText(text); }}
+                    onChangeText={text => {
+                        this.onChangeSearchBarText(text);
+                    }}
                     leftIcon={leftIcon}
                     rightIcon={rightIcon}
                 />
@@ -150,34 +160,41 @@ export default class ContactSyncInvite extends SafeComponent {
         );
     }
 
-    @computed get allSelected() {
+    @computed
+    get allSelected() {
         return this.contactList.every(listItem => listItem.selected);
     }
 
-    @action.bound selectAll() {
+    @action.bound
+    selectAll() {
         this.contactList.forEach(listItem => {
             listItem.selected = true;
         });
         this.clearSearch();
     }
 
-    @action.bound deselectAll() {
+    @action.bound
+    deselectAll() {
         this.contactList.forEach(listItem => {
             listItem.selected = false;
         });
         this.clearSearch();
     }
 
-    @action.bound toggleCheckbox(listItem) {
+    @action.bound
+    toggleCheckbox(listItem) {
         listItem.selected = !listItem.selected;
         this.refreshList();
     }
 
-    @action.bound refreshList() {
+    @action.bound
+    refreshList() {
         this.refresh++;
     }
 
-    keyExtractor(item, index) { return `${item.contact.email}-${index}`; }
+    keyExtractor(item, index) {
+        return `${item.contact.email}-${index}`;
+    }
 
     contactItem = ({ item }) => {
         if (!item.visible) return null;
@@ -188,7 +205,8 @@ export default class ContactSyncInvite extends SafeComponent {
                 contact={item.contact}
                 phoneContactName={item.phoneContactName}
                 checked={item.selected}
-                onPress={() => this.toggleCheckbox(item)} />
+                onPress={() => this.toggleCheckbox(item)}
+            />
         );
     };
 
@@ -201,20 +219,25 @@ export default class ContactSyncInvite extends SafeComponent {
                     </Text>
                     {buttons.blueTextButton(
                         this.allSelected ? tx('title_deselectAll') : tx('title_selectAll'),
-                        this.allSelected ? this.deselectAll : this.selectAll)}
+                        this.allSelected ? this.deselectAll : this.selectAll
+                    )}
                 </View>
                 <FlatList
                     initialNumToRender={INITIAL_LIST_SIZE}
                     data={this.contactList}
                     renderItem={this.contactItem}
                     extraData={this.refresh}
-                    keyExtractor={this.keyExtractor} />
+                    keyExtractor={this.keyExtractor}
+                />
             </View>
         );
     }
 
-    @action.bound async inviteSelectedContacts() {
-        const confirmed = await imagePopups.confirmInvites(tx('title_confirmEmailInvite', { numSelectedContacts: this.selectedContacts.length }));
+    @action.bound
+    async inviteSelectedContacts() {
+        const confirmed = await imagePopups.confirmInvites(
+            tx('title_confirmEmailInvite', { numSelectedContacts: this.selectedContacts.length })
+        );
         if (await confirmed) {
             contactState.batchInvite(this.selectedEmails);
             const contactsAdded = contactState.store.addedContacts.length;
@@ -237,11 +260,14 @@ export default class ContactSyncInvite extends SafeComponent {
     footer() {
         if (uiState.keyboardHeight) return null;
         return (
-            <View style={footerContainer} >
+            <View style={footerContainer}>
                 {buttons.blueTextButton(
-                    this.selectedContacts.length === 1 ? tx('button_sendInvite') : tx('button_sendInvites'),
+                    this.selectedContacts.length === 1
+                        ? tx('button_sendInvite')
+                        : tx('button_sendInvites'),
                     this.inviteSelectedContacts,
-                    this.selectedContacts.length === 0)}
+                    this.selectedContacts.length === 0
+                )}
             </View>
         );
     }
@@ -253,6 +279,7 @@ export default class ContactSyncInvite extends SafeComponent {
                 {this.body()}
                 {this.footer()}
                 <ActivityOverlay large visible={this.inProgress} />
-            </View>);
+            </View>
+        );
     }
 }

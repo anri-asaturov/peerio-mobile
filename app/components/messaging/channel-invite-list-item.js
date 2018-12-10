@@ -20,15 +20,18 @@ export default class ChannelInviteListItem extends SafeComponent {
     @observable declinedStyle;
 
     componentDidMount() {
-        this.fadeOutReaction = when(() => uiState.declinedChannelId === this.props.id, () => {
-            this.declinedStyle = true;
-            setTimeout(() => {
-                this.animating = true;
-                transitionAnimationTimed(2000);
-            }, 400);
-            chatInviteStore.rejectInvite(this.props.id);
-            uiState.declinedChannelId = null;
-        });
+        this.fadeOutReaction = when(
+            () => uiState.declinedChannelId === this.props.id,
+            () => {
+                this.declinedStyle = true;
+                setTimeout(() => {
+                    this.animating = true;
+                    transitionAnimationTimed(2000);
+                }, 400);
+                chatInviteStore.rejectInvite(this.props.id);
+                uiState.declinedChannelId = null;
+            }
+        );
     }
 
     componentWillReceiveProps(/* nextProps */) {
@@ -87,14 +90,13 @@ export default class ChannelInviteListItem extends SafeComponent {
                 {...testLabel(channelName)}>
                 <TouchableOpacity
                     onPress={this.onPress}
-                    style={containerStyle} pressRetentionOffset={vars.retentionOffset}>
+                    style={containerStyle}
+                    pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold style={textStyle}>
                         {`# ${channelName}`}
                     </Text>
                     <View style={circleStyle}>
-                        <Text style={textNewStyle}>
-                            {t('title_new')}
-                        </Text>
+                        <Text style={textNewStyle}>{t('title_new')}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

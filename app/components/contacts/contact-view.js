@@ -21,7 +21,9 @@ const flexRow = {
 
 @observer
 export default class ContactView extends SafeComponent {
-    get contact() { return this.props.contact || contactState.currentContact; }
+    get contact() {
+        return this.props.contact || contactState.currentContact;
+    }
 
     toggleFav() {
         const { contact } = this;
@@ -35,7 +37,14 @@ export default class ContactView extends SafeComponent {
     renderInvitedUser(contact) {
         return (
             <View style={{ flex: 1, flexGrow: 1 }}>
-                <View style={[flexRow, { backgroundColor: vars.darkBlueBackground05, paddingRight: vars.spacing.small.maxi }]}>
+                <View
+                    style={[
+                        flexRow,
+                        {
+                            backgroundColor: vars.darkBlueBackground05,
+                            paddingRight: vars.spacing.small.maxi
+                        }
+                    ]}>
                     <View style={{ marginHorizontal: vars.spacing.medium.mini2x }}>
                         <AvatarCircle large invited contact={contact} />
                     </View>
@@ -48,25 +57,48 @@ export default class ContactView extends SafeComponent {
                                 color: vars.txtDark,
                                 fontSize: vars.font.size16,
                                 marginVertical: vars.spacing.small.mini2x
-                            }}>{contact.email}</Text>
+                            }}>
+                            {contact.email}
+                        </Text>
                     </View>
                 </View>
                 <View style={{ flex: 1, flexGrow: 1 }} />
-            </View>);
+            </View>
+        );
     }
 
     renderContact(contact) {
-        const { username, firstName, lastName, tofuError, fingerprintSkylarFormatted, isAdded, isDeleted } = contact;
+        const {
+            username,
+            firstName,
+            lastName,
+            tofuError,
+            fingerprintSkylarFormatted,
+            isAdded,
+            isDeleted
+        } = contact;
         const tofuErrorControl = tofuError && (
-            <View style={{ backgroundColor: vars.redWarning, flexGrow: 1, padding: vars.spacing.small.maxi }}>
+            <View
+                style={{
+                    backgroundColor: vars.redWarning,
+                    flexGrow: 1,
+                    padding: vars.spacing.small.maxi
+                }}>
                 <Text style={{ color: vars.white }}>
-                    This contact{'\''}s public key has changed, which means it may be compromised.
+                    This contact{"'"}s public key has changed, which means it may be compromised.
                 </Text>
             </View>
         );
         const body = (
             <View style={{ flex: 1, flexGrow: 1 }}>
-                <View style={[flexRow, { backgroundColor: vars.darkBlueBackground05, paddingRight: vars.spacing.small.maxi }]}>
+                <View
+                    style={[
+                        flexRow,
+                        {
+                            backgroundColor: vars.darkBlueBackground05,
+                            paddingRight: vars.spacing.small.maxi
+                        }
+                    ]}>
                     <View style={{ marginHorizontal: vars.spacing.medium.mini2x }}>
                         <AvatarCircle large contact={contact} />
                     </View>
@@ -79,26 +111,60 @@ export default class ContactView extends SafeComponent {
                                 color: vars.txtDark,
                                 fontSize: vars.font.size16,
                                 marginVertical: vars.spacing.small.mini2x
-                            }}>{firstName} {lastName}</Text>
+                            }}>
+                            {firstName} {lastName}
+                        </Text>
                         <Text style={{ color: vars.txtDark }}>@{username}</Text>
                     </View>
                     {icons.dark('forum', () => this.startChat())}
-                    {isAdded ? icons.colored('star', () => this.toggleFav(), vars.yellow, null, false, 'favoriteButton') :
-                        icons.dark('star-border', () => this.toggleFav(), null, null, 'favoriteButton', false)}
+                    {isAdded
+                        ? icons.colored(
+                              'star',
+                              () => this.toggleFav(),
+                              vars.yellow,
+                              null,
+                              false,
+                              'favoriteButton'
+                          )
+                        : icons.dark(
+                              'star-border',
+                              () => this.toggleFav(),
+                              null,
+                              null,
+                              'favoriteButton',
+                              false
+                          )}
                 </View>
                 <View style={{ margin: vars.spacing.medium.maxi2x }}>
                     {tofuErrorControl}
-                    {isDeleted && <Text style={{ color: vars.txtAlert }}>{t('title_accountDeleted')}</Text>}
-                    <Text style={{ color: vars.txtDate, marginVertical: vars.spacing.small.maxi }}>{t('title_publicKey')}</Text>
-                    <Text style={{ color: vars.txtMedium, fontFamily: `Verdana`, fontSize: vars.font.size16 }} numberOfLines={2}>
+                    {isDeleted && (
+                        <Text style={{ color: vars.txtAlert }}>{t('title_accountDeleted')}</Text>
+                    )}
+                    <Text style={{ color: vars.txtDate, marginVertical: vars.spacing.small.maxi }}>
+                        {t('title_publicKey')}
+                    </Text>
+                    <Text
+                        style={{
+                            color: vars.txtMedium,
+                            fontFamily: `Verdana`,
+                            fontSize: vars.font.size16
+                        }}
+                        numberOfLines={2}>
                         {fingerprintSkylarFormatted}
                     </Text>
                 </View>
                 <View style={{ flex: 1, flexGrow: 1 }} />
             </View>
         );
-        return this.props.nonModal ? body
-            : <LayoutModalExit body={body} title={username} onClose={() => contactState.routerModal.discard()} />;
+        return this.props.nonModal ? (
+            body
+        ) : (
+            <LayoutModalExit
+                body={body}
+                title={username}
+                onClose={() => contactState.routerModal.discard()}
+            />
+        );
     }
 
     renderThrow() {

@@ -12,7 +12,13 @@ import { vars } from '../../styles/styles';
 export default class LayoutModalExit extends SafeComponent {
     exitRow() {
         const { title, rightIcon } = this.props;
-        const leftIcon = icons.dark('close', this.props.onClose, undefined, undefined, 'closeModal');
+        const leftIcon = icons.dark(
+            'close',
+            this.props.onClose,
+            undefined,
+            undefined,
+            'closeModal'
+        );
         const fontSize = vars.font.size14;
         const outerStyle = { marginBottom: 0 };
         return <ModalHeader {...{ leftIcon, rightIcon, title, fontSize, outerStyle }} />;
@@ -23,17 +29,11 @@ export default class LayoutModalExit extends SafeComponent {
             borderBottomWidth: 1,
             borderBottomColor: 'rgba(0, 0, 0, .12)'
         };
-        return (
-            <View style={s}>{content}</View>
-        );
+        return <View style={s}>{content}</View>;
     }
 
     header() {
-        return (
-            <View>
-                {this.lineBlock(this.exitRow())}
-            </View>
-        );
+        return <View>{this.lineBlock(this.exitRow())}</View>;
     }
 
     renderThrow() {
@@ -47,7 +47,8 @@ export default class LayoutModalExit extends SafeComponent {
                 noFitHeight
                 body={this.props.body}
                 header={header}
-                style={layoutStyle} />
+                style={layoutStyle}
+            />
         );
     }
 }

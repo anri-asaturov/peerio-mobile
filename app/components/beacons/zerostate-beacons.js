@@ -41,8 +41,11 @@ const addContactBeacon = createZeroStateBeacon({
         const firstLoginContacts = routes.main.route.toLowerCase().includes('contact');
         const noAddedContacts = contactStore.contacts.length === 0;
 
-        return !preferenceStore.prefs.importContactsInBackground
-            && firstLoginContacts && noAddedContacts;
+        return (
+            !preferenceStore.prefs.importContactsInBackground &&
+            firstLoginContacts &&
+            noAddedContacts
+        );
     },
     priority: 2,
     component: SpotBeacon,

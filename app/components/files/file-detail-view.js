@@ -36,26 +36,33 @@ const centered = {
 
 @observer
 export default class FileDetailView extends SafeComponent {
-    get file() { return fileState.currentFile || {}; }
-
-    get rightIcon() { return (<MenuIcon action={() => FileActionSheet.show(this.file, false, 'files')} />); }
-
-    get enabled() {
-        return this.file && this.file.readyForDownload || fileState.showSelection;
+    get file() {
+        return fileState.currentFile || {};
     }
 
-    @action.bound onCancel() {
+    get rightIcon() {
+        return <MenuIcon action={() => FileActionSheet.show(this.file, false, 'files')} />;
+    }
+
+    get enabled() {
+        return (this.file && this.file.readyForDownload) || fileState.showSelection;
+    }
+
+    @action.bound
+    onCancel() {
         fileState.cancelDownload(this.file);
     }
 
-    @action.bound onOpen() {
+    @action.bound
+    onOpen() {
         const { file } = this;
         file.launchViewer().catch(() => {
             snackbarState.pushTemporary(tx('snackbar_couldntOpenFile'));
         });
     }
 
-    @action.bound onDownload() {
+    @action.bound
+    onDownload() {
         fileState.download(this.file);
     }
 
@@ -63,14 +70,42 @@ export default class FileDetailView extends SafeComponent {
         const { file, enabled } = this;
 
         let button;
-        if (file.downloading) button = <ButtonText text={tx('button_cancel')} onPress={this.onCancel} disabled={!enabled} />;
-        else if (file.hasFileAvailableForPreview) button = <ButtonText text={tx('button_open')} onPress={this.onOpen} disabled={!enabled} testID="open" />;
-        else button = <ButtonText text={tx('button_download')} onPress={this.onDownload} disabled={!enabled} testID="download" />;
+        if (file.downloading)
+            button = (
+                <ButtonText
+                    text={tx('button_cancel')}
+                    onPress={this.onCancel}
+                    disabled={!enabled}
+                />
+            );
+        else if (file.hasFileAvailableForPreview)
+            button = (
+                <ButtonText
+                    text={tx('button_open')}
+                    onPress={this.onOpen}
+                    disabled={!enabled}
+                    testID="open"
+                />
+            );
+        else
+            button = (
+                <ButtonText
+                    text={tx('button_download')}
+                    onPress={this.onDownload}
+                    disabled={!enabled}
+                    testID="download"
+                />
+            );
 
         return (
-            <View style={{ flexGrow: 1, justifyContent: 'center', backgroundColor: vars.darkBlueBackground05 }}>
+            <View
+                style={{
+                    flexGrow: 1,
+                    justifyContent: 'center',
+                    backgroundColor: vars.darkBlueBackground05
+                }}>
                 <View style={centered}>
-                    {<FileTypeIcon size="medium" type={fileHelpers.getFileIconType(file.ext)} /> }
+                    {<FileTypeIcon size="medium" type={fileHelpers.getFileIconType(file.ext)} />}
                 </View>
                 <View style={fileProgressContainer}>
                     {file.downloading && <FileProgress file={file} />}

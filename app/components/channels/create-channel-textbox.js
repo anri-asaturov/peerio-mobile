@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, TextInput, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { action } from 'mobx';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const height = vars.inputHeight;
 const fontSize = vars.font.size14;
@@ -44,22 +45,30 @@ const titleStyle = {
 
 @observer
 export default class CreateChannelTextBox extends Component {
-    @action.bound changeText(text) {
+    @action.bound
+    changeText(text) {
         this.props.state[this.props.property] = text;
     }
 
     render() {
-        const { labelText, placeholderText, property, bottomText, maxLength, multiline } = this.props;
+        const {
+            labelText,
+            placeholderText,
+            property,
+            bottomText,
+            maxLength,
+            multiline
+        } = this.props;
         const testID = `textInput-${property}`;
         // hack for v-align, padding top and bottom need to be specified
         let paddingTop = 0;
-        if (Platform.OS === 'ios' && multiline) paddingTop = ((height - fontSize) / 2 - 1);
+        if (Platform.OS === 'ios' && multiline) paddingTop = (height - fontSize) / 2 - 1;
         const style = [placeholderStyle, { paddingTop, paddingBottom: 0 }];
         return (
             <View>
                 <View style={container}>
                     <Text style={titleStyle}>{tx(labelText)}</Text>
-                    <TextInput
+                    <TextInputUncontrolled
                         underlineColorAndroid="transparent"
                         value={this[property]}
                         returnKeyType="done"
@@ -71,7 +80,8 @@ export default class CreateChannelTextBox extends Component {
                         style={style}
                         maxLength={maxLength}
                         multiline={multiline}
-                        {...testLabel(testID)} />
+                        {...testLabel(testID)}
+                    />
                 </View>
                 <Text style={bottomTextStyle}>{tx(bottomText)}</Text>
             </View>

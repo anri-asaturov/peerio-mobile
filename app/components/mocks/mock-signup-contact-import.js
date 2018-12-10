@@ -13,8 +13,6 @@ export default class MockSignupContactInvite extends Component {
     }
 
     render() {
-        return (
-            <SignupContactAdd />
-        );
+        return <SignupContactAdd />;
     }
 }

@@ -13,9 +13,7 @@ export default class FoldersActionSheet {
         const { hasLegacyFiles, isShared, owner } = folder;
         const isOwner = !owner || owner === User.current.username;
 
-        const header = (
-            <FileActionSheetHeader file={folder} />
-        );
+        const header = <FileActionSheetHeader file={folder} />;
         const folderShareAction = {
             title: 'button_share',
             disabled: hasLegacyFiles,
@@ -41,7 +39,9 @@ export default class FoldersActionSheet {
                         '',
                         fileHelpers.getFileNameWithoutExtension(folder.name)
                     );
-                    if (newFolderName) { await folder.rename(`${newFolderName}`); }
+                    if (newFolderName) {
+                        await folder.rename(`${newFolderName}`);
+                    }
                 }
             }
         ];

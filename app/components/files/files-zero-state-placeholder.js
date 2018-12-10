@@ -6,6 +6,7 @@ import SafeComponent from '../shared/safe-component';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 import ViewWithDrawer from '../shared/view-with-drawer';
+import testLabel from '../helpers/test-label';
 
 const fileUploadZeroState = require('../../assets/file-upload-zero-state.png');
 
@@ -40,34 +41,29 @@ export default class FilesPlaceholder extends SafeComponent {
 
     get title() {
         if (this.props.emptyFolder) {
-            return (<Text style={[headerStyle, { marginVertical: vars.spacing.large.midi }]} bold>
-                {tx('title_emptyFolder')}
-            </Text>);
+            return (
+                <Text style={[headerStyle, { marginVertical: vars.spacing.large.midi }]} bold>
+                    {tx('title_emptyFolder')}
+                </Text>
+            );
         }
         return (
             <View>
                 <Text style={headerStyle} bold>
                     {tx('title_zeroFiles')}
                 </Text>
-                <Text style={labelStyle}>
-                    {tx('title_zeroFilesSubtitle')}
-                </Text>
+                <Text style={labelStyle}>{tx('title_zeroFilesSubtitle')}</Text>
             </View>
         );
     }
 
     renderThrow() {
         return (
-            <ViewWithDrawer>
+            <ViewWithDrawer {...testLabel('filesZeroState')}>
                 <View style={outerContainer}>
                     {this.title}
-                    <Image
-                        source={fileUploadZeroState}
-                        resizeMode="contain"
-                        style={imageStyle} />
-                    <Text style={labelStyle}>
-                        {tx('description_empty_folder')}
-                    </Text>
+                    <Image source={fileUploadZeroState} resizeMode="contain" style={imageStyle} />
+                    <Text style={labelStyle}>{tx('description_empty_folder')}</Text>
                 </View>
             </ViewWithDrawer>
         );

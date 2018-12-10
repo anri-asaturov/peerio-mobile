@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
@@ -17,7 +16,9 @@ function backFromChat(invitation) {
 
 @observer
 export default class MedcryptorChannelInvite extends ChannelInvite {
-    get invitation() { return invitationState.currentInvitation; }
+    get invitation() {
+        return invitationState.currentInvitation;
+    }
 
     get leftIcon() {
         return <BackIcon testID="buttonBackIcon" action={() => backFromChat(this.invitation)} />;
@@ -43,7 +44,8 @@ export default class MedcryptorChannelInvite extends ChannelInvite {
         return label;
     }
 
-    @action.bound declineInvite() {
+    @action.bound
+    declineInvite() {
         uiState.declinedChannelId = this.invitation.kegDbId;
         backFromChat(this.invitation);
     }

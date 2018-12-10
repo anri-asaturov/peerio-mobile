@@ -90,22 +90,23 @@ export default class MedcryptorSpaceListItem extends SafeComponent {
                     <View style={nameContainerStyle}>
                         <Text
                             semibold={hasUnread}
-                            style={[textStyle, (hasUnread && textUnreadStyle)]}>
+                            style={[textStyle, hasUnread && textUnreadStyle]}>
                             {`${spaceName}`}
                         </Text>
                         {icons.dark('chevron-right', this.onPress)}
                     </View>
-                    {hasInvites && <View style={newCircleStyle}>
-                        <Text style={textNewStyle}>
-                            {t('title_new')}
-                        </Text>
-                    </View>}
-                    {hasUnread && <View style={circleStyle}>
-                        <Text semibold style={textCircleStyle}>
-                            {unreadCount}
-                        </Text>
-                    </View>}
-
+                    {hasInvites && (
+                        <View style={newCircleStyle}>
+                            <Text style={textNewStyle}>{t('title_new')}</Text>
+                        </View>
+                    )}
+                    {hasUnread && (
+                        <View style={circleStyle}>
+                            <Text semibold style={textCircleStyle}>
+                                {unreadCount}
+                            </Text>
+                        </View>
+                    )}
                 </TouchableOpacity>
             </View>
         );

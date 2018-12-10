@@ -28,9 +28,7 @@ export default class CheckBox extends Component {
         const { alignLeft } = this.props;
         const { isChecked } = this;
         const borderColor = isChecked ? vars.peerioBlue : 'gray';
-        const backgroundColor = isChecked
-            ? vars.peerioBlueBackground15
-            : undefined;
+        const backgroundColor = isChecked ? vars.peerioBlueBackground15 : undefined;
         const container = {
             flexDirection: 'row',
             flexGrow: 1,
@@ -60,9 +58,7 @@ export default class CheckBox extends Component {
                 {alignLeft ? (
                     <View style={container}>
                         <View style={checkbox}>
-                            {isChecked && (
-                                <Icon name="check" color={borderColor} />
-                            )}
+                            {isChecked && <Icon name="check" color={borderColor} />}
                         </View>
                         <Text style={text}>{this.props.text}</Text>
                     </View>
@@ -70,9 +66,7 @@ export default class CheckBox extends Component {
                     <View style={container}>
                         <Text style={text}>{this.props.text}</Text>
                         <View style={checkbox}>
-                            {isChecked && (
-                                <Icon name="check" color={borderColor} />
-                            )}
+                            {isChecked && <Icon name="check" color={borderColor} />}
                         </View>
                     </View>
                 )}

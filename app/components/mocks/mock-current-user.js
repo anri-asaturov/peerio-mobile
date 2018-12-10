@@ -24,9 +24,7 @@ class MockCurrentUser {
             username,
             firstName,
             lastName,
-            addresses: [
-                address
-            ],
+            addresses: [address],
             loading: false,
             notFound: false,
             fullName: `${firstName} ${lastName}`

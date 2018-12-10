@@ -15,7 +15,8 @@ export default class FileShare extends Component {
                 action={this.action}
                 title="title_shareWith"
                 inputPlaceholder="title_TryUsernameOrEmail"
-                limit={chatState.LIMIT_PEOPLE_DM} />
+                limit={chatState.LIMIT_PEOPLE_DM}
+            />
         );
     }
 }

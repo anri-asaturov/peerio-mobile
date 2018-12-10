@@ -35,4 +35,3 @@ export default class Circle extends SafeComponent {
         );
     }
 }
-

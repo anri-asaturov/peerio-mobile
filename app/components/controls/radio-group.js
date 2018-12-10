@@ -34,28 +34,21 @@ export default class RadioGroup extends SafeComponent {
         const { selectedIndex } = this.state;
         const targetIndex = selectedIndex !== -1 ? selectedIndex : this.props.defaultSelect;
 
-        const views = this.props.options.map((text, index) =>
-            (<RadioButton
+        const views = this.props.options.map((text, index) => (
+            <RadioButton
                 key={text}
                 onPress={() => this._onSelect(index)}
-                isSelected={index === targetIndex}
-            >
-                <View style={radioText} >
+                isSelected={index === targetIndex}>
+                <View style={radioText}>
                     <Text style={{ color: vars.textBlack87 }}>{tx(text)}</Text>
                 </View>
             </RadioButton>
-            ),
-        );
+        ));
 
-        return (
-            <View>
-                {views}
-            </View>
-        );
+        return <View>{views}</View>;
     }
 }
 
 RadioGroup.defaultProps = {
     defaultSelect: -1
 };
-

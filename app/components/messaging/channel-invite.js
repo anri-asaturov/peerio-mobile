@@ -98,31 +98,45 @@ const moreText = {
 export default class ChannelInvite extends SafeComponent {
     @observable waiting = false;
 
-    get invitation() { return invitationState.currentInvitation; }
+    get invitation() {
+        return invitationState.currentInvitation;
+    }
 
-    get leftIcon() { return <BackIcon action={routes.main.chats} />; }
+    get leftIcon() {
+        return <BackIcon action={routes.main.chats} />;
+    }
 
     get illustration() {
         return (
             <View style={imageContainer}>
-                <Image source={roomInviteIllustration}
-                    style={[adjustImageDimensions(roomInviteIllustration, width - vars.spacing.medium.mini2x * 2, null),
-                        { marginBottom: vars.spacing.small.mini2x, marginHorizontal: vars.spacing.medium.mini2x }
+                <Image
+                    source={roomInviteIllustration}
+                    style={[
+                        adjustImageDimensions(
+                            roomInviteIllustration,
+                            width - vars.spacing.medium.mini2x * 2,
+                            null
+                        ),
+                        {
+                            marginBottom: vars.spacing.small.mini2x,
+                            marginHorizontal: vars.spacing.medium.mini2x
+                        }
                     ]}
-                    resizeMode="contain" />
-            </View>);
+                    resizeMode="contain"
+                />
+            </View>
+        );
     }
 
     get heading() {
         return (
             <View style={headingContainer}>
-                <Text style={headingStyle}>
-                    {tx('title_roomInviteHeading')}
-                </Text>
+                <Text style={headingStyle}>{tx('title_roomInviteHeading')}</Text>
                 <Text bold style={headingStyle}>
                     #{this.invitation.channelName}
                 </Text>
-            </View>);
+            </View>
+        );
     }
 
     get participants() {
@@ -143,36 +157,44 @@ export default class ChannelInvite extends SafeComponent {
             <View style={infoSection}>
                 <View style={{ alignItems: 'center' }}>
                     <View style={infoText}>
-                        <Text style={hostedByStyle}>
-                            {tx('title_whoIsAlreadyIn')}
-                        </Text>
-                        <Text style={hostNameStyle}>
-                            &nbsp;#{this.invitation.channelName}
-                        </Text>
+                        <Text style={hostedByStyle}>{tx('title_whoIsAlreadyIn')}</Text>
+                        <Text style={hostNameStyle}>&nbsp;#{this.invitation.channelName}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
-                        <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: vars.spacing.medium.mini2x }}>
+                        <View
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginRight: vars.spacing.medium.mini2x
+                            }}>
                             <AvatarCircle contact={host} />
                             <GrayLabel contact={host} label="title_admin" />
                         </View>
                         {toRender.map(participant => (
-                            <View key={participant} style={{ marginLeft: -vars.spacing.small.midi }}>
-                                <AvatarCircle key={participant} contact={contactStore.getContact(participant)} />
+                            <View
+                                key={participant}
+                                style={{ marginLeft: -vars.spacing.small.midi }}>
+                                <AvatarCircle
+                                    key={participant}
+                                    contact={contactStore.getContact(participant)}
+                                />
                             </View>
                         ))}
-                        {notShown > 0 &&
+                        {notShown > 0 && (
                             <View style={moreContainer}>
                                 <Text bold style={moreText}>
                                     {`+${notShown}`}
                                 </Text>
-                            </View>}
+                            </View>
+                        )}
                     </View>
                 </View>
             </View>
         );
     }
 
-    @action.bound async acceptInvite() {
+    @action.bound
+    async acceptInvite() {
         const chatId = this.invitation.kegDbId;
         chatInviteStore.acceptInvite(chatId);
         let newChat = null;
@@ -187,7 +209,8 @@ export default class ChannelInvite extends SafeComponent {
         routes.main.chats(newChat);
     }
 
-    @action.bound declineInvite() {
+    @action.bound
+    declineInvite() {
         uiState.declinedChannelId = this.invitation.kegDbId;
         routes.main.chats();
     }
@@ -209,7 +232,8 @@ export default class ChannelInvite extends SafeComponent {
                     'accept',
                     { marginHorizontal: vars.spacing.small.midi2x }
                 )}
-            </View>);
+            </View>
+        );
     }
 
     renderThrow() {
@@ -223,6 +247,7 @@ export default class ChannelInvite extends SafeComponent {
                 {this.participants}
                 {this.buttons}
                 <ProgressOverlay enabled={this.waiting} />
-            </View>);
+            </View>
+        );
     }
 }

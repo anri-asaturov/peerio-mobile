@@ -2,7 +2,7 @@ const Page = require('../page');
 
 class FilesListPage extends Page {
     get placeholder() {
-        return this.getWhenVisible('~title_uploadSomething');
+        return this.getWhenVisible('~filesZeroState');
     }
 
     folderNamed(selector) {
@@ -31,10 +31,6 @@ class FilesListPage extends Page {
 
     get fileNameInput() {
         return this.getWhenVisible('~title_name');
-    }
-
-    get firstFile() {
-        return this.getWhenVisible('~file0');
     }
 
     get fileUploadedPopup() {

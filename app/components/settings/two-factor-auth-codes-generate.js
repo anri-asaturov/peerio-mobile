@@ -62,10 +62,16 @@ export default class TwoFactorAuthCodesGenerate extends SafeComponent {
                             () => this.reissueCodes(),
                             null,
                             null,
-                            { width: vars.wideRoundedButtonWidth })}
+                            { width: vars.wideRoundedButtonWidth }
+                        )}
                     </View>
                 </View>
-                <View style={{ left: paddingHorizontal + 12, bottom: paddingVertical, position: 'absolute' }}>
+                <View
+                    style={{
+                        left: paddingHorizontal + 12,
+                        bottom: paddingVertical,
+                        position: 'absolute'
+                    }}>
                     {buttons.redTextButton('title_2FADisableAuth', this.disable2fa)}
                 </View>
             </View>

@@ -14,14 +14,20 @@ export default class ComposeMessage extends Component {
 
     get roomRedirectText() {
         return (
-            <View style={{ marginTop: vars.spacing.small.midi2x, flexDirection: 'row', justifyContent: 'center' }}>
+            <View
+                style={{
+                    marginTop: vars.spacing.small.midi2x,
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
                 <Text style={{ fontSize: vars.font.size14, color: vars.subtleText }}>
                     {tx('title_chatWithGroup')}
                 </Text>
                 <Text style={{ fontSize: vars.font.size14, color: vars.peerioBlue }}>
                     {tx('title_createRoom')}
                 </Text>
-            </View>);
+            </View>
+        );
     }
 
     render() {
@@ -32,7 +38,8 @@ export default class ComposeMessage extends Component {
                 action={contacts => chatState.startChat(contacts)}
                 inputPlaceholder="title_TryUsernameOrEmail"
                 title="title_newDirectMessage"
-                limit={chatState.LIMIT_PEOPLE_DM} />
+                limit={chatState.LIMIT_PEOPLE_DM}
+            />
         );
     }
 }

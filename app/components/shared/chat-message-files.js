@@ -11,9 +11,9 @@ export default class ChatMessageFiles extends SafeComponent {
     get files() {
         const { message, chat } = this.props;
 
-        const allFiles = message.files
-            .map(id => fileState.store.getByIdInChat(id, chat.id))
-            .filter(f => f) || [];
+        const allFiles =
+            message.files.map(id => fileState.store.getByIdInChat(id, chat.id)).filter(f => f) ||
+            [];
 
         const nonImageFiles = allFiles.filter(f => !f.isImage) || [];
 
@@ -29,7 +29,8 @@ export default class ChatMessageFiles extends SafeComponent {
                 file={file}
                 onActionSheet={onFileAction}
                 onLegacyFileAction={onLegacyFileAction}
-                chatId={chat.id} />
+                chatId={chat.id}
+            />
         ));
     }
 
@@ -37,11 +38,7 @@ export default class ChatMessageFiles extends SafeComponent {
         const { message } = this.props;
         if (!message.files || !message.files.length) return null;
 
-        return (
-            <View>
-                {this.renderFiles}
-            </View>
-        );
+        return <View>{this.renderFiles}</View>;
     }
 }
 

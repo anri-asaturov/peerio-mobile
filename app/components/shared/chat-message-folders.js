@@ -10,17 +10,14 @@ export default class ChatMessageFolders extends SafeComponent {
     get folders() {
         const { folders, chat } = this.props;
         return folders.map(folderId => (
-            <FolderInlineContainer
-                key={folderId}
-                folderId={folderId}
-                chat={chat} />
+            <FolderInlineContainer key={folderId} folderId={folderId} chat={chat} />
         ));
     }
 
     renderThrow() {
         const { folders } = this.props;
         if (!folders || !folders.length) return null;
-        return (<View>{this.folders}</View>);
+        return <View>{this.folders}</View>;
     }
 }
 

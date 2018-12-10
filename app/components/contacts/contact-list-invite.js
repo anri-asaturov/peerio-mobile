@@ -13,16 +13,18 @@ const INITIAL_LIST_SIZE = 20;
 
 @observer
 export default class ContactListInvite extends SafeComponent {
-    get layoutTitle() { return tx('button_inviteEmailContact'); }
+    get layoutTitle() {
+        return tx('button_inviteEmailContact');
+    }
 
     get leftIcon() {
-        return buttons.whiteTextButton(tx('button_done'), () => contactAddState.routerMain.contacts());
+        return buttons.whiteTextButton(tx('button_done'), () =>
+            contactAddState.routerMain.contacts()
+        );
     }
 
     item({ item }) {
-        return (
-            <ContactInviteItem contact={item} />
-        );
+        return <ContactInviteItem contact={item} />;
     }
 
     header({ section: /* data, */ { key } }) {
@@ -42,18 +44,17 @@ export default class ContactListInvite extends SafeComponent {
                 keyExtractor={item => item.username}
                 renderItem={this.item}
                 renderSectionHeader={this.header}
-                ref={sv => { this.scrollView = sv; }}
+                ref={sv => {
+                    this.scrollView = sv;
+                }}
             />
         );
     }
 
     renderThrow() {
         return (
-            <View
-                style={{ flex: 1 }}>
-                <View style={{ flex: 1 }}>
-                    {this.listView()}
-                </View>
+            <View style={{ flex: 1 }}>
+                <View style={{ flex: 1 }}>{this.listView()}</View>
             </View>
         );
     }

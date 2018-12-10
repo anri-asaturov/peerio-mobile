@@ -33,8 +33,8 @@ export default class BasicSettingsItem extends SafeComponent {
     }
 
     get rightIcon() {
-        return this.props.icon !== null ?
-            icons.dark(this.props.icon || 'keyboard-arrow-right')
+        return this.props.icon !== null
+            ? icons.dark(this.props.icon || 'keyboard-arrow-right')
             : null;
     }
 
@@ -53,19 +53,11 @@ export default class BasicSettingsItem extends SafeComponent {
                 onPress={() => !untappable && !disabled && this.press()}>
                 <View style={itemContainerStyle} pointerEvents={untappable ? undefined : 'none'}>
                     <View style={{ flexGrow: 1, flexShrink: 1 }}>
-                        <Text style={titleStyle}>
-                            {t(title)}
-                        </Text>
-                        {!!description && <Text style={descriptionStyle}>
-                            {description}d
-                        </Text>}
+                        <Text style={titleStyle}>{t(title)}</Text>
+                        {!!description && <Text style={descriptionStyle}>{description}d</Text>}
                     </View>
-                    <View style={{ flex: 0 }}>
-                        {children}
-                    </View>
-                    <View style={{ flex: 0 }}>
-                        {rightIcon}
-                    </View>
+                    <View style={{ flex: 0 }}>{children}</View>
+                    <View style={{ flex: 0 }}>{rightIcon}</View>
                 </View>
             </TouchableOpacity>
         );

@@ -9,9 +9,6 @@ export default class CustomOverlay extends SafeComponent {
     renderThrow() {
         if (!uiState.customOverlayComponent) return null;
         const container = { alignItems: 'center' };
-        return (
-            <View style={container}>
-                {uiState.customOverlayComponent}
-            </View>);
+        return <View style={container}>{uiState.customOverlayComponent}</View>;
     }
 }

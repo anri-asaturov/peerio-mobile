@@ -38,13 +38,15 @@ export default class MedcryptorLoadingScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.fadeValue = new Animated.Value(0.70);
+        this.fadeValue = new Animated.Value(0.7);
         this.growValue = new Animated.Value(1);
         this.animationStyle = {
             transform: [{ scale: this.growValue }],
             opacity: this.fadeValue
         };
-        this.randomMessage = tx(this.randomMessages[Math.floor(Math.random() * this.randomMessages.length)]);
+        this.randomMessage = tx(
+            this.randomMessages[Math.floor(Math.random() * this.randomMessages.length)]
+        );
     }
 
     async componentDidMount() {
@@ -59,13 +61,13 @@ export default class MedcryptorLoadingScreen extends Component {
             await promiseWhen(() => routes.main.fileStateLoaded);
             this.goToNextStep();
             await promiseWhen(() => routes.main.contactStateLoaded);
-
-            setTimeout(() => routes.main.transitionToMain(), 0);
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
-            if (!loginState.loaded) routes.app.routes.loginWelcomeBack.transition();
+            if (!loginState.loaded) routes.app.loginWelcomeBack();
             console.error(e);
             return;
+        } finally {
+            this.dismiss();
         }
         this.fadeInOut();
         this.growIcon();
@@ -73,34 +75,28 @@ export default class MedcryptorLoadingScreen extends Component {
 
     fadeInOut() {
         Animated.sequence([
-            Animated.timing(
-                this.fadeValue,
-                {
-                    toValue: 1,
-                    duration: 400,
-                    easing: Easing.linear,
-                    useNativeDriver: true
-                }),
-            Animated.timing(
-                this.fadeValue,
-                {
-                    toValue: 0.70,
-                    duration: 400,
-                    easing: Easing.linear,
-                    useNativeDriver: true
-                })
+            Animated.timing(this.fadeValue, {
+                toValue: 1,
+                duration: 400,
+                easing: Easing.linear,
+                useNativeDriver: true
+            }),
+            Animated.timing(this.fadeValue, {
+                toValue: 0.7,
+                duration: 400,
+                easing: Easing.linear,
+                useNativeDriver: true
+            })
         ]).start(() => this.fadeInOut());
     }
 
     growIcon() {
-        Animated.timing(
-            this.growValue,
-            {
-                toValue: 1.5,
-                duration: 300,
-                easing: Easing.linear,
-                useNativeDriver: true
-            }).start();
+        Animated.timing(this.growValue, {
+            toValue: 1.5,
+            duration: 300,
+            easing: Easing.linear,
+            useNativeDriver: true
+        }).start();
     }
 
     goToNextStep = () => {
@@ -109,30 +105,35 @@ export default class MedcryptorLoadingScreen extends Component {
         this.iconState = this.currentState;
     };
 
-    @computed get currentState() {
+    @computed
+    get currentState() {
         const result = {};
         const numberOfSteps = Object.keys(this.icons).length - 1;
         Object.keys(this.icons).forEach((name, i) => {
             result[name] = {};
             if (!socket.connected) {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
+                if (i === numberOfSteps) result[name].line = null;
+                // Icon on the far right should not have a line
                 else result[name].line = lineDormant;
                 result[name].icon = this.icons[name].source.dormant;
                 result[name].iconStyle = smallIcon;
                 result.statusText = tx('title_waitingToConnect');
             } else if (i < this.loadingStep) {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
+                if (i === numberOfSteps) result[name].line = null;
+                // Icon on the far right should not have a line
                 else result[name].line = this.icons[name].line.done;
                 result[name].icon = this.icons[name].source.done;
                 result[name].iconStyle = smallIcon;
             } else if (i === this.loadingStep) {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
+                if (i === numberOfSteps) result[name].line = null;
+                // Icon on the far right should not have a line
                 else result[name].line = this.icons[name].line.inProgress;
                 result[name].icon = this.icons[name].source.inProgress;
                 result[name].iconStyle = [bigIcon, this.animationStyle];
                 result.statusText = tx(this.icons[name].copy);
             } else {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
+                if (i === numberOfSteps) result[name].line = null;
+                // Icon on the far right should not have a line
                 else result[name].line = lineDormant;
                 result[name].icon = this.icons[name].source.dormant;
                 result[name].iconStyle = smallIcon;
@@ -145,7 +146,7 @@ export default class MedcryptorLoadingScreen extends Component {
         return this.imagesNew[this.loadingStep][imageName];
     }
 
-    renderImages = (name) => {
+    renderImages = name => {
         const lineStyle = {
             height: 3,
             width: 20,
@@ -155,24 +156,39 @@ export default class MedcryptorLoadingScreen extends Component {
         };
         this.iconState = this.currentState;
         return (
-            <View key={name} style={{ flexDirection: 'row', height: vars.iconSizeLarge, justifyContent: 'center', alignItems: 'center' }}>
+            <View
+                key={name}
+                style={{
+                    flexDirection: 'row',
+                    height: vars.iconSizeLarge,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
                 <Animated.Image
                     key={`${name}Icon`}
                     source={this.iconState[`${name}`].icon}
                     style={this.iconState[`${name}`].iconStyle}
                     resizeMode="contain"
                 />
-                {this.iconState[`${name}`].line && <Image
-                    key={`${name}Line`}
-                    source={this.iconState[`${name}`].line}
-                    style={lineStyle}
-                    resizeMode="contain"
-                />}
+                {this.iconState[`${name}`].line && (
+                    <Image
+                        key={`${name}Line`}
+                        source={this.iconState[`${name}`].line}
+                        style={lineStyle}
+                        resizeMode="contain"
+                    />
+                )}
             </View>
         );
     };
 
+    dismiss() {
+        loginState.showLoadingScreen = false;
+    }
+
     render() {
+        if (!loginState.showLoadingScreen) return null;
+
         const container = {
             backgroundColor: vars.darkBlueBackground05,
             flex: 1,
@@ -207,16 +223,12 @@ export default class MedcryptorLoadingScreen extends Component {
         };
         return (
             <View style={container}>
-                {socket.connected && <Text style={flavorTextStyle}>
-                    {this.randomMessage}
-                </Text>}
+                {socket.connected && <Text style={flavorTextStyle}>{this.randomMessage}</Text>}
                 <View style={loadingProgressContainer}>
                     <View style={iconContainer}>
                         {Object.keys(this.icons).map(this.renderImages)}
                     </View>
-                    <Text style={statusTextStyle}>
-                        {this.iconState.statusText}
-                    </Text>
+                    <Text style={statusTextStyle}>{this.iconState.statusText}</Text>
                 </View>
                 <View style={{ position: 'absolute', bottom: 0, right: 0, left: 0 }}>
                     <SnackBarConnection />

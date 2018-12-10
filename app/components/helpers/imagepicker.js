@@ -9,17 +9,19 @@ const { FilePickerManager } = NativeModules;
 
 let lastCall = null;
 
-const launchGallery = async options => new Promise(resolve =>
-    ImagePicker.launchImageLibrary(options, resolve));
+const launchGallery = async options =>
+    new Promise(resolve => ImagePicker.launchImageLibrary(options, resolve));
 
-const launchCamera = async options => new Promise(resolve =>
-    ImagePicker.launchCamera(options, resolve));
+const launchCamera = async options =>
+    new Promise(resolve => ImagePicker.launchCamera(options, resolve));
 
-const showFilePicker = async () => new Promise(resolve =>
-    FilePickerManager.showFilePicker(null, resolve));
+const showFilePicker = async () =>
+    new Promise(resolve => FilePickerManager.showFilePicker(null, resolve));
 
 function waitForPermissions() {
-    return new Promise(resolve => { lastCall = resolve; });
+    return new Promise(resolve => {
+        lastCall = resolve;
+    });
 }
 
 function normalizeUri(response) {
@@ -55,7 +57,10 @@ async function processResponse(functor, params) {
     }
     // if it's a HEIF or HEIC file, it would still give you path to JPG asset
     // for the sake of compatibility
-    const ext = fileHelpers.getFileExtension(response.path).trim().toLowerCase();
+    const ext = fileHelpers
+        .getFileExtension(response.path)
+        .trim()
+        .toLowerCase();
     if (params && params.isCamera) {
         response.fileName = `${moment(Date.now()).format('llll')}`;
     }

@@ -19,9 +19,13 @@ export default class ChatBeginningNotice extends Component {
         const { chat } = this.props;
         return (
             <Text style={textStyle}>
-                {chatStore.spaces.isPatientRoomOpen && tx('mcr_title_chatHeaderPatientRoom', { patientName: chat.nameInSpace })}
-                {chatStore.spaces.isInternalRoomOpen && tx('mcr_title_chatHeaderInternalRoom', { roomName: chat.nameInSpace })}
-                {!chatStore.spaces.activeSpaceId && chat.isChannel && tx('title_chatBeginningRoom', { chatName: chat.name })}
+                {chatStore.spaces.isPatientRoomOpen &&
+                    tx('mcr_title_chatHeaderPatientRoom', { patientName: chat.nameInSpace })}
+                {chatStore.spaces.isInternalRoomOpen &&
+                    tx('mcr_title_chatHeaderInternalRoom', { roomName: chat.nameInSpace })}
+                {!chatStore.spaces.activeSpaceId &&
+                    chat.isChannel &&
+                    tx('title_chatBeginningRoom', { chatName: chat.name })}
                 {!chat.isChannel && tx('title_chatBeginning', { chatName: chat.name })}
             </Text>
         );

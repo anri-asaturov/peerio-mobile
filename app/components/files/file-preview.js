@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { observable, action, when } from 'mobx';
 import { observer } from 'mobx-react/native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -11,6 +11,7 @@ import SafeComponent from '../shared/safe-component';
 import { fileHelpers, config, warnings } from '../../lib/icebear';
 import Thumbnail from '../shared/thumbnail';
 import testLabel from '../helpers/test-label';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const nameContainer = {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -55,45 +56,64 @@ export default class FilePreview extends SafeComponent {
     @observable previewSmallHeight;
 
     async componentWillMount() {
-        when(() => this.previewContainerWidth && this.width, () => {
-            const { previewContainerWidth, previewContainerHeight, width, height } = this;
-            const dims = vars.optimizeImageSize(width, height, previewContainerWidth, previewContainerHeight);
-            this.previewSmallWidth = dims.width;
-            this.previewSmallHeight = dims.height;
-        });
+        when(
+            () => this.previewContainerWidth && this.width,
+            () => {
+                const { previewContainerWidth, previewContainerHeight, width, height } = this;
+                const dims = vars.optimizeImageSize(
+                    width,
+                    height,
+                    previewContainerWidth,
+                    previewContainerHeight
+                );
+                this.previewSmallWidth = dims.width;
+                this.previewSmallHeight = dims.height;
+            }
+        );
         const { path } = this.props.state;
         const { width, height } = await ImagePicker.getImageDimensions(path);
         Object.assign(this, { width, height });
     }
 
-    @action.bound layoutPreviewContainer(e) {
+    @action.bound
+    layoutPreviewContainer(e) {
         const { width, height } = e.nativeEvent.layout;
         this.previewContainerWidth = width;
         this.previewContainerHeight = height;
     }
 
-    @action.bound launchPreviewViewer() {
-        config.FileStream.launchViewer(this.props.state.path, this.props.state.fileName)
-            .catch(() => {
+    @action.bound
+    launchPreviewViewer() {
+        config.FileStream.launchViewer(this.props.state.path, this.props.state.fileName).catch(
+            () => {
                 warnings.add('snackbar_couldntOpenFile');
-            });
+            }
+        );
     }
 
     get previewImage() {
         const width = thumbnailDim;
         const height = width;
         return (
-            <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={this.launchPreviewViewer}>
+            <TouchableOpacity
+                pressRetentionOffset={vars.retentionOffset}
+                onPress={this.launchPreviewViewer}>
                 <Thumbnail path={this.props.state.path} style={{ width, height }} />
             </TouchableOpacity>
         );
     }
 
+    onChangeText = text => {
+        this.props.state.name = text;
+    };
+
     renderThrow() {
         const { state } = this.props;
-        const fileImagePlaceholder = fileHelpers.isImage(state.ext)
-            ? this.previewImage
-            : <FileTypeIcon type={fileHelpers.getFileIconType(state.ext)} size="medium" />;
+        const fileImagePlaceholder = fileHelpers.isImage(state.ext) ? (
+            this.previewImage
+        ) : (
+            <FileTypeIcon type={fileHelpers.getFileIconType(state.ext)} size="small" />
+        );
 
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -104,17 +124,17 @@ export default class FilePreview extends SafeComponent {
                     <Text style={{ fontSize: vars.font.size12, color: vars.txtLightGrey }}>
                         {tx('title_name')}
                     </Text>
-                    <TextInput
+                    <TextInputUncontrolled
                         {...testLabel('title_name')}
                         autoCorrect={false}
                         autoCapitalize="sentences"
                         value={state.name}
-                        onChangeText={text => { state.name = text; }}
+                        onChangeText={this.onChangeText}
                         underlineColorAndroid="transparent"
-                        style={inputStyle} />
+                        style={inputStyle}
+                    />
                 </View>
             </View>
         );
     }
 }
-

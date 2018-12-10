@@ -41,10 +41,6 @@ class ChatPage extends Page {
         return this.getWhenVisible('~popupButton-Leave');
     }
 
-    get alertLeftRoom() {
-        return this.getWhenVisible('~popupButton-ok');
-    }
-
     get invitedContactRemoved() {
         return this.app.waitForVisible('~test_recipient-memberList', 5000, true);
     }
@@ -67,6 +63,14 @@ class ChatPage extends Page {
 
     get dismissDmPlaceholder() {
         return this.getWhenVisible('~button_dismiss');
+    }
+
+    get shareFileInChatBeaconVisible() {
+        return this.checkIfVisible('~shareFileInChat');
+    }
+
+    get shareFileInChatBeacon() {
+        return this.getWhenVisible('~shareFileInChat');
     }
 }
 

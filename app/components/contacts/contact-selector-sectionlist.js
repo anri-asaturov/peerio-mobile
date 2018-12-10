@@ -16,14 +16,15 @@ export default class ContactSelectorSectionList extends Component {
         return item.username || item.email;
     }
 
-    item = (params) => {
+    item = params => {
         const { item } = params;
         const { username, email } = item;
         if (!username) {
             return (
                 <ContactInviteItem
                     contact={ContactInviteItem.fromEmail(email)}
-                    backgroundColor={vars.darkBlueBackground05} />
+                    backgroundColor={vars.darkBlueBackground05}
+                />
             );
         }
         return (
@@ -31,7 +32,8 @@ export default class ContactSelectorSectionList extends Component {
                 <ContactCard
                     contact={item}
                     onPress={() => this.props.onPress(item)}
-                    backgroundColor={vars.darkBlueBackground05} />
+                    backgroundColor={vars.darkBlueBackground05}
+                />
             </View>
         );
     };
@@ -46,9 +48,7 @@ export default class ContactSelectorSectionList extends Component {
         };
         return (
             <View style={container}>
-                <Text bold>
-                    {tx(key, { found: data && data.length })}
-                </Text>
+                <Text bold>{tx(key, { found: data && data.length })}</Text>
             </View>
         );
     }
@@ -67,4 +67,3 @@ export default class ContactSelectorSectionList extends Component {
         );
     }
 }
-

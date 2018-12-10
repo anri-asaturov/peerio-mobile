@@ -31,14 +31,19 @@ class MockChannel {
     @observable unreadCount = 0;
     @observable headLoaded = true;
 
-    get allJoinedParticipants() { return this.participants; }
-    get otherParticipants() { return this.participants; }
+    get allJoinedParticipants() {
+        return this.participants;
+    }
+    get otherParticipants() {
+        return this.participants;
+    }
 
-
-    constructor() {
+    constructor(name) {
         TinyDb.userCollection = TinyDb.open('testuser');
         this.initParticipants();
         this.id = randomWords({ min: 7, max: 7, join: ':' });
+
+        if (name) this.name = name;
 
         for (let i = 0; i < 10; ++i) {
             this.addInlineImageMessage();

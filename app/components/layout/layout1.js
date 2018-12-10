@@ -15,28 +15,34 @@ export default class Layout1 extends SafeComponent {
 
     componentDidMount() {
         uiState.currentScrollView = this._scrollView;
-        this.keyboardReaction = reaction(() => [uiState.keyboardHeight, uiState.focusedTextBox], () => {
-            if (!this.props.autoScroll) return;
-            // console.debug('layout1.js: keyboard height or focused textbox changed');
-            if (uiState.focusedTextBox) {
-                // console.debug('layout1.js: trying to measure textbox');
-                uiState.focusedTextBox.measure((fx, fy, width, height, px, py) => {
-                    const padding = height + uiState.height / 8;
-                    const preferrableY = uiState.height - padding - uiState.keyboardHeight;
-                    // console.debug(`layout1.js: preferrable Y: ${preferrableY}`);
-                    // console.debug(`layout1.js: py: ${py}`);
-                    if (uiState.keyboardHeight > 0) {
-                        if (py > preferrableY) {
-                            this._scrollView.scrollTo({ y: py - preferrableY });
-                            when(() => uiState.keyboardHeight === 0, () => this._scrollView.scrollTo({ y: 0 }));
+        this.keyboardReaction = reaction(
+            () => [uiState.keyboardHeight, uiState.focusedTextBox],
+            () => {
+                if (!this.props.autoScroll) return;
+                // console.debug('layout1.js: keyboard height or focused textbox changed');
+                if (uiState.focusedTextBox) {
+                    // console.debug('layout1.js: trying to measure textbox');
+                    uiState.focusedTextBox.measure((fx, fy, width, height, px, py) => {
+                        const padding = height + uiState.height / 8;
+                        const preferrableY = uiState.height - padding - uiState.keyboardHeight;
+                        // console.debug(`layout1.js: preferrable Y: ${preferrableY}`);
+                        // console.debug(`layout1.js: py: ${py}`);
+                        if (uiState.keyboardHeight > 0) {
+                            if (py > preferrableY) {
+                                this._scrollView.scrollTo({ y: py - preferrableY });
+                                when(
+                                    () => uiState.keyboardHeight === 0,
+                                    () => this._scrollView.scrollTo({ y: 0 })
+                                );
+                            }
+                            if (py < 0) {
+                                this._scrollView.scrollTo({ y: 0 });
+                            }
                         }
-                        if (py < 0) {
-                            this._scrollView.scrollTo({ y: 0 });
-                        }
-                    }
-                });
+                    });
+                }
             }
-        });
+        );
     }
 
     componentWillUnmount() {
@@ -67,11 +73,15 @@ export default class Layout1 extends SafeComponent {
         return (
             <MenuContext>
                 <View
-                    onLayout={event => { this.height = event.nativeEvent.layout.height; }}
+                    onLayout={event => {
+                        this.height = event.nativeEvent.layout.height;
+                    }}
                     style={[boxStyle, this.props.style]}>
                     {this.props.header}
                     <ScrollView
-                        ref={ref => { this._scrollView = ref; }}
+                        ref={ref => {
+                            this._scrollView = ref;
+                        }}
                         contentContainerStyle={contentContainerStyle}
                         style={{ flex: 1, flexGrow: 1 }}
                         scrollEnabled={!this.props.noScroll}

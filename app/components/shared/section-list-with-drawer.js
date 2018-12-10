@@ -4,6 +4,7 @@ import { observer } from 'mobx-react/native';
 import { action } from 'mobx';
 import { vars } from '../../styles/styles';
 import ListWithDrawer from './list-with-drawer';
+import { setScrollHelperRef, setScrollHelperOnScroll } from '../helpers/test-helper';
 
 @observer
 export default class SectionListWithDrawer extends ListWithDrawer {
@@ -11,6 +12,9 @@ export default class SectionListWithDrawer extends ListWithDrawer {
     scrollViewRef(sv) {
         this.props.setScrollViewRef && this.props.setScrollViewRef(sv);
         this.scrollView = sv;
+        // avoid using more than one list in a view
+        // to not confuse scrollHelper
+        setScrollHelperRef(sv);
     }
 
     scrollDrawerOutOfView = animated => {
@@ -67,8 +71,9 @@ export default class SectionListWithDrawer extends ListWithDrawer {
             <SectionList
                 onScrollToIndexFailed={this.onScrollToIndexFailed}
                 ref={this.scrollViewRef}
-                {...this.props.scrollHelper}
+                scrollEventThrottle={1}
                 {...this.props}
+                onScroll={setScrollHelperOnScroll}
                 ListHeaderComponent={this.topDrawer}
             />
         );
