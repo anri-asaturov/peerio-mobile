@@ -1,6 +1,4 @@
 import React from 'react';
-import RNFS from 'react-native-fs';
-import FileOpener from 'react-native-file-opener';
 import { WebView, Image, View, Platform } from 'react-native';
 import { observable } from 'mobx';
 import Text from '../controls/custom-text';
@@ -10,27 +8,13 @@ import popupState from '../layout/popup-state';
 import locales from '../../lib/locales';
 import CheckBox from './checkbox';
 import { vars } from '../../styles/styles';
-import { fileStore, User, config, telemetry } from '../../lib/icebear';
+import { User, config, telemetry } from '../../lib/icebear';
 import testLabel from '../helpers/test-label';
 import FilePreview from '../files/file-preview';
-import PopupMigration from '../controls/popup-migration';
 import TwoFactorAuthPrompt from '../settings/two-factor-auth-prompt';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
-
-const titleStyle = {
-    color: vars.lighterBlackText,
-    fontSize: vars.font.size20
-};
-const textStyle = {
-    color: vars.lighterBlackText,
-    fontSize: vars.font.size14
-};
-const textDownloadStyle = {
-    textDecorationLine: 'underline',
-    color: vars.linkColor
-};
 
 function textControl(str, style) {
     const text = {
@@ -610,62 +594,6 @@ function popupMoveToSharedFolder() {
     });
 }
 
-function popupUpgradeNotification() {
-    return new Promise(resolve => {
-        const viewFileMigrationList = async () => {
-            const directory =
-                Platform.OS === 'ios' ? RNFS.CachesDirectoryPath : RNFS.ExternalDirectoryPath;
-            const path = `${directory}/${User.current.username}-Peerio-shared-files-list.txt`;
-            const content = await fileStore.migration.getLegacySharedFilesText();
-            RNFS.writeFile(path, content, 'utf8')
-                .then(() => FileOpener.open(path, 'text/*', path))
-                .catch(err => console.log(err.message));
-        };
-        const download = text => {
-            return (
-                <Text
-                    style={textDownloadStyle}
-                    onPress={viewFileMigrationList}
-                    pressRetentionOffset={vars.retentionOffset}>
-                    {text}
-                </Text>
-            );
-        };
-        const resolveButtonText = fileStore.hasLegacySharedFiles ? 'update' : 'ok';
-        popupState.showPopup({
-            type: 'systemUpgrade',
-            title: textControl(tx('title_upgradeFileSystem'), titleStyle),
-            contents: (
-                <View>
-                    {textControl(tx('title_upgradeFileSystemDescription1'), textStyle)}
-                    {textControl(tx('title_upgradeFileSystemDescription2'), textStyle)}
-                    {fileStore.migration.hasLegacySharedFiles
-                        ? textControl(
-                              tx('title_upgradeFileSystemDescription3', { download }),
-                              textStyle
-                          )
-                        : null}
-                </View>
-            ),
-            buttons: [
-                {
-                    id: resolveButtonText,
-                    text: tu(`button_${resolveButtonText}`),
-                    action: () => resolve(true)
-                }
-            ]
-        });
-    });
-}
-
-function popupUpgradeProgress() {
-    return popupState.showPopup({
-        type: 'systemUpgrade',
-        title: textControl(tx('title_fileUpdateProgress'), titleStyle),
-        contents: <PopupMigration />
-    });
-}
-
 locales.loadAssetFile('terms.txt').then(s => {
     tos = s;
 });
@@ -698,8 +626,6 @@ export {
     popupSignOutAutologin,
     popupCancelConfirm,
     popupSetupVideo,
-    popupUpgradeNotification,
-    popupUpgradeProgress,
     popupFileRename,
     popupFolderDelete,
     popupMoveToSharedFolder,

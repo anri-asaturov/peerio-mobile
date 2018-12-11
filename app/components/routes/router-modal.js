@@ -11,7 +11,6 @@ import FileChooseRecipient from '../files/file-choose-recipient';
 import ContactView from '../contacts/contact-view';
 import ChatInfo from '../messaging/chat-info';
 import ChannelInfo from '../messaging/channel-info';
-import AccountUpgradeSwiper from '../settings/account-upgrade-swiper';
 import popupState from '../layout/popup-state';
 import routes from './routes';
 import { vars } from '../../styles/styles';
@@ -37,7 +36,6 @@ class RouterModal extends Router {
         this.add('contactView', ContactView);
         this.add('chatInfo', ChatInfo);
         this.add('channelInfo', ChannelInfo);
-        this.add('accountUpgradeSwiper', AccountUpgradeSwiper, true, true);
         this.add('contactSync', SignupContactInvite);
         this.add('messageInfo', MessageInfo);
     }

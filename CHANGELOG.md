@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.423.0"></a>
+# [3.423.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.422.0...v3.423.0) (2018-12-11)
+
+
+
+<a name="3.422.0"></a>
+# [3.422.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.422.0) (2018-12-11)
+
+
+### Bug Fixes
+
+* copying text from messages shouldn't trigger open url [ch2719] ([a1689cc](https://github.com/PeerioTechnologies/peerio-mobile/commit/a1689cc))
+* fix 2fa test [ch17998] ([85c41b8](https://github.com/PeerioTechnologies/peerio-mobile/commit/85c41b8))
+* fix 2fa test [ch17998] ([#401](https://github.com/PeerioTechnologies/peerio-mobile/issues/401)) ([ffb0063](https://github.com/PeerioTechnologies/peerio-mobile/commit/ffb0063))
+* fix autogrowing text input [ch17995] ([18db5fa](https://github.com/PeerioTechnologies/peerio-mobile/commit/18db5fa))
+* fix crash on a shared folder in self chat [ch17742] ([7b65721](https://github.com/PeerioTechnologies/peerio-mobile/commit/7b65721))
+* fix favicon error placeholder [ch17545] ([#394](https://github.com/PeerioTechnologies/peerio-mobile/issues/394)) ([cd98cab](https://github.com/PeerioTechnologies/peerio-mobile/commit/cd98cab))
+* fix merging with other branchs ([764de2b](https://github.com/PeerioTechnologies/peerio-mobile/commit/764de2b))
+
+
+### Features
+
+* use new url preview for image urls [ch17620] ([#395](https://github.com/PeerioTechnologies/peerio-mobile/issues/395)) ([be76ddf](https://github.com/PeerioTechnologies/peerio-mobile/commit/be76ddf))
+
+
+
 <a name="3.421.0"></a>
 # [3.421.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.421.0) (2018-12-04)
 

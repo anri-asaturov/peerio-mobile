@@ -145,7 +145,7 @@ class TopDrawerPendingFiles extends SafeComponent {
 
     renderThrow() {
         // no localization because of temporary nature
-        const descriptionLine1 = `Files marked “pending” will be removed by November 15th 2018.`;
+        const descriptionLine1 = `Files marked “pending” will be removed.`;
         return (
             <TopDrawer
                 {...this.props}

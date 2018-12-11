@@ -5,6 +5,7 @@ import TwoFactorAuth from './two-factor-auth';
 import Display from './display';
 import Notifications from './notifications';
 import settingsState from './settings-state';
+import Logs from '../logs/logs';
 
 @observer
 export default class SettingsLevel3 extends SafeComponent {
@@ -13,6 +14,8 @@ export default class SettingsLevel3 extends SafeComponent {
     display = () => <Display />;
 
     notifications = () => <Notifications />;
+
+    logs = () => <Logs />;
 
     renderThrow() {
         const component = this[settingsState.subroute];

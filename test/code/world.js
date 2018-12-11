@@ -236,6 +236,7 @@ class World {
         );
         const { username, passphrase } = result;
         Object.assign(this, { username, passphrase });
+        await this.seeWelcomeScreen();
     }
 
     async logout() {

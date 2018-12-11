@@ -1,6 +1,5 @@
 import React from 'react';
-import { observable, reaction, action, when, extendObservable } from 'mobx';
-import RNKeepAwake from 'react-native-keep-awake';
+import { observable, reaction, action, extendObservable } from 'mobx';
 import Router from './router';
 import uiState from '../layout/ui-state';
 import WelcomeZeroState from '../layout/welcome-zero-state';
@@ -21,19 +20,18 @@ import {
     settingsState,
     contactState,
     contactAddState,
-    invitationState
+    invitationState,
+    accountUpgradeState
 } from '../states';
 // import { enablePushNotifications } from '../../lib/push';
 import routes from './routes';
-import snackbarState from '../snackbars/snackbar-state';
-import { tx } from '../utils/translator';
-import popupState from '../layout/popup-state';
 import { fileStore } from '../../lib/icebear';
-import { popupUpgradeNotification, popupUpgradeProgress } from '../shared/popups';
 import preferenceStore from '../settings/preference-store';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 import { timeoutWithAction } from '../utils/timeouts';
 import { transitionAnimation } from '../helpers/animations';
+import AccountUpgradeOffer from '../settings/account-upgrade-offer';
+import { AccountUpgradeMonthly, AccountUpgradeAnnual } from '../settings/account-upgrade-option';
 
 const INACTIVE_DELAY = 5000;
 
@@ -80,14 +78,9 @@ class RouterMain extends Router {
             settingsState
         );
         this.add('channelInvite', [<whiteLabelComponents.ChannelInvite />], invitationState);
-
-        reaction(
-            () => fileStore.migration.pending,
-            migration => {
-                if (migration) this.filesystemUpgrade();
-            },
-            { fireImmediately: true }
-        );
+        this.add('accountUpgrade', [<AccountUpgradeOffer />], accountUpgradeState);
+        this.add('accountUpgradeMonthly', [<AccountUpgradeMonthly />], accountUpgradeState);
+        this.add('accountUpgradeAnnual', [<AccountUpgradeAnnual />], accountUpgradeState);
 
         reaction(
             () => this.current || this.currentIndex,
@@ -133,26 +126,6 @@ class RouterMain extends Router {
         // TODO: refactor all this
         // wait for User object to be loaded
         if (whiteLabelComponents.extendRoutes) whiteLabelComponents.extendRoutes(this);
-    }
-
-    @action
-    async filesystemUpgrade() {
-        if (fileStore.migration.pending) {
-            if (!(fileStore.migration.started || fileStore.migration.performedByAnotherClient)) {
-                await popupUpgradeNotification();
-                fileStore.migration.confirmMigration();
-            }
-            popupUpgradeProgress();
-            when(
-                () => !fileStore.migration.pending,
-                () => {
-                    popupState.discardPopup();
-                    snackbarState.pushTemporary(tx('title_fileUpdateComplete'));
-                    RNKeepAwake.deactivate();
-                }
-            );
-            RNKeepAwake.activate();
-        }
     }
 
     add(key, components, routeState) {

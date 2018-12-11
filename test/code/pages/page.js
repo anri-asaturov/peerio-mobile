@@ -107,7 +107,7 @@ class Page {
     }
 
     waitToDisappear(selector) {
-        return this.app.waitForVisible(selector, 1500, true);
+        return this.app.waitForVisible(selector, 5000, true);
     }
 
     pressCoords(x, y) {

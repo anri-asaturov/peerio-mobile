@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
-import { tu } from '../utils/translator';
+import { tu, tx } from '../utils/translator';
 import testLabel from '../helpers/test-label';
 
 export default {
@@ -123,6 +123,56 @@ export default {
         );
     },
 
+    roundBlueBgButtonWithSubtitle(
+        text,
+        subtitle,
+        onPress,
+        disabled,
+        accessibilityId,
+        style,
+        containerStyle
+    ) {
+        const touchableStyle = {
+            height: vars.button.touchableHeight,
+            alignItems: 'center',
+            justifyContent: 'center'
+        };
+        const buttonStyle = {
+            minWidth: vars.button.minWidth,
+            height: vars.button.buttonHeight * 1.2,
+            paddingHorizontal: vars.button.paddingHorizontal,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: vars.button.borderRadius,
+            backgroundColor: disabled ? vars.mediumGrayBg : vars.peerioBlue
+        };
+        const textStyle = {
+            textAlign: 'center',
+            color: vars.white,
+            fontSize: vars.font.size14
+        };
+        const subtitleStyle = {
+            textAlign: 'center',
+            color: vars.textWhite50,
+            fontSize: vars.font.size10
+        };
+        return (
+            <TouchableOpacity
+                {...testLabel(accessibilityId)}
+                disabled={disabled}
+                onPress={disabled ? null : onPress}
+                pressRetentionOffset={vars.retentionOffset}
+                style={[touchableStyle, containerStyle]}>
+                <View style={[buttonStyle, style]}>
+                    <Text semibold style={textStyle}>
+                        {tx(text)}
+                    </Text>
+                    <Text style={subtitleStyle}>{tx(subtitle)}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    },
+
     roundWhiteBgButton(text, onPress, disabled, accessibilityId, style) {
         const touchableStyle = {
             height: vars.button.touchableHeight,
@@ -156,6 +206,50 @@ export default {
                     <Text semibold style={textStyle}>
                         {tu(text)}
                     </Text>
+                </View>
+            </TouchableOpacity>
+        );
+    },
+
+    roundWhiteBgButtonWithSubtitle(text, subtitle, onPress, disabled, accessibilityId, style) {
+        const touchableStyle = {
+            height: vars.button.touchableHeight,
+            alignItems: 'center',
+            justifyContent: 'center'
+        };
+        const buttonStyle = {
+            minWidth: vars.button.minWidth,
+            height: vars.button.buttonHeight * 1.2,
+            paddingHorizontal: vars.button.paddingHorizontal,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: vars.button.borderRadius,
+            borderColor: vars.peerioBlue,
+            borderWidth: 1,
+            backgroundColor: disabled ? vars.mediumGrayBg : vars.white
+        };
+        const textStyle = {
+            textAlign: 'center',
+            color: vars.peerioBlue,
+            fontSize: vars.font.size14
+        };
+        const subtitleStyle = {
+            textAlign: 'center',
+            color: vars.black54,
+            fontSize: vars.font.size10
+        };
+        return (
+            <TouchableOpacity
+                {...testLabel(accessibilityId)}
+                disabled={disabled}
+                onPress={disabled ? null : onPress}
+                pressRetentionOffset={vars.retentionOffset}
+                style={touchableStyle}>
+                <View style={[buttonStyle, style]}>
+                    <Text semibold style={textStyle}>
+                        {tx(text)}
+                    </Text>
+                    <Text style={subtitleStyle}>{tx(subtitle)}</Text>
                 </View>
             </TouchableOpacity>
         );

@@ -36,6 +36,7 @@ import { TopDrawerBackupAccountKey, TopDrawerNewContact } from '../shared/top-dr
 import routes from '../routes/routes';
 import uiState from '../layout/ui-state';
 import { testConfirmEmail } from '../helpers/test-confirm-email';
+import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 
 const svStyle = {
     flexGrow: 1,
@@ -144,9 +145,7 @@ export default class SettingsLevel1 extends SafeComponent {
     renderThrow() {
         const plan = plans.topPlan();
         const upgradeItem = plan ? (
-            <SettingsItem
-                title={tx('title_viewYourPlan', { title: tx(plan.title) })}
-                onPress={() => settingsState.upgrade()}
+            <whiteLabelComponents.ManageAccountButton
                 leftComponent={this.leftSettingsIcon('open-in-browser', vars.darkBlue)}
             />
         ) : (
@@ -213,7 +212,7 @@ export default class SettingsLevel1 extends SafeComponent {
                     />
                     <SettingsItem
                         title="title_help"
-                        onPress={() => settingsState.transition('logs')}
+                        onPress={() => settingsState.transition('help')}
                         leftComponent={this.leftSettingsIcon('help', vars.helpSettingsIconColor)}
                     />
 

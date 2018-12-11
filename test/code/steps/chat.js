@@ -144,3 +144,9 @@ Then(/(?:I am|they are) in the chat list page/, async function() {
 Then('I fill my chatlist', async function() {
     await this.chatListPage.testAction2();
 });
+
+Then('A chat opens with the support user', async function() {
+    await this.app.pause(2000); // Necessary else it will always return false
+    const textInputExists = await this.chatPage.textInputExists;
+    textInputExists.should.be.true; // eslint-disable-line
+});

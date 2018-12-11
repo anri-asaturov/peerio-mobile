@@ -36,6 +36,8 @@ Then('I change my last name', async function() {
 Then('I upload a new avatar', async function() {
     await this.profileSettingsPage.uploadAvatarIcon.click();
     await this.fileUploadPage.uploadCropImageFromCamera();
+    const avatarLetterDisappeared = await this.profileSettingsPage.avatarLetterDisappeared;
+    avatarLetterDisappeared.should.be.true; // eslint-disable-line
 });
 
 Then('I change my existing avatar', async function() {
@@ -57,4 +59,13 @@ When('I can see my account key', async function() {
     passphrase.should.equal(this.passphrase);
 
     await this.settingsPage.copyButton.click();
+});
+
+When('I go to help settings', async function() {
+    await this.homePage.settingsTab.click();
+    await this.settingsPage.helpButton.click();
+});
+
+When('I tap Chat button in help settings', async function() {
+    await this.settingsPage.chatButton.click();
 });

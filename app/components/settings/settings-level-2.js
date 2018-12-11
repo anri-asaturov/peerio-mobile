@@ -1,11 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View } from 'react-native';
+import { View, Linking, Alert, NativeModules } from 'react-native';
+import stringify from 'json-stringify-safe';
+import moment from 'moment';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import BasicSettingsItem from './basic-settings-item';
 import ToggleItem from './toggle-item';
-import { User, clientApp } from '../../lib/icebear';
+import { User, clientApp, config } from '../../lib/icebear';
 import { mainState, settingsState } from '../states';
 import { tx } from '../utils/translator';
 import payments from '../payments/payments';
@@ -13,8 +15,10 @@ import PaymentsQuotas from '../payments/payments-quotas';
 import ProfileEdit from './profile-edit';
 import AccountEdit from './account-edit';
 import AccountUpgrade from './account-upgrade';
-import Logs from '../logs/logs';
 import keychain from '../../lib/keychain-bridge';
+import chatState from '../messaging/chat-state';
+import buttons from '../helpers/buttons';
+import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 
 const bgStyle = {
     flexGrow: 1,
@@ -26,6 +30,41 @@ const bgStyle = {
 
 const spacer = {
     height: 24
+};
+
+const PEERIO_SUPPORT_USERNAME = 'support';
+
+// uses react-native-mail module
+const { RNMail } = NativeModules;
+
+const mapFormat = ({ time, msg, color }, k) => ({
+    msg: msg && (typeof msg === 'string' ? msg : stringify(msg)),
+    time: moment(time).format(`HH:mm:ss.SSS`),
+    k,
+    key: `${time}:${k}`,
+    color
+});
+
+const mapGlue = ({ msg, time }) => `${time}: ${msg}`;
+
+const sendLogs = () => {
+    const subject = `Support // logs from ${User.current ? User.current.username : 'n/a'}`;
+    const recipients = config.logRecipients;
+    if (console.logVersion) console.logVersion();
+    console.log('attempting to send email');
+    const body = `<pre>${console.stack
+        .map(mapFormat)
+        .map(mapGlue)
+        .join('\n')}</pre>`;
+    RNMail.mail(
+        { subject, recipients, body, isHTML: true },
+        error => error && Alert.alert(`Error sending logs`, error)
+    );
+};
+
+const startChatWithSupport = async () => {
+    chatState.addContactAndStartChat(PEERIO_SUPPORT_USERNAME);
+    settingsState.stack.clear();
 };
 
 @observer
@@ -75,6 +114,32 @@ export default class SettingsLevel2 extends SafeComponent {
         );
     }
 
+    help() {
+        return (
+            <View style={bgStyle}>
+                <whiteLabelComponents.SettingsHelpButton title="title_helpCenter" untappable>
+                    {buttons.blueTextButton('button_visit', () =>
+                        Linking.openURL('https://support.peerio.com/hc/en-us')
+                    )}
+                </whiteLabelComponents.SettingsHelpButton>
+                <whiteLabelComponents.SettingsHelpButton
+                    title="title_contactPeerioSupport"
+                    untappable>
+                    {buttons.blueTextButton(
+                        'button_chat',
+                        startChatWithSupport,
+                        null,
+                        null,
+                        'button_chat'
+                    )}
+                </whiteLabelComponents.SettingsHelpButton>
+                <BasicSettingsItem title="title_sendLogsToSupport" untappable>
+                    {buttons.blueTextButton('button_send', sendLogs)}
+                </BasicSettingsItem>
+            </View>
+        );
+    }
+
     quotas = () => <PaymentsQuotas />;
 
     profile = () => <ProfileEdit />;
@@ -82,8 +147,6 @@ export default class SettingsLevel2 extends SafeComponent {
     account = () => <AccountEdit />;
 
     upgrade = () => <AccountUpgrade />;
-
-    logs = () => <Logs />;
 
     autoLoginToggle() {
         const user = User.current;

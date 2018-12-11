@@ -5,6 +5,10 @@ class ChatPage extends Page {
         return this.getWhenVisible(`~textInputMessage`);
     }
 
+    get textInputExists() {
+        return this.checkIfPresent(`~textInputMessage`);
+    }
+
     get buttonSendMessage() {
         return this.getWhenVisible('~buttonSendMessage');
     }

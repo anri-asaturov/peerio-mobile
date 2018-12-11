@@ -4,9 +4,9 @@ import { observer } from 'mobx-react/native';
 import PopupLayout from '../layout/popup-layout';
 import { vars } from '../../styles/styles';
 // import PaymentsInfoPopup from '../payments/payments-info-popup';
-import AccountUpgradePlan from '../settings/account-upgrade-plan';
+// import AccountUpgradePlan from '../settings/account-upgrade-plan';
 // import { popupControl } from '../shared/popups';
-import plans from '../payments/payments-config';
+// import plans from '../payments/payments-config';
 import { gradient } from '../controls/effects';
 
 const basicColor = '#82A9BE';
@@ -27,7 +27,7 @@ export default class MockChatList extends Component {
                         style: { flexGrow: 1, paddingTop: vars.layoutPaddingTop },
                         backgroundColor: 'transparent'
                     },
-                    <AccountUpgradePlan plan={plans[1]} />,
+                    // <AccountUpgradePlan plan={plans[1]} />,
                     basicColor,
                     premiumColor
                 )}

@@ -207,6 +207,12 @@ class ChatState extends RoutedState {
     startDMWithUsername(username) {
         this.startChat([contactStore.getContact(username)]);
     }
+
+    @action
+    async addContactAndStartChat(username) {
+        const contact = await contactStore.whitelabel.getContact(username);
+        this.startChat([contact]);
+    }
 }
 
 const chatState = new ChatState();

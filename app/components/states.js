@@ -9,6 +9,7 @@ import contactState from './contacts/contact-state';
 import contactAddState from './contacts/contact-add-state';
 import invitationState from './messaging/invitation-state';
 import drawerState from './shared/drawer-state';
+import accountUpgradeState from './settings/account-upgrade-state';
 
 export {
     settingsState,
@@ -21,5 +22,6 @@ export {
     contactState,
     contactAddState,
     invitationState,
-    drawerState
+    drawerState,
+    accountUpgradeState
 };

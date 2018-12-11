@@ -122,6 +122,13 @@ export default (c, icebear, tm) => {
         },
         maintenanceReadMore: {
             link: 'https://peerio.zendesk.com/hc/en-us/articles/360000371866'
+        },
+        manageSubscription: {
+            link:
+                whitelabel.MANAGE_SUBSCRIPTION ||
+                'https://support.peerio.com/hc/en-us/articles/208395556-How-do-I-manage-my-Peerio-plan-',
+            ios: 'https://support.apple.com/en-us/HT202039',
+            android: 'https://support.google.com/googleplay/answer/7018481'
         }
     };
 
