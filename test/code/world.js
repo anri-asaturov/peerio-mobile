@@ -24,7 +24,8 @@ const ListenerServer = require('../listener/listener-server');
 class World {
     constructor({ attach, parameters }) {
         this.attach = attach;
-        this.context = parameters.platform === 'ios' ? iOSFactory : AndroidFactory;
+        this.platform = parameters.platform;
+        this.context = this.platform === 'ios' ? iOSFactory : AndroidFactory;
         this.listener = ListenerServer.create(parameters.platform);
     }
 
@@ -244,7 +245,8 @@ class World {
         await this.homePage.scrollDownHelper();
         await this.settingsPage.logoutButton.click();
         await this.settingsPage.lockButton.click();
-        await this.loginPage.passphrase;
+        if (this.platform === 'ios') await this.loginPage.passphrase;
+        // TODO wait for app to close (android only ?)
         await this.app.closeApp();
         await this.app.launch();
     }

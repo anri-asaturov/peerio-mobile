@@ -1,16 +1,3 @@
-################################################################################
-#
-# This .feature file has been written by Mona Ghassemi for use by Peerio.
-# It is part of a set of .feature files located in the mobile repository, 
-# tests-folder-scenarios
-# 
-# If you have any questions, comments, or concerns regarding the contents 
-# of this file, please contact Mona Ghassemi, @bluemona, on Peerio. 
-#
-# Thanks! 
-#
-################################################################################
-
 @folders @sharing @editor
 Feature: Volume editor
      As a Peerio user, I have access to volume called "Test Volume". I may have different 

@@ -9,6 +9,10 @@ class FilesListPage extends Page {
         return this.getWhenVisible(`~${selector}`);
     }
 
+    folderNamedVisible(selector) {
+        return this.checkIfVisible(`~${selector}`);
+    }
+
     get createFolderOption() {
         return this.getWhenVisible('~Create a folder');
     }
@@ -19,6 +23,10 @@ class FilesListPage extends Page {
 
     get moveOption() {
         return this.getWhenVisible('~Move');
+    }
+
+    get shareOption() {
+        return this.getWhenVisible('~button_share');
     }
 
     get confirmDelete() {
@@ -55,6 +63,14 @@ class FilesListPage extends Page {
 
     optionsButttonFor(selector) {
         return this.getElementInContainer(`~${selector}`, '~more-vert');
+    }
+
+    get buttonFolderBack() {
+        return this.getWhenVisible('~buttonBackIcon');
+    }
+
+    get buttonFolderBackExists() {
+        return this.checkIfPresent('~buttonBackIcon');
     }
 }
 

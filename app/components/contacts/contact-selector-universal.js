@@ -118,7 +118,8 @@ export default class ContactSelectorUniversal extends SafeComponent {
     }
 
     get shareButton() {
-        if (this.recipients.items.length) return icons.text(tu('share'), this.action);
+        if (this.recipients.items.length)
+            return icons.text(tu('share'), this.action, null, 'share');
         return icons.disabledText(tu('share'));
     }
 

@@ -20,6 +20,10 @@ class ContactSelectorPage extends Page {
     get closeButton() {
         return this.getWhenVisible('~closeButton');
     }
+
+    get shareButton() {
+        return this.getWhenVisible('~share');
+    }
 }
 
 module.exports = ContactSelectorPage;
