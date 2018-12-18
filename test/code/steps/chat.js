@@ -146,7 +146,5 @@ Then('I fill my chatlist', async function() {
 });
 
 Then('A chat opens with the support user', async function() {
-    await this.app.pause(2000); // Necessary else it will always return false
-    const textInputExists = await this.chatPage.textInputExists;
-    textInputExists.should.be.true; // eslint-disable-line
+    await this.chatPage.textInput;
 });

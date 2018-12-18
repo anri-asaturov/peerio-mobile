@@ -42,7 +42,7 @@ class SettingsPage extends Page {
     }
 
     get chatButton() {
-        return this.getWhenVisible('~button_chat');
+        return this.getWhenVisible('~title_contactPeerioSupport');
     }
 }
 

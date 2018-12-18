@@ -191,8 +191,11 @@ export default class MedcryptorLoadingScreen extends Component {
 
         const container = {
             backgroundColor: vars.darkBlueBackground05,
-            flex: 1,
-            flexGrow: 1,
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
             alignItems: 'center'
         };
         const flavorTextStyle = {

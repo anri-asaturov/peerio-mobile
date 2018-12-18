@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
+import { action } from 'mobx';
 import { View, TouchableOpacity } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -28,22 +29,42 @@ export default class ChatMessageContainer extends SafeComponent {
         };
     }
 
+    @action.bound
+    onPressReceipt() {
+        const {
+            chat,
+            messageObject,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction
+        } = this.props;
+        chatState.routerModal.messageInfo({
+            chat,
+            messageObject,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction
+        });
+    }
+
     get innerProps() {
+        const {
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction
+        } = this.props;
+        const { backgroundColor, errorStyle, onPressReceipt } = this;
         return {
-            messageObject: this.props.messageObject,
-            chat: this.props.chat,
-            onFileAction: this.props.onFileAction,
-            onLegacyFileAction: this.props.onLegacyFileAction,
-            onInlineImageAction: this.props.onInlineImageAction,
-            backgroundColor: this.backgroundColor,
-            errorStyle: this.errorStyle,
-            onPressReceipt: () => {
-                chatState.currentMessage = this.props.messageObject;
-                chatState.onFileAction = this.props.onLegacyFileAction;
-                chatState.onLegacyFileAction = this.props.onInlineImageAction;
-                chatState.onInlineImageAction = this.props.onInlineImageAction;
-                chatState.routerModal.messageInfo();
-            }
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction,
+            backgroundColor,
+            errorStyle,
+            onPressReceipt
         };
     }
 
@@ -83,6 +104,5 @@ ChatMessageContainer.propTypes = {
     onFileAction: PropTypes.any,
     onLegacyFileAction: PropTypes.any,
     onInlineImageAction: PropTypes.any,
-    backgroundColor: PropTypes.any,
-    errorStyle: PropTypes.any
+    backgroundColor: PropTypes.any
 };

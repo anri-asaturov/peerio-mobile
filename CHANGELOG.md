@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.424.0"></a>
+# [3.424.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.423.0...v3.424.0) (2018-12-17)
+
+
+### Bug Fixes
+
+* fix message info view for when receipts are null ([d9200f9](https://github.com/PeerioTechnologies/peerio-mobile/commit/d9200f9))
+* refactor receipt view component [ch18035] ([66178bd](https://github.com/PeerioTechnologies/peerio-mobile/commit/66178bd))
+
+
+
 <a name="3.423.0"></a>
 # [3.423.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.422.0...v3.423.0) (2018-12-11)
 

@@ -67,6 +67,10 @@ const startChatWithSupport = async () => {
     settingsState.stack.clear();
 };
 
+function helpCenterAction() {
+    Linking.openURL('https://support.peerio.com/hc/en-us');
+}
+
 @observer
 export default class SettingsLevel2 extends SafeComponent {
     testTwoFactorAuthPrompt(cancelable) {
@@ -117,14 +121,14 @@ export default class SettingsLevel2 extends SafeComponent {
     help() {
         return (
             <View style={bgStyle}>
-                <whiteLabelComponents.SettingsHelpButton title="title_helpCenter" untappable>
-                    {buttons.blueTextButton('button_visit', () =>
-                        Linking.openURL('https://support.peerio.com/hc/en-us')
-                    )}
+                <whiteLabelComponents.SettingsHelpButton
+                    onPress={helpCenterAction}
+                    title="title_helpCenter">
+                    {buttons.blueTextButton('button_visit', helpCenterAction)}
                 </whiteLabelComponents.SettingsHelpButton>
                 <whiteLabelComponents.SettingsHelpButton
                     title="title_contactPeerioSupport"
-                    untappable>
+                    onPress={startChatWithSupport}>
                     {buttons.blueTextButton(
                         'button_chat',
                         startChatWithSupport,
@@ -133,7 +137,7 @@ export default class SettingsLevel2 extends SafeComponent {
                         'button_chat'
                     )}
                 </whiteLabelComponents.SettingsHelpButton>
-                <BasicSettingsItem title="title_sendLogsToSupport" untappable>
+                <BasicSettingsItem title="title_sendLogsToSupport" onPress={sendLogs}>
                     {buttons.blueTextButton('button_send', sendLogs)}
                 </BasicSettingsItem>
             </View>

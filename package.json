@@ -1,6 +1,6 @@
 {
   "name": "peeriomobile",
-  "version": "3.423.0",
+  "version": "3.424.0",
   "private": true,
   "scripts": {
     "postinstall": "./scripts/setup-env.sh && npm run icebear:compile && ./scripts/setup-rn-debugging.sh && ./scripts/copy-android-resources.sh && ./scripts/android-switch-to-rn-fork.sh && node scripts/test-deps.js",
@@ -37,6 +37,7 @@
     "test-android-invites": "TEST_FEATURE=chat/roomInvites npm run test-android-feature",
     "test-ios-listener": "TEST_FEATURE=listener/listener npm run test-ios-feature",
     "test-ios-placeholderDM": "TEST_FEATURE=chat/placeholderDM npm run test-ios-feature",
+    "test-ios-settings-help": "TEST_FEATURE=settings/help npm run test-ios-feature",
     "test-android": "TEST_FEATURE=account/login npm run test-android-feature",
     "test-android-feature": "source env.sh && ./scripts/forward-android-listener.sh && cucumber-js test/spec/$TEST_FEATURE.feature -r test/code -f node_modules/cucumber-pretty -f json:test/reports/result-android.json --world-parameters '{\"platform\": \"android\"}'",
     "test-android-2fa": "TEST_FEATURE=account/2fa npm run test-android-feature",
@@ -101,7 +102,7 @@
     "path": "0.12.7",
     "pdfform.js": "1.0.13",
     "peerio-copy": "github:PeerioTechnologies/peerio-copy#icebear",
-    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#dev",
+    "peerio-icebear": "github:PeerioTechnologies/peerio-icebear#v6.0.1",
     "peerio-translator": "2.1.1",
     "process": "0.11.9",
     "prop-types": "15.5.10",

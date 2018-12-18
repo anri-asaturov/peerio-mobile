@@ -6,9 +6,9 @@ import BasicSettingsItem from '../../settings/basic-settings-item';
 @observer
 export default class PeerioSettingsHelpButton extends SafeComponent {
     renderThrow() {
-        const { title, untappable } = this.props;
+        const { title, untappable, onPress } = this.props;
         return (
-            <BasicSettingsItem title={title} untappable={untappable}>
+            <BasicSettingsItem {...{ title, untappable, onPress }}>
                 {this.props.children}
             </BasicSettingsItem>
         );

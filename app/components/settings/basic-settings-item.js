@@ -54,7 +54,7 @@ export default class BasicSettingsItem extends SafeComponent {
                 <View style={itemContainerStyle} pointerEvents={untappable ? undefined : 'none'}>
                     <View style={{ flexGrow: 1, flexShrink: 1 }}>
                         <Text style={titleStyle}>{t(title)}</Text>
-                        {!!description && <Text style={descriptionStyle}>{description}d</Text>}
+                        {!!description && <Text style={descriptionStyle}>{description}</Text>}
                     </View>
                     <View style={{ flex: 0 }}>{children}</View>
                     <View style={{ flex: 0 }}>{rightIcon}</View>
