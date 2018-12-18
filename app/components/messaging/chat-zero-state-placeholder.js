@@ -58,12 +58,8 @@ export default class ChatZeroStatePlaceholder extends SafeComponent {
     get moreDetails() {
         return (
             <View>
-                <Text style={textStyle}>
-                    {tx('title_createRooms')}
-                </Text>
-                <Text style={textStyle}>
-                    {tx('title_createDMs')}
-                </Text>
+                <Text style={textStyle}>{tx('title_createRooms')}</Text>
+                <Text style={textStyle}>{tx('title_createDMs')}</Text>
             </View>
         );
     }
@@ -72,18 +68,21 @@ export default class ChatZeroStatePlaceholder extends SafeComponent {
         return (
             <View style={container}>
                 <ViewWithDrawer>
-                    <Text bold style={[textStyle, chatHeaderStyle]} {...testLabel('title_headerZeroState')}>
+                    <Text
+                        bold
+                        style={[textStyle, chatHeaderStyle]}
+                        {...testLabel('title_headerZeroState')}>
                         {tx('title_zeroChat')}
                     </Text>
                     <Text style={[textStyle, chatDescriptionStyle]}>
                         {tx('title_zeroChatsDescription')}
                     </Text>
-                    <Image
-                        source={zeroStateImage}
-                        resizeMode="contain"
-                        style={imageStyle} />
-                    {preferenceStore.prefs.importContactsInBackground ?
-                        this.moreDetails : <SyncContactsButton />}
+                    <Image source={zeroStateImage} resizeMode="contain" style={imageStyle} />
+                    {preferenceStore.prefs.importContactsInBackground ? (
+                        this.moreDetails
+                    ) : (
+                        <SyncContactsButton />
+                    )}
                 </ViewWithDrawer>
             </View>
         );

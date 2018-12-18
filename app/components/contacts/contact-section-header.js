@@ -23,7 +23,9 @@ export default class ContactSectionHeader extends SafeComponent {
         };
         return (
             <View style={style}>
-                <Text bold style={textStyle}>{title}</Text>
+                <Text bold style={textStyle}>
+                    {title}
+                </Text>
             </View>
         );
     }

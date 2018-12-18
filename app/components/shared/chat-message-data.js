@@ -50,9 +50,7 @@ export default class ChatMessageData extends SafeComponent {
                         {sender.username}
                     </Text>
                 </Text>
-                <Text style={dateTextStyle}>
-                    {messageTimestampText}
-                </Text>
+                <Text style={dateTextStyle}>{messageTimestampText}</Text>
             </View>
         );
     }

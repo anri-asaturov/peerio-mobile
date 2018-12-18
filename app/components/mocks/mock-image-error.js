@@ -20,7 +20,8 @@ export default class MockImageError extends Component {
                     onLoadEnd={() => console.error('load end')}
                     onError={e => console.error(e)}
                     style={{ width: 100, height: 100 }}
-                    source={source} />
+                    source={source}
+                />
             </View>
         );
     }

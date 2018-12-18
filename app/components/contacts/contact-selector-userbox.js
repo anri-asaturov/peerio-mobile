@@ -25,13 +25,14 @@ export default class ContactSelectorUserBox extends Component {
     render() {
         const { contact } = this.props;
         return (
-            <TouchableOpacity
-                pressRetentionOffset={vars.retentionOffset}
-                {...this.props}>
+            <TouchableOpacity pressRetentionOffset={vars.retentionOffset} {...this.props}>
                 <View style={style}>
                     <Text style={textStyle}>{contact.username}</Text>
                     <Icon
-                        style={{ paddingRight: vars.spacing.small.mini2x, marginLeft: vars.spacing.small.midi2x }}
+                        style={{
+                            paddingRight: vars.spacing.small.mini2x,
+                            marginLeft: vars.spacing.small.midi2x
+                        }}
                         name="cancel"
                         size={vars.iconSize}
                         color="white"
@@ -41,4 +42,3 @@ export default class ContactSelectorUserBox extends Component {
         );
     }
 }
-

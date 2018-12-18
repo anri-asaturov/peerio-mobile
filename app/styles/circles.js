@@ -1,12 +1,15 @@
 import vars from './vars';
 
 function create(size, style) {
-    return [{
-        width: size,
-        height: size,
-        borderRadius: size / 2,
-        backgroundColor: vars.txtLight
-    }, style];
+    return [
+        {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            backgroundColor: vars.txtLight
+        },
+        style
+    ];
 }
 
 const smallCircle = {
@@ -30,9 +33,12 @@ export default {
     small: {
         base: smallCircle,
         normal: smallCircle,
-        active: [smallCircle, {
-            backgroundColor: vars.highlight
-        }]
+        active: [
+            smallCircle,
+            {
+                backgroundColor: vars.highlight
+            }
+        ]
     },
     create
 };

@@ -9,28 +9,38 @@ import ChatMessageInlineImages from './chat-message-inline-images';
 import SystemMessage from './system-message';
 import ChatMessageText from './chat-message-text';
 import ChatMessageSendError from './chat-message-error';
+import ChatMessageInlineUrls from './chat-message-inline-urls';
 
 @observer
 export default class ChatMessageBody extends SafeComponent {
     renderThrow() {
-        const { messageObject, chat, onFileAction, onLegacyFileAction, onInlineImageAction } = this.props;
+        const {
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction,
+            isClosed
+        } = this.props;
 
         return (
             <View style={{ flex: 1, flexGrow: 1, flexShrink: 1 }}>
-                <ChatMessageFolders
-                    folders={messageObject.folders}
-                    chat={chat} />
+                <ChatMessageFolders folders={messageObject.folders} chat={chat} />
                 <ChatMessageFiles
                     message={messageObject}
                     chat={chat}
                     onFileAction={onFileAction}
-                    onLegacyFileAction={onLegacyFileAction} />
+                    onLegacyFileAction={onLegacyFileAction}
+                />
                 <ChatMessageInlineImages
                     message={messageObject}
                     chat={chat}
                     onInlineImageAction={onInlineImageAction}
-                    onLegacyFileAction={onLegacyFileAction} />
+                    onLegacyFileAction={onLegacyFileAction}
+                    isClosed={isClosed}
+                />
                 <ChatMessageText message={messageObject.text} />
+                <ChatMessageInlineUrls message={messageObject} isClosed={isClosed} />
                 <SystemMessage message={messageObject} />
                 <ChatMessageSendError visible={messageObject.sendError} />
             </View>

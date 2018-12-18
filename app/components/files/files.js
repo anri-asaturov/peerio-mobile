@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, Animated } from 'react-native';
-import { observable, reaction, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import FilesZeroStatePlaceholder from './files-zero-state-placeholder';
@@ -23,6 +23,10 @@ import SharedFolderRemovalNotif from './shared-folder-removal-notif';
 import SearchBar from '../controls/search-bar';
 import FlatListWithDrawer from '../shared/flat-list-with-drawer';
 import zeroStateBeacons from '../beacons/zerostate-beacons';
+import filesBeacons from '../beacons/files-beacons';
+import MeasureableView from '../shared/measureable-view';
+import beaconState from '../beacons/beacon-state';
+import routes from '../routes/routes';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -44,11 +48,15 @@ export default class Files extends SafeComponent {
     }
 
     get rightIcon() {
-        return !fileState.isFileSelectionMode &&
-            <PlusBorderIcon
-                action={() => FileUploadActionSheet.show(false, true)}
-                beacon={zeroStateBeacons.uploadFileBeacon}
-                testID="buttonUploadFileToFiles" />;
+        return (
+            !fileState.isFileSelectionMode && (
+                <PlusBorderIcon
+                    action={() => FileUploadActionSheet.show({ createFolder: true })}
+                    beacon={[zeroStateBeacons.uploadFileBeacon, filesBeacons.foldersBeacon]}
+                    testID="buttonUploadFileToFiles"
+                />
+            )
+        );
     }
 
     get layoutTitle() {
@@ -56,48 +64,33 @@ export default class Files extends SafeComponent {
         return fileState.store.folderStore.currentFolder.name;
     }
 
-    @observable dataSource = [];
-    @observable refreshing = false;
-    @observable maxLoadedIndex = INITIAL_LIST_SIZE;
     actionsHeight = new Animated.Value(0);
 
+    @computed
     get data() {
-        let data = fileState.store.searchQuery ?
-            fileState.store.filesAndFoldersSearchResult
+        let data = fileState.store.searchQuery
+            ? fileState.store.filesAndFoldersSearchResult
             : fileState.store.folderStore.currentFolder.filesAndFoldersDefaultSorting;
-        if (fileState.isFileSelectionMode) data = data.filter(item => !item.isLegacy && item.readyForDownload);
+        if (fileState.isFileSelectionMode) {
+            data = data.filter(item => !item.isLegacy && (item.isFolder || item.readyForDownload));
+        }
         return data;
     }
 
     componentDidMount() {
-        this.reactionNavigation = reaction(() => fileState.store.folderStore.currentFolder,
-            action(() => {
-                this.maxLoadedIndex = INITIAL_LIST_SIZE;
-                this.refresh++;
-            }));
-        this.reaction = reaction(() => [
-            fileState.routerMain.route === 'files',
-            fileState.routerMain.currentIndex === 0,
-            this.data,
-            this.data.length,
-            fileState.store.searchQuery,
-            this.maxLoadedIndex
-        ], () => {
-            console.debug(`files.js: update ${this.data.length} -> ${this.maxLoadedIndex}`);
-            this.dataSource = this.data.slice(0, Math.min(this.data.length, this.maxLoadedIndex));
-        }, { fireImmediately: true });
+        // download last uploaded file
+        uiState.testAction1 = () => routes.main.files(this.data.filter(f => !f.isFolder)[0]);
     }
 
     componentWillUnmount() {
-        this.reaction && this.reaction();
-        this.reaction = null;
-        this.reactionNavigation && this.reactionNavigation();
-        this.reactionNavigation = null;
         // remove icebear hook for deletion
         fileState.store.bulk.deleteFolderConfirmator = null;
+        uiState.testAction1 = null;
     }
 
-    onChangeFolder = folder => { fileState.store.folderStore.currentFolder = folder; };
+    onChangeFolder = folder => {
+        fileState.store.folderStore.currentFolder = folder;
+    };
 
     item = ({ item, index }) => {
         // fileId for file, id for folder
@@ -108,17 +101,12 @@ export default class Files extends SafeComponent {
                 rowID={index}
                 onChangeFolder={this.onChangeFolder}
                 onFileAction={() => FileActionSheet.show(item)}
-                onFolderAction={() => FoldersActionSheet.show(item)} />
+                onFolderAction={() => FoldersActionSheet.show(item)}
+            />
         );
     };
 
-    onEndReached = () => {
-        if (this.maxLoadedIndex <= this.data.length) this.maxLoadedIndex += PAGE_SIZE;
-    };
-
-    flatListRef = (ref) => { uiState.currentScrollView = ref; };
-
-    keyExtractor = fsObject => fsObject ? (fsObject.fileId || fsObject.id) : null;
+    keyExtractor = fsObject => (fsObject ? fsObject.fileId || fsObject.id : null);
 
     get noFilesMatchSearch() {
         if (this.data.length || !fileState.findFilesText || fileState.store.loading) return null;
@@ -131,29 +119,36 @@ export default class Files extends SafeComponent {
         );
     }
 
+    onMeasure = position => {
+        const beacon = filesBeacons.fileReceivedBeacon;
+        beacon.position = position;
+        beaconState.requestBeacon(beacon);
+    };
+
     list() {
         return (
-            <FlatListWithDrawer
-                setScrollViewRef={this.flatListRef}
-                ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
-                ListFooterComponent={this.noFilesMatchSearch}
-                keyExtractor={this.keyExtractor}
-                initialNumToRender={INITIAL_LIST_SIZE}
-                pageSize={PAGE_SIZE}
-                data={this.dataSource}
-                extraData={this.refresh}
-                renderItem={this.item}
-                onEndReached={this.onEndReached}
-                onEndReachedThreshold={0.5} />
+            <MeasureableView onMeasure={this.onMeasure}>
+                <FlatListWithDrawer
+                    ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
+                    ListFooterComponent={this.noFilesMatchSearch}
+                    keyExtractor={this.keyExtractor}
+                    initialNumToRender={INITIAL_LIST_SIZE}
+                    pageSize={PAGE_SIZE}
+                    data={this.data}
+                    extraData={this.refresh}
+                    renderItem={this.item}
+                />
+            </MeasureableView>
         );
     }
 
-    get isZeroState() { return fileState.store.isEmpty; }
+    get isZeroState() {
+        return fileState.store.isEmpty;
+    }
 
     get isEmpty() {
         const folder = fileState.store.folderStore.currentFolder;
-        if (this.data.length
-            || (!folder.isShared && folder.isRoot)) return false;
+        if (this.data.length || (!folder.isShared && folder.isRoot)) return false;
         return true;
     }
 
@@ -166,7 +161,6 @@ export default class Files extends SafeComponent {
         const items = text.split(/[ ,;]/);
         if (items.length > 1) {
             fileState.findFilesText = items[0].trim();
-            this.onSubmit();
             return;
         }
         fileState.findFilesText = text;
@@ -189,7 +183,8 @@ export default class Files extends SafeComponent {
         fileState.store.searchQuery = val;
     };
 
-    @action.bound onChangeText(text) {
+    @action.bound
+    onChangeText(text) {
         this.clean = !text.length;
         this.onChangeFindFilesText(text);
     }
@@ -217,7 +212,8 @@ export default class Files extends SafeComponent {
                 onSubmit={this.onSubmit}
                 leftIcon={leftIcon}
                 rightIcon={rightIcon}
-            />);
+            />
+        );
     }
 
     toolbar() {
@@ -238,18 +234,22 @@ export default class Files extends SafeComponent {
             paddingRight: vars.spacing.small.midi2x
         };
         return (
-            fileState.isFileSelectionMode && <View style={container}>
-                <ButtonText
-                    testID="fileShareButtonCancel"
-                    onPress={this.handleExit}
-                    secondary
-                    text={tx('button_cancel')} />
-                <ButtonText
-                    testID="fileShareButtonShare"
-                    onPress={this.submitSelection}
-                    text={tx('button_share')}
-                    disabled={!fileState.showSelection} />
-            </View>
+            fileState.isFileSelectionMode && (
+                <View style={container}>
+                    <ButtonText
+                        testID="fileShareButtonCancel"
+                        onPress={this.handleExit}
+                        secondary
+                        text={tx('button_cancel')}
+                    />
+                    <ButtonText
+                        testID="fileShareButtonShare"
+                        onPress={this.submitSelection}
+                        text={tx('button_share')}
+                        disabled={!fileState.showSelection}
+                    />
+                </View>
+            )
         );
     }
 
@@ -275,17 +275,19 @@ export default class Files extends SafeComponent {
     }
 
     body() {
-        if (this.data.length
-            || fileState.findFilesText
-            || !fileState.store.folderStore.currentFolder.isRoot) return this.list();
+        if (
+            this.data.length ||
+            fileState.findFilesText ||
+            !fileState.store.folderStore.currentFolder.isRoot
+        )
+            return this.list();
         return this.isZeroState && <FilesZeroStatePlaceholder />;
     }
 
     renderThrow() {
         const { noFilesInFolder } = this;
         return (
-            <View
-                style={{ flex: 1, flexGrow: 1 }}>
+            <View ref={this.flatListRef} style={{ flex: 1, flexGrow: 1 }}>
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.darkBlueBackground05 }}>
                     {upgradeForFiles()}
                     {noFilesInFolder || this.body()}

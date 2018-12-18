@@ -29,15 +29,19 @@ export default class ChatInfoSectionHeader extends SafeComponent {
         return (
             <TouchableOpacity
                 pressRetentionOffset={vars.retentionOffset}
-                style={style} onPress={toggleCollapsed} disabled={!collapsible}>
-                <Text bold style={textStyle}>{title}</Text>
-                {collapsible &&
-                <Icon
-                    name={collapsed
-                        ? 'arrow-drop-down' : 'arrow-drop-up'}
-                    size={24}
-                    style={{ color: vars.subtleText }}
-                />}
+                style={style}
+                onPress={toggleCollapsed}
+                disabled={!collapsible}>
+                <Text bold style={textStyle}>
+                    {title}
+                </Text>
+                {collapsible && (
+                    <Icon
+                        name={collapsed ? 'arrow-drop-down' : 'arrow-drop-up'}
+                        size={24}
+                        style={{ color: vars.subtleText }}
+                    />
+                )}
             </TouchableOpacity>
         );
     }

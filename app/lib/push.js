@@ -18,7 +18,8 @@ function onRegister(token) {
         console.log(`🚲 push.js: onAuthenticated`);
         // TODO: remove when server is persisting tokensif (pushState.registered) return;
         console.log(`🚲 push.js: sending registration OS: ${JSON.stringify(payload)}`);
-        socket.send('/auth/mobile-device/register', payload)
+        socket
+            .send('/auth/mobile-device/register', payload)
             .then(r => {
                 console.log(`🚲 push.js: register result success ${JSON.stringify(r)}`);
                 pushState.registered = true;
@@ -29,11 +30,9 @@ function onRegister(token) {
     socket.onAuthenticated(registerServerSide);
     console.log(`push register called`);
     setTimeout(() => {
-        PushNotificationIOS.presentLocalNotification(
-            {
-                alertBody: 'Hello world!!!'
-            }
-        );
+        PushNotificationIOS.presentLocalNotification({
+            alertBody: 'Hello world!!!'
+        });
         /* PushNotification.localNotification({
             title: 'hello',
             message: `processed a notification:`
@@ -50,15 +49,12 @@ function enablePushNotifications() {
             console.log('🚲 push.js: NOTIFICATION:', notification);
             if (notification.data && notification.data.remote) {
                 console.log('try presenting a notificaiton');
-                await PushNotificationIOS.presentLocalNotification(
-                    {
-                        alertBody: `Generated message: ${randomWords()}`
-                    }
-                );
+                await PushNotificationIOS.presentLocalNotification({
+                    alertBody: `Generated message: ${randomWords()}`
+                });
                 await notification.finish(PushNotificationIOS.FetchResult.NoData);
                 await PushNotificationIOS.cancelAllLocalNotifications();
                 await PushNotificationIOS.removeAllDeliveredNotifications();
-
 
                 console.log('🚲 push.js: nofitication finish callback called');
                 /* PushNotification.localNotification({
@@ -86,14 +82,18 @@ function toggleServerSide(enable) {
     const action = enable ? 'enable' : 'disable';
     console.log(`🚲 push.js: ${action} push waiting for socket`);
     pushState.enabled = enable;
-    when(() => pushState.registered && socket.authenticated, () => {
-        if (enable !== pushState.enabled) return;
-        console.log(`🚲 push.js: ${action} push request`);
-        const req = `/auth/push/${action}`;
-        socket.send(req)
-            .then(r => console.log(`🚲 push.js: ${action} server ${r}`))
-            .catch(e => console.error(e));
-    });
+    when(
+        () => pushState.registered && socket.authenticated,
+        () => {
+            if (enable !== pushState.enabled) return;
+            console.log(`🚲 push.js: ${action} push request`);
+            const req = `/auth/push/${action}`;
+            socket
+                .send(req)
+                .then(r => console.log(`🚲 push.js: ${action} server ${r}`))
+                .catch(e => console.error(e));
+        }
+    );
 }
 
 function clearBadge() {

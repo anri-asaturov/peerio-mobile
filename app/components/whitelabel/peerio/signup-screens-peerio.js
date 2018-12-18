@@ -29,4 +29,3 @@ const PAGE_NAMES = Object.keys(PAGES);
 const PAGE_COMPONENTS = Object.values(PAGES);
 
 module.exports = { PAGE_NAMES, PAGE_COMPONENTS };
-

@@ -1,9 +1,12 @@
 import vars from './vars';
 import common from './common';
 
-const inputContainer = [common.fullAbsoluteContainer, {
-    flexDirection: 'row'
-}];
+const inputContainer = [
+    common.fullAbsoluteContainer,
+    {
+        flexDirection: 'row'
+    }
+];
 
 const alertInvisible = {
     borderBottomColor: 'transparent',
@@ -44,15 +47,20 @@ export default {
     alertInvisible,
     alertVisible,
     focused: {
-        outer: [{
-            // ios shadow
-            // shadowOpacity: 0.4,
-            elevation: 10
-        }],
-        radius: [radius, {
-            // android shadow
-            // elevation: 10
-        }],
+        outer: [
+            {
+                // ios shadow
+                // shadowOpacity: 0.4,
+                elevation: 10
+            }
+        ],
+        radius: [
+            radius,
+            {
+                // android shadow
+                // elevation: 10
+            }
+        ],
         touchable: [inputContainer],
         textbox
     },

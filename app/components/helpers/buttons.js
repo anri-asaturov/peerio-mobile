@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
-import { tu } from '../utils/translator';
+import { tu, tx } from '../utils/translator';
 import testLabel from '../helpers/test-label';
 
 export default {
@@ -16,9 +16,13 @@ export default {
             <TouchableOpacity
                 {...testLabel(accessibilityId)}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
-                <Text style={{ backgroundColor: 'transparent', color: disabled ? vars.txtMedium : vars.white }}>
+                <Text
+                    style={{
+                        backgroundColor: 'transparent',
+                        color: disabled ? vars.txtMedium : vars.white
+                    }}>
                     {tu(text)}
                 </Text>
             </TouchableOpacity>
@@ -33,11 +37,9 @@ export default {
         return (
             <TouchableOpacity
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={{ opacity: disabled ? 0 : 1 }}>
-                <Text style={[textStyle, buttonStyle]}>
-                    {tu(text)}
-                </Text>
+                <Text style={[textStyle, buttonStyle]}>{tu(text)}</Text>
             </TouchableOpacity>
         );
     },
@@ -54,7 +56,7 @@ export default {
                     {...testLabel(accessibilityId)}
                     disabled={disabled}
                     onPress={disabled ? null : onPress}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={[buttonStyle, style]}>
                     <Text semibold style={{ color: disabled ? vars.txtMedium : vars.peerioBlue }}>
                         {tu(text)}
@@ -76,7 +78,7 @@ export default {
                 {...testLabel(accessibilityId)}
                 disabled={disabled}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
                 <Text bold style={{ textAlign: 'center', color: vars.white }}>
                     {tu(text)}
@@ -110,10 +112,62 @@ export default {
                 {...testLabel(accessibilityId)}
                 disabled={disabled}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={[touchableStyle, containerStyle]}>
                 <View style={[buttonStyle, style]}>
-                    <Text semibold style={textStyle}>{tu(text)}</Text>
+                    <Text semibold style={textStyle}>
+                        {tu(text)}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
+    },
+
+    roundBlueBgButtonWithSubtitle(
+        text,
+        subtitle,
+        onPress,
+        disabled,
+        accessibilityId,
+        style,
+        containerStyle
+    ) {
+        const touchableStyle = {
+            height: vars.button.touchableHeight,
+            alignItems: 'center',
+            justifyContent: 'center'
+        };
+        const buttonStyle = {
+            minWidth: vars.button.minWidth,
+            height: vars.button.buttonHeight * 1.2,
+            paddingHorizontal: vars.button.paddingHorizontal,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: vars.button.borderRadius,
+            backgroundColor: disabled ? vars.mediumGrayBg : vars.peerioBlue
+        };
+        const textStyle = {
+            textAlign: 'center',
+            color: vars.white,
+            fontSize: vars.font.size14
+        };
+        const subtitleStyle = {
+            textAlign: 'center',
+            color: vars.textWhite50,
+            fontSize: vars.font.size10
+        };
+        return (
+            <TouchableOpacity
+                {...testLabel(accessibilityId)}
+                disabled={disabled}
+                onPress={disabled ? null : onPress}
+                pressRetentionOffset={vars.retentionOffset}
+                style={[touchableStyle, containerStyle]}>
+                <View style={[buttonStyle, style]}>
+                    <Text semibold style={textStyle}>
+                        {tx(text)}
+                    </Text>
+                    <Text style={subtitleStyle}>{tx(subtitle)}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -146,10 +200,56 @@ export default {
                 {...testLabel(accessibilityId)}
                 disabled={disabled}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={touchableStyle}>
                 <View style={[buttonStyle, style]}>
-                    <Text semibold style={textStyle}>{tu(text)}</Text>
+                    <Text semibold style={textStyle}>
+                        {tu(text)}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
+    },
+
+    roundWhiteBgButtonWithSubtitle(text, subtitle, onPress, disabled, accessibilityId, style) {
+        const touchableStyle = {
+            height: vars.button.touchableHeight,
+            alignItems: 'center',
+            justifyContent: 'center'
+        };
+        const buttonStyle = {
+            minWidth: vars.button.minWidth,
+            height: vars.button.buttonHeight * 1.2,
+            paddingHorizontal: vars.button.paddingHorizontal,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: vars.button.borderRadius,
+            borderColor: vars.peerioBlue,
+            borderWidth: 1,
+            backgroundColor: disabled ? vars.mediumGrayBg : vars.white
+        };
+        const textStyle = {
+            textAlign: 'center',
+            color: vars.peerioBlue,
+            fontSize: vars.font.size14
+        };
+        const subtitleStyle = {
+            textAlign: 'center',
+            color: vars.black54,
+            fontSize: vars.font.size10
+        };
+        return (
+            <TouchableOpacity
+                {...testLabel(accessibilityId)}
+                disabled={disabled}
+                onPress={disabled ? null : onPress}
+                pressRetentionOffset={vars.retentionOffset}
+                style={touchableStyle}>
+                <View style={[buttonStyle, style]}>
+                    <Text semibold style={textStyle}>
+                        {tx(text)}
+                    </Text>
+                    <Text style={subtitleStyle}>{tx(subtitle)}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -163,7 +263,7 @@ export default {
         return (
             <TouchableOpacity
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={buttonStyle}>
                 <Text bold style={{ color: disabled ? vars.txtMedium : vars.red }}>
                     {tu(text)}

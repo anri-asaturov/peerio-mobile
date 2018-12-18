@@ -9,7 +9,6 @@ import { tx } from '../utils/translator';
 
 const containerStyle = {
     justifyContent: 'center'
-
 };
 
 const titleStyle = {

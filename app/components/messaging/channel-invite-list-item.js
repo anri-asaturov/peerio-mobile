@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observable, when } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -12,6 +12,7 @@ import routes from '../routes/routes';
 import testLabel from '../helpers/test-label';
 import uiState from '../layout/ui-state';
 import { chatInviteStore } from '../../lib/icebear';
+import { transitionAnimationTimed } from '../helpers/animations';
 
 @observer
 export default class ChannelInviteListItem extends SafeComponent {
@@ -19,16 +20,18 @@ export default class ChannelInviteListItem extends SafeComponent {
     @observable declinedStyle;
 
     componentDidMount() {
-        this.fadeOutReaction = when(() => uiState.declinedChannelId === this.props.id, () => {
-            this.declinedStyle = true;
-            setTimeout(() => {
-                this.animating = true;
-                LayoutAnimation.configureNext({ duration: 2000 });
-                LayoutAnimation.easeInEaseOut();
-            }, 400);
-            chatInviteStore.rejectInvite(this.props.id);
-            uiState.declinedChannelId = null;
-        });
+        this.fadeOutReaction = when(
+            () => uiState.declinedChannelId === this.props.id,
+            () => {
+                this.declinedStyle = true;
+                setTimeout(() => {
+                    this.animating = true;
+                    transitionAnimationTimed(2000);
+                }, 400);
+                chatInviteStore.rejectInvite(this.props.id);
+                uiState.declinedChannelId = null;
+            }
+        );
     }
 
     componentWillReceiveProps(/* nextProps */) {
@@ -87,14 +90,13 @@ export default class ChannelInviteListItem extends SafeComponent {
                 {...testLabel(channelName)}>
                 <TouchableOpacity
                     onPress={this.onPress}
-                    style={containerStyle} pressRetentionOffset={vars.pressRetentionOffset}>
+                    style={containerStyle}
+                    pressRetentionOffset={vars.retentionOffset}>
                     <Text semibold style={textStyle}>
                         {`# ${channelName}`}
                     </Text>
                     <View style={circleStyle}>
-                        <Text style={textNewStyle}>
-                            {t('title_new')}
-                        </Text>
+                        <Text style={textNewStyle}>{t('title_new')}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

@@ -7,16 +7,13 @@ import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
 
-const conatinerStyle =
-{
+const conatinerStyle = {
     flex: 1,
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginVertical:
-    vars.spacing.small.midi2x
+    marginVertical: vars.spacing.small.midi2x
 };
-
 
 const dateStyle = {
     flex: 0,
@@ -53,9 +50,7 @@ export default class DateSeparator extends SafeComponent {
         return (
             <View style={conatinerStyle}>
                 <View style={separator} />
-                <Text style={dateStyle}>
-                    {this.date}
-                </Text>
+                <Text style={dateStyle}>{this.date}</Text>
                 <View style={separator} />
             </View>
         );

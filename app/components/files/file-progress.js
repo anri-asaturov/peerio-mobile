@@ -28,13 +28,10 @@ export default class FileProgress extends SafeComponent {
 
     renderThrow() {
         if (this.hidden) return null;
-        return (
-            <Progress value={this.value} max={this.max} />
-        );
+        return <Progress value={this.value} max={this.max} />;
     }
 }
 
 FileProgress.propTypes = {
     file: PropTypes.any
 };
-

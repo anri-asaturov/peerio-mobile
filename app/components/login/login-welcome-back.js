@@ -12,9 +12,9 @@ import LoginButtonBack from './login-button-back';
 import LoginInputs from './login-inputs';
 import { User, telemetry } from '../../lib/icebear';
 import tm from '../../telemetry';
-import TmHelper from '../../telemetry/helpers';
 import ActivityOverlay from '../controls/activity-overlay';
 import DebugMenuTrigger from '../shared/debug-menu-trigger';
+import routes from '../routes/routes';
 
 const { S } = telemetry;
 
@@ -33,29 +33,41 @@ const subtitleStyle = {
     marginBottom: marginBottom + 10
 };
 
+const sublocation = S.WELCOME_BACK_SCREEN;
+
+const loginTelemetryHelper = {
+    location: S.SIGN_IN,
+    sublocation
+};
+
 @observer
 export default class LoginWelcomeBack extends SafeComponent {
     @observable lastUser;
 
     async componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.WELCOME_BACK_SCREEN;
         this.lastUser = await User.getLastAuthenticated();
+        if (!this.lastUser) {
+            routes.app.loginWelcome();
+        }
     }
 
     componentWillUnmount() {
-        tm.login.duration(this.startTime);
+        tm.login.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound onSignupPress() {
+    @action.bound
+    onSignupPress() {
         loginState.routes.app.signupStep1();
     }
 
-    @action.bound onLoginPress() {
+    @action.bound
+    onLoginPress() {
         loginState.routes.app.loginClean();
     }
 
-    @action.bound switchUserLink(text) {
+    @action.bound
+    switchUserLink(text) {
         const onPress = () => {
             tm.login.changeUser();
             loginState.switchUser();
@@ -82,12 +94,18 @@ export default class LoginWelcomeBack extends SafeComponent {
         return (
             <View style={signupStyles.page}>
                 <IntroStepIndicator max={1} current={1} />
-                <View style={[signupStyles.container, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
-                    <LoginButtonBack />
+                <View
+                    style={[
+                        signupStyles.container,
+                        { paddingHorizontal: signupStyles.pagePaddingLarge }
+                    ]}>
+                    <LoginButtonBack telemetry={{ sublocation, option: S.BACK }} />
                     <DebugMenuTrigger>
                         <View style={{ marginTop }}>
                             <Text semibold serif style={titleStyle}>
-                                {tx('title_welcomeBackFirstname', { firstName: this.lastUser.firstName })}
+                                {tx('title_welcomeBackFirstname', {
+                                    firstName: this.lastUser.firstName
+                                })}
                             </Text>
                             <T k="title_switchUser" style={subtitleStyle}>
                                 {{
@@ -97,7 +115,7 @@ export default class LoginWelcomeBack extends SafeComponent {
                             </T>
                         </View>
                     </DebugMenuTrigger>
-                    <LoginInputs hideUsernameInput />
+                    <LoginInputs telemetry={loginTelemetryHelper} hideUsernameInput />
                 </View>
                 <ActivityOverlay large visible={loginState.isInProgress} />
                 <StatusBar hidden />

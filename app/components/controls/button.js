@@ -24,7 +24,13 @@ export default class Button extends Component {
                 accessibilityLabel={this.props.accessibilityLabel}
                 testID={this.props.testID}>
                 <View style={this.props.style}>
-                    <Text bold={this.props.bold} style={[{ backgroundColor: 'transparent', color: vars.highlight }, textStyle, opacity]}>
+                    <Text
+                        bold={this.props.bold}
+                        style={[
+                            { backgroundColor: 'transparent', color: vars.highlight },
+                            textStyle,
+                            opacity
+                        ]}>
                         {text}
                     </Text>
                 </View>

@@ -20,29 +20,34 @@ export default class FileInlineProgress extends SafeComponent {
     }
 
     get file() {
-        return this.props.chatId ?
-            fileState.store.getByIdInChat(this.props.file, this.props.chatId) :
-            fileState.store.getById(this.props.file);
+        return this.props.chatId
+            ? fileState.store.getByIdInChat(this.props.file, this.props.chatId)
+            : fileState.store.getById(this.props.file);
     }
 
     get downloadProgress() {
         if (!this.file) return 0;
         const { progress, progressMax } = this.file;
-        return Math.min(Math.ceil(progress / progressMax * 100), 100);
+        return Math.min(Math.ceil((progress / progressMax) * 100), 100);
     }
 
     // If file is cached, open in viewer
     // If file is NOT cached, download and then when download is complete open in viewer
-    @action.bound fileAction() {
-        when(() => this.file.hasFileAvailableForPreview, () => {
-            this.file.launchViewer().catch(() => {
-                snackbarState.pushTemporary(tx('snackbar_couldntOpenFile'));
-            });
-        });
+    @action.bound
+    fileAction() {
+        when(
+            () => this.file.hasFileAvailableForPreview,
+            () => {
+                this.file.launchViewer().catch(() => {
+                    snackbarState.pushTemporary(tx('snackbar_couldntOpenFile'));
+                });
+            }
+        );
         if (!this.file.hasFileAvailableForPreview) fileState.download(this.file);
     }
 
-    @action.bound onCancel() {
+    @action.bound
+    onCancel() {
         fileState.cancelDownload(this.file);
     }
 
@@ -71,23 +76,34 @@ export default class FileInlineProgress extends SafeComponent {
                 onActionSheet={this.props.onActionSheet}
                 onAction={this.fileAction}
                 onLegacyFileAction={this.props.onLegacyFileAction}>
-                {!this.filePreviouslyDownloaded &&
+                {!this.filePreviouslyDownloaded && (
                     <TouchableOpacity
-                        pressRetentionOffset={vars.pressRetentionOffset}
+                        pressRetentionOffset={vars.retentionOffset}
                         style={downloadStatusContainer}
                         onPress={onPress}>
                         <Text semibold style={textStyle}>
-                            {file.downloading && !file.cached &&
-                                <Text>{tx('button_cancelDownload')} ({this.downloadProgress}%)</Text>}
-                            {!file.downloading && !file.cached &&
-                                <Text>{tx('button_downloadToView')} ({file.sizeFormatted})</Text>}
-                            {!file.downloading && file.cached &&
-                                <Text>{tx('button_openFile')}</Text>}
+                            {file.downloading &&
+                                !file.cached && (
+                                    <Text>
+                                        {tx('button_cancelDownload')} ({this.downloadProgress}%)
+                                    </Text>
+                                )}
+                            {!file.downloading &&
+                                !file.cached && (
+                                    <Text>
+                                        {tx('button_downloadToView')} ({file.sizeFormatted})
+                                    </Text>
+                                )}
+                            {!file.downloading &&
+                                file.cached && <Text>{tx('button_openFile')}</Text>}
                         </Text>
-                    </TouchableOpacity>}
+                    </TouchableOpacity>
+                )}
                 <View style={{ flex: 0 }}>
-                    {!file.uploading && this.props.transparentOnFinishUpload && <ActivityIndicator />}
-                    {file.uploading && icons.darkNoPadding('close', () => fileState.cancelUpload(file))}
+                    {!file.uploading &&
+                        this.props.transparentOnFinishUpload && <ActivityIndicator />}
+                    {file.uploading &&
+                        icons.darkNoPadding('close', () => fileState.cancelUpload(file))}
                 </View>
             </FileInlineContainer>
         );

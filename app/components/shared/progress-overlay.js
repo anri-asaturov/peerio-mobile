@@ -5,7 +5,7 @@ import { View, ActivityIndicator } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 
 const overlay = {
-//    backgroundColor: '#00000020',
+    //    backgroundColor: '#00000020',
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',

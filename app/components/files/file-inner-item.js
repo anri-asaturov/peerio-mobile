@@ -14,7 +14,8 @@ import FileTypeIcon from './file-type-icon';
 import testLabel from '../helpers/test-label';
 import FileProgress from './file-progress';
 import { fileHelpers, contactStore, User } from '../../lib/icebear';
-// import FileActionSheet from './file-action-sheet';
+import MeasureableIcon from '../layout/measureable-icon';
+import filesBeacons from '../beacons/files-beacons';
 
 const { width } = Dimensions.get('window');
 const height = vars.filesListItemHeight;
@@ -27,9 +28,11 @@ const fileInfoContainerStyle = {
 
 @observer
 export default class FileInnerItem extends SafeComponent {
-    @action.bound onPress() {
+    @action.bound
+    onPress() {
         const { file } = this.props;
-        this.props.onPress && !fileState.isFileSelectionMode ? this.props.onPress(file)
+        this.props.onPress && !fileState.isFileSelectionMode
+            ? this.props.onPress(file)
             : (file.selected = !file.selected);
     }
 
@@ -57,12 +60,31 @@ export default class FileInnerItem extends SafeComponent {
         );
     }
 
-    renderThrow() {
+    get iconRight() {
         const { file, onFileAction } = this.props;
-        if (file.signatureError) return <View style={{ marginHorizontal: vars.spacing.small.midi }}><FileSignatureError /></View>;
-        const actionIcon = () => onFileAction();
-        const iconRight = file.uploading ? icons.dark('close', () => fileState.cancelUpload(file)) :
-            icons.dark('more-vert', actionIcon, null, null, 'more-vert');
+        const beforeUploadIcon = icons.dark('close', () => fileState.cancelUpload(file));
+        const uploadedIcon = (
+            <MeasureableIcon
+                icon="more-vert"
+                testId="more-vert"
+                beacon={filesBeacons.fileOptionsBeacon}
+                color={vars.darkIcon}
+                onPress={onFileAction}
+                spotBgColor={vars.filesBg}
+            />
+        );
+
+        return file.uploading ? beforeUploadIcon : uploadedIcon;
+    }
+
+    renderThrow() {
+        const { file } = this.props;
+        if (file.signatureError)
+            return (
+                <View style={{ marginHorizontal: vars.spacing.small.midi }}>
+                    <FileSignatureError />
+                </View>
+            );
         const checked = this.props.file && this.props.file.selected;
         const nameStyle = {
             color: vars.txtDark,
@@ -96,18 +118,19 @@ export default class FileInnerItem extends SafeComponent {
         }
         if (icon) icon = icons.darkNoPadding(icon);
         const loadingStyle = null;
-        const optionsIcon = this.props.hideArrow || fileState.isFileSelectionMode ? null : (
-            <View style={{ flex: 0 }}>
-                {iconRight}
-            </View>
-        );
-        const testID = file.name;
-        const owner = !file.fileOwner || file.fileOwner === User.current.username
-            ? `` : `${contactStore.getContact(file.fileOwner).fullName} `;
+        const optionsIcon =
+            this.props.hideArrow || fileState.isFileSelectionMode ? null : (
+                <View style={{ flex: 0 }}>{this.iconRight}</View>
+            );
+        const testID = file.nameWithoutExtension;
+        const owner =
+            !file.fileOwner || file.fileOwner === User.current.username
+                ? ``
+                : `${contactStore.getContact(file.fileOwner).fullName} `;
         return (
             <View style={{ backgroundColor: vars.chatItemPressedBackground }}>
                 <TouchableOpacity
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     onPress={this.onPress}
                     {...testLabel(testID)}
                     accessible={false}
@@ -115,15 +138,27 @@ export default class FileInnerItem extends SafeComponent {
                     <View style={[fileInfoContainerStyle, { opacity }]}>
                         {this.checkbox()}
                         <View style={[itemContainerStyle, { width }]}>
-                            <View style={[loadingStyle, { flex: 0, paddingRight: vars.fileInnerItemPaddingRight }]}>
-                                {icon ||
+                            <View
+                                style={[
+                                    loadingStyle,
+                                    { flex: 0, paddingRight: vars.fileInnerItemPaddingRight }
+                                ]}>
+                                {icon || (
                                     <FileTypeIcon
                                         size="smaller"
                                         type={fileHelpers.getFileIconType(file.ext)}
-                                    />}
+                                    />
+                                )}
                             </View>
-                            <View style={{ flexGrow: 1, flexShrink: 1, marginLeft: vars.spacing.medium.mini2x }}>
-                                <Text bold style={nameStyle} numberOfLines={1} ellipsizeMode="tail">{file.name}</Text>
+                            <View
+                                style={{
+                                    flexGrow: 1,
+                                    flexShrink: 1,
+                                    marginLeft: vars.spacing.medium.mini2x
+                                }}>
+                                <Text bold style={nameStyle} numberOfLines={1} ellipsizeMode="tail">
+                                    {file.name}
+                                </Text>
                                 <Text style={infoStyle}>
                                     <Text>{owner}</Text>
                                     {file.size && <Text>{file.sizeFormatted}</Text>}

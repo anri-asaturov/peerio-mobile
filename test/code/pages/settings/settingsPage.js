@@ -36,6 +36,14 @@ class SettingsPage extends Page {
     get copyButton() {
         return this.getWhenVisible('~popupButton-copy');
     }
+
+    get helpButton() {
+        return this.getWhenPresent('~title_help');
+    }
+
+    get chatButton() {
+        return this.getWhenVisible('~title_contactPeerioSupport');
+    }
 }
 
 module.exports = SettingsPage;

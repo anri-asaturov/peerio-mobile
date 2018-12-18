@@ -73,7 +73,13 @@ export default class PopupMigration extends SafeComponent {
         ) : (
             <View style={container}>
                 <Progress max={100} value={fileStore.migration.progress} />
-                {(fileStore.migration.progress !== 0) && <Text style={textStyle}>{tx('title_fileUpdateProgressPercent', { progress: fileStore.migration.progress })}</Text>}
+                {fileStore.migration.progress !== 0 && (
+                    <Text style={textStyle}>
+                        {tx('title_fileUpdateProgressPercent', {
+                            progress: fileStore.migration.progress
+                        })}
+                    </Text>
+                )}
             </View>
         );
     }
@@ -90,7 +96,8 @@ export default class PopupMigration extends SafeComponent {
                 <AlternatingText
                     initialText={tx('title_fileUpdateProgressDescription')}
                     messageArray={messageArray}
-                    textStyle={alternatingTextStyle} />
+                    textStyle={alternatingTextStyle}
+                />
             </View>
         );
     }

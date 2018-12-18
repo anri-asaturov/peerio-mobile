@@ -10,7 +10,10 @@ export default class MockTopDrawer extends Component {
         return (
             <TopDrawer
                 headingText="Heading"
-                image={icons.imageIcon(require('../../assets/info-icon.png'), vars.iconSizeMedium2x)}
+                image={icons.imageIcon(
+                    require('../../assets/info-icon.png'),
+                    vars.iconSizeMedium2x
+                )}
                 descriptionText="Max 2 lines. Lorem Ipsum is simply dummy text of the printing and typesetting industry."
                 buttonText="ButtonText"
             />

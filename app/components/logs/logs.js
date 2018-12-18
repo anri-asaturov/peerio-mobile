@@ -34,20 +34,22 @@ export default class Logs extends Component {
 
     @observable.shallow items = [];
 
-    @action.bound update() {
-        this.items = console.stack
-            .map(mapFormat)
-            .slice();
+    @action.bound
+    update() {
+        this.items = console.stack.map(mapFormat).slice();
     }
 
     sendLogs() {
         const subject = `Support // logs from ${User.current ? User.current.username : 'n/a'}`;
         const recipients = config.logRecipients;
         if (console.logVersion) console.logVersion();
-        const body = `<pre>${console.stack.map(mapFormat).map(mapGlue).join('\n')}</pre>`;
+        const body = `<pre>${console.stack
+            .map(mapFormat)
+            .map(mapGlue)
+            .join('\n')}</pre>`;
         RNMail.mail(
             { subject, recipients, body, isHTML: true },
-            (error) => error && Alert.alert(`Error sending logs`, error)
+            error => error && Alert.alert(`Error sending logs`, error)
         );
     }
 
@@ -69,16 +71,16 @@ export default class Logs extends Component {
                     pressRetentionOffset={vars.retentionOffset}
                     onPress={this.sendLogs}>
                     <View style={s}>
-                        <Text style={{ color: 'white' }}>
-                            {`Send Logs`}
-                        </Text>
+                        <Text style={{ color: 'white' }}>Send Logs</Text>
                     </View>
                 </TouchableOpacity>
             </View>
         );
     }
 
-    flatListRef = (sv) => { this.scrollView = sv; };
+    flatListRef = sv => {
+        this.scrollView = sv;
+    };
 
     list() {
         return (

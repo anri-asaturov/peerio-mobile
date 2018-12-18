@@ -35,7 +35,7 @@ const inputContainer = {
 
 const labelContainerStyle = {
     position: 'absolute',
-    top: (-vars.font.size12 / 2) - 2,
+    top: -vars.font.size12 / 2 - 2,
     left: vars.spacing.small.mini2x,
     backgroundColor: 'white',
     paddingLeft: vars.spacing.small.mini2x,

@@ -26,8 +26,7 @@ export default class SyncContactsButton extends SafeComponent {
         const width = 247;
         return (
             <View style={{ alignItems: 'center' }}>
-                <MeasureableView
-                    onMeasure={this.onMeasure}>
+                <MeasureableView onMeasure={this.onMeasure}>
                     {buttons.roundBlueBgButton(
                         'button_syncContacts',
                         contactState.syncContacts,

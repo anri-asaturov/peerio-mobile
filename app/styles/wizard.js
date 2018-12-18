@@ -40,18 +40,23 @@ export default {
         marginTop: 12,
         marginBottom: 30
     },
-    textInfo: {
-    },
+    textInfo: {},
     text: {
         title: textInverse,
-        subTitle: [textInverse, {
-            fontSize: 24,
-            marginTop: 12,
-            marginBottom: 32
-        }],
-        info: [textInverse, {
-            fontSize: 12
-        }]
+        subTitle: [
+            textInverse,
+            {
+                fontSize: 24,
+                marginTop: 12,
+                marginBottom: 32
+            }
+        ],
+        info: [
+            textInverse,
+            {
+                fontSize: 12
+            }
+        ]
     },
     footer: {
         row: {

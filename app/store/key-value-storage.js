@@ -37,16 +37,14 @@ class KeyValueStorage {
     }
 
     getAllKeys() {
-        return AsyncStorage.getAllKeys()
-            .then(keys => {
-                return keys.filter(k => k.startsWith(this.prefix)).map(k => this._getOriginalKey(k));
-            });
+        return AsyncStorage.getAllKeys().then(keys => {
+            return keys.filter(k => k.startsWith(this.prefix)).map(k => this._getOriginalKey(k));
+        });
     }
 
     clear() {
         return this.getAllKeys().then(keys => Promise.map(keys, key => this.removeValue(key)));
     }
 }
-
 
 export default KeyValueStorage;

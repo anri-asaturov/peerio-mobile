@@ -1,16 +1,18 @@
 import { observable, action, when, reaction } from 'mobx';
-import { chatStore, chatInviteStore, clientApp, warnings } from '../../lib/icebear';
+import { chatStore, chatInviteStore, clientApp, warnings, contactStore } from '../../lib/icebear';
 import RoutedState from '../routes/routed-state';
 import sounds from '../../lib/sounds';
 import { tx } from '../utils/translator';
 import routes from '../routes/routes';
 import { promiseWhen } from '../helpers/sugar';
+import MockChannel from '../mocks/mock-channel';
+
+const mockChannelNumber = 20;
 
 class ChatState extends RoutedState {
     @observable store = chatStore;
     @observable chatInviteStore = chatInviteStore;
     @observable collapseChannels = false;
-    @observable collapseDMs = false;
     @observable selfNewMessageCounter = 0;
     LIMIT_PEOPLE_DM = 1;
 
@@ -18,7 +20,9 @@ class ChatState extends RoutedState {
     @observable collapseFirstChannelInfoList = false;
 
     // to be able to easily refactor, keep the name "chatStore"
-    get chatStore() { return this.store; }
+    get chatStore() {
+        return this.store;
+    }
 
     _loading = true;
 
@@ -29,16 +33,22 @@ class ChatState extends RoutedState {
             sounds.received();
         });
 
-        reaction(() => this.chatStore.activeChat, chat => {
-            if (chat) {
-                console.log(`chat-store switched to ${chat.id}`);
-                console.log(`chat-store: loading ${chat.id}`);
-                this.loading = false;
-            } else if (this.routerMain && this.routerMain.route === 'chats') this.routerMain.chats();
-        }, { fireImmediately: true });
+        reaction(
+            () => this.chatStore.activeChat,
+            chat => {
+                if (chat) {
+                    console.log(`chat-store switched to ${chat.id}`);
+                    console.log(`chat-store: loading ${chat.id}`);
+                    this.loading = false;
+                } else if (this.routerMain && this.routerMain.route === 'chats')
+                    this.routerMain.chats();
+            },
+            { fireImmediately: true }
+        );
     }
 
-    @action async init() {
+    @action
+    async init() {
         const { store } = this;
         await promiseWhen(() => store.loaded);
     }
@@ -51,8 +61,11 @@ class ChatState extends RoutedState {
 
     get loading() {
         const c = this.currentChat;
-        return this._loading ||
-            this.chatStore.loading || c && (c.loadingMeta || c.loadingInitialPage);
+        return (
+            this._loading ||
+            this.chatStore.loading ||
+            (c && (c.loadingMeta || c.loadingInitialPage))
+        );
     }
 
     set loading(v) {
@@ -80,23 +93,31 @@ class ChatState extends RoutedState {
         clientApp.isInChatsView = active && !!c;
         this.loading = c && c.loadingMeta;
         if (active) {
-            when(() => !this.chatStore.loading, () => {
-                if (!this.chatStore.chats.length) this.loading = false;
-                c && this.activate(c);
-                console.log(`chat-state.js: active: ${c && c.active}, isFocused: ${clientApp.isFocused}, isInChatsView: ${clientApp.isInChatsView}`);
-            });
+            when(
+                () => !this.chatStore.loading,
+                () => {
+                    if (!this.chatStore.chats.length) this.loading = false;
+                    c && this.activate(c);
+                    console.log(
+                        `chat-state.js: active: ${c && c.active}, isFocused: ${
+                            clientApp.isFocused
+                        }, isInChatsView: ${clientApp.isInChatsView}`
+                    );
+                }
+            );
         }
     }
 
     get unreadMessages() {
         let r = 0;
-        this.chatStore.chats.forEach(c => { r += c.unreadCount; });
+        this.chatStore.chats.forEach(c => {
+            r += c.unreadCount;
+        });
         return r;
     }
 
     get canSend() {
-        return this.currentChat && this.currentChat.id &&
-            !this.currentChat.loadingMessages;
+        return this.currentChat && this.currentChat.id && !this.currentChat.loadingMessages;
     }
 
     get canSendAck() {
@@ -107,7 +128,8 @@ class ChatState extends RoutedState {
         return this.canSend && this.currentChat.canSendJitsi;
     }
 
-    @action async startChat(recipients, isChannel = false, name, purpose) {
+    @action
+    async startChat(recipients, isChannel = false, name, purpose) {
         try {
             this.loading = true;
             const chat = await this.store.startChat(recipients, isChannel, name, purpose);
@@ -122,46 +144,77 @@ class ChatState extends RoutedState {
         }
     }
 
-    @action async startChatAndShareFiles(recipients, file) {
+    @action
+    async startChatAndShareFiles(recipients, file) {
         if (!file) return;
         await this.store.startChatAndShareFiles(recipients, file);
         this.routerMain.chats(this.store.activeChat, true);
     }
 
-    @action addMessage(msg) {
+    @action
+    addMessage(msg) {
         this.selfNewMessageCounter++;
-        this.currentChat && msg &&
-            this.currentChat.sendMessage(msg).catch(sounds.destroy);
+        this.currentChat && msg && this.currentChat.sendMessage(msg).catch(sounds.destroy);
     }
 
-    @action shareFilesAndFolders(filesAndFolders) {
+    @action
+    shareFilesAndFolders(filesAndFolders) {
         this.selfNewMessageCounter++;
-        this.currentChat && filesAndFolders && filesAndFolders.length &&
+        this.currentChat &&
+            filesAndFolders &&
+            filesAndFolders.length &&
             this.currentChat.shareFilesAndFolders(filesAndFolders).catch(sounds.destroy);
     }
 
-    @action addVideoMessage(link) {
+    @action
+    addVideoMessage(link) {
         this.selfNewMessageCounter++;
         this.currentChat && this.currentChat.createVideoCall(link);
     }
 
-    @action addAck() {
+    @action
+    addAck() {
         this.selfNewMessageCounter++;
-        this.currentChat && this.currentChat
-            .sendAck().catch(sounds.destroy);
+        this.currentChat && this.currentChat.sendAck().catch(sounds.destroy);
     }
 
     get titleAction() {
         if (this.routerMain.currentIndex === 0) return null;
-        return this.currentChat ? (() => {
-            this.currentChat.isChannel ? this.routerModal.channelInfo() : this.routerModal.chatInfo();
-        }) : null;
+        return this.currentChat
+            ? () => {
+                  this.currentChat.isChannel
+                      ? this.routerModal.channelInfo()
+                      : this.routerModal.chatInfo();
+              }
+            : null;
     }
 
     fabAction() {
         console.log(`chat-state.js: fab action`);
         routes.modal.compose();
     }
+
+    @action.bound
+    testFillWithMockChannels() {
+        for (let i = 0; i < mockChannelNumber; ++i) {
+            this.chatStore.chats.push(
+                new MockChannel(`${Math.floor(Math.random() * 1000) + 1000}`)
+            );
+        }
+    }
+
+    @action
+    startDMWithUsername(username) {
+        this.startChat([contactStore.getContact(username)]);
+    }
+
+    @action
+    async addContactAndStartChat(username) {
+        const contact = await contactStore.whitelabel.getContact(username);
+        this.startChat([contact]);
+    }
 }
 
-export default new ChatState();
+const chatState = new ChatState();
+global.chatState = chatState;
+export default chatState;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { ScrollView, View, LayoutAnimation, Platform } from 'react-native';
+import { ScrollView, View, Platform } from 'react-native';
 import { action, reaction } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -8,6 +8,7 @@ import popupState from './popup-state';
 import ButtonText from '../controls/button-text';
 import { vars } from '../../styles/styles';
 import uiState from './ui-state';
+import { transitionAnimation } from '../helpers/animations';
 
 const colors = {
     systemWarning: vars.yellow,
@@ -17,7 +18,7 @@ const colors = {
 @observer
 export default class PopupLayout extends SafeComponent {
     componentDidMount() {
-        reaction(() => popupState.activePopup, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => popupState.activePopup, transitionAnimation);
     }
 
     onPress(item) {
@@ -25,7 +26,7 @@ export default class PopupLayout extends SafeComponent {
         popupState.discardPopup();
     }
 
-    button = (item) => {
+    button = item => {
         const { text, id, secondary, disabled } = item;
         return (
             <ButtonText
@@ -34,11 +35,13 @@ export default class PopupLayout extends SafeComponent {
                 disabled={disabled}
                 key={id}
                 text={text}
-                testID={id} />
+                testID={id}
+            />
         );
     };
 
-    @action.bound scrollViewRef(sv) {
+    @action.bound
+    scrollViewRef(sv) {
         this.scrollView = sv;
         uiState.currentScrollView = sv;
     }
@@ -56,9 +59,12 @@ export default class PopupLayout extends SafeComponent {
             zIndex: 16
         };
 
-        const popupNonAnimatedStyle = [modalStyle, {
-            transform: [{ translateY: 0 }]
-        }];
+        const popupNonAnimatedStyle = [
+            modalStyle,
+            {
+                transform: [{ translateY: 0 }]
+            }
+        ];
         const contentContainerStyle = {
             flexGrow: 1,
             justifyContent: 'center',
@@ -123,14 +129,23 @@ export default class PopupLayout extends SafeComponent {
                 contentContainerStyle={contentContainerStyle}>
                 <View style={wrapper}>
                     <View style={container}>
-                        <View style={{ padding: popup.noPadding ? 0 : vars.popupPadding, flexGrow: 1, flexShrink: 1 }}>
-                            {popup.title ? <Text bold style={title} >{popup.title}</Text> : null}
-                            {popup.subTitle ? <Text style={subTitle} >{popup.subTitle}</Text> : null}
+                        <View
+                            style={{
+                                padding: popup.noPadding ? 0 : vars.popupPadding,
+                                flexGrow: 1,
+                                flexShrink: 1
+                            }}>
+                            {popup.title ? (
+                                <Text bold style={title}>
+                                    {popup.title}
+                                </Text>
+                            ) : null}
+                            {popup.subTitle ? <Text style={subTitle}>{popup.subTitle}</Text> : null}
                             {popup.contents}
                         </View>
-                        {popup.buttons && <View style={buttonBar}>
-                            {popup.buttons.map(this.button)}
-                        </View>}
+                        {popup.buttons && (
+                            <View style={buttonBar}>{popup.buttons.map(this.button)}</View>
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -138,5 +153,4 @@ export default class PopupLayout extends SafeComponent {
     }
 }
 
-PopupLayout.propTypes = {
-};
+PopupLayout.propTypes = {};

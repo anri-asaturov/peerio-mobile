@@ -13,7 +13,6 @@ import SignupGenerationBox from './signup-generation-box';
 import SignupPdfPreview from './signup-pdf-preview';
 import SignupHeading from './signup-heading';
 import tm from '../../telemetry';
-import TmHelper from '../../telemetry/helpers';
 import { telemetry } from '../../lib/icebear';
 
 const { S } = telemetry;
@@ -24,15 +23,16 @@ const buttonContainer = {
     marginBottom: vars.spacing.small.mini2x
 };
 
+const sublocation = S.ACCOUNT_KEY;
+
 @observer
 export default class SignupBackupAk extends SafeComponent {
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.ACCOUNT_KEY;
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
     copyAccountKey() {
@@ -40,20 +40,22 @@ export default class SignupBackupAk extends SafeComponent {
             Clipboard.setString(signupState.passphrase);
             snackbarState.pushTemporary(t('title_copied'));
             signupState.keyBackedUp = true;
-            tm.signup.copyAk();
+            tm.signup.copyAk({ sublocation });
         } catch (e) {
             console.error(e);
         }
     }
 
-    @action.bound handleNext() {
+    @action.bound
+    handleNext() {
         signupState.next();
-        tm.signup.navigate(S.NEXT);
+        tm.signup.navigate({ sublocation, option: S.NEXT });
     }
 
-    @action.bound handleSkip() {
+    @action.bound
+    handleSkip() {
         signupState.next();
-        tm.signup.navigate(S.SKIP);
+        tm.signup.navigate({ sublocation, option: S.SKIP });
     }
 
     renderThrow() {
@@ -61,7 +63,10 @@ export default class SignupBackupAk extends SafeComponent {
         return (
             <View style={signupStyles.page}>
                 <View style={signupStyles.backupAkPage}>
-                    <SignupHeading title="title_backupAk" subTitle="title_generatingAkDescription" />
+                    <SignupHeading
+                        title="title_backupAk"
+                        subTitle="title_generatingAkDescription"
+                    />
                     <SignupGenerationBox />
                     <View style={buttonContainer}>
                         {buttons.blueTextButton(
@@ -69,13 +74,12 @@ export default class SignupBackupAk extends SafeComponent {
                             this.copyAccountKey,
                             null,
                             null,
-                            'button_copy')}
+                            'button_copy'
+                        )}
                     </View>
-                    <Text style={signupStyles.description2}>
-                        {tx('title_akBackupDescription')}
-                    </Text>
+                    <Text style={signupStyles.description2}>{tx('title_akBackupDescription')}</Text>
                     <View>
-                        <SignupPdfPreview />
+                        <SignupPdfPreview telemetry={{ sublocation }} />
                     </View>
                     <View style={[buttonContainer, { marginTop }]}>
                         {buttons.blueTextButton(
@@ -83,7 +87,8 @@ export default class SignupBackupAk extends SafeComponent {
                             signupState.keyBackedUp ? this.handleNext : this.handleSkip,
                             null,
                             null,
-                            'button_next')}
+                            'button_next'
+                        )}
                     </View>
                 </View>
             </View>

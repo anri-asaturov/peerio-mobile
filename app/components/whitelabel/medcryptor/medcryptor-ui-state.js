@@ -261,7 +261,8 @@ class MedCryptorUIState extends RoutedState {
     @observable specialtySelected = '';
     specialties = {
         'Allied Health': 'Allied Health',
-        'Aboriginal and Torres Strait Islander Health': 'Aboriginal and Torres Strait Islander Health',
+        'Aboriginal and Torres Strait Islander Health':
+            'Aboriginal and Torres Strait Islander Health',
         'Chinese Medicine': 'Chinese Medicine',
         Chiropractic: 'Chiropractic',
         Dental: 'Dental',

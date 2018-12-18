@@ -31,23 +31,28 @@ const paragraphStyle = {
 export default class TosAccordionItem extends SafeComponent {
     @observable isOpen = false;
 
-    @action.bound toggle() {
+    @action.bound
+    toggle() {
         this.isOpen = !this.isOpen;
         // Only need to send TM event on Open
         if (this.isOpen) {
             if (this.props.data.title === 'title_termsOfUse') {
-                tm.signup.readMoreAccordion(S.TERMS_OF_USE_SUMMARY);
-            } else tm.signup.readMoreAccordion(tx(this.props.data.title));
+                tm.signup.readMoreAccordion({ item: S.TERMS_OF_USE_SUMMARY });
+            } else tm.signup.readMoreAccordion({ item: tx(this.props.data.title) });
         }
     }
 
     keyExtractor = item => item.subtitle;
 
     paragraphItem({ item }) {
-        return (<View style={paragraphStyle}>
-            <Text bold style={textStyle}>{tx(item.subtitle)}</Text>
-            <Text style={textStyle}>{tx(item.description)}</Text>
-        </View>);
+        return (
+            <View style={paragraphStyle}>
+                <Text bold style={textStyle}>
+                    {tx(item.subtitle)}
+                </Text>
+                <Text style={textStyle}>{tx(item.description)}</Text>
+            </View>
+        );
     }
 
     renderThrow() {
@@ -74,14 +79,18 @@ export default class TosAccordionItem extends SafeComponent {
             <View style={container}>
                 <TouchableOpacity onPress={this.toggle} style={titleStyle}>
                     {this.isOpen ? leftIcon.on : leftIcon.off}
-                    <Text semibold style={[textTitleStyle, { color: titleTextColor }]}>{tx(title)}</Text>
+                    <Text semibold style={[textTitleStyle, { color: titleTextColor }]}>
+                        {tx(title)}
+                    </Text>
                     {icons.darkNoPadding(rightIconName, this.toggle)}
                 </TouchableOpacity>
-                {this.isOpen ? <FlatList
-                    data={content}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={this.paragraphItem}
-                /> : null}
+                {this.isOpen ? (
+                    <FlatList
+                        data={content}
+                        keyExtractor={this.keyExtractor}
+                        renderItem={this.paragraphItem}
+                    />
+                ) : null}
             </View>
         );
     }

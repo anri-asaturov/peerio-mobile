@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
@@ -75,9 +76,10 @@ const textBoxText = {
 
 @observer
 export default class SignupPdfPreview extends SafeComponent {
-    @action.bound saveAccountKey() {
-        signupState.saveAccountKey();
-        tm.signup.saveAk();
+    @action.bound
+    saveAccountKey() {
+        signupState.saveAccountKey(this.props.telemetry);
+        tm.signup.saveAk(this.props.telemetry);
     }
 
     renderThrow() {
@@ -105,21 +107,22 @@ export default class SignupPdfPreview extends SafeComponent {
                 </View>
                 <View style={footer}>
                     <View>
-                        <Text style={filenameStyle}>
-                            {signupState.backupFileName('pdf')}
-                        </Text>
-                        <Text style={filesizeStyle}>
-                            {FILE_SIZE}
-                        </Text>
+                        <Text style={filenameStyle}>{signupState.backupFileName('pdf')}</Text>
+                        <Text style={filesizeStyle}>{FILE_SIZE}</Text>
                     </View>
                     {buttons.roundBlueBgButton(
                         tx('button_downloadPdf'),
                         this.saveAccountKey,
                         null,
                         'button_downloadPdf',
-                        { marginHorizontal: vars.spacing.small.mini2x })}
+                        { marginHorizontal: vars.spacing.small.mini2x }
+                    )}
                 </View>
             </View>
         );
     }
 }
+
+SignupPdfPreview.propTypes = {
+    telemetry: PropTypes.any
+};

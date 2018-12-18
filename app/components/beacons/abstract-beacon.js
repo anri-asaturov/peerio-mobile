@@ -1,8 +1,9 @@
-import { action, observable } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { LayoutAnimation, Dimensions } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 import beaconState from './beacon-state';
+import { uiState } from '../states';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -35,21 +36,33 @@ export default class AbstractBeacon extends SafeComponent {
 
     componentWillMount() {
         LayoutAnimation.configureNext(fadeInAnimation);
+        this.dismissBeaconReaction = reaction(
+            () => uiState.modalShown,
+            () => {
+                const { onUnmount, id } = this.props;
+                if (beaconState.activeBeacon.id === id) {
+                    onUnmount && onUnmount(this.wasPressed);
+                }
+            }
+        );
     }
 
     componentWillUnmount() {
         const { onUnmount } = this.props;
         onUnmount && onUnmount(this.wasPressed);
+        this.dismissBeaconReaction && this.dismissBeaconReaction();
     }
 
-    @action.bound onPress() {
+    @action.bound
+    onPress() {
         const { id } = this.props;
         LayoutAnimation.configureNext(fadeOutAnimation);
         beaconState.removeBeacon(id);
         beaconState.markSeen([id]);
     }
 
-    @action.bound onPressContainer() {
+    @action.bound
+    onPressContainer() {
         // pressing container should break the flow of beacons
         // if we have one. to handle that we use onDismiss
         const { onDismiss, id } = this.props;
@@ -64,7 +77,8 @@ export default class AbstractBeacon extends SafeComponent {
         }
     }
 
-    @action.bound onPressIcon() {
+    @action.bound
+    onPressIcon() {
         this.wasPressed = true;
         this.onPress();
         this.props.onPressIcon();
@@ -84,7 +98,8 @@ export default class AbstractBeacon extends SafeComponent {
         return x <= windowWidth / 2;
     }
 
-    @action.bound onDescriptionTextLayout(e) {
+    @action.bound
+    onDescriptionTextLayout(e) {
         const { height } = e.nativeEvent.layout;
         this.descriptionTextHeight = height;
     }

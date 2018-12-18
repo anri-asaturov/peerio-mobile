@@ -28,36 +28,43 @@ export default class MockBeacon extends Component {
         User.current = mockContactStore.createMock();
         User.current.activePlans = [];
         User.current.beacons = {
-            get() { return null; }
+            get() {
+                return null;
+            }
         };
         contactState.store = mockContactStore;
         contactState.init();
         routes.main.route = 'chats';
     }
 
-    @action.bound toggleTopBottom() {
+    @action.bound
+    toggleTopBottom() {
         this.showVertical = true;
         this.showTop = !this.showTop;
         this.showLeft = false;
     }
 
-    @action.bound toggleLeftRight() {
+    @action.bound
+    toggleLeftRight() {
         this.showVertical = false;
         this.showLeft = !this.showLeft;
         this.showTop = false;
     }
 
-    @action.bound toggleArrow() {
+    @action.bound
+    toggleArrow() {
         uiState.mockBeaconArrowDirection = !uiState.mockBeaconArrowDirection;
         beaconState.activeBeacon.sidePointer = !uiState.mockBeaconArrowDirection;
     }
 
-    @action.bound toggleBeaconType() {
+    @action.bound
+    toggleBeaconType() {
         uiState.mockBeaconType = !uiState.mockBeaconType;
         beaconState.activeBeacon.component = uiState.mockBeaconType ? AreaBeacon : SpotBeacon;
     }
 
-    @action.bound toggleHorizontalPadding() {
+    @action.bound
+    toggleHorizontalPadding() {
         this.padding = this.padding ? 0 : 100;
     }
 
@@ -72,24 +79,44 @@ export default class MockBeacon extends Component {
         return (
             <View style={containerStyle}>
                 {!this.showVertical && this.showLeft && <MockTabContainer vertical />}
-                <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.white, paddingHorizontal: 20, paddingVertical: 50 }}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexGrow: 1,
+                        backgroundColor: vars.white,
+                        paddingHorizontal: 20,
+                        paddingVertical: 50
+                    }}>
                     <Text>1. Click on any icon to see its beacon</Text>
                     <Text>2. Use the buttons to change beacon properties</Text>
                     {buttons.roundWhiteBgButton('Toggle Top/Bottom', this.toggleTopBottom)}
                     {buttons.roundWhiteBgButton('Toggle Left/Right', this.toggleLeftRight)}
                     {buttons.roundWhiteBgButton('Toggle Arrow Orientation', this.toggleArrow)}
                     {buttons.roundWhiteBgButton('Toggle Area/Spot Beacon', this.toggleBeaconType)}
-                    {buttons.roundWhiteBgButton('Toggle Left/Right Padding', this.toggleHorizontalPadding)}
-                    <Text>(Left/Right padding causes beacon position on the page to change, which changes
-                        the position of the arrow with respect to the beacon when the arrow is oriented horizontally)</Text>
+                    {buttons.roundWhiteBgButton(
+                        'Toggle Left/Right Padding',
+                        this.toggleHorizontalPadding
+                    )}
+                    <Text>
+                        (Left/Right padding causes beacon position on the page to change, which
+                        changes the position of the arrow with respect to the beacon when the arrow
+                        is oriented horizontally)
+                    </Text>
                 </View>
                 {!this.showVertical && !this.showLeft && <MockTabContainer vertical />}
-            </View>);
+            </View>
+        );
     }
 
     render() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
+            <View
+                style={{
+                    backgroundColor: 'white',
+                    flex: 1,
+                    flexGrow: 1,
+                    paddingTop: vars.layoutPaddingTop
+                }}>
                 {this.showVertical && this.showTop && <MockTabContainer />}
                 {this.list}
                 {this.showVertical && !this.showTop && <MockTabContainer />}

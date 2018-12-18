@@ -26,14 +26,16 @@ export default class FileActionSheet {
             return;
         }
         const { isLegacy, readyForDownload } = file;
-        const header = (<FileActionSheetHeader
-            file={file}
-            onPress={() => {
-                routes.modal.discard();
-                routes.main.files(file);
-                ActionSheetLayout.hide();
-            }}
-        />);
+        const header = (
+            <FileActionSheetHeader
+                file={file}
+                onPress={() => {
+                    routes.modal.discard();
+                    routes.main.files(file);
+                    ActionSheetLayout.hide();
+                }}
+            />
+        );
 
         // Files that exist can be opened right away
         // Files that dont exist need to be downloaded firs
@@ -77,13 +79,15 @@ export default class FileActionSheet {
         }
 
         // Move
-        actionButtons.push({
-            title: tx('button_move'),
-            disabled: isLegacy,
-            action: async () => {
-                await routes.modal.moveFileTo({ fsObject: file });
-            }
-        });
+        // TODO: a better way to not show move option in DMs and rooms
+        routes.main.route !== 'chats' &&
+            actionButtons.push({
+                title: tx('button_move'),
+                disabled: isLegacy,
+                action: async () => {
+                    await routes.modal.moveFileTo({ fsObject: file });
+                }
+            });
 
         // Rename
         actionButtons.push({

@@ -9,6 +9,7 @@ import chatState from './../../messaging/chat-state';
 import testLabel from '../../helpers/test-label';
 import icons from '../../helpers/icons';
 import { t } from '../../utils/translator';
+import routes from '../../routes/routes';
 
 const containerStyle = {
     height: vars.sectionHeaderHeight,
@@ -70,7 +71,7 @@ export default class MedcryptorSpaceListItem extends SafeComponent {
     onPress = () => {
         const { spaceId } = this.props.space;
         chatState.store.spaces.activeSpaceId = spaceId;
-        return chatState.routerMain.space();
+        return routes.main.space();
     };
 
     renderThrow() {
@@ -85,26 +86,27 @@ export default class MedcryptorSpaceListItem extends SafeComponent {
                     {...testLabel(spaceName)}
                     onPress={this.onPress}
                     style={containerStyle}
-                    pressRetentionOffset={vars.pressRetentionOffset}>
+                    pressRetentionOffset={vars.retentionOffset}>
                     <View style={nameContainerStyle}>
                         <Text
                             semibold={hasUnread}
-                            style={[textStyle, (hasUnread && textUnreadStyle)]}>
+                            style={[textStyle, hasUnread && textUnreadStyle]}>
                             {`${spaceName}`}
                         </Text>
                         {icons.dark('chevron-right', this.onPress)}
                     </View>
-                    {hasInvites && <View style={newCircleStyle}>
-                        <Text style={textNewStyle}>
-                            {t('title_new')}
-                        </Text>
-                    </View>}
-                    {hasUnread && <View style={circleStyle}>
-                        <Text semibold style={textCircleStyle}>
-                            {unreadCount}
-                        </Text>
-                    </View>}
-
+                    {hasInvites && (
+                        <View style={newCircleStyle}>
+                            <Text style={textNewStyle}>{t('title_new')}</Text>
+                        </View>
+                    )}
+                    {hasUnread && (
+                        <View style={circleStyle}>
+                            <Text semibold style={textCircleStyle}>
+                                {unreadCount}
+                            </Text>
+                        </View>
+                    )}
                 </TouchableOpacity>
             </View>
         );

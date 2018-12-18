@@ -44,7 +44,9 @@ const labelStyle = {
 };
 
 const whiteStyle = {
-    backgroundColor: vars.white, paddingVertical: vars.spacing.small.maxi, paddingHorizontal
+    backgroundColor: vars.white,
+    paddingVertical: vars.spacing.small.maxi,
+    paddingHorizontal
 };
 
 const row = { flexDirection: 'row' };
@@ -100,7 +102,9 @@ export default class TwoFactorAuthCodes extends SafeComponent {
 
         // if (Platform.OS === 'android') {
         mimeType = 'text/plain';
-        filePath = `${Platform.OS === 'android' ? RNFS.ExternalDirectoryPath : RNFS.DocumentDirectoryPath}/backup codes for ${User.current.username}.txt`;
+        filePath = `${
+            Platform.OS === 'android' ? RNFS.ExternalDirectoryPath : RNFS.DocumentDirectoryPath
+        }/backup codes for ${User.current.username}.txt`;
         await RNFS.writeFile(filePath, formatTableTxt(this.codes), 'utf8');
         /* } else {
             const html = formatTableHTML(this.codes);
@@ -120,39 +124,43 @@ export default class TwoFactorAuthCodes extends SafeComponent {
         return (
             <View style={bgStyle}>
                 <View>
-                    <Text bold
-                        style={headerStyle}
-                        {...testLabel('title_2FABackupCode')} >
+                    <Text bold style={headerStyle} {...testLabel('title_2FABackupCode')}>
                         {tx('title_2FABackupCode')}
                     </Text>
                     <Text style={infoStyle}>
-                        {
-                            `Save these backup codes in a safe place so that you
+                        {`Save these backup codes in a safe place so that you
 still login if you're unable to access your
 authenticator app.`}
                     </Text>
-                    <Text style={labelStyle}>
-                        {tx('title_2FABackupCode')}
-                    </Text>
+                    <Text style={labelStyle}>{tx('title_2FABackupCode')}</Text>
                 </View>
                 <View style={whiteStyle}>
                     <View style={row}>
                         <View style={column}>
-                            {this.codes.slice(0, this.codes.length / 2).map(i =>
-                                <Text bold style={textStyle} key={i}>{i}</Text>
-                            )}
+                            {this.codes.slice(0, this.codes.length / 2).map(i => (
+                                <Text bold style={textStyle} key={i}>
+                                    {i}
+                                </Text>
+                            ))}
                         </View>
                         <View style={column}>
-                            {this.codes.slice(this.codes.length / 2, this.codes.length).map(i =>
-                                <Text bold style={textStyle} key={i}>{i}</Text>
-                            )}
+                            {this.codes.slice(this.codes.length / 2, this.codes.length).map(i => (
+                                <Text bold style={textStyle} key={i}>
+                                    {i}
+                                </Text>
+                            ))}
                         </View>
                     </View>
                     <View style={rowRight}>
                         {buttons.blueTextButton(tx('title_download'), () => this.downloadCodes())}
                     </View>
                 </View>
-                <View style={{ left: paddingHorizontal + 12, bottom: paddingVertical, position: 'absolute' }}>
+                <View
+                    style={{
+                        left: paddingHorizontal + 12,
+                        bottom: paddingVertical,
+                        position: 'absolute'
+                    }}>
                     {buttons.redTextButton('title_2FADisableAuth', this.disable2fa)}
                 </View>
             </View>

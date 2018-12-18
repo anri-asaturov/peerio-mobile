@@ -31,7 +31,8 @@ bicolor.propTypes = {
 };
 
 const effects = {
-    gradient, bicolor
+    gradient,
+    bicolor
 };
 
 export { gradient, bicolor };

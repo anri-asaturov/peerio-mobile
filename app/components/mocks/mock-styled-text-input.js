@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react';
 import { View, ScrollView, Dimensions } from 'react-native';
 import { observer } from 'mobx-react/native';
@@ -10,12 +8,12 @@ const { width } = Dimensions.get('window');
 
 @observer
 export default class MockStyleTextInput extends Component {
-    validation1 = async (value) => {
+    validation1 = async value => {
         const expression = '123';
         return value === expression;
     };
 
-    validation2 = async (value) => {
+    validation2 = async value => {
         const expression = '123';
         return value === expression;
     };
@@ -29,8 +27,13 @@ export default class MockStyleTextInput extends Component {
                 keyboardShouldPersistTaps="handled"
                 scrollEnabled={false}
                 showsHorizontalScrollIndicator={false}
-                ref={sv => { this._scrollView = sv; }}
-                key="scroll" horizontal pagingEnabled removeClippedSubviews={false}>
+                ref={sv => {
+                    this._scrollView = sv;
+                }}
+                key="scroll"
+                horizontal
+                pagingEnabled
+                removeClippedSubviews={false}>
                 <View style={{ marginTop: 150, width }}>
                     <StyledTextInput
                         state={this.state1}

@@ -43,7 +43,8 @@ export default class ChannelUpgradeOffer extends Component {
             marginTop: vars.spacing.medium.midi
         };
 
-        return (gradient({ height: 100, alignItems: 'center' },
+        return gradient(
+            { height: 100, alignItems: 'center' },
             <View style={container}>
                 <View style={offerStyle}>
                     <Text style={offerTextStyle}>
@@ -51,9 +52,14 @@ export default class ChannelUpgradeOffer extends Component {
                     </Text>
                 </View>
                 <View style={buttonStyle}>
-                    {buttons.whiteTextButtonNoPadding(tx('button_upgrade'), () => settingsState.upgrade(), false, { fontWeight: '600' })}
+                    {buttons.whiteTextButtonNoPadding(
+                        tx('button_upgrade'),
+                        () => settingsState.upgrade(),
+                        false,
+                        { fontWeight: '600' }
+                    )}
                 </View>
             </View>
-        ));
+        );
     }
 }

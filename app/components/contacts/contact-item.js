@@ -23,7 +23,8 @@ export default class ContactItem extends SafeComponent {
                 onPress={this.onPress}
                 disableTapping={isInvited}
                 contact={contact}
-                invited={isInvited} />
+                invited={isInvited}
+            />
         );
     }
 }

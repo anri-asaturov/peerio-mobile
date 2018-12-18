@@ -2,12 +2,12 @@ const Page = require('../page');
 const { selectorWithText } = require('../../helpers/androidHelper');
 
 class FileViewPage extends Page {
-    get fileDownloadTab() {
-        return this.getWhenEnabled(`~file-download-tab`);
+    get fileOpenButton() {
+        return this.getWhenEnabled(`~popupButton-open`);
     }
 
-    get fileOpenTab() {
-        return this.getWhenEnabled(`~open-in-new-tab`);
+    get fileDownloadButton() {
+        return this.getWhenEnabled(`~popupButton-download`);
     }
     get encryptionRecommendationPopup() {
         const cancelButtonSelector = selectorWithText('CANCEL');

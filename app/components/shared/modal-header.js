@@ -8,10 +8,13 @@ import { tx } from '../utils/translator';
 @observer
 export default class ModalHeader extends Component {
     render() {
-        const outerStyle = [{
-            backgroundColor: vars.darkBlueBackground15,
-            marginBottom: vars.spacing.small.midi2x
-        }, this.props.outerStyle];
+        const outerStyle = [
+            {
+                backgroundColor: vars.darkBlueBackground15,
+                marginBottom: vars.spacing.small.midi2x
+            },
+            this.props.outerStyle
+        ];
 
         const textStyle = {
             textAlign: 'center',
@@ -21,7 +24,11 @@ export default class ModalHeader extends Component {
             color: vars.textBlack54
         };
 
-        const titleComponent = <Text semibold style={textStyle}>{tx(this.props.title)}</Text>;
+        const titleComponent = (
+            <Text semibold style={textStyle}>
+                {tx(this.props.title)}
+            </Text>
+        );
         const { leftIcon, rightIcon, testID } = this.props;
         return <CommonHeader {...{ titleComponent, leftIcon, rightIcon, outerStyle, testID }} />;
     }

@@ -2,7 +2,8 @@ import { Image } from 'react-native';
 
 function adjustImageDimensions(imageAsset, requestedWidth, requestedHeight) {
     const asset = Image.resolveAssetSource(imageAsset);
-    let adjustedWidth = asset.width, adjustedHeight = asset.height;
+    let adjustedWidth = asset.width,
+        adjustedHeight = asset.height;
     const aspectRatio = adjustedWidth / adjustedHeight;
     if (requestedWidth) {
         adjustedWidth = requestedWidth;

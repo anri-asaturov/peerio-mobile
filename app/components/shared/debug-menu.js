@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { when, observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import { config, overrideServer, socket } from '../../lib/icebear';
@@ -10,6 +10,8 @@ import Logs from '../logs/logs';
 import consoleOverride from '../../lib/console-override';
 import SafeComponent from './safe-component';
 import uiState from '../layout/ui-state';
+import { transitionAnimation } from '../helpers/animations';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 const { height } = Dimensions.get('window');
 
@@ -58,13 +60,25 @@ export default class DebugMenu extends SafeComponent {
     @observable disableButtons = true;
 
     componentDidMount() {
-        when(() => socket.connected, () => { this.switchServerValue = config.socketServerUrl; });
-        when(() => uiState.showDebugMenu, () => {
-            setTimeout(() => {
-                this.disableButtons = false;
-            }, 2000);
-        });
+        when(
+            () => socket.connected,
+            () => {
+                this.switchServerValue = config.socketServerUrl;
+            }
+        );
+        when(
+            () => uiState.showDebugMenu,
+            () => {
+                transitionAnimation();
+                setTimeout(() => {
+                    transitionAnimation();
+                    this.disableButtons = false;
+                }, 2000);
+            }
+        );
     }
+
+    componentWillUnmount() {}
 
     async debugServer(serverName) {
         await overrideServer(serverName);
@@ -74,29 +88,39 @@ export default class DebugMenu extends SafeComponent {
     renderThrow() {
         if (!uiState.showDebugMenu) return null;
         return (
-            <View style={container}>
+            <View style={[container, { opacity: this.disableButtons ? 0.5 : 1 }]}>
                 <View style={debugContainer}>
                     <View>
                         <Button
                             style={button}
-                            onPress={() => { uiState.showDebugMenu = false; }}
+                            onPress={() => {
+                                uiState.showDebugMenu = false;
+                            }}
                             text="Hide Debug Menu"
-                            textStyle={{ textAlign: 'center' }} />
+                            textStyle={{ textAlign: 'center' }}
+                            disabled={this.disableButtons}
+                        />
                     </View>
                     <View style={buttonContainer}>
                         <View style={{ flex: 1 }}>
                             <Button
                                 style={button}
-                                onPress={() => { this.showDebugLogs = !this.showDebugLogs; }}
+                                onPress={() => {
+                                    this.showDebugLogs = !this.showDebugLogs;
+                                }}
                                 text="Toggle logs"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                             <Button
                                 style={button}
-                                onPress={() => { consoleOverride.verbose = !consoleOverride.verbose; }}
+                                onPress={() => {
+                                    consoleOverride.verbose = !consoleOverride.verbose;
+                                }}
                                 text="Toggle Verbose"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                         </View>
                         <View style={{ flex: 1 }}>
                             <Button
@@ -104,22 +128,27 @@ export default class DebugMenu extends SafeComponent {
                                 onPress={() => this.debugServer(this.switchServerValue)}
                                 text="Override server"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                             <Button
                                 style={button}
                                 onPress={() => this.debugServer(null)}
                                 text="Reset Server"
                                 textStyle={{ textAlign: 'center' }}
-                                disabled={this.disableButtons} />
+                                disabled={this.disableButtons}
+                            />
                         </View>
                     </View>
                     <View style={{ flex: 0 }}>
-                        <TextInput
+                        <TextInputUncontrolled
                             autoCorrect={false}
                             autoCapitalize="none"
                             value={this.switchServerValue}
-                            onChangeText={text => { this.switchServerValue = text; }}
-                            style={input} />
+                            onChangeText={text => {
+                                this.switchServerValue = text;
+                            }}
+                            style={input}
+                        />
                     </View>
                 </View>
                 {this.debugLogs}
@@ -128,9 +157,10 @@ export default class DebugMenu extends SafeComponent {
     }
 
     get debugLogs() {
-        return this.showDebugLogs ?
+        return this.showDebugLogs ? (
             <View style={{ backgroundColor: 'white', height: height * 0.6, marginHorizontal: 8 }}>
                 <Logs />
-            </View> : null;
+            </View>
+        ) : null;
     }
 }

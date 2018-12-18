@@ -16,6 +16,16 @@ function transitionAnimation() {
     });
 }
 
+function transitionAnimationTimed(animationDuration) {
+    if (Platform.OS === 'android') return fadeInAnimation();
+    return LayoutAnimation.configureNext({
+        duration: animationDuration,
+        delete: easeInOpacity,
+        create: easeInOpacity,
+        update: easeInOpacity
+    });
+}
+
 function fadeInAnimation() {
     return LayoutAnimation.configureNext({
         duration,
@@ -31,8 +41,4 @@ function fadeOutAnimation() {
     });
 }
 
-export {
-    transitionAnimation,
-    fadeInAnimation,
-    fadeOutAnimation
-};
+export { transitionAnimation, transitionAnimationTimed, fadeInAnimation, fadeOutAnimation };

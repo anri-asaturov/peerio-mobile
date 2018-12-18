@@ -10,12 +10,11 @@ import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { TopDrawerBackupAccountKey } from '../shared/top-drawer-components';
-import { drawerState, uiState } from '../states';
+import { drawerState } from '../states';
 import { socket, telemetry } from '../../lib/icebear';
 import routes from '../routes/routes';
 import TosAccordion from './tos-accordion';
 import { popupTOS, popupPrivacy } from '../shared/popups';
-import TmHelper from '../../telemetry/helpers';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -39,6 +38,8 @@ const buttonContainer = {
     backgroundColor: vars.white
 };
 
+const sublocation = S.TERMS_OF_USE;
+
 @observer
 export default class SignupTos extends SafeComponent {
     componentWillMount() {
@@ -48,26 +49,24 @@ export default class SignupTos extends SafeComponent {
 
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.TERMS_OF_USE;
         if (!signupState.keyBackedUp) {
             drawerState.addDrawer(TopDrawerBackupAccountKey);
         }
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound cancelSignup() {
-        tm.signup.navigate(S.CANCEL);
+    @action.bound
+    cancelSignup() {
+        tm.signup.navigate({ sublocation, option: S.CANCEL });
         routes.app.signupCancel();
     }
 
     @action.bound
-    async finishSignup() {
+    finishSignup() {
         tm.signup.acceptTos();
-        await signupState.finishAccountCreation();
-        uiState.isFirstLogin = true;
         signupState.next();
     }
 
@@ -75,32 +74,44 @@ export default class SignupTos extends SafeComponent {
         return (
             <View>
                 <Text style={signupStyles.description2}>
-                    {<T k="title_termsDescription">
-                        {{
-                            openTerms: this.openTermsLink,
-                            openPrivacy: this.openPrivacyLink
-                        }}
-                    </T>}
+                    {
+                        <T k="title_termsDescription">
+                            {{
+                                openTerms: this.openTermsLink,
+                                openPrivacy: this.openPrivacyLink
+                            }}
+                        </T>
+                    }
                 </Text>
                 <TosAccordion style={{ paddingBottom: buttonContainerHeight }} />
             </View>
         );
     }
 
-    @action.bound openTermsLink(text) {
+    @action.bound
+    openTermsLink(text) {
         const onPress = async () => {
-            tm.signup.readMorePopup(S.TERMS_OF_USE);
+            tm.signup.readMorePopup({ item: S.TERMS_OF_USE });
             await popupTOS();
         };
-        return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
+        return (
+            <Text style={{ color: vars.peerioBlue }} onPress={onPress}>
+                {text}
+            </Text>
+        );
     }
 
-    @action.bound openPrivacyLink(text) {
+    @action.bound
+    openPrivacyLink(text) {
         const onPress = async () => {
-            tm.signup.readMorePopup(S.PRIVACY_POLICY);
+            tm.signup.readMorePopup({ item: S.PRIVACY_POLICY });
             await popupPrivacy();
         };
-        return (<Text style={{ color: vars.peerioBlue }} onPress={onPress}>{text}</Text>);
+        return (
+            <Text style={{ color: vars.peerioBlue }} onPress={onPress}>
+                {text}
+            </Text>
+        );
     }
 
     renderThrow() {

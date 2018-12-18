@@ -11,7 +11,8 @@ import contactState from '../contacts/contact-state';
 
 @observer
 export default class TouchableContactAvatar extends SafeComponent {
-    @action.bound onPress() {
+    @action.bound
+    onPress() {
         const { contact } = this.props;
         contactState.contactView(contact);
     }

@@ -15,7 +15,8 @@ import chatState from '../messaging/chat-state';
 @observer
 export default class MockImagePreview extends Component {
     componentWillMount() {
-        const path = '/Users/seavan/Library/Developer/CoreSimulator/Devices/BEEBFAB7-125B-469D-923B-AAF5EB5E47D5/data/Containers/Data/Application/FFE08229-965D-4B1C-8D19-0FF74E7BFE37/Library/Caches/cache/d73b44ad8eea613e8a5d55aebc04d3fc.jpg';
+        const path =
+            '/Users/seavan/Library/Developer/CoreSimulator/Devices/BEEBFAB7-125B-469D-923B-AAF5EB5E47D5/data/Containers/Data/Application/FFE08229-965D-4B1C-8D19-0FF74E7BFE37/Library/Caches/cache/d73b44ad8eea613e8a5d55aebc04d3fc.jpg';
         const fileName = 'image-001.jpg';
         contactState.store.contacts = mockContactStore.contacts;
         chatState.store = mockChatStore;
@@ -25,10 +26,16 @@ export default class MockImagePreview extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: 'white', flex: 1, flexGrow: 1, paddingTop: vars.layoutPaddingTop }}>
+            <View
+                style={{
+                    backgroundColor: 'white',
+                    flex: 1,
+                    flexGrow: 1,
+                    paddingTop: vars.layoutPaddingTop
+                }}>
                 <PopupLayout />
                 <ModalLayout />
-                { /* <StatusBar barStyle="default" /> */}
+                {/* <StatusBar barStyle="default" /> */}
             </View>
         );
     }

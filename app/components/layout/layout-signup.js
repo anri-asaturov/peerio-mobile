@@ -8,7 +8,6 @@ import Bottom from '../controls/bottom';
 import ActivityOverlay from '../controls/activity-overlay';
 import signupState from '../signup/signup-state';
 
-
 @observer
 export default class LayoutSignup extends SafeComponent {
     constructor(props) {

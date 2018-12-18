@@ -13,6 +13,10 @@ class ChatPage extends Page {
         return this.getWhenVisible('~buttonUploadToChat');
     }
 
+    get buttonCloseModal() {
+        return this.getWhenVisible('~closeModal');
+    }
+
     get buttonExitChat() {
         return this.getWhenVisible('~buttonBackIcon');
     }
@@ -34,11 +38,7 @@ class ChatPage extends Page {
     }
 
     get confirmLeaveRoomButton() {
-        return this.getWhenVisible('~popupButton-confirm');
-    }
-
-    get alertLeftRoom() {
-        return this.getWhenVisible('~popupButton-ok');
+        return this.getWhenVisible('~popupButton-Leave');
     }
 
     get invitedContactRemoved() {
@@ -63,6 +63,14 @@ class ChatPage extends Page {
 
     get dismissDmPlaceholder() {
         return this.getWhenVisible('~button_dismiss');
+    }
+
+    get shareFileInChatBeaconVisible() {
+        return this.checkIfVisible('~shareFileInChat');
+    }
+
+    get shareFileInChatBeacon() {
+        return this.getWhenVisible('~shareFileInChat');
     }
 }
 

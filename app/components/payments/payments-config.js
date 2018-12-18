@@ -4,34 +4,35 @@ import { User } from '../../lib/icebear';
 import { tx } from '../utils/translator';
 import whitelabel from '../../components/whitelabel/white-label-config';
 
-const basicPlanInfo =
-`Secure Messaging
+const basicPlanInfo = `Secure Messaging
 Portability across devices
 Secure File Storage & Sharing
 1 GB of secure Peerio Vault storage
 500M max upload file size`;
 
-const professionalIncludesInfo =
-`Includes all features of Basic plan`;
+const professionalIncludesInfo = `Includes all features of Basic plan`;
 
-const professionalPlanInfo =
-`500 GB of secure storage
+const professionalPlanInfo = `500 GB secure file storage
 Unlimited upload file size
-Premium support
+Priority support services`;
+
+const professionalPaymentInfoMonthly = monthly => `
+Monthly plans will be charged ${monthly} at the start of your subscription period. These prices may vary according to your location and local currency.
+
+Your subscription will renew automatically at the end of each billing period unless you disable auto-renew at least 24-hours before the end of your current billing period.
+
+If your subscription is renewed, your account will be charged for renewal within 24-hours prior to the end of the current period.
 `;
 
-const professionalPaymentInfo = (monthly, annual) => `
-Monthly plans will be charged ${monthly}.
+const professionalPaymentInfoAnnual = annual => `
+Annual plans will be charged ${annual} at the start of your subscription period. These prices may vary according to your location and local currency.
 
-Annual plans will be charged ${annual}.
+Your subscription will renew automatically at the end of each billing period unless you disable auto-renew at least 24-hours before the end of your current billing period.
 
-These prices may vary according to your location and local currency.
-
-Your subscription will renew automatically at the end of each billing period unless you disable auto-renew at least 24-hours before the end of your current billing period. If your subscription is renewed, your account will be charged for renewal within 24-hours prior to the end of the current period.
+If your subscription is renewed, your account will be charged for renewal within 24-hours prior to the end of the current period.
 `;
 
-const { professionalYearlyID, professionalMonthlyID }
-    = paymentsNative;
+const { professionalYearlyID, professionalMonthlyID } = paymentsNative;
 
 const serverPlans = [
     'icebear_premium_monthly',
@@ -85,20 +86,24 @@ class ProfessionalPlan extends PaidPlan {
     title = 'title_proPlan';
     storage = '500 GB';
     uploadFileSize = tx('title_unlimited');
-    priceOptions = [{
-        title: 'title_billedMonthly',
-        id: professionalMonthlyID,
-        serverID: 'icebear_pro_monthly',
-        price: whitelabel.PRO_MONTHLY_PRICE || '$12.99 USD/month'
-    }, {
-        title: 'title_billedAnnually',
-        id: professionalYearlyID,
-        serverID: 'icebear_pro_yearly',
-        price: whitelabel.PRO_YEARLY_PRICE || '$119.88 USD/year'
-    }];
+    priceOptions = [
+        {
+            title: 'title_billedMonthly',
+            id: professionalMonthlyID,
+            serverID: 'icebear_pro_monthly',
+            price: whitelabel.PRO_MONTHLY_PRICE || '$12.99 USD/month'
+        },
+        {
+            title: 'title_billedAnnually',
+            id: professionalYearlyID,
+            serverID: 'icebear_pro_yearly',
+            price: whitelabel.PRO_YEARLY_PRICE || '$118.99 USD/year'
+        }
+    ];
     includes = professionalIncludesInfo;
     info = professionalPlanInfo;
-    paymentInfo = professionalPaymentInfo(this.priceOptions[0].price, this.priceOptions[1].price);
+    paymentInfoMonthly = professionalPaymentInfoMonthly(this.priceOptions[0].price);
+    paymentInfoAnnual = professionalPaymentInfoAnnual(this.priceOptions[1].price);
 }
 
 const plans = [new BasicPlan(), new ProfessionalPlan()];

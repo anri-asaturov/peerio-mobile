@@ -19,10 +19,7 @@ export default class FileTypeIcon extends React.Component {
         const sizeStyle = { width: size, height: size };
         return (
             <View style={sizeStyle}>
-                <Image
-                    style={sizeStyle}
-                    source={iconSource}
-                />
+                <Image style={sizeStyle} source={iconSource} />
             </View>
         );
     }

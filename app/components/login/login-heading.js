@@ -28,9 +28,7 @@ export default class LoginHeading extends SafeComponent {
                 <Text semibold serif style={headerStyle}>
                     {tx(title)}
                 </Text>
-                <Text style={headerDescription}>
-                    {tx(subTitle)}
-                </Text>
+                <Text style={headerDescription}>{tx(subTitle)}</Text>
             </View>
         );
     }

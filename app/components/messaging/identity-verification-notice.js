@@ -37,12 +37,8 @@ export default class IdentityVerificationNotice extends Component {
             width: this.props.fullWidth ? null : vars.verificationMessageWidth
         };
         return (
-            <View style={idVerificationContainer} >
-                <Icon style={this.securityIcon}
-                    name="security"
-                    size={vars.iconSize}
-                    color="gray"
-                />
+            <View style={idVerificationContainer}>
+                <Icon style={this.securityIcon} name="security" size={vars.iconSize} color="gray" />
                 <Text style={this.idVerificationText}>
                     <T k="title_verifyUserIdentity" />
                 </Text>

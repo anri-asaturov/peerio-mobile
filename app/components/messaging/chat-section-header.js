@@ -28,7 +28,11 @@ export default class ChatSectionHeader extends SafeComponent {
             color: vars.txtMedium
         };
 
-        const action = collapsible ? () => { chatState[this.props.state] = !chatState[this.props.state]; } : null;
+        const action = collapsible
+            ? () => {
+                  chatState[this.props.state] = !chatState[this.props.state];
+              }
+            : null;
         return (
             <TouchableOpacity
                 {...testLabel(title)}
@@ -37,9 +41,16 @@ export default class ChatSectionHeader extends SafeComponent {
                 style={style}
                 onPress={action}
                 disabled={!collapsible}>
-                <Text semibold style={textStyle}>{title}</Text>
-                {collapsible &&
-                    <Icon name={chatState[this.props.state] ? 'arrow-drop-down' : 'arrow-drop-up'} size={24} style={{ color: vars.txtDark }} />}
+                <Text semibold style={textStyle}>
+                    {title}
+                </Text>
+                {collapsible && (
+                    <Icon
+                        name={chatState[this.props.state] ? 'arrow-drop-down' : 'arrow-drop-up'}
+                        size={24}
+                        style={{ color: vars.txtDark }}
+                    />
+                )}
             </TouchableOpacity>
         );
     }

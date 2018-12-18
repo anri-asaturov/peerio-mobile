@@ -8,8 +8,8 @@ import Toggle from './toggle';
 @observer
 export default class ToggleItem extends SafeComponent {
     get active() {
-        return this.props.reverse ?
-            !this.props.state[this.props.prop]
+        return this.props.reverse
+            ? !this.props.state[this.props.prop]
             : this.props.state[this.props.prop];
     }
 
@@ -20,9 +20,7 @@ export default class ToggleItem extends SafeComponent {
 
     renderThrow() {
         return (
-            <BasicSettingsItem
-                {...this.props}
-                untappable icon={null}>
+            <BasicSettingsItem {...this.props} untappable icon={null}>
                 <Toggle onPress={this.toggle} active={this.active} />
             </BasicSettingsItem>
         );
@@ -36,4 +34,3 @@ ToggleItem.propTypes = {
     description: PropTypes.any,
     onPress: PropTypes.any
 };
-

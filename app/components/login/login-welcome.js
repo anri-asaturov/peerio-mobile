@@ -12,7 +12,9 @@ import LoginHeading from './login-heading';
 import { adjustImageDimensions } from '../helpers/image';
 import { telemetry } from '../../lib/icebear';
 import tm from '../../telemetry';
-import TmHelper from '../../telemetry/helpers';
+import DebugMenuTrigger from '../shared/debug-menu-trigger';
+import { uiState } from '../states';
+import signupState from '../signup/signup-state';
 
 const { S } = telemetry;
 
@@ -38,25 +40,30 @@ const buttonContainer = {
     alignItems: 'flex-start'
 };
 
+const sublocation = S.WELCOME_SCREEN;
+
 @observer
 export default class LoginWelcome extends SafeComponent {
-    @action.bound onSignupPress() {
-        tm.signup.onStartAccountCreation();
+    @action.bound
+    onSignupPress() {
+        tm.signup.onStartAccountCreation({ sublocation });
         loginState.routes.app.signupStep1();
     }
 
-    @action.bound onLoginPress() {
+    @action.bound
+    onLoginPress() {
         tm.login.onNavigateLogin();
         loginState.routes.app.loginClean();
     }
 
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.WELCOME_SCREEN;
+        uiState.testAction3 = signupState.testQuickSignup;
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
+        uiState.testAction3 = null;
     }
 
     render() {
@@ -66,22 +73,41 @@ export default class LoginWelcome extends SafeComponent {
                     <Image
                         resizeMode="contain"
                         source={imageWelcome}
-                        style={{ height, alignSelf: 'center', marginBottom: -vars.spacing.small.midi2x }} />
+                        style={{
+                            height,
+                            alignSelf: 'center',
+                            marginBottom: -vars.spacing.small.midi2x
+                        }}
+                    />
                 </View>
                 <View style={logoBar}>
-                    <Image
-                        source={logoWelcome}
-                        style={adjustImageDimensions(logoWelcome, undefined, vars.welcomeHeaderHeight)} />
+                    <DebugMenuTrigger>
+                        <Image
+                            source={logoWelcome}
+                            style={adjustImageDimensions(
+                                logoWelcome,
+                                undefined,
+                                vars.welcomeHeaderHeight
+                            )}
+                        />
+                    </DebugMenuTrigger>
                 </View>
-                <View style={[headerContainer, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
-                    <LoginHeading title="title_newUserWelcome" subTitle="title_newUserWelcomeDescription" />
+                <View
+                    style={[headerContainer, { paddingHorizontal: signupStyles.pagePaddingLarge }]}>
+                    <LoginHeading
+                        title="title_newUserWelcome"
+                        subTitle="title_newUserWelcomeDescription"
+                    />
                     <View style={buttonContainer}>
                         {buttons.roundBlueBgButton(
                             tx('button_CreateAccount'),
                             this.onSignupPress,
                             null,
                             'button_CreateAccount',
-                            { width: vars.roundedButtonWidth, marginBottom: vars.spacing.small.midi2x }
+                            {
+                                width: vars.roundedButtonWidth,
+                                marginBottom: vars.spacing.small.midi2x
+                            }
                         )}
                         {buttons.roundWhiteBgButton(
                             tx('button_login'),

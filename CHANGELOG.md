@@ -2,6 +2,371 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.424.0"></a>
+# [3.424.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.423.0...v3.424.0) (2018-12-17)
+
+
+### Bug Fixes
+
+* fix message info view for when receipts are null ([d9200f9](https://github.com/PeerioTechnologies/peerio-mobile/commit/d9200f9))
+* refactor receipt view component [ch18035] ([66178bd](https://github.com/PeerioTechnologies/peerio-mobile/commit/66178bd))
+
+
+
+<a name="3.423.0"></a>
+# [3.423.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.422.0...v3.423.0) (2018-12-11)
+
+
+
+<a name="3.422.0"></a>
+# [3.422.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.422.0) (2018-12-11)
+
+
+### Bug Fixes
+
+* copying text from messages shouldn't trigger open url [ch2719] ([a1689cc](https://github.com/PeerioTechnologies/peerio-mobile/commit/a1689cc))
+* fix 2fa test [ch17998] ([85c41b8](https://github.com/PeerioTechnologies/peerio-mobile/commit/85c41b8))
+* fix 2fa test [ch17998] ([#401](https://github.com/PeerioTechnologies/peerio-mobile/issues/401)) ([ffb0063](https://github.com/PeerioTechnologies/peerio-mobile/commit/ffb0063))
+* fix autogrowing text input [ch17995] ([18db5fa](https://github.com/PeerioTechnologies/peerio-mobile/commit/18db5fa))
+* fix crash on a shared folder in self chat [ch17742] ([7b65721](https://github.com/PeerioTechnologies/peerio-mobile/commit/7b65721))
+* fix favicon error placeholder [ch17545] ([#394](https://github.com/PeerioTechnologies/peerio-mobile/issues/394)) ([cd98cab](https://github.com/PeerioTechnologies/peerio-mobile/commit/cd98cab))
+* fix merging with other branchs ([764de2b](https://github.com/PeerioTechnologies/peerio-mobile/commit/764de2b))
+
+
+### Features
+
+* use new url preview for image urls [ch17620] ([#395](https://github.com/PeerioTechnologies/peerio-mobile/issues/395)) ([be76ddf](https://github.com/PeerioTechnologies/peerio-mobile/commit/be76ddf))
+
+
+
+<a name="3.421.0"></a>
+# [3.421.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.421.0) (2018-12-04)
+
+
+### Bug Fixes
+
+* fix and refactor login process [ch17758][ch17303][ch17127] ([159aa41](https://github.com/PeerioTechnologies/peerio-mobile/commit/159aa41))
+* fix crash on a shared folder in self chat [ch17742] ([7b65721](https://github.com/PeerioTechnologies/peerio-mobile/commit/7b65721))
+
+
+
+<a name="3.420.0"></a>
+# [3.420.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.420.0) (2018-12-04)
+
+
+### Bug Fixes
+
+* fix and refactor login process [ch17758][ch17303][ch17127] ([159aa41](https://github.com/PeerioTechnologies/peerio-mobile/commit/159aa41))
+* fix crash on a shared folder in self chat [ch17742] ([7b65721](https://github.com/PeerioTechnologies/peerio-mobile/commit/7b65721))
+
+
+
+<a name="3.419.0"></a>
+# [3.419.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.418.0...v3.419.0) (2018-12-04)
+
+
+### Bug Fixes
+
+* fix and refactor login process [ch17758][ch17303][ch17127] ([159aa41](https://github.com/PeerioTechnologies/peerio-mobile/commit/159aa41))
+* fix crash on a shared folder in self chat [ch17742] ([7b65721](https://github.com/PeerioTechnologies/peerio-mobile/commit/7b65721))
+
+
+
+<a name="3.418.0"></a>
+# [3.418.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.416.0...v3.418.0) (2018-11-30)
+
+
+
+<a name="3.417.0"></a>
+# [3.417.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.416.0...v3.417.0) (2018-11-30)
+
+
+
+<a name="3.416.0"></a>
+# [3.416.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.415.0...v3.416.0) (2018-11-28)
+
+
+
+<a name="3.415.0"></a>
+# [3.415.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.414.0...v3.415.0) (2018-11-28)
+
+
+
+<a name="3.414.0"></a>
+# [3.414.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.413.0...v3.414.0) (2018-11-28)
+
+
+
+<a name="3.413.0"></a>
+# [3.413.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.412.0...v3.413.0) (2018-11-28)
+
+
+
+<a name="3.412.0"></a>
+# [3.412.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.411.0...v3.412.0) (2018-11-28)
+
+
+
+<a name="3.411.0"></a>
+# [3.411.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.409.0...v3.411.0) (2018-11-27)
+
+
+
+<a name="3.410.0"></a>
+# [3.410.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.409.0...v3.410.0) (2018-11-27)
+
+
+
+<a name="3.409.0"></a>
+# [3.409.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.407.0...v3.409.0) (2018-11-27)
+
+
+### Bug Fixes
+
+* use modern setLocale instead ([ed0a0d0](https://github.com/PeerioTechnologies/peerio-mobile/commit/ed0a0d0))
+
+
+
+<a name="3.408.0"></a>
+# [3.408.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.407.0...v3.408.0) (2018-11-27)
+
+
+### Bug Fixes
+
+* use modern setLocale instead ([ed0a0d0](https://github.com/PeerioTechnologies/peerio-mobile/commit/ed0a0d0))
+
+
+
+<a name="3.407.0"></a>
+# [3.407.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.406.0...v3.407.0) (2018-11-21)
+
+
+### Features
+
+* add a listener server ([188c14a](https://github.com/PeerioTechnologies/peerio-mobile/commit/188c14a))
+* listener helper ([f239675](https://github.com/PeerioTechnologies/peerio-mobile/commit/f239675))
+
+
+
+<a name="3.406.0"></a>
+# [3.406.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.405.0...v3.406.0) (2018-11-16)
+
+
+### Bug Fixes
+
+* disable animations for android api 24 (nougat) [ch17182] ([675d670](https://github.com/PeerioTechnologies/peerio-mobile/commit/675d670))
+* fix chat.feature test [ch17090] ([65f3cad](https://github.com/PeerioTechnologies/peerio-mobile/commit/65f3cad))
+* fix roomInvites [ch17090] ([8f40cf6](https://github.com/PeerioTechnologies/peerio-mobile/commit/8f40cf6))
+* fix roomInvites test [ch17090] ([08879e8](https://github.com/PeerioTechnologies/peerio-mobile/commit/08879e8))
+* fix roomInvites test [ch17090] ([56140c3](https://github.com/PeerioTechnologies/peerio-mobile/commit/56140c3))
+* kill simulator with more passion before the test run [ch17090] ([c57cef5](https://github.com/PeerioTechnologies/peerio-mobile/commit/c57cef5))
+
+
+### Features
+
+* remove screen requirements for android app ([4036e3b](https://github.com/PeerioTechnologies/peerio-mobile/commit/4036e3b))
+
+
+
+<a name="3.405.0"></a>
+# [3.405.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.404.0...v3.405.0) (2018-11-13)
+
+
+
+<a name="3.404.0"></a>
+# [3.404.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.403.0...v3.404.0) (2018-11-13)
+
+
+### Features
+
+* enable sharing local folders and volumes in dms and rooms [ch16391] ([56b74e5](https://github.com/PeerioTechnologies/peerio-mobile/commit/56b74e5))
+
+
+
+<a name="3.403.0"></a>
+# [3.403.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.402.0...v3.403.0) (2018-11-12)
+
+
+### Bug Fixes
+
+* **MC:** go back after declining room ([#372](https://github.com/PeerioTechnologies/peerio-mobile/issues/372)) ([9d83d12](https://github.com/PeerioTechnologies/peerio-mobile/commit/9d83d12))
+
+
+
+<a name="3.402.0"></a>
+# [3.402.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.401.0...v3.402.0) (2018-11-11)
+
+
+### Bug Fixes
+
+* fix medcryptor route initialization [ch16983] ([affe008](https://github.com/PeerioTechnologies/peerio-mobile/commit/affe008))
+
+
+
+<a name="3.401.0"></a>
+# [3.401.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.400.0...v3.401.0) (2018-11-10)
+
+
+### Bug Fixes
+
+* incorrect AreaBeacon positioing and hacks [ch16857] ([2237185](https://github.com/PeerioTechnologies/peerio-mobile/commit/2237185))
+* MC chat list ([#368](https://github.com/PeerioTechnologies/peerio-mobile/issues/368)) ([7a6c9a8](https://github.com/PeerioTechnologies/peerio-mobile/commit/7a6c9a8))
+* remove option for rooms ([#369](https://github.com/PeerioTechnologies/peerio-mobile/issues/369)) ([612cd0d](https://github.com/PeerioTechnologies/peerio-mobile/commit/612cd0d))
+* remove test unread counter ([870881b](https://github.com/PeerioTechnologies/peerio-mobile/commit/870881b))
+
+
+
+<a name="3.400.0"></a>
+# [3.400.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.399.0...v3.400.0) (2018-11-09)
+
+
+### Bug Fixes
+
+* fix onLoadEnd for gif [ch16832] ([8a99c91](https://github.com/PeerioTechnologies/peerio-mobile/commit/8a99c91))
+
+
+
+<a name="3.399.0"></a>
+# [3.399.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.398.0...v3.399.0) (2018-11-08)
+
+
+### Bug Fixes
+
+* disable preview for GIFs in iOS [ch16832] ([38b9bf2](https://github.com/PeerioTechnologies/peerio-mobile/commit/38b9bf2))
+
+
+
+<a name="3.398.0"></a>
+# [3.398.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.397.0...v3.398.0) (2018-11-08)
+
+
+### Features
+
+* implement a separate component for rendering GIF images on iOS [ch16832] ([3f64110](https://github.com/PeerioTechnologies/peerio-mobile/commit/3f64110))
+* show unread indicator for invites and pending dms [ch16754] ([9559506](https://github.com/PeerioTechnologies/peerio-mobile/commit/9559506))
+
+
+
+<a name="3.397.0"></a>
+# [3.397.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.396.0...v3.397.0) (2018-11-07)
+
+
+
+<a name="3.396.0"></a>
+# [3.396.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.395.0...v3.396.0) (2018-11-07)
+
+
+### Features
+
+* room invite UI [branch ch16458] ([#366](https://github.com/PeerioTechnologies/peerio-mobile/issues/366)) ([0a18346](https://github.com/PeerioTechnologies/peerio-mobile/commit/0a18346))
+
+
+
+<a name="3.395.0"></a>
+# [3.395.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.394.0...v3.395.0) (2018-11-06)
+
+
+### Features
+
+* files beacons ([#355](https://github.com/PeerioTechnologies/peerio-mobile/issues/355)) ([733ef58](https://github.com/PeerioTechnologies/peerio-mobile/commit/733ef58))
+
+
+
+<a name="3.394.0"></a>
+# [3.394.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.393.0...v3.394.0) (2018-11-06)
+
+
+### Bug Fixes
+
+* alignment and size ([#356](https://github.com/PeerioTechnologies/peerio-mobile/issues/356)) ([78bc732](https://github.com/PeerioTechnologies/peerio-mobile/commit/78bc732))
+* ui allows removing volume owner ([#362](https://github.com/PeerioTechnologies/peerio-mobile/issues/362)) ([80aafca](https://github.com/PeerioTechnologies/peerio-mobile/commit/80aafca))
+
+
+
+<a name="3.393.0"></a>
+# [3.393.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.391.0...v3.393.0) (2018-11-04)
+
+
+### Bug Fixes
+
+* added fade in/out ([6a553a1](https://github.com/PeerioTechnologies/peerio-mobile/commit/6a553a1))
+* code style and login logic regressions ([1e1bc52](https://github.com/PeerioTechnologies/peerio-mobile/commit/1e1bc52))
+* partial animation skip ([41aeb3c](https://github.com/PeerioTechnologies/peerio-mobile/commit/41aeb3c))
+* text positioning ([1457fa7](https://github.com/PeerioTechnologies/peerio-mobile/commit/1457fa7))
+
+
+### Features
+
+* new loading screen animation [branch ch16061] ([49d0112](https://github.com/PeerioTechnologies/peerio-mobile/commit/49d0112))
+* escape file name for android when downloading [ch16522] ([2907432](https://github.com/PeerioTechnologies/peerio-mobile/commit/2907432))
+
+
+
+<a name="3.392.0"></a>
+# [3.392.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.391.0...v3.392.0) (2018-11-04)
+
+
+### Bug Fixes
+
+* escape file name for android when downloading [ch16522] ([2907432](https://github.com/PeerioTechnologies/peerio-mobile/commit/2907432))
+
+
+
+<a name="3.391.0"></a>
+# [3.391.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.390.0...v3.391.0) (2018-11-01)
+
+
+### Bug Fixes
+
+* show room invites [ch16421] ([6658775](https://github.com/PeerioTechnologies/peerio-mobile/commit/6658775))
+
+
+
+<a name="3.390.0"></a>
+# [3.390.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.390.0) (2018-11-01)
+
+
+### Bug Fixes
+
+* wait for authenticated before prompting upload ([#357](https://github.com/PeerioTechnologies/peerio-mobile/issues/357)) ([1faedc4](https://github.com/PeerioTechnologies/peerio-mobile/commit/1faedc4))
+
+
+### Features
+
+* chat beacons ([#345](https://github.com/PeerioTechnologies/peerio-mobile/issues/345)) ([941f1db](https://github.com/PeerioTechnologies/peerio-mobile/commit/941f1db))
+
+
+
+<a name="3.389.0"></a>
+# [3.389.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.389.0) (2018-10-31)
+
+
+### Bug Fixes
+
+* wait for authenticated before prompting upload ([#357](https://github.com/PeerioTechnologies/peerio-mobile/issues/357)) ([1faedc4](https://github.com/PeerioTechnologies/peerio-mobile/commit/1faedc4))
+
+
+### Features
+
+* chat beacons ([#345](https://github.com/PeerioTechnologies/peerio-mobile/issues/345)) ([941f1db](https://github.com/PeerioTechnologies/peerio-mobile/commit/941f1db))
+
+
+
+<a name="3.388.0"></a>
+# [3.388.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.385.0...v3.388.0) (2018-10-25)
+
+
+### Bug Fixes
+
+* wait for authenticated ([f2d3813](https://github.com/PeerioTechnologies/peerio-mobile/commit/f2d3813))
+
+
+### Features
+
+* chat beacons ([#345](https://github.com/PeerioTechnologies/peerio-mobile/issues/345)) ([941f1db](https://github.com/PeerioTechnologies/peerio-mobile/commit/941f1db))
+
+
+
 <a name="3.385.0"></a>
 # [3.385.0](https://github.com/PeerioTechnologies/peerio-mobile/compare/v3.384.0...v3.385.0) (2018-10-23)
 

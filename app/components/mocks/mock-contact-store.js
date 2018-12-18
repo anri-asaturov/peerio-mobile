@@ -1,6 +1,7 @@
 import randomWords from 'random-words';
 import capitalize from 'capitalize';
 import { observable } from 'mobx';
+import MockCurrentUser from './mock-current-user';
 
 class MockContactStore {
     addedContacts = [];
@@ -16,13 +17,15 @@ class MockContactStore {
     }
 
     get uiView() {
-        return [{
-            letter: 'A',
-            items: this.contacts
-        }];
+        return [
+            {
+                letter: 'A',
+                items: this.contacts
+            }
+        ];
     }
 
-    filter = (text) => {
+    filter = text => {
         return text ? this.contacts.filter(c => c.username.indexOf(text) !== -1) : this.contacts;
     };
 
@@ -35,9 +38,7 @@ class MockContactStore {
             username,
             firstName,
             lastName,
-            addresses: [
-                address
-            ],
+            addresses: [address],
             loading: false,
             notFound: false,
             fullName: `${firstName} ${lastName}`
@@ -47,8 +48,14 @@ class MockContactStore {
         return contact;
     }
 
+    createMockCurrentUser() {
+        const contact = new MockCurrentUser();
+        this.contacts.push(contact);
+        this.contactsMap.set(contact.username, contact);
+        return contact;
+    }
+
     getContact(username) {
-        console.log(`get ${username}`);
         const r = this.contactsMap.get(username);
         return r || { username, loading: false, notFound: true };
     }

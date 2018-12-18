@@ -59,13 +59,7 @@ export default class TopDrawer extends SafeComponent {
     };
 
     renderThrow() {
-        const {
-            heading,
-            image,
-            descriptionLine1,
-            descriptionLine2,
-            buttonText
-        } = this.props;
+        const { heading, image, descriptionLine1, descriptionLine2, buttonText } = this.props;
         return (
             <View style={container}>
                 <View style={headingStyle}>
@@ -91,7 +85,7 @@ export default class TopDrawer extends SafeComponent {
     }
 }
 
-TopDrawer.PropTypes = {
+TopDrawer.propTypes = {
     context: PropTypes.string,
     heading: PropTypes.string.isRequired,
     image: PropTypes.any.isRequired,

@@ -9,6 +9,7 @@ import ChatMessageBody from './chat-message-body';
 import MessageSentError from './message-sent-error';
 
 const itemStyle = {
+    marginTop: 8,
     flex: 1,
     flexGrow: 1,
     flexDirection: 'row',
@@ -18,13 +19,22 @@ const itemStyle = {
 const itemContainerStyle = {
     flexDirection: 'row',
     marginLeft: 68,
-    marginRight: 8
+    marginRight: 6
 };
 
 @observer
 export default class ChatMessageCollapsed extends SafeComponent {
     renderThrow() {
-        const { errorStyle, backgroundColor, messageObject, chat, onFileAction, onLegacyFileAction, onInlineImageAction } = this.props;
+        const {
+            errorStyle,
+            backgroundColor,
+            messageObject,
+            chat,
+            onFileAction,
+            onLegacyFileAction,
+            onInlineImageAction,
+            onPressReceipt
+        } = this.props;
 
         const { files, folders } = messageObject;
         const shrinkStrategy = { flexShrink: 1 };
@@ -33,8 +43,7 @@ export default class ChatMessageCollapsed extends SafeComponent {
         return (
             <View style={[itemStyle, errorStyle]}>
                 <CorruptedMessage visible={messageObject.signatureError} />
-                <View
-                    style={[itemContainerStyle, shrinkStrategy, backgroundColor]}>
+                <View style={[itemContainerStyle, shrinkStrategy, backgroundColor]}>
                     <ChatMessageBody
                         messageObject={messageObject}
                         chat={chat}
@@ -42,7 +51,10 @@ export default class ChatMessageCollapsed extends SafeComponent {
                         onLegacyFileAction={onLegacyFileAction}
                         onInlineImageAction={onInlineImageAction}
                     />
-                    <ViewReceipts receipts={messageObject.receipts} keepAvatar={!chat.isChannel} />
+                    <ViewReceipts
+                        receipts={messageObject.receipts}
+                        onPressReceipt={onPressReceipt}
+                    />
                 </View>
                 <MessageSentError message={messageObject} chat={chat} />
             </View>

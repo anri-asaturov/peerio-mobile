@@ -26,20 +26,25 @@ function upgradeMessage(title) {
     return (
         <View style={container}>
             <Text style={text}>{title}</Text>
-            {buttons.blueTextButton('button_upgrade',
-                () => settingsState.upgrade())}
+            {buttons.blueTextButton('button_upgrade', () => settingsState.upgrade())}
         </View>
     );
 }
 
 function upgradeForFiles() {
-    return !process.env.PEERIO_DISABLE_PAYMENTS && !plans.userHasPaidPlan() && paymentsNative.showFileUpgradeOffer ?
-        upgradeMessage(tx('title_outOfStorage')) : null;
+    return !process.env.PEERIO_DISABLE_PAYMENTS &&
+        !plans.userHasPaidPlan() &&
+        paymentsNative.showFileUpgradeOffer
+        ? upgradeMessage(tx('title_outOfStorage'))
+        : null;
 }
 
 function upgradeForArchive() {
-    return !process.env.PEERIO_DISABLE_PAYMENTS && !plans.userHasPaidPlan() && paymentsNative.showArchiveUpgradeOffer ?
-        upgradeMessage(tx('title_upgradeForArchive')) : null;
+    return !process.env.PEERIO_DISABLE_PAYMENTS &&
+        !plans.userHasPaidPlan() &&
+        paymentsNative.showArchiveUpgradeOffer
+        ? upgradeMessage(tx('title_upgradeForArchive'))
+        : null;
 }
 
 export { upgradeForFiles, upgradeForArchive };

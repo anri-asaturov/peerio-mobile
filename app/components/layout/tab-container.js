@@ -29,7 +29,8 @@ export default class TabContainer extends SafeComponent {
         if (routerMain.currentIndex !== 0) return null;
         if (fileState.isFileSelectionMode) return null;
         if (invitationState.currentInvitation) return null;
-        if (routerMain.route === 'contactSyncAdd' || routerMain.route === 'contactSyncInvite') return null;
+        if (routerMain.route === 'contactSyncAdd' || routerMain.route === 'contactSyncInvite')
+            return null;
         if (uiState.hideTabs) return null;
         return (
             <View style={bottomRowStyle}>
@@ -40,27 +41,31 @@ export default class TabContainer extends SafeComponent {
                     highlightList={['space']}
                     bubble={chatStore.unreadMessages + chatInviteStore.received.length}
                     onPressTabItem={dismissAllOnboardingBeacons}
-                    beacon={onboardingBeacons.chatBeacon} />
+                    beacon={onboardingBeacons.chatBeacon}
+                />
                 <TabItem
                     text={t('title_files')}
                     route="files"
                     icon="folder"
                     bubble={fileStore.unreadFiles}
                     onPressTabItem={dismissAllOnboardingBeacons}
-                    beacon={onboardingBeacons.filesBeacon} />
+                    beacon={onboardingBeacons.filesBeacon}
+                />
                 <TabItem
                     text={t('title_contacts')}
                     route="contacts"
                     icon="people"
                     highlightList={['contactAdd', 'contactInvite']}
                     onPressTabItem={dismissAllOnboardingBeacons}
-                    beacon={onboardingBeacons.contactBeacon} />
+                    beacon={onboardingBeacons.contactBeacon}
+                />
                 <TabItem
                     text={t('title_settings')}
                     route="settings"
                     icon="settings"
                     onPressTabItem={dismissAllOnboardingBeacons}
-                    beacon={onboardingBeacons.settingsBeacon} />
+                    beacon={onboardingBeacons.settingsBeacon}
+                />
             </View>
         );
     }

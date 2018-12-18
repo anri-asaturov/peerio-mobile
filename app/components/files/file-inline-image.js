@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, when, reaction, action } from 'mobx';
-import { View, Image, Dimensions, LayoutAnimation, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import FLAnimatedImage from 'react-native-gif';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import Progress from '../shared/progress';
@@ -16,6 +17,7 @@ import fileState from '../files/file-state';
 import settingsState from '../settings/settings-state';
 import { clientApp, config, util } from '../../lib/icebear';
 import { T, tx } from '../utils/translator';
+import { transitionAnimation } from '../helpers/animations';
 
 const toSettings = text => (
     <Text
@@ -46,6 +48,8 @@ const textMessageTextStyle = {
     textAlign: 'center'
 };
 
+// TODO: image urls are now handled by inline-url-container
+// remove the URL support from this component
 @observer
 export default class FileInlineImage extends SafeComponent {
     @observable cachedImage;
@@ -91,41 +95,77 @@ export default class FileInlineImage extends SafeComponent {
             tmpCachePath = selfTmpCachePath;
         }
 
-        when(() => image.cachingFailed, () => { this.cachingFailed = true; });
+        when(
+            () => image.cachingFailed,
+            () => {
+                this.cachingFailed = true;
+            }
+        );
         if (fileId) {
             // we have local inline file
-            when(() => clientApp.uiUserPrefs.peerioContentEnabled, () => { this.opened = true; });
+            when(
+                () => clientApp.uiUserPrefs.peerioContentEnabled,
+                () => {
+                    this.opened = !this.props.isClosed;
+                }
+            );
             if (!this.loadImage) {
-                when(() => clientApp.uiUserPrefs.peerioContentEnabled && !this.tooBig && !this.oversizeCutoff,
-                    () => { this.loadImage = true; });
-            }
-            when(() => tmpCached || image.tmpCached, () => {
-                this.cachedImage = inlineImageCacheStore.getImage(tmpCachePath);
-            });
-            if (!image.tmpCached) {
-                when(() => this.loadImage, async () => {
-                    // TODO: HACK FOR ANDROID
-                    // should be replaced with FileStream update to handle content paths
-                    if (tmpCachePath.startsWith('content:/')
-                        || await config.FileStream.exists(tmpCachePath)) {
-                        image.tmpCached = true;
-                        return;
+                when(
+                    () =>
+                        clientApp.uiUserPrefs.peerioContentEnabled &&
+                        !this.tooBig &&
+                        !this.oversizeCutoff,
+                    () => {
+                        this.loadImage = true;
                     }
-                    image.tryToCacheTemporarily(true);
-                    this.handleLoadStart();
-                });
+                );
+            }
+            when(
+                () => tmpCached || image.tmpCached,
+                () => {
+                    this.cachedImage = inlineImageCacheStore.getImage(tmpCachePath);
+                }
+            );
+            if (!image.tmpCached) {
+                when(
+                    () => this.loadImage,
+                    async () => {
+                        // TODO: HACK FOR ANDROID
+                        // should be replaced with FileStream update to handle content paths
+                        if (
+                            tmpCachePath.startsWith('content:/') ||
+                            (await config.FileStream.exists(tmpCachePath))
+                        ) {
+                            image.tmpCached = true;
+                            return;
+                        }
+                        image.tryToCacheTemporarily(true);
+                        this.handleLoadStart();
+                    }
+                );
             }
         } else {
             // we have external url
-            when(() => clientApp.uiUserPrefs.externalContentConsented && clientApp.uiUserPrefs.externalContentEnabled,
-                () => { this.loadImage = true; });
+            when(
+                () =>
+                    clientApp.uiUserPrefs.externalContentConsented &&
+                    clientApp.uiUserPrefs.externalContentEnabled,
+                () => {
+                    this.loadImage = true;
+                }
+            );
             this.opened =
-                clientApp.uiUserPrefs.externalContentConsented && clientApp.uiUserPrefs.externalContentEnabled;
-            when(() => this.loadImage, () => {
-                this.cachedImage = inlineImageCacheStore.getImage(url);
-                this.opened = true;
-                this.handleLoadStart();
-            });
+                clientApp.uiUserPrefs.externalContentConsented &&
+                clientApp.uiUserPrefs.externalContentEnabled &&
+                !this.props.isClosed;
+            when(
+                () => this.loadImage,
+                () => {
+                    this.cachedImage = inlineImageCacheStore.getImage(url);
+                    this.opened = !this.props.isClosed;
+                    this.handleLoadStart();
+                }
+            );
         }
     }
 
@@ -138,20 +178,29 @@ export default class FileInlineImage extends SafeComponent {
     fetchSize() {
         const { cachedImage } = this;
         // if width or height is undefined, there was an error loading it
-        when(() => cachedImage.width !== undefined && cachedImage.height !== undefined && this.optimalContentWidth, () => {
-            const { width, height } = cachedImage;
-            const { optimalContentWidth, optimalContentHeight } = this;
-            if (width <= 0 && height <= 0) this.onErrorLoadingImage();
-            Object.assign(this, vars.optimizeImageSize(width, height, optimalContentWidth, optimalContentHeight));
-            // console.debug(`calculated width: ${this.width}, ${this.height}`);
-        });
+        when(
+            () =>
+                cachedImage.width !== undefined &&
+                cachedImage.height !== undefined &&
+                this.optimalContentWidth,
+            () => {
+                const { width, height } = cachedImage;
+                const { optimalContentWidth, optimalContentHeight } = this;
+                if (width <= 0 && height <= 0) this.onErrorLoadingImage();
+                Object.assign(
+                    this,
+                    vars.optimizeImageSize(width, height, optimalContentWidth, optimalContentHeight)
+                );
+                // console.debug(`calculated width: ${this.width}, ${this.height}`);
+            }
+        );
     }
 
     componentDidMount() {
-        reaction(() => this.opened, () => LayoutAnimation.easeInEaseOut());
+        reaction(() => this.opened, transitionAnimation);
     }
 
-    layout = (evt) => {
+    layout = evt => {
         this.optimalContentWidth = evt.nativeEvent.layout.width - this.outerPadding * 2 - 2;
     };
 
@@ -169,10 +218,16 @@ export default class FileInlineImage extends SafeComponent {
         return (
             <View style={outer}>
                 <Text style={text0}>
-                    {tx('title_imageSizeWarning', { size: util.formatBytes(config.chat.inlineImageSizeLimit) })}
+                    {tx('title_imageSizeWarning', {
+                        size: util.formatBytes(config.chat.inlineImageSizeLimit)
+                    })}
                 </Text>
-                <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} onPress={this.forceShow}>
-                    <Text italic style={text}>{tx('button_displayThisImageAfterWarning')}</Text>
+                <TouchableOpacity
+                    pressRetentionOffset={vars.retentionOffset}
+                    onPress={this.forceShow}>
+                    <Text italic style={text}>
+                        {tx('button_displayThisImageAfterWarning')}
+                    </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -188,9 +243,14 @@ export default class FileInlineImage extends SafeComponent {
             color: vars.txtDark
         };
         return (
-            <TouchableOpacity style={outer} onPress={this.imageAction} pressRetentionOffset={vars.pressRetentionOffset}>
+            <TouchableOpacity
+                style={outer}
+                onPress={this.imageAction}
+                pressRetentionOffset={vars.retentionOffset}>
                 <Text style={text0}>
-                    {tx('title_imageTooBigCutoff', { size: util.formatBytes(config.chat.inlineImageSizeLimitCutoff) })}
+                    {tx('title_imageTooBigCutoff', {
+                        size: util.formatBytes(config.chat.inlineImageSizeLimitCutoff)
+                    })}
                 </Text>
             </TouchableOpacity>
         );
@@ -208,9 +268,7 @@ export default class FileInlineImage extends SafeComponent {
         };
         return (
             <View style={outer}>
-                <Text style={text0}>
-                    {tx('title_poorConnectionInlineImage')}
-                </Text>
+                <Text style={text0}>{tx('title_poorConnectionInlineImage')}</Text>
             </View>
         );
     }
@@ -222,8 +280,14 @@ export default class FileInlineImage extends SafeComponent {
             marginVertical: 10
         };
         return (
-            <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} onPress={() => { this.loadImage = true; }}>
-                <Text italic style={text}>{tx('button_displayThisImage')}</Text>
+            <TouchableOpacity
+                pressRetentionOffset={vars.retentionOffset}
+                onPress={() => {
+                    this.loadImage = true;
+                }}>
+                <Text italic style={text}>
+                    {tx('button_displayThisImage')}
+                </Text>
             </TouchableOpacity>
         );
     }
@@ -248,9 +312,7 @@ export default class FileInlineImage extends SafeComponent {
     get downloadErrorMessage() {
         return (
             <View style={textMessageOuter}>
-                <Text style={textMessageTextStyle}>
-                    {tx('Image preview is not available')}
-                </Text>
+                <Text style={textMessageTextStyle}>{tx('Image preview is not available')}</Text>
             </View>
         );
     }
@@ -258,14 +320,13 @@ export default class FileInlineImage extends SafeComponent {
     get downloadSlowMessage() {
         return (
             <View style={textMessageOuter}>
-                <Text style={textMessageTextStyle}>
-                    {tx('title_poorConnectionExternalURL')}
-                </Text>
+                <Text style={textMessageTextStyle}>{tx('title_poorConnectionExternalURL')}</Text>
             </View>
         );
     }
 
-    @action.bound handleLoadStart() {
+    @action.bound
+    handleLoadStart() {
         this.loadingTimeoutId = setTimeout(() => {
             if (!this.loaded) {
                 this.downloadSlow = true;
@@ -273,25 +334,35 @@ export default class FileInlineImage extends SafeComponent {
         }, vars.loadingTimeout);
     }
 
-    @action.bound handleLoadEnd() {
+    @action.bound
+    handleLoadEnd() {
         if (this.loadingTimeoutId) {
             clearTimeout(this.loadingTimeoutId);
             this.loadingTimeoutId = null;
         }
     }
 
-    @action.bound handleProgress(e) {
+    @action.bound
+    handleProgress(e) {
         const { loaded, total } = e.nativeEvent;
         this.loadedBytesCount = loaded;
         this.totalBytesCount = total;
     }
 
-    @action.bound onLoad() {
+    @action.bound
+    onLoad() {
         this.loaded = true;
     }
 
-    @action.bound onErrorLoadingImage() {
+    @action.bound
+    onErrorLoadingImage() {
         this.errorDisplayingImage = true;
+    }
+
+    @action.bound
+    onLoadGif() {
+        this.handleLoadEnd();
+        this.onLoad();
     }
 
     get displayErrorMessage() {
@@ -307,15 +378,14 @@ export default class FileInlineImage extends SafeComponent {
         };
         return (
             <View style={outer}>
-                <Text style={text0}>
-                    {tx('error_loadingImage')}
-                </Text>
+                <Text style={text0}>{tx('error_loadingImage')}</Text>
             </View>
         );
     }
 
     // Opens the image using exists, else attempts to download it
-    @action.bound imageAction() {
+    @action.bound
+    imageAction() {
         const { image } = this.props;
         if (image.hasFileAvailableForPreview) {
             image.launchViewer();
@@ -328,10 +398,17 @@ export default class FileInlineImage extends SafeComponent {
         const { image } = this.props;
         const { fileId, downloading } = image;
         const { width, height, loaded, showUpdateSettingsLink, cachingFailed } = this;
-        const { source, acquiringSize } = this.cachedImage || {};
+        const { source, acquiringSize, shouldUseFLAnimated } = this.cachedImage || {};
+        // console.log(`render ${source ? source.uri : null}, shouldUseFLAnimated: ${shouldUseFLAnimated}`);
         const isLocal = !!fileId;
         if (!clientApp.uiUserPrefs.externalContentConsented && !isLocal) {
-            return <InlineUrlPreviewConsent onChange={() => { this.showUpdateSettingsLink = true; }} />;
+            return (
+                <InlineUrlPreviewConsent
+                    onChange={() => {
+                        this.showUpdateSettingsLink = true;
+                    }}
+                />
+            );
         }
 
         const inner = {
@@ -339,45 +416,76 @@ export default class FileInlineImage extends SafeComponent {
             minHeight: loaded ? undefined : vars.imageInnerContainerHeight,
             justifyContent: 'center'
         };
+
+        const borderRadius = 2;
+        const imageStyle = { width, height, borderRadius };
         return (
             <View>
                 <FileInlineContainer
                     onLayout={this.layout}
                     file={image}
                     onActionSheet={this.props.onAction}
-                    onAction={this.imageAction}
+                    onAction={shouldUseFLAnimated ? null : this.imageAction}
                     onLegacyFileAction={this.props.onLegacyFileAction}
                     isImage
                     isOpen={this.opened}
-                    extraActionIcon={!downloading && icons.darkNoPadding(
-                        this.opened ? 'arrow-drop-up' : 'arrow-drop-down',
-                        () => { this.opened = !this.opened; },
-                        { marginHorizontal: vars.spacing.small.midi2x }
-                    )}>
-                    {this.opened &&
+                    extraActionIcon={
+                        !downloading &&
+                        icons.darkNoPadding(
+                            this.opened ? 'arrow-drop-up' : 'arrow-drop-down',
+                            () => {
+                                this.opened = !this.opened;
+                            },
+                            { marginHorizontal: vars.spacing.small.midi2x }
+                        )
+                    }>
+                    {this.opened && (
                         <View style={inner}>
-                            {!downloading && this.loadImage && width && height ?
-                                <TouchableOpacity onPress={this.imageAction} >
-                                    <Image
-                                        onProgress={this.handleProgress}
-                                        onLoadEnd={this.handleLoadEnd}
-                                        onLoad={this.onLoad}
-                                        onError={this.onErrorLoadingImage}
-                                        source={{ uri: source.uri, width, height }}
-                                        style={{ width, height }} />
+                            {!downloading && this.loadImage && width && height ? (
+                                /* TODO: make a separate preview for GIF images on iOS */
+                                <TouchableOpacity
+                                    onPress={shouldUseFLAnimated ? null : this.imageAction}>
+                                    {shouldUseFLAnimated ? (
+                                        <FLAnimatedImage
+                                            source={{ uri: source.uri }}
+                                            onLoadEnd={this.onLoadGif}
+                                            style={imageStyle}
+                                        />
+                                    ) : (
+                                        <Image
+                                            onProgress={this.handleProgress}
+                                            onLoadEnd={this.handleLoadEnd}
+                                            onLoad={this.onLoad}
+                                            onError={this.onErrorLoadingImage}
+                                            source={{ uri: source.uri, width, height }}
+                                            style={imageStyle}
+                                        />
+                                    )}
                                 </TouchableOpacity>
-                                : null }
+                            ) : null}
                             {!this.loadImage && !this.tooBig && this.displayImageOffer}
-                            {!this.loadImage && this.tooBig && !this.oversizeCutoff && this.displayTooBigImageOffer}
+                            {!this.loadImage &&
+                                this.tooBig &&
+                                !this.oversizeCutoff &&
+                                this.displayTooBigImageOffer}
                             {!this.loadImage && this.oversizeCutoff && this.displayCutOffImageOffer}
                             {!this.loaded && cachingFailed && this.downloadErrorMessage}
-                            {!this.loaded && !cachingFailed && this.downloadSlow && this.downloadSlowMessage}
+                            {!this.loaded &&
+                                !cachingFailed &&
+                                this.downloadSlow &&
+                                this.downloadSlowMessage}
                             {this.errorDisplayingImage && this.displayErrorMessage}
-                            {(acquiringSize || downloading)
-                                && !this.downloadSlow
-                                && !cachingFailed && <ActivityIndicator />}
-                            {this.totalBytesCount > 0 && <Progress max={this.totalBytesCount} value={this.loadedBytesCount} />}
-                        </View>}
+                            {(acquiringSize || downloading) &&
+                                !this.downloadSlow &&
+                                !cachingFailed && <ActivityIndicator />}
+                            {this.totalBytesCount > 0 && (
+                                <Progress
+                                    max={this.totalBytesCount}
+                                    value={this.loadedBytesCount}
+                                />
+                            )}
+                        </View>
+                    )}
                     {isLocal && <FileProgress file={image} />}
                 </FileInlineContainer>
                 {!isLocal && showUpdateSettingsLink && this.updateSettingsOffer}

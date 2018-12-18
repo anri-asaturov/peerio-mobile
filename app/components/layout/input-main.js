@@ -10,6 +10,12 @@ import { inputMain, vars } from '../../styles/styles';
 import icons from '../helpers/icons';
 import { uiState, chatState } from '../states';
 import testLabel from '../helpers/test-label';
+import MeasureableIcon from './measureable-icon';
+import chatBeacons from '../beacons/chat-beacons';
+
+const buttonStyle = {
+    paddingHorizontal: vars.iconPadding
+};
 
 @observer
 export default class InputMain extends SafeComponent {
@@ -22,52 +28,69 @@ export default class InputMain extends SafeComponent {
         this.value = this.props.value;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.value) {
-            this.value = nextProps.value;
-        }
-    }
-
-    @action.bound onChangeText(text) {
+    @action.bound
+    onChangeText(text) {
         this.value = text;
     }
 
-    @action.bound plus() {
+    @action.bound
+    plus() {
         this.props.plus();
     }
 
-    @action.bound send() {
+    @action.bound
+    send() {
         if (!this.canSend) return;
         this.hasText ? this.props.send(this.value) : this.props.sendAck();
         this.value = '';
+        this.textInputRef.resetHeight();
     }
 
     setFocus() {
-        this.input.ti.focus();
+        this.textInputRef.focus();
     }
 
     get canSend() {
-        return this.props.canSend || uiState.isAuthenticated && (this.hasText ? chatState.canSend : chatState.canSendAck);
+        return (
+            this.props.canSend ||
+            (uiState.isAuthenticated && (this.hasText ? chatState.canSend : chatState.canSendAck))
+        );
     }
 
+    setRef = ref => {
+        this.textInputRef = ref;
+    };
+
     renderThrow() {
-        const { tiStyle, iconStyle, outerStyle, autoExpandingInputContainerStyle,
-            sendIconStyleNormal, sendIconStyleActive } = inputMain;
-        const icon = icons.white(this.hasText ? 'send' : 'thumb-up', this.send, iconStyle, vars.iconSizeSmall, 'buttonSendMessage');
+        const {
+            tiStyle,
+            iconStyle,
+            outerStyle,
+            autoExpandingInputContainerStyle,
+            sendIconStyleNormal,
+            sendIconStyleActive
+        } = inputMain;
+        const icon = icons.white(
+            this.hasText ? 'send' : 'thumb-up',
+            this.send,
+            iconStyle,
+            vars.iconSizeSmall,
+            'buttonSendMessage'
+        );
         const sendIconStyle = this.canSend ? sendIconStyleActive : sendIconStyleNormal;
         const chatName = chatState.title;
         return (
             <View style={outerStyle}>
-                {icons.dark(
-                    'add-circle-outline',
-                    this.plus,
-                    {
-                        paddingLeft: vars.spacing.small.mini2x,
-                        paddingRight: vars.spacing.medium.maxi2x
-                    },
-                    null,
-                    'buttonUploadToChat'
-                )}
+                <View style={buttonStyle}>
+                    <MeasureableIcon
+                        icon="add-circle-outline"
+                        testId="buttonUploadToChat"
+                        beacon={chatBeacons.shareFilesInChatBeacon}
+                        color={vars.darkIcon}
+                        onPress={this.plus}
+                        spotBgColor={vars.white}
+                    />
+                </View>
                 <View style={autoExpandingInputContainerStyle}>
                     <AutoExpandingTextInput
                         onChangeText={this.onChangeText}
@@ -77,24 +100,21 @@ export default class InputMain extends SafeComponent {
                         maxHeight={146}
                         style={tiStyle}
                         blurOnSubmit={false}
-                        ref={ref => { this.input = ref; }}
+                        ref={this.setRef}
                         {...testLabel('textInputMessage')}
                     />
                 </View>
                 <TouchableOpacity
                     {...testLabel('buttonSendMessage')}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     onPress={this.send}
                     style={{ padding: vars.iconSizeSmall }}>
-                    <View style={sendIconStyle}>
-                        {icon}
-                    </View>
+                    <View style={sendIconStyle}>{icon}</View>
                 </TouchableOpacity>
             </View>
         );
     }
 }
-
 
 InputMain.propTypes = {
     value: PropTypes.any,

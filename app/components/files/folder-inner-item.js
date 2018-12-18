@@ -38,12 +38,14 @@ const nameStyle = {
 export default class FolderInnerItem extends SafeComponent {
     @observable progressWidth = 0;
 
-    @action.bound onPress() {
+    @action.bound
+    onPress() {
         const { folder, onPress } = this.props;
         onPress && onPress(folder);
     }
 
-    @action.bound toggleSelected() {
+    @action.bound
+    toggleSelected() {
         const { folder } = this.props;
         folder.selected = !folder.selected;
     }
@@ -52,21 +54,23 @@ export default class FolderInnerItem extends SafeComponent {
         const { folder } = this.props;
         const { progressWidth } = this;
         if (!progressWidth) return 0;
-        return progressWidth * folder.progressPercentage / 100;
+        return (progressWidth * folder.progressPercentage) / 100;
     }
 
-    @action.bound layout(evt) {
+    @action.bound
+    layout(evt) {
         this.progressWidth = evt.nativeEvent.layout.width;
     }
 
     get checkbox() {
         if (!fileState.isFileSelectionMode) return null;
         const { folder } = this.props;
-        const { isShared } = folder;
+        const sharedFoldersEnabled =
+            process.env.SHARED_FOLDERS_ENABLED && !fileState.disableFoldersInSelection;
         const checked = folder && folder.selected;
         const v = vars;
         let iconColor = checked ? v.checkboxIconActive : v.checkboxIconInactive;
-        iconColor = isShared ? iconColor : vars.checkboxDisabled;
+        iconColor = sharedFoldersEnabled ? iconColor : vars.checkboxDisabled;
         const iconBgColor = 'transparent';
         const icon = checked ? 'check-box' : 'check-box-outline-blank';
         const outer = {
@@ -84,9 +88,15 @@ export default class FolderInnerItem extends SafeComponent {
                 style={outer}
                 pointerEvents="none"
                 onPress={this.toggleSelected}
-                disabled={!isShared}
-                pressRetentionOffset={vars.pressRetentionOffset}>
-                {icons.colored(icon, this.toggleSelected, iconColor, iconBgColor, !isShared)}
+                disabled={!sharedFoldersEnabled}
+                pressRetentionOffset={vars.retentionOffset}>
+                {icons.colored(
+                    icon,
+                    this.toggleSelected,
+                    iconColor,
+                    iconBgColor,
+                    !sharedFoldersEnabled
+                )}
             </TouchableOpacity>
         );
     }
@@ -102,17 +112,20 @@ export default class FolderInnerItem extends SafeComponent {
             borderBottomWidth: 1,
             borderBottomColor: 'rgba(0, 0, 0, .12)'
         };
-        const s = [helpers.circle(20), {
-            backgroundColor: vars.white,
-            borderColor: vars.txtMedium,
-            borderWidth: 2
-        }];
+        const s = [
+            helpers.circle(20),
+            {
+                backgroundColor: vars.white,
+                borderColor: vars.txtMedium,
+                borderWidth: 2
+            }
+        ];
         return (
             <TouchableOpacity
                 disabled={disabled}
                 style={{ opacity: disabled ? vars.opacity54 : null }}
                 onPress={this.props.onSelect}
-                pressRetentionOffset={vars.pressRetentionOffset}>
+                pressRetentionOffset={vars.retentionOffset}>
                 <View style={outer}>
                     <View style={s} />
                 </View>
@@ -130,17 +143,22 @@ export default class FolderInnerItem extends SafeComponent {
                 </Text>
             );
         }
-        const owner = !folder.owner || folder.owner === User.current.username
-            ? `` : `${contactStore.getContact(folder.owner).fullName} `;
+        const owner =
+            !folder.owner || folder.owner === User.current.username
+                ? ``
+                : `${contactStore.getContact(folder.owner).fullName} `;
         return (
             <Text style={folderInfoStyle}>
                 <Text>{owner}</Text>
-                {folder.size ?
-                    <Text>{folder.sizeFormatted}</Text> :
-                    <Text>{tx('title_empty')}</Text>}
+                {folder.size ? (
+                    <Text>{folder.sizeFormatted}</Text>
+                ) : (
+                    <Text>{tx('title_empty')}</Text>
+                )}
                 &nbsp;&nbsp;
                 {folder.createdAt ? moment(folder.createdAt).format('DD/MM/YYYY') : null}
-            </Text>);
+            </Text>
+        );
     }
 
     renderThrow() {
@@ -168,32 +186,53 @@ export default class FolderInnerItem extends SafeComponent {
             borderBottomColor: 'rgba(0, 0, 0, .12)',
             paddingLeft: fileState.isFileSelectionMode ? 0 : vars.spacing.medium.mini2x
         };
-        const optionsIcon = hideOptionsIcon || fileState.isFileSelectionMode ? null : (
-            <View style={{ flex: 0 }}>
-                {icons.dark('more-vert', onFolderAction, null, null, 'more-vert', convertingToVolume || convertingFromFolder)}
-            </View>);
+        const optionsIcon =
+            hideOptionsIcon || fileState.isFileSelectionMode ? null : (
+                <View style={{ flex: 0 }}>
+                    {icons.dark(
+                        'more-vert',
+                        onFolderAction,
+                        null,
+                        null,
+                        'more-vert',
+                        convertingToVolume || convertingFromFolder
+                    )}
+                </View>
+            );
         return (
             <View
-                style={{ backgroundColor: vars.chatItemPressedBackground,
-                    opacity: disabled ? vars.opacity54 : null }}>
+                style={{
+                    backgroundColor: vars.chatItemPressedBackground,
+                    opacity: disabled ? vars.opacity54 : null
+                }}>
                 <TouchableOpacity
                     disabled={disabled}
                     onPress={hideOptionsIcon ? onSelect : this.onPress}
                     style={{ backgroundColor: vars.filesBg }}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     {...testLabel(folder.name)}
-                    accessible={false}
-                >
+                    accessible={false}>
                     <View style={folderInfoContainerStyle}>
                         {this.radio}
                         {this.checkbox}
                         <View style={itemContainerStyle} onLayout={this.layout}>
                             <View style={progressContainer} />
                             <View style={{ flex: 0 }}>
-                                {icons.plaindark(isShared ? 'folder-shared' : 'folder', vars.iconSize, null)}
+                                {icons.plaindark(
+                                    isShared ? 'folder-shared' : 'folder',
+                                    vars.iconSize,
+                                    null
+                                )}
                             </View>
-                            <View style={{ flexGrow: 1, flexShrink: 1, marginLeft: vars.spacing.medium.maxi2x }}>
-                                <Text bold style={nameStyle} numberOfLines={1} ellipsizeMode="tail">{folder.parent ? folder.name : tx('title_files')}</Text>
+                            <View
+                                style={{
+                                    flexGrow: 1,
+                                    flexShrink: 1,
+                                    marginLeft: vars.spacing.medium.maxi2x
+                                }}>
+                                <Text bold style={nameStyle} numberOfLines={1} ellipsizeMode="tail">
+                                    {folder.parent ? folder.name : tx('title_files')}
+                                </Text>
                                 {this.fileDetails}
                             </View>
                             {optionsIcon}

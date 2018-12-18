@@ -12,6 +12,7 @@ import { User } from '../../lib/icebear';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
 import ContactCard from '../shared/contact-card';
+import GrayLabel from '../controls/gray-label';
 
 @observer
 export default class MemberListItem extends SafeComponent {
@@ -52,6 +53,9 @@ export default class MemberListItem extends SafeComponent {
 
         const isAdmin = channel.isAdmin(contact);
         const isCurrentUser = contact.username === User.current.username;
+        const userStyle = {
+            marginRight: isCurrentUser ? vars.spacing.huge.midi : vars.spacing.small.maxi2x
+        };
 
         return (
             <View
@@ -62,45 +66,55 @@ export default class MemberListItem extends SafeComponent {
                     <ContactCard
                         contact={contact}
                         key={username}
-                        backgroundColor={vars.channelInfoBg} />
+                        backgroundColor={vars.channelInfoBg}
+                    />
                 </View>
-                <View
-                    {...testLabel('moreButton')}
-                    style={this.moreBtnStyle}>
-                    {isAdmin &&
-                        <View style={[
-                            this.adminContainerStyle,
-                            { marginRight: isCurrentUser ? vars.spacing.huge.midi : vars.spacing.small.maxi2x }
-                        ]}>
-                            <Text semibold style={this.adminTextStyle}>
-                                {tx('title_admin')}
-                            </Text>
-                        </View>}
-                    {channel.canIAdmin && !isCurrentUser && <Menu>
-                        <MenuTrigger
-                            renderTouchable={() => <TouchableOpacity pressRetentionOffset={vars.pressRetentionOffset} />}
-                            style={{ padding: vars.iconPadding }}>
-                            {icons.plaindark('more-vert')}
-                        </MenuTrigger>
-                        <MenuOptions>
-                            {contact.signingPublicKey && <MenuOption
-                                onSelect={() => (isAdmin ?
-                                    channel.demoteAdmin(contact) :
-                                    channel.promoteToAdmin(contact))}>
-                                <Text>{isAdmin ?
-                                    tx('button_demoteAdmin') : tx('button_makeAdmin')}
-                                </Text>
-                            </MenuOption>}
-                            <MenuOption
-                                onSelect={async () => {
-                                    onRemove(contact, section);
-                                }}>
-                                <Text {...testLabel('Remove')}>{tx('button_remove')}</Text>
-                            </MenuOption>
-                        </MenuOptions>
-                    </Menu>}
+                <View style={this.moreBtnStyle}>
+                    {isAdmin && (
+                        <View style={userStyle}>
+                            <GrayLabel contact={contact} label="title_admin" />
+                        </View>
+                    )}
+                    {channel.canIAdmin &&
+                        !isCurrentUser && (
+                            <Menu>
+                                <MenuTrigger
+                                    renderTouchable={() => (
+                                        <TouchableOpacity
+                                            {...testLabel('moreButton')}
+                                            pressRetentionOffset={vars.retentionOffset}
+                                        />
+                                    )}
+                                    style={{ padding: vars.iconPadding }}>
+                                    {icons.plaindark('more-vert')}
+                                </MenuTrigger>
+                                <MenuOptions>
+                                    {contact.signingPublicKey && (
+                                        <MenuOption
+                                            onSelect={() =>
+                                                isAdmin
+                                                    ? channel.demoteAdmin(contact)
+                                                    : channel.promoteToAdmin(contact)
+                                            }>
+                                            <Text>
+                                                {isAdmin
+                                                    ? tx('button_demoteAdmin')
+                                                    : tx('button_makeAdmin')}
+                                            </Text>
+                                        </MenuOption>
+                                    )}
+                                    <MenuOption
+                                        onSelect={async () => {
+                                            onRemove(contact, section);
+                                        }}>
+                                        <Text {...testLabel('Remove')}>{tx('button_remove')}</Text>
+                                    </MenuOption>
+                                </MenuOptions>
+                            </Menu>
+                        )}
                 </View>
-            </View>);
+            </View>
+        );
     }
 }
 

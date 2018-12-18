@@ -17,9 +17,12 @@ export default class Link extends Component {
     }
 
     render() {
-        const style = [{
-            textDecorationLine: 'underline'
-        }, this.props.style];
+        const style = [
+            {
+                textDecorationLine: 'underline'
+            },
+            this.props.style
+        ];
         return (
             <Text style={style} onPress={this.props.onPress || this.open}>
                 {this.props.children}

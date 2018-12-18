@@ -15,11 +15,7 @@ export default class ContactLegacyItem extends SafeComponent {
 
     renderThrow() {
         const { contact } = this.props;
-        return (
-            <ContactCard
-                faded={contact.invited}
-                contact={contact} />
-        );
+        return <ContactCard faded={contact.invited} contact={contact} />;
     }
 }
 

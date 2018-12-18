@@ -2,7 +2,15 @@ import { Linking, Platform } from 'react-native';
 import { observable, action, when } from 'mobx';
 import chatState from '../messaging/chat-state';
 import RoutedState from '../routes/routed-state';
-import { fileStore, TinyDb, socket, fileHelpers, clientApp, chatStore, User } from '../../lib/icebear';
+import {
+    fileStore,
+    TinyDb,
+    socket,
+    fileHelpers,
+    clientApp,
+    chatStore,
+    User
+} from '../../lib/icebear';
 import { tx } from '../utils/translator';
 import { rnAlertYesNo } from '../../lib/alerts';
 import { popupInputWithPreview, popupYesCancel, popupOkCancel } from '../shared/popups';
@@ -13,6 +21,7 @@ class FileState extends RoutedState {
     @observable currentFile = null;
     @observable previewFile = null;
     @observable isFileSelectionMode = null;
+    @observable disableFoldersInSelection;
     @observable findFilesText;
     localFileMap = observable.map();
     forceShowMap = observable.map();
@@ -20,7 +29,8 @@ class FileState extends RoutedState {
     _prefix = 'files';
     selectedFile = null;
 
-    @action async init() {
+    @action
+    async init() {
         fileStore.folderStore.currentFolder = fileStore.folderStore.root;
         return new Promise(resolve => when(() => this.store.cacheLoaded, resolve));
     }
@@ -33,11 +43,12 @@ class FileState extends RoutedState {
         return fileStore.selectedFilesOrFolders;
     }
 
-    @action delete(noTransition) {
+    @action
+    delete(noTransition) {
         const f = this.currentFile ? [this.currentFile] : this.selected;
         const count = f.length;
         const shared = !!f.filter(i => !!i.shared).length;
-        let t = tx((count > 1) ? 'dialog_confirmDeleteFiles' : 'dialog_confirmDeleteFile', { count });
+        let t = tx(count > 1 ? 'dialog_confirmDeleteFiles' : 'dialog_confirmDeleteFile', { count });
         if (shared) t += `\n${tx('title_confirmRemoveSharedFiles')}`;
         rnAlertYesNo(t)
             .then(() => {
@@ -46,14 +57,18 @@ class FileState extends RoutedState {
                 });
                 if (!noTransition) this.routerMain.files();
             })
-            .catch((e) => console.error(e));
+            .catch(e => console.error(e));
     }
 
-    @action async deleteFile(file) {
+    @action
+    async deleteFile(file) {
         const isOwner = file.owner === User.current.username;
         const title = isOwner ? tx('dialog_confirmDeleteFile') : tx('title_confirmRemoveFile');
         let subtitle = '';
-        if (file.shared) subtitle += isOwner ? tx('title_confirmRemoveSharedFiles') : tx('dialog_confirmRemoveFileNonOwner');
+        if (file.shared)
+            subtitle += isOwner
+                ? tx('title_confirmRemoveSharedFiles')
+                : tx('dialog_confirmRemoveFileNonOwner');
         const result = await popupOkCancel(title, subtitle);
         console.log(result);
         if (result) {
@@ -66,9 +81,14 @@ class FileState extends RoutedState {
         if (Platform.OS !== 'android') return;
         let text = null;
         switch (global.fileEncryptionStatus) {
-            case undefined: case 2: return;
-            case 1: text = 'dialog_androidEncryptionStatusPartial'; break;
-            default: text = 'dialog_androidEncryptionStatusOff';
+            case undefined:
+            case 2:
+                return;
+            case 1:
+                text = 'dialog_androidEncryptionStatusPartial';
+                break;
+            default:
+                text = 'dialog_androidEncryptionStatusOff';
         }
         if (await TinyDb.system.getValue('fileEncryptionStatusShown')) return;
         try {
@@ -92,9 +112,10 @@ class FileState extends RoutedState {
         return true;
     }
 
-    @action async download(fp) {
+    @action
+    async download(fp) {
         await this.remindAboutEncryption();
-        if (!await this.remindAboutExternal()) {
+        if (!(await this.remindAboutExternal())) {
             console.log('file-state.js: user denied saving to external');
             return;
         }
@@ -107,15 +128,21 @@ class FileState extends RoutedState {
         });
     }
 
-    @action resetSelection() {
+    @action
+    resetSelection() {
         this.selectedFile = null;
-        this.selected.forEach(f => { f.selected = false; });
+        this.selected.forEach(f => {
+            f.selected = false;
+        });
     }
 
-    @action selectFilesAndFolders() {
+    @action
+    selectFilesAndFolders(params = {}) {
+        const { disableFolders } = params;
         this.resetSelection();
         fileStore.folderStore.currentFolder = this.store.folderStore.root;
         this.isFileSelectionMode = true;
+        this.disableFoldersInSelection = disableFolders;
         return new Promise((resolve, reject) => {
             this.resolveFileSelection = resolve;
             this.rejectFileSelection = reject;
@@ -124,18 +151,23 @@ class FileState extends RoutedState {
     }
 
     // TODO modify after router push logic is implemented
-    @action exitFileSelect() {
+    @action
+    exitFileSelect() {
         this.resetSelection();
         this.isFileSelectionMode = false;
+        this.disableFoldersInSelection = false;
         this.routerMain.chats(chatStore.activeChat);
-        this.rejectFileSelection && this.rejectFileSelection(new Error(`file-state.js: user cancel`));
+        this.rejectFileSelection &&
+            this.rejectFileSelection(new Error(`file-state.js: user cancel`));
         this.rejectFileSelection = null;
     }
 
-    @action submitSelectedFiles() {
+    @action
+    submitSelectedFiles() {
         this.resolveFileSelection(this.selected.slice());
         this.resolveFileSelection = null;
         this.isFileSelectionMode = false;
+        this.disableFoldersInSelection = false;
         this.exitFileSelect();
     }
 
@@ -146,13 +178,16 @@ class FileState extends RoutedState {
             path: url,
             name: fileHelpers.getFileNameWithoutExtension(fileName)
         };
-        const { shouldUpload, newName } = await popupInputWithPreview(tx('title_fileName'), fileProps);
+        const { shouldUpload, newName } = await popupInputWithPreview(
+            tx('title_fileName'),
+            fileProps
+        );
         const newFileName = `${newName}.${ext}`;
 
         return { shouldUpload, newFileName };
     };
 
-    uploadInline = async (data) => {
+    uploadInline = async data => {
         await promiseWhen(() => socket.authenticated);
         const chat = chatState.currentChat;
         if (!chat) throw new Error('file-state.js, uploadInline: no chat selected');
@@ -163,7 +198,7 @@ class FileState extends RoutedState {
         return data.file;
     };
 
-    uploadInFiles = async (data) => {
+    uploadInFiles = async data => {
         await promiseWhen(() => socket.authenticated);
         const folder = fileStore.folderStore.currentFolder;
         const { shouldUpload, newFileName } = await this.preprocess(data);
@@ -177,7 +212,6 @@ class FileState extends RoutedState {
     cancelUpload(file) {
         return popupYesCancel(tx('title_confirmCancelUpload')).then(r => r && file.cancelUpload());
     }
-
 
     cancelDownload(file) {
         file.cancelDownload();

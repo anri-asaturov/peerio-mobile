@@ -35,12 +35,26 @@ export default class PaymentStorageUsageItem extends SafeComponent {
         const hideUpgrade = plans.userHasPaidPlan() || process.env.PEERIO_DISABLE_PAYMENTS;
         return (
             <View style={container}>
-                <Image source={require('../../assets/icons/cloud-in-circle.png')} style={{ width: 42, height: 42, margin: vars.spacing.small.midi2x }} />
+                <Image
+                    source={require('../../assets/icons/cloud-in-circle.png')}
+                    style={{ width: 42, height: 42, margin: vars.spacing.small.midi2x }}
+                />
                 <View>
-                    <Text semibold style={titleStyle}>{tx('title_storageUsed', { percent: u.fileQuotaUsedPercent, storage: u.fileQuotaTotalFmt })}</Text>
-                    {!hideUpgrade && <TouchableOpacity pressRetentionOffset={vars.retentionOffset} onPress={() => settingsState.upgrade()}>
-                        <Text style={descriptionTextStyle}>{tx('title_unlockMoreStorage')}</Text>
-                    </TouchableOpacity>}
+                    <Text semibold style={titleStyle}>
+                        {tx('title_storageUsed', {
+                            percent: u.fileQuotaUsedPercent,
+                            storage: u.fileQuotaTotalFmt
+                        })}
+                    </Text>
+                    {!hideUpgrade && (
+                        <TouchableOpacity
+                            pressRetentionOffset={vars.retentionOffset}
+                            onPress={() => settingsState.upgrade()}>
+                            <Text style={descriptionTextStyle}>
+                                {tx('title_unlockMoreStorage')}
+                            </Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         );

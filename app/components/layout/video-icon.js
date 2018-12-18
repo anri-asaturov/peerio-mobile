@@ -12,7 +12,7 @@ export default class VideoIcon extends HeaderIconBase {
 
     get disabled() {
         // if there's no current chat or you can't send the link return true
-        return (!chatState.currentChat || !chatState.canSendJitsi);
+        return !chatState.currentChat || !chatState.canSendJitsi;
     }
 
     // the action assigned to video icon

@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     parser: 'babel-eslint',
     plugins: [ 'babel' ],
-    extends: [ 'peerio' ],
+    extends: [ 'peerio', 'prettier' ],
     rules: {
         'global-require': 0,
         'generator-star-spacing': 0,
@@ -22,6 +22,7 @@ module.exports = {
         'max-len': 0,
         'space-before-function-paren': 0,
         'babel/semi': 1,
+        'import/prefer-default-export': 0,
         'no-restricted-imports': [2, { paths: [{
             name: 'react-native',
             importNames: ['Text'],

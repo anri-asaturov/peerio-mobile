@@ -9,7 +9,7 @@ import { tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
 import buttons from '../helpers/buttons';
 import { User, telemetry } from '../../lib/icebear';
-import TmHelper from '../../telemetry/helpers';
+import { uiState } from '../states';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -22,31 +22,39 @@ const buttonContainer = {
     marginBottom: vars.spacing.small.maxi2x
 };
 
+const sublocation = S.SHARE_DATA;
+
 @observer
 export default class SignupShareData extends SafeComponent {
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.SHARE_DATA;
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action.bound handleShareButton() {
-        User.current.saveSettings(settings => {
-            settings.errorTracking = true;
-            settings.dataCollection = true;
-        });
+    @action.bound
+    async finishAccountCreation() {
+        await signupState.finishAccountCreation();
+        await signupState.finishSignUp();
+        uiState.isFirstLogin = true;
+    }
+
+    @action.bound
+    async handleShareButton() {
+        signupState.dataCollection = true;
+        await this.finishAccountCreation();
         tm.signup.shareData(true);
         tm.signup.finishSignup();
-        signupState.finishSignUp();
     }
 
-    @action.bound handleDeclineButton() {
+    @action.bound
+    async handleDeclineButton() {
+        signupState.dataCollection = false;
+        await this.finishAccountCreation();
         tm.signup.shareData(false);
         tm.signup.finishSignup();
-        signupState.finishSignUp();
     }
 
     renderThrow() {
@@ -63,15 +71,17 @@ export default class SignupShareData extends SafeComponent {
                         {buttons.blueTextButton(
                             tx('button_notNow'),
                             this.handleDeclineButton,
+                            User.current,
                             null,
-                            null,
-                            'button_notNow')}
+                            'button_notNow'
+                        )}
                         <View style={{ width: 24 }} />
                         {buttons.roundBlueBgButton(
                             tx('button_share'),
                             this.handleShareButton,
-                            null,
-                            'button_share')}
+                            User.current,
+                            'button_share'
+                        )}
                     </View>
                 </View>
             </View>

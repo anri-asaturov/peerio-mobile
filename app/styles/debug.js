@@ -2,7 +2,9 @@ const border = (borderColor, borderWidth) => ({ borderColor, borderWidth: border
 
 const borders = input => {
     const r = {};
-    input.forEach(i => { r[i] = border(i); });
+    input.forEach(i => {
+        r[i] = border(i);
+    });
     return r;
 };
 

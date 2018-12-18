@@ -41,15 +41,19 @@ export default class UnreadMessageIndicator extends SafeComponent {
             marginTop: isAlignedTop ? vars.spacing.small.mini : null
         };
         const iconName = isAlignedTop ? 'keyboard-arrow-up' : 'keyboard-arrow-down';
-        const testLabelName = isAlignedTop ? 'chatlist-unread-indicator-top' : 'chatlist-unread-indicator-bottom';
+        const testLabelName = isAlignedTop
+            ? 'chatlist-unread-indicator-top'
+            : 'chatlist-unread-indicator-bottom';
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={[container, alignmentStyle]}
                 onPress={action}
-                {...testLabel(testLabelName)} >
+                {...testLabel(testLabelName)}>
                 <View style={[marginTopStyle, { flexDirection: 'row' }]}>
-                    <Text semibold style={text}>{tu('title_unreadMessages')}</Text>
+                    <Text semibold style={text}>
+                        {tu('title_unreadMessages')}
+                    </Text>
                     {icons.plainWhite(iconName, vars.iconSize)}
                 </View>
             </TouchableOpacity>

@@ -13,7 +13,6 @@ import CheckBox from '../shared/checkbox';
 import SignupButtonBack from './signup-button-back';
 import SignupHeading from './signup-heading';
 import SignupStepIndicator from './signup-step-indicator';
-import TmHelper from '../../telemetry/helpers';
 import tm from '../../telemetry';
 
 const { S } = telemetry;
@@ -25,14 +24,24 @@ const checkboxContainer = {
     marginBottom: vars.spacing.small.maxi
 };
 
+const sublocation = S.ACCOUNT_EMAIL;
+
+const tmEmail = {
+    item: S.EMAIL,
+    location: S.ONBOARDING,
+    sublocation
+};
+
 @observer
 export default class SignupStep3 extends SafeComponent {
     emailState = observable({ value: '' });
-    @action.bound emailInputRef(ref) { this.emailInput = ref; }
+    @action.bound
+    emailInputRef(ref) {
+        this.emailInput = ref;
+    }
 
     componentDidMount() {
         this.startTime = Date.now();
-        TmHelper.currentRoute = S.ACCOUNT_EMAIL;
         // QUICK SIGNUP DEV FLAG
         if (__DEV__ && process.env.PEERIO_QUICK_SIGNUP) {
             const rnd = new Date().getTime() % 100000;
@@ -46,35 +55,44 @@ export default class SignupStep3 extends SafeComponent {
     }
 
     componentWillUnmount() {
-        tm.signup.duration(this.startTime);
+        tm.signup.duration({ sublocation, startTime: this.startTime });
     }
 
-    @action tmToggleChecked() {
+    @action
+    tmToggleChecked() {
         tm.signup.toggleNewsletterCheckbox(signupState.subscribeToPromoEmails);
     }
 
-    @action.bound handleCreateButton() {
+    @action.bound
+    handleCreateButton() {
         if (this.isCreateDisabled) return;
         signupState.email = this.emailState.value;
         signupState.next();
-        tm.signup.navigate(S.CREATE);
+        tm.signup.navigate({ sublocation, option: S.CREATE });
     }
 
-    get isCreateDisabled() { return !socket.connected || !this.emailState.value || !this.emailInput.isValid; }
+    get isCreateDisabled() {
+        return !socket.connected || !this.emailState.value || !this.emailInput.isValid;
+    }
 
     renderThrow() {
-        const buttonMarginTop = vars.isDeviceScreenBig ? vars.spacing.large.minix : vars.spacing.small.maxi;
+        const buttonMarginTop = vars.isDeviceScreenBig
+            ? vars.spacing.large.minix
+            : vars.spacing.small.maxi;
         return (
             <View style={signupStyles.page}>
                 <SignupStepIndicator />
                 <View style={signupStyles.container}>
-                    <SignupButtonBack />
-                    <SignupHeading title="title_createYourAccount" subTitle="title_whatIsYourEmail" />
+                    <SignupButtonBack telemetry={{ sublocation, option: S.BACK }} />
+                    <SignupHeading
+                        title="title_createYourAccount"
+                        subTitle="title_whatIsYourEmail"
+                    />
                     <StyledTextInput
                         autoFocus
                         state={this.emailState}
                         validations={email}
-                        inputName={S.EMAIL}
+                        telemetry={tmEmail}
                         label={`${tx('title_email')}*`}
                         helperText={tx('title_hintEmail')}
                         lowerCase
@@ -85,7 +103,8 @@ export default class SignupStep3 extends SafeComponent {
                         required
                         clearTextIcon
                         ref={this.emailInputRef}
-                        testID="email" />
+                        testID="email"
+                    />
                     <View style={[signupStyles.separator, { marginBottom: 0 }]} />
                     <View style={checkboxContainer}>
                         <CheckBox
@@ -94,7 +113,8 @@ export default class SignupStep3 extends SafeComponent {
                             onChange={this.tmToggleChecked}
                             property="subscribeToPromoEmails"
                             text={tx('title_subscribeNewsletter')}
-                            accessibilityLabel={tx('title_subscribeNewsletter')} />
+                            accessibilityLabel={tx('title_subscribeNewsletter')}
+                        />
                     </View>
                     <View style={{ alignItems: 'flex-end', marginTop: buttonMarginTop }}>
                         {buttons.roundBlueBgButton(
@@ -102,7 +122,8 @@ export default class SignupStep3 extends SafeComponent {
                             this.handleCreateButton,
                             this.isCreateDisabled,
                             'button_create',
-                            { width: vars.signupButtonWidth, marginVertical: 30 })}
+                            { width: vars.signupButtonWidth, marginVertical: 30 }
+                        )}
                     </View>
                 </View>
             </View>

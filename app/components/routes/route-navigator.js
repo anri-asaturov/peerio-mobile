@@ -12,14 +12,18 @@ export default class RouteNavigator extends Component {
 
     componentDidMount() {
         const { routes } = this.props;
-        this.bindRouteroutes = reaction(() => routes.route, route => {
-            console.log(`route-navigator: ${routes.prevRoute}, ${route}`);
-            routes.prevRoute = route;
-            const rInfo = routes.routes[route];
-            uiState.hideAll().then(() => {
-                this.route = rInfo;
-            });
-        }, { fireImmediately: true });
+        this.bindRouteroutes = reaction(
+            () => routes.route,
+            route => {
+                console.log(`route-navigator: ${routes.prevRoute}, ${route}`);
+                routes.prevRoute = route;
+                const rInfo = routes.routes[route];
+                uiState.hideAll().then(() => {
+                    this.route = rInfo;
+                });
+            },
+            { fireImmediately: true }
+        );
     }
 
     renderScene(route) {
@@ -29,18 +33,16 @@ export default class RouteNavigator extends Component {
     render() {
         const { route } = this;
         const hidden = { overflow: 'hidden' };
-        const inner = route ?
-            (<View
+        const inner = route ? (
+            <View
                 testID={`route${route.key}Scene`}
                 removeClippedSubviews={false}
                 style={[navigator.card, hidden]}>
                 {this.route ? this.renderScene(this.route) : null}
-            </View>)
-            : null;
+            </View>
+        ) : null;
         return (
-            <View
-                testID="navigatorContainer"
-                style={{ flex: 1 }}>
+            <View testID="navigatorContainer" style={{ flex: 1 }}>
                 {inner}
             </View>
         );

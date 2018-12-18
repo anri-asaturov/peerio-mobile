@@ -21,10 +21,6 @@ export default class IntroStepIndicator extends SafeComponent {
             }
             items.push(<View style={s} key={i} />);
         }
-        return (
-            <View style={signupStyles.progressBarContainer}>
-                {items}
-            </View>
-        );
+        return <View style={signupStyles.progressBarContainer}>{items}</View>;
     }
 }

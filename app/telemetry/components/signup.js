@@ -1,150 +1,148 @@
 import { telemetry } from '../../lib/icebear';
 import { setup } from '../main';
-import TmHelper from '../helpers';
 
 const { S, duration } = telemetry;
 
 const location = S.ONBOARDING;
-const signup = setup(
-    {
-        duration: (startTime) => {
-            return [
-                S.DURATION,
-                {
-                    location,
-                    sublocation: TmHelper.currentRoute,
-                    totalTime: duration(startTime)
-                }
-            ];
-        },
+const signup = setup({
+    duration: tm => {
+        return [
+            S.DURATION,
+            {
+                location,
+                sublocation: tm.sublocation,
+                totalTime: duration(tm.startTime)
+            }
+        ];
+    },
 
-        durationItem: (startTime, item) => {
-            return [
-                S.DURATION,
-                {
-                    item,
-                    location: S.ONBOARDING,
-                    totalTime: duration(startTime)
-                }
-            ];
-        },
+    durationItem: tm => {
+        return [
+            S.DURATION,
+            {
+                item: tm.item,
+                location: S.ONBOARDING,
+                totalTime: duration(tm.startTime)
+            }
+        ];
+    },
 
-        onStartAccountCreation: () => {
-            return [
-                S.START_ACCOUNT_CREATION, {
-                    location,
-                    sublocation: TmHelper.currentRoute
-                }
-            ];
-        },
+    onStartAccountCreation: tm => {
+        return [
+            S.START_ACCOUNT_CREATION,
+            {
+                location,
+                sublocation: tm.sublocation
+            }
+        ];
+    },
 
-        navigate: (option) => {
-            return [
-                S.NAVIGATE,
-                {
-                    option,
-                    sublocation: TmHelper.currentRoute
-                }
-            ];
-        },
+    navigate: tm => {
+        return [
+            S.NAVIGATE,
+            {
+                option: tm.option,
+                sublocation: tm.sublocation
+            }
+        ];
+    },
 
-        pickUsername: (errorFlag) => {
-            return [S.PICK_USERNAME, { option: errorFlag }];
-        },
+    pickUsername: errorFlag => {
+        return [S.PICK_USERNAME, { option: errorFlag }];
+    },
 
-        toggleNewsletterCheckbox: (checked) => {
-            return [
-                S.SET_SETTING,
-                {
-                    option: S.RECEIVE_EMAIL,
-                    on: checked,
-                    item: S.NEWSLETTER,
-                    location: S.ONBOARDING
-                }
-            ];
-        },
+    toggleNewsletterCheckbox: checked => {
+        return [
+            S.SET_SETTING,
+            {
+                option: S.RECEIVE_EMAIL,
+                on: checked,
+                item: S.NEWSLETTER,
+                location: S.ONBOARDING
+            }
+        ];
+    },
 
-        copyAk: () => {
-            return [
-                S.COPY,
-                {
-                    item: S.ACCOUNT_KEY,
-                    sublocation: TmHelper.currentRoute
-                }
-            ];
-        },
+    copyAk: tm => {
+        return [
+            S.COPY,
+            {
+                item: S.ACCOUNT_KEY,
+                sublocation: tm.sublocation
+            }
+        ];
+    },
 
-        saveAk: (sublocation) => {
-            return [
-                S.DOWNLOAD,
-                {
-                    item: S.ACCOUNT_KEY,
-                    sublocation: sublocation || TmHelper.currentRoute
-                }
-            ];
-        },
+    saveAk: tm => {
+        return [
+            S.DOWNLOAD,
+            {
+                item: S.ACCOUNT_KEY,
+                sublocation: tm.sublocation
+            }
+        ];
+    },
 
-        confirmSaveAk: (fileType) => {
-            return [
-                S.DOWNLOAD_CONFIRM,
-                {
-                    item: S.ACCOUNT_KEY,
-                    location: S.ONBOARDING,
-                    sublocation: TmHelper.currentRoute,
-                    fileType
-                }
-            ];
-        },
+    confirmSaveAk: (tm, fileType) => {
+        return [
+            S.DOWNLOAD_CONFIRM,
+            {
+                item: S.ACCOUNT_KEY,
+                location: S.ONBOARDING,
+                sublocation: tm.sublocation,
+                fileType
+            }
+        ];
+    },
 
-        readMorePopup: (item) => {
-            return [
-                S.READ_MORE,
-                {
-                    item,
-                    location: S.ONBOARDING
-                }
-            ];
-        },
+    readMorePopup: tm => {
+        return [
+            S.READ_MORE,
+            {
+                item: tm.item,
+                location: S.ONBOARDING
+            }
+        ];
+    },
 
-        readMoreAccordion: (item) => {
-            return [
-                S.READ_MORE,
-                {
-                    item,
-                    location: S.ONBOARDING
-                }
-            ];
-        },
+    readMoreAccordion: tm => {
+        return [
+            S.READ_MORE,
+            {
+                item: tm.item,
+                location: S.ONBOARDING
+            }
+        ];
+    },
 
-        acceptTos: () => {
-            return [S.ACCEPT_TERMS];
-        },
+    acceptTos: () => {
+        return [S.ACCEPT_TERMS];
+    },
 
-        declineTos: () => {
-            return [S.DECLINE_TERMS];
-        },
+    declineTos: () => {
+        return [S.DECLINE_TERMS];
+    },
 
-        shareData: (on) => {
-            return [
-                S.SET_SETTING,
-                {
-                    option: S.SHARE_DATA,
-                    on,
-                    item: S.CRASH_AND_ERROR_DATA,
-                    location: S.ONBOARDING
-                }
-            ];
-        },
+    shareData: on => {
+        return [
+            S.SET_SETTING,
+            {
+                option: S.SHARE_DATA,
+                on,
+                item: S.CRASH_AND_ERROR_DATA,
+                location: S.ONBOARDING
+            }
+        ];
+    },
 
-        finishSignup: () => {
-            return [
-                S.FINISH_ACCOUNT_CREATION,
-                {
-                    location: S.ONBOARDING
-                }
-            ];
-        }
+    finishSignup: () => {
+        return [
+            S.FINISH_ACCOUNT_CREATION,
+            {
+                location: S.ONBOARDING
+            }
+        ];
     }
-);
+});
 
 module.exports = signup;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
 import { observable, action, when } from 'mobx';
@@ -31,8 +32,17 @@ export default class LoginInputs extends SafeComponent {
     usernameState = observable({ value: '' });
     passwordState = observable({ value: '' });
 
-    @action.bound usernameInputRef(ref) { this.usernameInput = ref; }
-    @action.bound passwordInputRef(ref) { this.passwordInput = ref; }
+    @action.bound
+    usernameInputRef(ref) {
+        this.usernameInput = ref;
+    }
+    @action.bound
+    passwordInputRef(ref) {
+        this.passwordInput = ref;
+    }
+
+    tmUsername = { ...this.props.telemetry, item: S.USERNAME };
+    tmAccountKey = { ...this.props.telemetry, item: S.ACCOUNT_KEY };
 
     async componentDidMount() {
         const { hideUsernameInput } = this.props;
@@ -41,39 +51,56 @@ export default class LoginInputs extends SafeComponent {
             this.usernameState.value = user.username;
         }
         if (__DEV__ && process.env.PEERIO_USERNAME && process.env.PEERIO_PASSPHRASE) {
-            when(() => loginState.isConnected, () => {
-                this.usernameInput && this.usernameInput.onChangeText(process.env.PEERIO_USERNAME);
-                this.passwordInput && this.passwordInput.onChangeText(process.env.PEERIO_PASSPHRASE);
-                process.env.PEERIO_AUTOLOGIN && this.submit();
-            });
+            when(
+                () => loginState.isConnected,
+                () => {
+                    this.usernameInput &&
+                        this.usernameInput.onChangeText(process.env.PEERIO_USERNAME);
+                    this.passwordInput &&
+                        this.passwordInput.onChangeText(process.env.PEERIO_PASSPHRASE);
+                    process.env.PEERIO_AUTOLOGIN && this.submit();
+                }
+            );
         }
     }
 
-    @action.bound submit() {
+    @action.bound
+    submit() {
         loginState.username = this.usernameState.value;
         loginState.passphrase = this.passwordState.value;
-        uiState.hideAll()
+        uiState
+            .hideAll()
             .then(async () => {
+                tm.login.onSigninButton();
                 await loginState.login();
-                tm.login.onLoginSuccess();
             })
             .catch(e => {
                 let errorMessage = 'error_wrongAK';
                 if (e.deleted || e.blacklisted) {
                     errorMessage = 'error_accountSuspendedTitle';
                 }
-                this.passwordInput.setCustomError(errorMessage);
+                // error message is displayed with a systemWarning
+                if (e.clientVersionDeprecated) {
+                    errorMessage = 'error_deprecated';
+                }
+                this.passwordInput.setCustomError(errorMessage, false);
+                tm.login.onUserLoginFailed(false);
             });
     }
 
     get isNextDisabled() {
-        return socket.connected && (!this.passwordState.value || !this.passwordInput.isValid ||
-            (!this.props.hideUsernameInput && !this.usernameInput.isValid));
+        return (
+            socket.connected &&
+            (!this.passwordState.value ||
+                !this.passwordInput.isValid ||
+                (!this.props.hideUsernameInput && !this.usernameInput.isValid))
+        );
     }
 
+    @action.bound
     tmEmailError(text, prevTextLength) {
         if (prevTextLength + 1 === text.length && text[text.length - 1] === '@') {
-            tm.login.onLoginWithEmail(tx(USERNAME_LABEL), tx('error_usingEmailInUsernameField'));
+            tm.login.onLoginWithEmail(this.tmUsername, tx('error_usingEmailInUsernameField'));
         }
     }
 
@@ -82,27 +109,31 @@ export default class LoginInputs extends SafeComponent {
         return (
             <View>
                 <View style={{ height: 16 }} />
-                {!hideUsernameInput && (<View>
-                    <StyledTextInput
-                        state={this.usernameState}
-                        inputName={S.USERNAME}
-                        validations={usernameLogin}
-                        label={tx(USERNAME_LABEL)}
-                        onChange={this.tmEmailError}
-                        ref={this.usernameInputRef}
-                        lowerCase
-                        testID="usernameLogin" />
-                    <View style={{ height: 8 }} />
-                </View>)}
+                {!hideUsernameInput && (
+                    <View>
+                        <StyledTextInput
+                            state={this.usernameState}
+                            telemetry={this.tmUsername}
+                            validations={usernameLogin}
+                            label={tx(USERNAME_LABEL)}
+                            onChange={this.tmEmailError}
+                            ref={this.usernameInputRef}
+                            lowerCase
+                            testID="usernameLogin"
+                        />
+                        <View style={{ height: 8 }} />
+                    </View>
+                )}
                 <StyledTextInput
                     state={this.passwordState}
-                    inputName={S.ACCOUNT_KEY}
+                    telemetry={this.tmAccountKey}
                     label={tx('title_AccountKey')}
                     onSubmit={this.submit}
                     secureText
                     returnKeyType="go"
                     ref={this.passwordInputRef}
-                    testID="usernamePassword" />
+                    testID="usernamePassword"
+                />
                 <View style={{ height: 8 }} />
                 <View>
                     {buttons.roundBlueBgButton(
@@ -114,10 +145,13 @@ export default class LoginInputs extends SafeComponent {
                     )}
                 </View>
                 <View style={{ height: 42 }} />
-                <Text style={findKeyText}>
-                    {tx('title_whereToFind')}
-                </Text>
+                <Text style={findKeyText}>{tx('title_whereToFind')}</Text>
             </View>
         );
     }
 }
+
+LoginInputs.propTypes = {
+    telemetry: PropTypes.any.isRequired,
+    hideUsernameInput: PropTypes.any
+};
