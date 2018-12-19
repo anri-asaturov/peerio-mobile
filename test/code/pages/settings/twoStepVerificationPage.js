@@ -14,7 +14,7 @@ class TwoStepVerificationPage extends Page {
     }
 
     get backupCodesVisible() {
-        return this.waitToDisappear('~~confirmationCodeInput');
+        return this.waitToDisappear('~confirmationCodeInput');
     }
 }
 
