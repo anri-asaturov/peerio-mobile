@@ -92,8 +92,14 @@ void RogerAddressBookChangeCallback(ABAddressBookRef addressBook, CFDictionaryRe
                                   selector:@selector(userContactsChange:)
              name:CNContactStoreDidChangeNotification object:nil]; */
   // define UNUserNotificationCenter
-  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  center.delegate = self;
+  // UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  // center.delegate = self;
+  
+  NSDate *now = [NSDate date];
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  dateFormatter.dateFormat = @"hh:mm:ss";
+  [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+  NSLog(@"Peerio launched at %@",[dateFormatter stringFromDate:now]);
   
   return YES;
 }
@@ -112,7 +118,13 @@ void RogerAddressBookChangeCallback(ABAddressBookRef addressBook, CFDictionaryRe
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-  [RCTPushNotificationManager didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+  NSDate *now = [NSDate date];
+  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+  dateFormatter.dateFormat = @"hh:mm:ss";
+  [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+  NSLog(@"Peerio received notification at %@",[dateFormatter stringFromDate:now]);
+  completionHandler(UIBackgroundFetchResultNewData);
+  // [RCTPushNotificationManager didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 // Required for the registrationError event.
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
