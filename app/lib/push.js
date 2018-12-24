@@ -30,9 +30,9 @@ function onRegister(token) {
     socket.onAuthenticated(registerServerSide);
     console.log(`push register called`);
     setTimeout(() => {
-        PushNotificationIOS.presentLocalNotification({
+        /* PushNotificationIOS.presentLocalNotification({
             alertBody: 'Hello world!!!'
-        });
+        }); */
         /* PushNotification.localNotification({
             title: 'hello',
             message: `processed a notification:`

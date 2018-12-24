@@ -13,7 +13,6 @@
 #import <React/RCTRootView.h>
 #import <React/RCTPushNotificationManager.h>
 #import <AddressBook/AddressBook.h>
-#import <UserNotifications/UserNotifications.h>
 #import <Contacts/Contacts.h>
 #import <React/RCTLinkingManager.h>
 
@@ -92,8 +91,7 @@ void RogerAddressBookChangeCallback(ABAddressBookRef addressBook, CFDictionaryRe
                                   selector:@selector(userContactsChange:)
              name:CNContactStoreDidChangeNotification object:nil]; */
   // define UNUserNotificationCenter
-  // UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  // center.delegate = self;
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   
   NSDate *now = [NSDate date];
   NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -101,6 +99,25 @@ void RogerAddressBookChangeCallback(ABAddressBookRef addressBook, CFDictionaryRe
   [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
   NSLog(@"Peerio launched at %@",[dateFormatter stringFromDate:now]);
   
+  if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
+      UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+      content.title = @"Appstart";
+      content.body = @"Notification";
+      NSString *identifier = @"UYLLocalStartNotification";
+      UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier
+                                        content:content trigger:nil];
+      [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+          if (error != nil) {
+              NSLog(@"Something went wrong: %@",error);
+          }
+          NSLog(@"Initializing UserNotification center delegate");
+          [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+      }];
+
+//    [self application:application didReceiveRemoteNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+  } else {
+      center.delegate = self;
+  }  
   return YES;
 }
 
@@ -123,6 +140,19 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
   dateFormatter.dateFormat = @"hh:mm:ss";
   [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
   NSLog(@"Peerio received notification at %@",[dateFormatter stringFromDate:now]);
+  
+  UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+  content.title = @"Don't forget";
+  content.body = @"Buy some milk";
+  NSString *identifier = @"UYLLocalNotification";
+  UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier
+                                    content:content trigger:nil];
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+      if (error != nil) {
+          NSLog(@"Something went wrong: %@",error);
+      }
+  }];
   completionHandler(UIBackgroundFetchResultNewData);
   // [RCTPushNotificationManager didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
@@ -138,15 +168,15 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 }
 
 //Called when a notification is delivered to a foreground app.
-// -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
-// {
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
 //  NSLog(@"User Info : %@",notification.request.content.userInfo);
   // [RCTPushNotificationManager didReceiveLocalNotification:notification];
   /* [RCTPushNotificationManager
      didReceiveRemoteNotification:notification.request.content.userInfo
      fetchCompletionHandler:completionHandler]; */
   // UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge
-//  completionHandler(UNNotificationPresentationOptionAlert);
-// }
+  completionHandler(UNNotificationPresentationOptionAlert);
+}
 
 @end
