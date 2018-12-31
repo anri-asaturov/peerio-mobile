@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, action } from 'mobx';
-import { View, TouchableOpacity, LayoutAnimation, Platform } from 'react-native';
+import { View, TouchableOpacity, Platform } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
@@ -10,6 +10,7 @@ import icons from '../helpers/icons';
 import FileTypeIcon from '../files/file-type-icon';
 import Thumbnail from '../shared/thumbnail';
 import { fileHelpers } from '../../lib/icebear';
+import { transitionAnimation } from '../helpers/animations';
 
 const height = 42;
 // height minus borders
@@ -70,24 +71,28 @@ export default class Progress extends SafeComponent {
         const { value, max } = this.props;
         const { width } = this;
         if (!width || !max) return 0;
-        return width * value / max;
+        return (width * value) / max;
     }
 
-    @action.bound layout(evt) {
+    @action.bound
+    layout(evt) {
         this.width = evt.nativeEvent.layout.width;
     }
 
     componentWillUpdate() {
         // android may break on LayoutAnimation
         if (Platform.OS === 'android') return;
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
     }
 
     componentDidMount() {
-        setTimeout(() => { this.visible = true; }, 0);
+        setTimeout(() => {
+            this.visible = true;
+        }, 0);
     }
 
-    @action.bound cancel() {
+    @action.bound
+    cancel() {
         this.visible = false;
         this.props.onCancel && this.props.onCancel();
     }
@@ -107,19 +112,16 @@ export default class Progress extends SafeComponent {
         let fileImagePlaceholder = null;
         const fileIconType = fileHelpers.getFileIconType(file.ext);
         if (fileIconType) {
-            fileImagePlaceholder = (
-                <FileTypeIcon
-                    size="smaller"
-                    type={fileIconType}
-                />
-            );
+            fileImagePlaceholder = <FileTypeIcon size="smaller" type={fileIconType} />;
         }
         if (fileHelpers.isImage(file.ext) && this.props.path) {
             fileImagePlaceholder = this.previewImage;
         }
         return (
             <View style={animation}>
-                <View style={[pbContainer, { opacity: this.hidden ? 0 : 1 }]} onLayout={this.layout}>
+                <View
+                    style={[pbContainer, { opacity: this.hidden ? 0 : 1 }]}
+                    onLayout={this.layout}>
                     <View style={[pbProgress, { width: this.currentWidth }]} />
                     <View style={row}>
                         {fileImagePlaceholder}
@@ -127,7 +129,7 @@ export default class Progress extends SafeComponent {
                             {this.props.title}
                         </Text>
                         <Text style={[percentText, { marginRight: 56 }]} numberOfLines={1}>
-                            ({Math.min(Math.ceil(100 * value / max), 100)}%)
+                            ({Math.min(Math.ceil((100 * value) / max), 100)}%)
                         </Text>
                         <TouchableOpacity
                             style={iconStyle}
@@ -149,7 +151,9 @@ export default class Progress extends SafeComponent {
         const animation = { height: this.visible ? height - 2 : 0 };
         return (
             <View style={animation}>
-                <View style={[pbContainer, { opacity: this.hidden ? 0 : 1 }]} onLayout={this.layout}>
+                <View
+                    style={[pbContainer, { opacity: this.hidden ? 0 : 1 }]}
+                    onLayout={this.layout}>
                     <View style={[pbProgress, { width: this.currentWidth }]} />
                     <View style={row}>
                         {icons.plain('folder-shared', vars.iconSize, vars.subtleText)}
@@ -157,7 +161,7 @@ export default class Progress extends SafeComponent {
                             {this.props.title}
                         </Text>
                         <Text style={percentText} numberOfLines={1}>
-                            ({Math.min(Math.ceil(100 * value / max), 100)}%)
+                            ({Math.min(Math.ceil((100 * value) / max), 100)}%)
                         </Text>
                     </View>
                 </View>
@@ -180,4 +184,3 @@ Progress.propTypes = {
     hidden: PropTypes.any,
     title: PropTypes.any
 };
-

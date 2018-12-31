@@ -5,6 +5,7 @@ import fileState from '../files/file-state';
 
 class MockFileStore {
     files = [];
+    isEmpty = false;
 
     constructor() {
         for (let i = 0; i < 15; ++i) {
@@ -12,8 +13,16 @@ class MockFileStore {
         }
     }
 
-    install() {
-        fileState.store = this;
+    bulk = {};
+
+    get folderStore() {
+        return {
+            currentFolder: {
+                get filesAndFoldersDefaultSorting() {
+                    return fileState.store.files;
+                }
+            }
+        };
     }
 
     createMock() {

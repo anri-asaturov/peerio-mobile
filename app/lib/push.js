@@ -1,7 +1,7 @@
 import PushNotification from 'react-native-push-notification';
-import { Platform } from 'react-native';
+import { Platform, PushNotificationIOS } from 'react-native';
 import { when, observable } from 'mobx';
-import { socket } from '../lib/icebear';
+import { socket } from './peerio-icebear';
 import whitelabel from '../components/whitelabel/white-label-config';
 
 const pushState = observable({
@@ -17,7 +17,8 @@ function onRegister(token) {
         console.log(`🚲 push.js: onAuthenticated`);
         // TODO: remove when server is persisting tokensif (pushState.registered) return;
         console.log(`🚲 push.js: sending registration OS: ${JSON.stringify(payload)}`);
-        socket.send('/auth/mobile-device/register', payload)
+        socket
+            .send('/auth/mobile-device/register', payload)
             .then(r => {
                 console.log(`🚲 push.js: register result success ${JSON.stringify(r)}`);
                 pushState.registered = true;
@@ -34,6 +35,8 @@ function enablePushNotifications() {
 
         onNotification(notification) {
             console.log('🚲 push.js: NOTIFICATION:', notification);
+            notification.finish(PushNotificationIOS.FetchResult.NoData);
+            console.log('🚲 push.js: nofitication finish callback called');
         },
 
         // GCM sender id
@@ -54,14 +57,18 @@ function toggleServerSide(enable) {
     const action = enable ? 'enable' : 'disable';
     console.log(`🚲 push.js: ${action} push waiting for socket`);
     pushState.enabled = enable;
-    when(() => pushState.registered && socket.authenticated, () => {
-        if (enable !== pushState.enabled) return;
-        console.log(`🚲 push.js: ${action} push request`);
-        const req = `/auth/push/${action}`;
-        socket.send(req)
-            .then(r => console.log(`🚲 push.js: ${action} server ${r}`))
-            .catch(e => console.error(e));
-    });
+    when(
+        () => pushState.registered && socket.authenticated,
+        () => {
+            if (enable !== pushState.enabled) return;
+            console.log(`🚲 push.js: ${action} push request`);
+            const req = `/auth/push/${action}`;
+            socket
+                .send(req)
+                .then(r => console.log(`🚲 push.js: ${action} server ${r}`))
+                .catch(e => console.error(e));
+        }
+    );
 }
 
 function clearBadge() {

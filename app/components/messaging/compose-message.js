@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { observer } from 'mobx-react/native';
 import Text from '../controls/custom-text';
 import ContactSelectorUniversal from '../contacts/contact-selector-universal';
 import chatState from './chat-state';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
 
+@observer
 export default class ComposeMessage extends Component {
     exit = () => chatState.routerModal.discard();
     action = contacts => chatState.startChat(contacts);
 
     get roomRedirectText() {
         return (
-            <View style={{ marginTop: vars.spacing.small.midi2x, flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={{ fontSize: vars.font.size.normal, color: vars.subtleText }}>
+            <View
+                style={{
+                    marginTop: vars.spacing.small.midi2x,
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
+                <Text style={{ fontSize: vars.font.size14, color: vars.subtleText }}>
                     {tx('title_chatWithGroup')}
                 </Text>
-                <Text style={{ fontSize: vars.font.size.normal, color: vars.peerioBlue }}>
+                <Text style={{ fontSize: vars.font.size14, color: vars.peerioBlue }}>
                     {tx('title_createRoom')}
                 </Text>
-            </View>);
+            </View>
+        );
     }
 
     render() {
@@ -30,7 +38,8 @@ export default class ComposeMessage extends Component {
                 action={contacts => chatState.startChat(contacts)}
                 inputPlaceholder="title_TryUsernameOrEmail"
                 title="title_newDirectMessage"
-                limit={chatState.LIMIT_PEOPLE_DM} />
+                limit={chatState.LIMIT_PEOPLE_DM}
+            />
         );
     }
 }

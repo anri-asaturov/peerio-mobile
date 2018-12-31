@@ -4,12 +4,12 @@ import ChatZeroStatePlaceholder from '../../messaging/chat-zero-state-placeholde
 import Text from '../../controls/custom-text';
 import { tx } from '../../utils/translator';
 import { vars } from '../../../styles/styles';
-import buttons from '../../helpers/buttons';
 import routes from '../../routes/routes';
+import BlueRoundButton from '../../buttons/blue-round-button';
 
 const chatHeaderStyle = {
     color: vars.darkBlue,
-    fontSize: vars.font.size.massive,
+    fontSize: vars.font.size24,
     textAlign: 'center',
     marginTop: vars.spacing.medium.maxi2x,
     marginBottom: vars.spacing.medium.mini2x
@@ -27,7 +27,11 @@ export default class MedcryptorChatZeroStatePlaceholder extends ChatZeroStatePla
 
     get findContactsButton() {
         return (
-            buttons.roundBlueBgButton('title_findContactsZeroState', () => routes.main.contactAdd(), false, '', { backgroundColor: vars.peerioPurple })
+            <BlueRoundButton
+                text="title_findContactsZeroState"
+                onPress={routes.main.contactAdd}
+                style={{ backgroundColor: vars.peerioPurple }}
+            />
         );
     }
 }

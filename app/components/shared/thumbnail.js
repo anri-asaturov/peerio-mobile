@@ -24,18 +24,27 @@ export default class Thumbnail extends Component {
     // scaled down height of the image we preview
     @observable previewSmallHeight;
 
-    @action.bound async updatePath(path) {
+    @action.bound
+    async updatePath(path) {
         this.width = 0;
         this.height = 0;
         this.previewSmallWidth = 0;
         this.previewSmallHeight = 0;
         if (!path) return;
-        when(() => this.previewContainerWidth && this.width && this.height, () => {
-            const { previewContainerWidth, previewContainerHeight, width, height } = this;
-            const dims = vars.optimizeImageSize(width, height, previewContainerWidth, previewContainerHeight);
-            this.previewSmallWidth = dims.width;
-            this.previewSmallHeight = dims.height;
-        });
+        when(
+            () => this.previewContainerWidth && this.width && this.height,
+            () => {
+                const { previewContainerWidth, previewContainerHeight, width, height } = this;
+                const dims = vars.optimizeImageSize(
+                    width,
+                    height,
+                    previewContainerWidth,
+                    previewContainerHeight
+                );
+                this.previewSmallWidth = dims.width;
+                this.previewSmallHeight = dims.height;
+            }
+        );
         console.log(`file-share-preview: trying to make thumbnail for ${path}`);
         try {
             const { width, height } = await ImagePicker.getImageDimensions(path);
@@ -48,10 +57,11 @@ export default class Thumbnail extends Component {
     }
 
     componentWillMount() {
-        reaction(() => this.props.path, this.updatePath, true);
+        reaction(() => this.props.path, this.updatePath, { fireImmediately: true });
     }
 
-    @action.bound layoutPreviewContainer(e) {
+    @action.bound
+    layoutPreviewContainer(e) {
         const { width, height } = e.nativeEvent.layout;
         this.previewContainerWidth = width;
         this.previewContainerHeight = height;
@@ -65,15 +75,21 @@ export default class Thumbnail extends Component {
         if (!this.readyToDisplay) return null;
         return (
             <Image
-                source={{ uri: this.props.path, width: this.previewSmallWidth, height: this.previewSmallHeight }}
-                style={imagePreviewStyle} />
+                source={{
+                    uri: this.props.path,
+                    width: this.previewSmallWidth,
+                    height: this.previewSmallHeight
+                }}
+                style={imagePreviewStyle}
+            />
         );
     }
 
     render() {
         if (!this.props.path) return null;
         return (
-            <View onLayout={this.layoutPreviewContainer}
+            <View
+                onLayout={this.layoutPreviewContainer}
                 style={[{ alignItems: 'center', justifyContent: 'center' }, this.props.style]}>
                 {this.image}
             </View>

@@ -26,11 +26,11 @@ export default class RecentFileItem extends SafeComponent {
         const iconRight = icons.dark('more-vert', this.props.onMenu);
         const nameStyle = {
             color: vars.txtDark,
-            fontSize: vars.font.size.normal
+            fontSize: vars.font.size14
         };
         const infoStyle = {
             color: vars.extraSubtleText,
-            fontSize: vars.font.size.smaller
+            fontSize: vars.font.size12
         };
         const itemContainerStyle = {
             flex: 1,
@@ -44,22 +44,22 @@ export default class RecentFileItem extends SafeComponent {
             width,
             paddingLeft: vars.spacing.medium.mini2x
         };
-        const arrow = this.props.hideArrow ? null : (
-            <View style={{ flex: 0 }}>
-                {iconRight}
-            </View>
-        );
+        const arrow = this.props.hideArrow ? null : <View style={{ flex: 0 }}>{iconRight}</View>;
         return (
             <View style={fileInfoContainerStyle}>
                 <View style={[itemContainerStyle, { width }]}>
                     <View style={{ flex: 0, paddingRight: vars.fileInnerItemPaddingRight }}>
-                        {<FileTypeIcon
-                            size="small"
-                            type={fileHelpers.getFileIconType(file.ext)}
-                        />}
+                        {<FileTypeIcon size="small" type={fileHelpers.getFileIconType(file.ext)} />}
                     </View>
-                    <View style={{ flexGrow: 1, flexShrink: 1, marginLeft: vars.spacing.medium.mini2x }}>
-                        <Text style={nameStyle} numberOfLines={1} ellipsizeMode="tail">{file.name}</Text>
+                    <View
+                        style={{
+                            flexGrow: 1,
+                            flexShrink: 1,
+                            marginLeft: vars.spacing.medium.mini2x
+                        }}>
+                        <Text style={nameStyle} numberOfLines={1} ellipsizeMode="tail">
+                            {file.name}
+                        </Text>
                         <Text style={infoStyle}>
                             {moment(file.uploadedAt).format('DD/MM/YYYY')}
                             {' - '}

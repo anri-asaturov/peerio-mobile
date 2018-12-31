@@ -1,5 +1,5 @@
 {
-  "username": "t4545",
+  "username": "t0404",
   "payload": {
     "GCM": "{ \"priority\": \"high\", \"notification\": { \"icon\":\"push\", \"color\":\"#2C95CF\", \"body\": \"that is great info\", \"title\": \"Peerio\", \"tag\": \"message\", \"click_action\": \"PUSH_OPEN\", \"sound\": \"push\" } }"
   }

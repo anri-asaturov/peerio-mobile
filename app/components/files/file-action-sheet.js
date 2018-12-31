@@ -4,9 +4,9 @@ import { tx } from '../utils/translator';
 import { fileState } from '../states';
 import routes from '../routes/routes';
 import ActionSheetLayout from '../layout/action-sheet-layout';
-import { fileHelpers, config } from '../../lib/icebear';
+import { fileHelpers, config, User } from '../../lib/icebear';
 import FileActionSheetHeader from '../files/file-action-sheet-header';
-import { popupInput } from '../shared/popups';
+import { popupFileRename } from '../shared/popups';
 import snackbarState from '../snackbars/snackbar-state';
 
 export default class FileActionSheet {
@@ -25,15 +25,17 @@ export default class FileActionSheet {
             snackbarState.pushTemporary(tx('snackbar_fileNotFound'));
             return;
         }
-        const { isLegacy } = file;
-        const header = (<FileActionSheetHeader
-            file={file}
-            onPress={() => {
-                routes.modal.discard();
-                routes.main.files(file);
-                ActionSheetLayout.hide();
-            }}
-        />);
+        const { isLegacy, readyForDownload } = file;
+        const header = (
+            <FileActionSheetHeader
+                file={file}
+                onPress={() => {
+                    routes.modal.discard();
+                    routes.main.files(file);
+                    ActionSheetLayout.hide();
+                }}
+            />
+        );
 
         // Files that exist can be opened right away
         // Files that dont exist need to be downloaded firs
@@ -43,7 +45,7 @@ export default class FileActionSheet {
         // Share
         actionButtons.push({
             title: tx('button_share'),
-            disabled: isLegacy,
+            disabled: isLegacy || !readyForDownload,
             action: () => routes.modal.shareFileTo({ file })
         });
 
@@ -77,20 +79,22 @@ export default class FileActionSheet {
         }
 
         // Move
-        actionButtons.push({
-            title: tx('button_move'),
-            disabled: isLegacy,
-            action: async () => {
-                await routes.modal.moveFileTo({ fsObject: file });
-            }
-        });
+        // TODO: a better way to not show move option in DMs and rooms
+        routes.main.route !== 'chats' &&
+            actionButtons.push({
+                title: tx('button_move'),
+                disabled: isLegacy,
+                action: async () => {
+                    await routes.modal.moveFileTo({ fsObject: file });
+                }
+            });
 
         // Rename
         actionButtons.push({
             title: tx('button_rename'),
             disabled: isLegacy,
             action: async () => {
-                const newFileName = await popupInput(
+                const newFileName = await popupFileRename(
                     tx('title_fileName'),
                     '',
                     fileHelpers.getFileNameWithoutExtension(file.name),
@@ -102,7 +106,7 @@ export default class FileActionSheet {
 
         // Delete
         actionButtons.push({
-            title: 'button_delete',
+            title: file.owner === User.current.username ? 'button_delete' : 'button_remove',
             isDestructive: true,
             action: async () => {
                 const result = await fileState.deleteFile(file);

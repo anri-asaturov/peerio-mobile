@@ -5,11 +5,16 @@ const whiteLabelConfig = {
     PRO_MONTHLY_PLAN: 'com.peerio.medcryptor.messenger.professional.500.monthly',
     PRO_MONTHLY_PRICE: '$25 AUD/month',
     PRO_YEARLY_PRICE: '$300 AUD/year',
-    stringReplacements: [{
-        original: 'Peerio',
-        replacement: 'MedCryptor'
-    }],
-    LOCALE_PREFIX: 'mcr_'
+    TERMS_URL: 'https://medcryptor.com/legal/terms-of-use',
+    PRIVACY: 'https://medcryptor.com/legal/privacy-policy',
+    stringReplacements: [
+        {
+            original: 'Peerio',
+            replacement: 'MedCryptor'
+        }
+    ],
+    LOCALE_PREFIX: 'mcr_',
+    SIGNUP_STEP_COUNT: 5
 };
 
 export default whiteLabelConfig;

@@ -11,7 +11,7 @@ import icons from '../../helpers/icons';
 import chatState from '../../messaging/chat-state';
 import { uiState } from '../../states';
 import { contactStore } from '../../../lib/icebear';
-import buttons from '../../helpers/buttons';
+import BlueRoundButton from '../../buttons/blue-round-button';
 
 const container = {
     flex: 1,
@@ -32,13 +32,13 @@ const welcomeContainerStyle = {
 
 const welcomeHeaderStyle = {
     color: vars.textBlack87,
-    fontSize: vars.font.size.huge,
+    fontSize: vars.font.size20,
     fontWeight: 'bold'
 };
 
 const upgradeDescriptionStyle = {
     color: vars.textBlack87,
-    fontSize: vars.font.size.bigger,
+    fontSize: vars.font.size16,
     marginBottom: vars.spacing.large.mini
 };
 
@@ -54,7 +54,7 @@ const featureContainer = {
 
 const featureStyle = {
     color: vars.textBlack54,
-    fontSize: vars.font.size.bigger,
+    fontSize: vars.font.size16,
     marginBottom: vars.spacing.small.midi2x
 };
 
@@ -70,7 +70,6 @@ const buttonContainerStyle = {
 const buttonStyle = {
     color: vars.textBlack38
 };
-
 
 @observer
 export default class MedcryptorAdminScreen extends SafeComponent {
@@ -89,7 +88,11 @@ export default class MedcryptorAdminScreen extends SafeComponent {
 
     helpAccountUsername = 'team_medcryptor';
     buyAccountUrl = 'https://medcryptor.com/';
-    features = ['mcr_title_patientInvites', 'mcr_title_consultationRooms', 'mcr_title_discussionRooms'];
+    features = [
+        'mcr_title_patientInvites',
+        'mcr_title_consultationRooms',
+        'mcr_title_discussionRooms'
+    ];
 
     contactMedcryptor = async () => {
         return chatState.startChat([this.helpAccount]);
@@ -102,12 +105,11 @@ export default class MedcryptorAdminScreen extends SafeComponent {
             <View key={title} style={featureContainer}>
                 <Icon
                     style={featureIcon}
-                    name="arrow-forward"
+                    name="chevron-right"
                     size={vars.iconSizeSmall}
-                    color={vars.textBlack54} />
-                <Text style={featureStyle}>
-                    {t(title)}
-                </Text>
+                    color={vars.textBlack54}
+                />
+                <Text style={featureStyle}>{t(title)}</Text>
             </View>
         );
     }
@@ -118,24 +120,18 @@ export default class MedcryptorAdminScreen extends SafeComponent {
                 <View style={wrapper}>
                     <View style={welcomeContainerStyle}>
                         {icons.coloredAsText('check-circle', vars.confirmColor, 60)}
-                        <Text style={welcomeHeaderStyle}>
-                            {t('mcr_title_thankYou')}
-                        </Text>
+                        <Text style={welcomeHeaderStyle}>{t('mcr_title_thankYou')}</Text>
                     </View>
                     <View style={featureContainerStyle}>
-                        <Text style={upgradeDescriptionStyle}>
-                            {t('mcr_title_upgrade')}
-                        </Text>
+                        <Text style={upgradeDescriptionStyle}>{t('mcr_title_upgrade')}</Text>
                         {this.features.map(f => this.renderFeature(f))}
                     </View>
-                    {buttons.roundBlueBgButton('mcr_title_getAccount', this.contactMedcryptor)}
+                    <BlueRoundButton text="mcr_title_getAccount" onPress={this.contactMedcryptor} />
                     <TouchableOpacity
-                        pressRetentionOffset={vars.pressRetentionOffset}
+                        pressRetentionOffset={vars.retentionOffset}
                         onPress={this.skipScreen}
                         style={buttonContainerStyle}>
-                        <Text style={buttonStyle}>
-                            {tu('mcr_title_skip')}
-                        </Text>
+                        <Text style={buttonStyle}>{tu('mcr_title_skip')}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

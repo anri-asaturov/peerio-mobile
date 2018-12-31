@@ -2,7 +2,7 @@
 Feature: 2 Factor Authentication
 
     Background:
-        Given I have signed up
+        Given I have quickly signed up
 
     Scenario: Enable 2FA for the first time
         Given I enable 2FA
@@ -23,6 +23,5 @@ Feature: 2 Factor Authentication
         Given I enable 2FA on an untrusted device
         And   I sign out
         When  I open Peerio
-        And   I sign in
-        Then  I am prompted to enter a 2FA token
+        And   I sign in with 2fa
         And   I am taken to the home tab

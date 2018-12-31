@@ -13,8 +13,12 @@ class ChatPage extends Page {
         return this.getWhenVisible('~buttonUploadToChat');
     }
 
+    get buttonCloseModal() {
+        return this.getWhenVisible('~closeModal');
+    }
+
     get buttonExitChat() {
-        return this.getWhenVisible('~buttonChatBack');
+        return this.getWhenVisible('~buttonBackIcon');
     }
 
     get addMembersButton() {
@@ -34,15 +38,23 @@ class ChatPage extends Page {
     }
 
     get confirmLeaveRoomButton() {
-        return this.getWhenVisible('~popupButton-confirm');
+        return this.getWhenVisible('~popupButton-Leave');
     }
 
     get invitedContactRemoved() {
         return this.app.waitForVisible('~test_recipient-memberList', 5000, true);
     }
 
-    chatWithTitleVisible(selector) {
+    chatWithTitle(selector) {
         return this.getWhenVisible(`~${selector}`);
+    }
+
+    get chatUnreadMessageIndicator() {
+        return this.getWhenPresent('~chatUnreadMessageIndicator');
+    }
+
+    get chatUnreadMessageIndicatorDisappeared() {
+        return this.waitToDisappear('~chatUnreadMessageIndicator');
     }
 
     get messageDmPlaceholder() {
@@ -51,6 +63,14 @@ class ChatPage extends Page {
 
     get dismissDmPlaceholder() {
         return this.getWhenVisible('~button_dismiss');
+    }
+
+    get shareFileInChatBeaconVisible() {
+        return this.checkIfVisible('~shareFileInChat');
+    }
+
+    get shareFileInChatBeacon() {
+        return this.getWhenVisible('~shareFileInChat');
     }
 }
 

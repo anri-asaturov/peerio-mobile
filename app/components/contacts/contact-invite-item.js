@@ -1,12 +1,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { observable } from 'mobx';
 import SafeComponent from '../shared/safe-component';
-import Avatar from '../shared/avatar';
 import { contactStore } from '../../lib/icebear';
-import buttons from '../helpers/buttons';
 import { tx } from '../utils/translator';
+import ContactCard from '../shared/contact-card';
+import BlueButtonText from '../buttons/blue-text-button';
+
+const containerStyle = {
+    flexDirection: 'row',
+    alignItems: 'center'
+};
+
+const avatarComponentStyle = {
+    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1
+};
 
 @observer
 export default class ContactInviteItem extends SafeComponent {
@@ -20,21 +32,23 @@ export default class ContactInviteItem extends SafeComponent {
 
     renderThrow() {
         const { contact } = this.props;
-        const { username, fullName } = contact;
         const invited = this.invited || contact.invited;
         const title = invited ? tx('title_invitedContacts') : tx('button_invite');
         return (
-            <Avatar
-                {...this.props}
-                noTap
-                sending={invited}
-                height={56}
-                contact={contact}
-                title2={username}
-                title={fullName}
-                rightIcon={(invited !== null) && buttons.blueTextButton(title, () => this.invite(), invited)}
-                hideOnline
-                invited />
+            <View style={containerStyle}>
+                <View style={avatarComponentStyle}>
+                    <ContactCard
+                        disableTapping
+                        faded={invited}
+                        contact={contact}
+                        invited
+                        backgroundColor={this.props.backgroundColor}
+                    />
+                </View>
+                {invited !== null && (
+                    <BlueButtonText text={title} onPress={this.invite} style={{ flexShrink: 1 }} />
+                )}
+            </View>
         );
     }
 }

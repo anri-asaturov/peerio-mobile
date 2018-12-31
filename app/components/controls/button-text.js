@@ -18,7 +18,8 @@ export default class ButtonText extends SafeComponent {
         else fontColor = vars.peerioBlue;
         const padding = vars.spacing.small.maxi2x;
         const touchable = {
-            padding
+            padding,
+            justifyContent: 'center'
         };
 
         return (

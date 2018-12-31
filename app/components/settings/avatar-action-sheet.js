@@ -24,7 +24,8 @@ async function save(largePath, smallPath) {
     const smallFile = await readFile(smallPath);
     // console.log(smallFile);
     return {
-        buffers: [largeFile.buffer, smallFile.buffer], largeFileB64
+        buffers: [largeFile.buffer, smallFile.buffer],
+        largeFileB64
     };
 }
 
@@ -47,8 +48,9 @@ async function generateResize(path) {
 }
 
 async function pickCrop(camera, onSave) {
-    const picker = camera ?
-        ImagePicker.openCamera.bind(ImagePicker) : ImagePicker.openPicker.bind(ImagePicker);
+    const picker = camera
+        ? ImagePicker.openCamera.bind(ImagePicker)
+        : ImagePicker.openPicker.bind(ImagePicker);
     const data = await picker({
         width: SIZE_BASE,
         height: SIZE_BASE,

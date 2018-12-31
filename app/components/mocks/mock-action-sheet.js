@@ -4,14 +4,12 @@ import { observer } from 'mobx-react/native';
 import { action } from 'mobx';
 import ActionSheetLayout from '../layout/action-sheet-layout';
 import FileActionSheetHeader from '../files/file-action-sheet-header';
-import buttons from '../helpers/buttons';
+import BlueButtonText from '../buttons/blue-text-button';
 
 class FileActionSheet {
     static show(file) {
         const header = (
-            <FileActionSheetHeader
-                file={file}
-                onPress={() => console.log('Go to file')} />
+            <FileActionSheetHeader file={file} onPress={() => console.log('Go to file')} />
         );
         const actionButtons = [
             {
@@ -42,7 +40,8 @@ class FileActionSheet {
 
 @observer
 export default class MockActionSheet extends Component {
-    @action.bound showActionSheet() {
+    @action.bound
+    showActionSheet() {
         const file = {
             name: 'Karim File',
             sizeFormatted: '22 MB',
@@ -55,7 +54,7 @@ export default class MockActionSheet extends Component {
         return (
             <View style={{ flexGrow: 1 }}>
                 <View style={{ justifyContent: 'center', flexGrow: 1 }}>
-                    {buttons.uppercaseBlueButton('Select image', this.showActionSheet)}
+                    <BlueButtonText text="Select image" onPress={this.showActionSheet} />
                 </View>
                 <ActionSheetLayout />
             </View>

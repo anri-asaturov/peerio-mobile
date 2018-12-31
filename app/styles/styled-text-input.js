@@ -1,52 +1,45 @@
 import vars from './vars';
-import common from './common';
-
-const outerStyle = {
-    marginHorizontal: vars.inputMarginHorizontal,
-    flex: 1,
-    flexGrow: 1
-};
 
 const textinputStyle = {
-    paddingHorizontal: vars.inputPaddingHorizontal,
     color: vars.black87,
-    fontSize: vars.font.size.normal,
     // without input height text input is rendered zero-height on iOS
     height: vars.inputHeight,
+    fontSize: vars.font.size14,
+    paddingHorizontal: vars.inputPaddingHorizontal
+};
+
+const bottomMessageContainer = {
+    flexDirection: 'row',
+    marginTop: vars.spacing.small.mini,
+    height: vars.spacing.medium.midi2x
+};
+
+const errorTextStyle = {
+    fontSize: vars.font.size12,
+    color: vars.red
+};
+
+const helperTextFocusedStyle = {
+    fontSize: vars.font.size12,
+    color: vars.peerioBlue
+};
+
+const helperTextBlurredStyle = {
+    fontSize: vars.font.size12,
+    color: vars.textBlack54
+};
+
+const inputContainer = {
     marginTop: vars.spacing.small.midi
 };
 
-const errorStyle = {
-    fontSize: vars.font.size.smaller,
-    color: vars.red,
-    marginTop: vars.spacing.small.mini,
-    marginBottom: vars.spacing.small.mini2x,
-    height: vars.spacing.medium.midi
-};
-
-const inputContainer = [
-    common.fullAbsoluteContainer,
-    { flexDirection: 'row' }
-];
-
-const hintContainer = [inputContainer, { paddingLeft: vars.inputPaddingHorizontal }];
-const hintStyle = {
-    normal: {
-        container: hintContainer,
-        text: {
-            color: vars.textBlack38,
-            alignSelf: 'center',
-            fontSize: vars.font.size.normal
-        }
-    },
-    small: {
-        container: [hintContainer, { top: -vars.inputHeight / 2 }],
-        text: {
-            color: vars.peerioBlue,
-            alignSelf: 'center',
-            fontSize: vars.font.size.small
-        }
-    }
+const labelContainerStyle = {
+    position: 'absolute',
+    top: -vars.font.size12 / 2 - 2,
+    left: vars.spacing.small.mini2x,
+    backgroundColor: 'white',
+    paddingLeft: vars.spacing.small.mini2x,
+    paddingRight: vars.spacing.small.mini2x
 };
 
 const iconContainer = {
@@ -58,11 +51,12 @@ const iconContainer = {
 };
 
 export default {
-    outerStyle,
     textinputStyle,
-    errorStyle,
+    bottomMessageContainer,
+    errorTextStyle,
+    helperTextFocusedStyle,
+    helperTextBlurredStyle,
     inputContainer,
-    hintContainer,
-    hintStyle,
+    labelContainerStyle,
     iconContainer
 };

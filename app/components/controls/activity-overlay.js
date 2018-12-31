@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { observer } from 'mobx-react/native';
 import { View, ActivityIndicator } from 'react-native';
 import { vars } from '../../styles/styles';
 
+@observer
 export default class ActivityOverlay extends Component {
     render() {
         const center = {
@@ -19,7 +21,10 @@ export default class ActivityOverlay extends Component {
         };
         return this.props.visible ? (
             <View style={[activityOverlay, center]}>
-                <ActivityIndicator size={this.props.large ? 'large' : 'small'} color={vars.txtDark} />
+                <ActivityIndicator
+                    size={this.props.large ? 'large' : 'small'}
+                    color={vars.txtDark}
+                />
             </View>
         ) : null;
     }

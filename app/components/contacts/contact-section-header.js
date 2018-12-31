@@ -12,7 +12,7 @@ export default class ContactSectionHeader extends SafeComponent {
         const { title } = this.props;
         if (!title) return null;
         const style = {
-            height: vars.contactListHeaderHeight,
+            height: vars.sectionHeaderHeight,
             justifyContent: 'center',
             backgroundColor: vars.darkBlueBackground05
         };
@@ -23,7 +23,9 @@ export default class ContactSectionHeader extends SafeComponent {
         };
         return (
             <View style={style}>
-                <Text bold style={textStyle}>{title}</Text>
+                <Text bold style={textStyle}>
+                    {title}
+                </Text>
             </View>
         );
     }

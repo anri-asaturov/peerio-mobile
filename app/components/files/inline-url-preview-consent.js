@@ -23,21 +23,17 @@ const titleContainer = {
 };
 
 const titleText = {
-    fontSize: vars.font.size.big,
+    fontSize: vars.font.size18,
     color: vars.textBlack87,
     paddingLeft: 8
 };
 
 const descriptionText = {
-    fontSize: vars.font.size.normal,
+    fontSize: vars.font.size14,
     color: vars.textBlack87
 };
 
-const options = [
-    'title_forAllContacts',
-    'title_forFavouriteContactsOnly',
-    'title_disable'
-];
+const options = ['title_forAllContacts', 'title_forFavouriteContactsOnly', 'title_disable'];
 
 @observer
 export default class InlineUrlPreviewConsent extends SafeComponent {
@@ -51,7 +47,7 @@ export default class InlineUrlPreviewConsent extends SafeComponent {
         return (
             <TouchableOpacity
                 onPress={onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={{ paddingLeft: 40, paddingVertical: 16 }}>
                 <Text bold style={{ color: colorIsPrimary ? vars.peerioBlue : vars.black54 }}>
                     {text}
@@ -64,13 +60,16 @@ export default class InlineUrlPreviewConsent extends SafeComponent {
         const index = this.optionSelected;
         const prefs = clientApp.uiUserPrefs;
         prefs.externalContentConsented = true;
-        if (index === 0) { // For all Contacts
+        if (index === 0) {
+            // For all Contacts
             prefs.externalContentEnabled = true;
             prefs.externalContentJustForFavs = false;
-        } else if (index === 1) { // For favorite contacts only
+        } else if (index === 1) {
+            // For favorite contacts only
             prefs.externalContentEnabled = true;
             prefs.externalContentJustForFavs = true;
-        } else if (index === 2) { // Disable
+        } else if (index === 2) {
+            // Disable
             prefs.externalContentEnabled = false;
             prefs.externalContentJustForFavs = false;
         }
@@ -90,19 +89,11 @@ export default class InlineUrlPreviewConsent extends SafeComponent {
         return (
             <View style={container}>
                 <View style={titleContainer}>
-                    <Icon
-                        name="security"
-                        size={vars.iconSize}
-                        color="gray"
-                    />
-                    <Text style={titleText}>
-                        {tx('title_EnableUrlPreviews')}
-                    </Text>
+                    <Icon name="security" size={vars.iconSize} color="gray" />
+                    <Text style={titleText}>{tx('title_EnableUrlPreviews')}</Text>
                 </View>
                 {this.spacer}
-                <Text style={descriptionText}>
-                    {tx('title_UrlPreviewsWarning')}
-                </Text>
+                <Text style={descriptionText}>{tx('title_UrlPreviewsWarning')}</Text>
                 <Text style={{ color: vars.peerioBlue }}>
                     <T k="title_learnMore" />
                 </Text>

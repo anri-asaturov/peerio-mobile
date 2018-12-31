@@ -16,16 +16,19 @@ const PAGE_SIZE = 2;
 
 @observer
 export default class ContactEditPermission extends SafeComponent {
-    @action.bound unshareFrom(contact) {
+    @action.bound
+    unshareFrom(contact) {
         // HINT: removing on layout animated listview causes side effects
         // we just collapse it inline
-        this.props.folder.removeParticipant(contact);
+        this.props.folder.removeParticipants([contact]);
     }
 
     get unshareButton() {
         const extraWidth = 20;
         // TODO: can we ever get not isFolder here, @karim?
-        const { folder: { isFolder, isShared } } = this.props;
+        const {
+            folder: { isFolder, isShared }
+        } = this.props;
         if (isFolder && isShared) {
             return icons.text(tu('button_unshare'), this.props.action, null, null, extraWidth);
         }
@@ -37,15 +40,20 @@ export default class ContactEditPermission extends SafeComponent {
         const leftIcon = icons.dark('close', onExit);
         /* TODO: show unshare button */
         const rightIcon = null; // this.unshareButton
-        const fontSize = vars.font.size.big;
+        const fontSize = vars.font.size18;
         const outerStyle = { backgroundColor: 'transparent' };
         return <ModalHeader {...{ leftIcon, rightIcon, title, fontSize, outerStyle }} />;
     }
 
     item = ({ item }) => {
-        return (<ContactEditPermissionItem
-            contact={item}
-            onUnshare={this.unshareFrom} />);
+        const { folder } = this.props;
+        return (
+            <ContactEditPermissionItem
+                contact={item}
+                isOwner={item.username === folder.owner}
+                onUnshare={this.unshareFrom}
+            />
+        );
     };
 
     keyExtractor = contact => contact.username;
@@ -57,16 +65,14 @@ export default class ContactEditPermission extends SafeComponent {
                 initialNumToRender={INITIAL_LIST_SIZE}
                 pageSize={PAGE_SIZE}
                 data={this.props.folder.otherParticipants || []}
-                renderItem={this.item} />);
+                renderItem={this.item}
+            />
+        );
     }
 
     renderThrow() {
         const { footer } = this.props;
-        const header = (
-            <View style={{ flex: 0 }}>
-                {this.exitRow()}
-            </View>
-        );
+        const header = <View style={{ flex: 0 }}>{this.exitRow()}</View>;
         const body = this.body();
         const layoutStyle = {
             backgroundColor: 'white'
@@ -78,7 +84,8 @@ export default class ContactEditPermission extends SafeComponent {
                 header={header}
                 noFitHeight
                 footer={footer}
-                style={layoutStyle} />
+                style={layoutStyle}
+            />
         );
     }
 }

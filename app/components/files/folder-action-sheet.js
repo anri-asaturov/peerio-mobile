@@ -1,7 +1,7 @@
 import React from 'react';
 import { tx } from '../utils/translator';
 import { fileState } from '../states';
-import { popupInput, popupFolderDelete } from '../shared/popups';
+import { popupFileRename, popupFolderDelete } from '../shared/popups';
 import { fileHelpers, volumeStore, config, User } from '../../lib/icebear';
 import FileActionSheetHeader from '../files/file-action-sheet-header';
 import ActionSheetLayout from '../layout/action-sheet-layout';
@@ -13,9 +13,7 @@ export default class FoldersActionSheet {
         const { hasLegacyFiles, isShared, owner } = folder;
         const isOwner = !owner || owner === User.current.username;
 
-        const header = (
-            <FileActionSheetHeader file={folder} />
-        );
+        const header = <FileActionSheetHeader file={folder} />;
         const folderShareAction = {
             title: 'button_share',
             disabled: hasLegacyFiles,
@@ -27,7 +25,7 @@ export default class FoldersActionSheet {
         };
         const actionButtons = [
             {
-                title: 'button_move',
+                title: tx('button_move'),
                 disabled: isShared,
                 action: async () => {
                     await routes.modal.moveFileTo({ fsObject: folder });
@@ -36,12 +34,14 @@ export default class FoldersActionSheet {
             {
                 title: tx('button_rename'),
                 action: async () => {
-                    const newFolderName = await popupInput(
-                        tx('title_fileName'),
+                    const newFolderName = await popupFileRename(
+                        tx('title_folderName'),
                         '',
                         fileHelpers.getFileNameWithoutExtension(folder.name)
                     );
-                    if (newFolderName) { await folder.rename(`${newFolderName}`); }
+                    if (newFolderName) {
+                        await folder.rename(`${newFolderName}`);
+                    }
                 }
             }
         ];
@@ -50,13 +50,13 @@ export default class FoldersActionSheet {
             actionButtons.push({
                 title: tx('button_unshare'),
                 action: async () => {
-                    folder.removeParticipant(chatState.currentChat.otherParticipants[0]);
+                    folder.removeParticipants([chatState.currentChat.otherParticipants[0]]);
                 }
             });
         }
 
         actionButtons.push({
-            title: 'button_delete',
+            title: tx('button_delete'),
             isDestructive: true,
             action: async () => {
                 // icebear will call this function to confirm file deletion

@@ -12,7 +12,7 @@ const sendIconStyleNormal = {
 export default {
     tiStyle: {
         color: vars.txtDark,
-        fontSize: vars.font.size.normal
+        fontSize: vars.font.size14
     },
 
     iconStyle: {
@@ -35,7 +35,10 @@ export default {
 
     sendIconStyleNormal,
 
-    sendIconStyleActive: [sendIconStyleNormal, {
-        backgroundColor: vars.peerioBlue
-    }]
+    sendIconStyleActive: [
+        sendIconStyleNormal,
+        {
+            backgroundColor: vars.peerioBlue
+        }
+    ]
 };

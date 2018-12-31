@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import {
-    View
-} from 'react-native';
+import { observer } from 'mobx-react/native';
+import { View } from 'react-native';
 
+@observer
 export default class Center extends Component {
     render() {
         const style = {
@@ -12,11 +12,7 @@ export default class Center extends Component {
             justifyContent: 'center',
             alignItems: 'center'
         };
-        return (
-            <View style={[style, this.props.style]}>
-                {this.props.children}
-            </View>
-        );
+        return <View style={[style, this.props.style]}>{this.props.children}</View>;
     }
 }
 

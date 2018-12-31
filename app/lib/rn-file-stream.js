@@ -9,30 +9,43 @@ const icebear = require('./peerio-icebear');
 const { fileHelpers } = icebear;
 const { bytesToB64, b64ToBytes } = icebear.crypto.cryptoUtil;
 
-const ROOT = Platform.OS === 'ios' ? RNFS.CachesDirectoryPath : RNFS.ExternalDirectoryPath;
+const isIOS = Platform.OS === 'ios';
+const ROOT = isIOS
+    ? RNFS.CachesDirectoryPath
+    : RNFS.ExternalDirectoryPath || RNFS.ExternalStorageDirectoryPath || RNFS.CachesDirectoryPath;
 
 function getTemporaryDirectory() {
     return pathUtils.join(ROOT, 'cache');
 }
 
-export default (fileStream) => {
+function getSafeNameForSaving(name) {
+    return name.replace(/[,:]/g, '');
+}
+
+const ASSET_PROTOCOL = 'asset://';
+
+export default fileStream => {
     class RNFileStream extends fileStream {
         async open() {
             if (this.mode === 'read') {
-                this.fileDescriptor = this.filePath; // read stream doesn't really have descriptor
-                return RNFS.stat(this.filePath)
-                    .then(s => {
-                        this.size = s.size;
-                        return this;
-                    });
+                this.fileDescriptor = this.filePath;
+                if (this.filePath.startsWith(ASSET_PROTOCOL)) {
+                    this.isAsset = true;
+                    this.filePath = RNFileStream.formatAssetsPath(
+                        this.filePath.replace(ASSET_PROTOCOL, '')
+                    );
+                } else {
+                    const { size } = await RNFS.stat(this.filePath);
+                    this.size = size;
+                }
+            } else if (this.mode === 'write') {
+                // delete existing file if it is write mode
+                if (await RNFileStream.exists(this.filePath)) {
+                    await RNFileStream.delete(this.filePath);
+                }
+                await RNFS.mkdir(pathUtils.dirname(this.filePath));
+                this.fileDescriptor = this.filePath;
             }
-            // delete existing file if it is write mode
-            if (this.mode === 'write') {
-                if (await RNFileStream.exists(this.filePath)) await RNFileStream.delete(this.filePath);
-            }
-            await RNFS.mkdir(pathUtils.dirname(this.filePath));
-            this.fileDescriptor = this.filePath;
-            return Promise.resolve(this);
         }
 
         close() {
@@ -46,9 +59,13 @@ export default (fileStream) => {
          *
          * @return {Promise<number>}
          */
-        readInternal(size) {
-            return RNFS.readFileChunk(this.filePath, this.pos, size)
-                .then(contents => b64ToBytes(contents));
+        async readInternal(size) {
+            // if the file is asset we use a special function to read it
+            // because of android
+            const contents = await (this.isAsset
+                ? RNFileStream.readAssetsFile(this.filePath, 'base64')
+                : RNFS.readFileChunk(this.filePath, this.pos, size));
+            return b64ToBytes(contents);
         }
 
         /**
@@ -70,11 +87,11 @@ export default (fileStream) => {
          * @return {Promise}
          */
         writeInternal(buffer) {
-            return RNFS.appendFile(this.fileDescriptor, bytesToB64(buffer), 'base64').return(buffer);
+            return RNFS.appendFile(this.fileDescriptor, bytesToB64(buffer), 'base64');
         }
 
         static getFullPath(uid, name) {
-            return `${ROOT}/${uid}/${name}`;
+            return `${ROOT}/${uid}/${getSafeNameForSaving(name)}`;
         }
 
         static exists(path) {
@@ -92,6 +109,10 @@ export default (fileStream) => {
         }
 
         static getStat(path) {
+            // TODO: may use readDirAssets to determine size
+            // for android assets size returns as 0
+            // for uniformity, we return same size for iOS, too
+            if (path.startsWith(ASSET_PROTOCOL)) return { size: 0 };
             return RNFS.stat(path);
         }
 
@@ -99,10 +120,9 @@ export default (fileStream) => {
          * @returns {Promise<string[]>}
          */
         static getCacheList() {
-            return RNFS.readDir(ROOT)
-                .then(items => {
-                    return items.filter(i => i.isFile()).map(i => i.path);
-                });
+            return RNFS.readDir(ROOT).then(items => {
+                return items.filter(i => i.isFile()).map(i => i.path);
+            });
         }
 
         static delete(path) {
@@ -121,13 +141,24 @@ export default (fileStream) => {
         }
 
         static getTempCachePath(name) {
-            return pathUtils.join(getTemporaryDirectory(), name);
+            return pathUtils.join(getTemporaryDirectory(), getSafeNameForSaving(name));
         }
+
+        static formatAssetsPath(path) {
+            return Platform.OS === 'ios' ? `${RNFS.MainBundlePath}/${path}` : path;
+        }
+
+        static makeAssetPath(path) {
+            return `${ASSET_PROTOCOL}${path}`;
+        }
+
+        static readAssetsFile = (isIOS ? RNFS.readFile : RNFS.readFileAssets).bind(RNFS);
+
+        static existsAssetsFile = (isIOS ? RNFS.exists : RNFS.existsAssets).bind(RNFS);
     }
 
     return RNFileStream;
 };
-
 
 /**
  * Get encryption status of the filesystem

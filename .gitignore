@@ -25,7 +25,7 @@ ios/main.jsbundle
 ios/main.jsbundle.*
 ios/worker.jsbundle
 ios/worker.jsbundle.*
-ios/peeriomobile.xcodeproj/project.xcworkspace/xcshareddata
+# ios/peeriomobile.xcodeproj/project.xcworkspace/xcshareddata
 
 # Android/IJ
 #
@@ -56,7 +56,13 @@ tests/console.py
 *.pyc
 misc
 test/screenshots
-test/reports/result
+test/reports/*.json
+test/reports/*.html
+test/reports/*.xml
+circle_artifacts
+circle_test_reports
+screenshots
+appium.log
 
 # env settings
 env.sh
@@ -72,6 +78,7 @@ app/lib/peerio-icebear
 *.dSYM*
 fastlane/report.xml
 fastlane/metadata
+apk
 
 # ctags
 tags
@@ -84,7 +91,3 @@ add-legacy.json
 temp
 signup-step-*.png
 
-# py.test reports
-py.test
-screenshots
-appium.log

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react/native';
-import SignupContactAdd from '../signup/signup-contact-add';
+import SignupContactAdd from '../contacts/contact-sync-add';
 import { User } from '../../lib/icebear';
 
 @observer
@@ -13,8 +13,6 @@ export default class MockSignupContactInvite extends Component {
     }
 
     render() {
-        return (
-            <SignupContactAdd />
-        );
+        return <SignupContactAdd />;
     }
 }

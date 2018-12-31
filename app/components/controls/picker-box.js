@@ -7,8 +7,10 @@ import PickerBoxIos from './picker-box-ios';
 @observer
 export default class PickerBox extends SafeComponent {
     renderThrow() {
-        return global.platform === 'ios' ?
-            <PickerBoxIos key="picker" {...this.props} /> : <PickerBoxAndroid {...this.props} />;
+        return global.platform === 'ios' ? (
+            <PickerBoxIos key="picker" {...this.props} />
+        ) : (
+            <PickerBoxAndroid {...this.props} />
+        );
     }
 }
-

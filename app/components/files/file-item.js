@@ -9,9 +9,15 @@ import FolderInnerItem from './folder-inner-item';
 import fileState from './file-state';
 import { vars } from '../../styles/styles';
 
+const fileContainer = {
+    backgroundColor: vars.filesBg,
+    paddingHorizontal: vars.spacing.medium.mini2x
+};
+
 @observer
 export default class FileItem extends SafeComponent {
-    @observable store = {
+    @observable
+    store = {
         get checkBoxHidden() {
             return !fileState.showSelection;
         },
@@ -33,17 +39,20 @@ export default class FileItem extends SafeComponent {
         }
     }
 
-    @action.bound onFileAction() {
+    @action.bound
+    onFileAction() {
         const { file, onFileAction } = this.props;
         onFileAction(file);
     }
 
-    @action.bound onFolderPress(folder) {
+    @action.bound
+    onFolderPress(folder) {
         const { onChangeFolder } = this.props;
         onChangeFolder(folder);
     }
 
-    @action.bound onFolderAction() {
+    @action.bound
+    onFolderAction() {
         const { file, onFolderAction } = this.props;
         onFolderAction(file);
     }
@@ -51,10 +60,21 @@ export default class FileItem extends SafeComponent {
     renderThrow() {
         const { file } = this.props;
         return (
-            <View style={{ backgroundColor: vars.filesBg, paddingHorizontal: vars.spacing.medium.mini2x }}>
-                {file.isFolder ?
-                    <FolderInnerItem folder={file} onPress={this.onFolderPress} onFolderAction={this.onFolderAction} /> :
-                    <FileInnerItem file={file} onPress={f => this.press(f)} onFileAction={this.onFileAction} rowID={this.props.rowID} />}
+            <View style={fileContainer}>
+                {file.isFolder ? (
+                    <FolderInnerItem
+                        folder={file}
+                        onPress={this.onFolderPress}
+                        onFolderAction={this.onFolderAction}
+                    />
+                ) : (
+                    <FileInnerItem
+                        file={file}
+                        onPress={f => this.press(f)}
+                        onFileAction={this.onFileAction}
+                        rowID={this.props.rowID}
+                    />
+                )}
             </View>
         );
     }

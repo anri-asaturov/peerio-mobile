@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { LayoutAnimation, Picker, View } from 'react-native';
+import { Picker, View } from 'react-native';
 import _ from 'lodash';
 import SafeComponent from '../shared/safe-component';
 import { tu } from '../utils/translator';
 import uiState from '../layout/ui-state';
 import icons from '../helpers/icons';
 import { vars } from '../../styles/styles';
+import { transitionAnimation } from '../helpers/animations';
 
 @observer
 export default class PickerPopup extends SafeComponent {
@@ -25,7 +26,7 @@ export default class PickerPopup extends SafeComponent {
     }
 
     componentWillUpdate() {
-        LayoutAnimation.easeInEaseOut();
+        transitionAnimation();
     }
 
     onValueChange(v) {
@@ -51,8 +52,11 @@ export default class PickerPopup extends SafeComponent {
     renderThrow() {
         const keys = _.keys(this.props.data);
         const i = keys.indexOf(this.value);
-        const items = _.values(_.mapValues(this.props.data, (value, key) =>
-            <Picker.Item label={value} value={key} key={key} />));
+        const items = _.values(
+            _.mapValues(this.props.data, (value, key) => (
+                <Picker.Item label={value} value={key} key={key} />
+            ))
+        );
         const topBox = {
             flex: 0,
             flexDirection: 'row',
@@ -71,8 +75,7 @@ export default class PickerPopup extends SafeComponent {
             height: uiState.pickerVisible ? uiState.pickerHeight : 0
         };
 
-        const pickerStyle = {
-        };
+        const pickerStyle = {};
 
         const up = icons.colored(
             'keyboard-arrow-up',
@@ -83,9 +86,8 @@ export default class PickerPopup extends SafeComponent {
         const down = icons.colored(
             'keyboard-arrow-down',
             () => this.next(1),
-            (i < keys.length - 1) ? vars.bg : vars.disabled
+            i < keys.length - 1 ? vars.bg : vars.disabled
         );
-
 
         return (
             <View style={containerStyle}>

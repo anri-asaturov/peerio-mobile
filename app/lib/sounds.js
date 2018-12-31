@@ -6,12 +6,12 @@ Platform.OS !== 'android' && Sound.setCategory('Ambient', true);
 
 const soundStorage = {};
 
-const load = (name) => {
+const load = name => {
     const path = Platform.OS === 'android' ? `${name}.mp3` : `sounds/${name}.mp3`;
     soundStorage[name] = () => {
         console.warn(`sounds.js: file ${path} not loaded`);
     };
-    const sound = new Sound(path, Sound.MAIN_BUNDLE, (error) => {
+    const sound = new Sound(path, Sound.MAIN_BUNDLE, error => {
         if (error) {
             console.error(`sounds.js: failed to load the sound ${path}`, error);
         } else {

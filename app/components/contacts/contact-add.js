@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, ScrollView, TouchableOpacity, LayoutAnimation, Share } from 'react-native';
-import { observable, reaction } from 'mobx';
+import { View, TouchableOpacity, Share, Platform } from 'react-native';
+import { observable, reaction, action } from 'mobx';
 import ProgressOverlay from '../shared/progress-overlay';
 import SafeComponent from '../shared/safe-component';
 import SimpleTextBox from '../shared/simple-text-box';
@@ -11,12 +11,16 @@ import { tx, tu, t } from '../utils/translator';
 import uiState from '../layout/ui-state';
 import contactState from './contact-state';
 import snackbarState from '../snackbars/snackbar-state';
-import buttons from '../helpers/buttons';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
 import routes from '../routes/routes';
 import icons from '../helpers/icons';
 import BackIcon from '../layout/back-icon';
+import whiteLabelComponents from '../../components/whitelabel/white-label-components';
+import ViewWithDrawer from '../shared/view-with-drawer';
+import { transitionAnimation } from '../helpers/animations';
+import fonts from '../../styles/fonts';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const textinputContainer = {
     backgroundColor: vars.white,
@@ -28,7 +32,7 @@ const textinputContainer = {
 };
 
 const textStyle = {
-    fontSize: vars.font.size.smaller,
+    fontSize: vars.font.size12,
     color: vars.textBlack54
 };
 
@@ -42,16 +46,16 @@ const buttonRow = {
 };
 
 const textinput = {
-    fontSize: vars.font.size.normal,
+    fontSize: vars.font.size14,
     height: vars.inputHeight,
     color: vars.txtDark,
     flex: 1,
     flexGrow: 1,
-    fontFamily: vars.peerioFontFamily
+    fontFamily: fonts.peerioFontFamily
 };
 
 const textStatic = {
-    fontSize: vars.font.size.normal,
+    fontSize: vars.font.size14,
     color: vars.txtDark,
     marginLeft: vars.inputPaddingLeft,
     flex: 1,
@@ -77,11 +81,14 @@ export default class ContactAdd extends SafeComponent {
 
     componentDidMount() {
         uiState.currentScrollView = this._scrollView;
-        reaction(() => this.query, () => {
-            LayoutAnimation.easeInEaseOut();
-            this.toInvite = null;
-            if (this.showValidationError) this.showValidationError = false;
-        });
+        reaction(
+            () => this.query,
+            () => {
+                transitionAnimation();
+                this.toInvite = null;
+                if (this.showValidationError) this.showValidationError = false;
+            }
+        );
     }
 
     componentWillUnmount() {
@@ -89,12 +96,15 @@ export default class ContactAdd extends SafeComponent {
         uiState.currentScrollViewPosition = 0;
     }
 
-    onScroll = ({ nativeEvent: { contentOffset: { y } } }) => {
+    onScroll = ({
+        nativeEvent: {
+            contentOffset: { y }
+        }
+    }) => {
         uiState.currentScrollViewPosition = y;
     };
 
     get leftIcon() {
-        if (contactState.empty) return null;
         return <BackIcon action={routes.main.contacts} />;
     }
 
@@ -115,18 +125,18 @@ export default class ContactAdd extends SafeComponent {
         this.waiting = true;
         this.toInvite = null;
         this.notFound = false;
-        const contact = await contactStore.whitelabel.getContact(this.query);
+        const contact = await contactStore.whitelabel.getContact(this.query, 'addcontact');
         const { isLegacy, fullNameAndUsername: name } = contact;
         if (contact.notFound || contact.isHidden) {
             this.notFound = true;
             const atInd = this.query.indexOf('@');
             const isEmail = atInd > -1 && atInd === this.query.lastIndexOf('@');
             if (isEmail) {
-                LayoutAnimation.easeInEaseOut();
+                transitionAnimation();
                 this.toInvite = this.inviteContactDuck(this.query);
             } else if (!isLegacy) {
                 this.showValidationError = true;
-                LayoutAnimation.easeInEaseOut();
+                transitionAnimation();
             }
             isLegacy && snackbarState.pushTemporary(t('title_inviteLegacy'));
         } else {
@@ -153,7 +163,11 @@ export default class ContactAdd extends SafeComponent {
         if (this.showAddEmail) {
             text = this.newEmailText ? 'button_save' : 'button_cancel';
         }
-        return this.renderButton1(text, () => this.emailAction(), this.newEmailText && this.showAddEmail && !this.newEmailTextValid);
+        return this.renderButton1(
+            text,
+            () => this.emailAction(),
+            this.newEmailText && this.showAddEmail && !this.newEmailTextValid
+        );
     }
 
     get validationError() {
@@ -170,8 +184,11 @@ export default class ContactAdd extends SafeComponent {
             <TouchableOpacity
                 {...testLabel(text)}
                 onPress={disabled ? null : onPress}
-                pressRetentionOffset={vars.pressRetentionOffset}
-                style={{ paddingRight: vars.spacing.small.maxi2x, paddingVertical: vars.spacing.small.maxi }}>
+                pressRetentionOffset={vars.retentionOffset}
+                style={{
+                    paddingRight: vars.spacing.small.maxi2x,
+                    paddingVertical: vars.spacing.small.maxi
+                }}>
                 <Text bold style={{ color: disabled ? vars.txtMedium : vars.peerioBlue }}>
                     {tu(text)}
                 </Text>
@@ -188,6 +205,15 @@ export default class ContactAdd extends SafeComponent {
             </View>
         );
     }
+
+    inviteAction = () => {
+        const mockContact = this.toInvite || {};
+        const { email } = mockContact;
+
+        mockContact.invited = true;
+        contactStore.invite(email);
+        this.query = '';
+    };
 
     get inviteBlock() {
         const mockContact = this.toInvite || {};
@@ -213,61 +239,90 @@ export default class ContactAdd extends SafeComponent {
                     <Text style={textStyle}>{tx('title_couldntLocateContact1')}</Text>
                     <Text style={textStyle}>{tx('title_couldntLocateContact2')}</Text>
                 </View>
-                {buttons.blueTextButton(tx('button_invite'), () => {
-                    mockContact.invited = true;
-                    contactStore.invite(email);
-                    this.query = '';
-                }, invited, null, 'button_invite')}
-            </View >
+                <BlueButtonText
+                    text="button_invite"
+                    disabled={invited}
+                    accessibilityId="button_invite"
+                    onPress={this.inviteAction}
+                />
+            </View>
         );
+    }
+
+    @action.bound
+    onChangeFindUserText(text) {
+        const { Version, OS } = Platform;
+        if (OS !== 'android' || Version > 22) {
+            this.query = text.toLowerCase();
+        } else {
+            this.query = text;
+        }
     }
 
     renderThrow() {
         return (
-            <View style={{ flex: 1, flexGrow: 1 }}>
-                <ScrollView
+            <View style={{ flex: 1, backgroundColor: vars.darkBlueBackground05 }}>
+                <ViewWithDrawer
                     onScroll={this.onScroll}
                     keyboardShouldPersistTaps="handled"
                     style={{ backgroundColor: vars.darkBlueBackground05 }}
-                    ref={ref => { this._scrollView = ref; }}>
+                    setScrollViewRef={ref => {
+                        this._scrollView = ref;
+                    }}>
                     <View style={{ marginTop: vars.spacing.medium.midi2x }}>
-                        {contactState.empty && <View style={{ margin: vars.spacing.small.midi2x }}>
-                            <Text style={labelDark}>{tx('title_contactZeroState')}</Text>
-                        </View>}
+                        {contactState.empty && (
+                            <View style={{ margin: vars.spacing.small.midi2x }}>
+                                <Text style={labelDark}>{tx('title_contactZeroState')}</Text>
+                            </View>
+                        )}
+                        <View style={{ marginRight: vars.spacing.small.midi2x }}>
+                            <whiteLabelComponents.ContactAddWarning />
+                        </View>
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>
                             <Text style={label}>{tx('button_addAContact')}</Text>
                             <View style={textinputContainer}>
                                 <SimpleTextBox
                                     autoCorrect={false}
                                     autoCapitalize="none"
-                                    onChangeText={text => { this.query = text; }}
+                                    onChangeText={this.onChangeFindUserText}
                                     placeholder={tx('title_userSearch')}
                                     style={textinput}
                                     value={this.query}
                                     {...testLabel('contactSearchInput')}
                                 />
-                                {(this.toInvite || this.showValidationError)
-                                    ? icons.dark('close', () => { this.query = null; })
-                                    : this.renderButton1('button_add', () => this.tryAdding(), !this.query)}
+                                {this.toInvite || this.showValidationError
+                                    ? icons.dark('close', () => {
+                                          this.query = null;
+                                      })
+                                    : this.renderButton1(
+                                          'button_add',
+                                          () => this.tryAdding(),
+                                          !this.query
+                                      )}
                             </View>
                             {this.inviteBlock}
                             {this.validationError}
                         </View>
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>
                             <View style={buttonRow}>
-                                <Text semibold style={labelDark}>{tx('title_findContacts')}</Text>
-                                {this.renderButton1('title_importContacts', () => contactState.testImport())}
+                                <Text semibold style={labelDark}>
+                                    {tx('title_findContacts')}
+                                </Text>
+                                {this.renderButton1('title_importContacts', () =>
+                                    contactState.inviteContacts()
+                                )}
                             </View>
                         </View>
                         <View style={{ marginVertical: vars.spacing.small.midi2x }}>
                             <View style={buttonRow}>
-                                <Text semibold style={labelDark}>{tx('title_shareSocial')}</Text>
+                                <Text semibold style={labelDark}>
+                                    {tx('title_shareSocial')}
+                                </Text>
                                 {this.renderButton1('button_share', () => this.share())}
                             </View>
                         </View>
-                        <View style={{ height: 180 }} />
                     </View>
-                </ScrollView>
+                </ViewWithDrawer>
                 <ProgressOverlay enabled={this.waiting} />
             </View>
         );

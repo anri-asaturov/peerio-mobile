@@ -10,9 +10,9 @@ import { fileStore, User } from '../../lib/icebear';
 import { tx } from '../utils/translator';
 import routes from '../routes/routes';
 import FoldersActionSheet from './folder-action-sheet';
-import buttons from '../helpers/buttons';
 import Text from '../controls/custom-text';
 import chatState from '../messaging/chat-state';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const padding = 8;
 const borderWidth = 1;
@@ -34,7 +34,7 @@ const header = {
 
 const infoStyle = {
     color: vars.textBlack54,
-    fontSize: vars.font.size.smaller
+    fontSize: vars.font.size12
 };
 
 @observer
@@ -44,7 +44,8 @@ export default class FolderInlineContainer extends SafeComponent {
         return fileStore.folderStore.getById(folderId);
     }
 
-    @action.bound press() {
+    @action.bound
+    press() {
         const { folder } = this;
         fileStore.folderStore.currentFolder = folder;
         routes.main.files();
@@ -57,17 +58,23 @@ export default class FolderInlineContainer extends SafeComponent {
             flexGrow: 1,
             flexShrink: 1,
             color: vars.txtDark,
-            fontSize: vars.font.size.normal,
+            fontSize: vars.font.size14,
             marginLeft: vars.spacing.small.midi2x
         };
-        return (<Text numberOfLines={1} ellipsizeMode="tail" style={nameStyle}>{name}</Text>);
+        return (
+            <Text numberOfLines={1} ellipsizeMode="tail" style={nameStyle}>
+                {name}
+            </Text>
+        );
     }
 
-    @action.bound onAction() {
+    @action.bound
+    onAction() {
         FoldersActionSheet.show(this.folder, true);
     }
 
-    @action.bound reshare() {
+    @action.bound
+    reshare() {
         const { folder } = this;
         folder.isShared = true;
         folder.isJustUnshared = false;
@@ -78,8 +85,16 @@ export default class FolderInlineContainer extends SafeComponent {
         const { convertingToVolume, convertingFromFolder } = folder;
         const optionsIcon = (
             <View style={{ flex: 0 }}>
-                {icons.dark('more-vert', this.onAction, null, null, null, convertingToVolume || convertingFromFolder)}
-            </View>);
+                {icons.dark(
+                    'more-vert',
+                    this.onAction,
+                    null,
+                    null,
+                    null,
+                    convertingToVolume || convertingFromFolder
+                )}
+            </View>
+        );
         return (
             <View style={[header, { height: vars.inlineFolderContainerHeight }]}>
                 {icons.darkNoPadding('folder-shared')}
@@ -90,13 +105,20 @@ export default class FolderInlineContainer extends SafeComponent {
     }
 
     get unsharedBody() {
-        const text = this.folder ?
-            tx('title_folderNameUnshared', { folderName: this.folder.name }) : tx('title_folderUnshared');
+        const text = this.folder
+            ? tx('title_folderNameUnshared', { folderName: this.folder.name })
+            : tx('title_folderUnshared');
         return (
             <View style={container}>
                 <View style={[header, { padding }]}>
                     {icons.darkNoPadding('folder', null, null, null, true)}
-                    <View style={{ flexGrow: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View
+                        style={{
+                            flexGrow: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
                         <View style={{ marginLeft: vars.spacing.small.midi2x }}>
                             <Text italic style={infoStyle}>
                                 {text}
@@ -113,14 +135,18 @@ export default class FolderInlineContainer extends SafeComponent {
             <View style={container}>
                 <View style={[header, { padding }]}>
                     {icons.darkNoPadding('folder')}
-                    <View style={{ flexGrow: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View
+                        style={{
+                            flexGrow: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
                         <View style={{ marginLeft: vars.spacing.small.midi2x }}>
-                            <Text style={infoStyle}>
-                                {tx('title_folderUnshared')}
-                            </Text>
+                            <Text style={infoStyle}>{tx('title_folderUnshared')}</Text>
                         </View>
                         <View>
-                            {buttons.uppercaseBlueButton(tx('button_reshare'), this.reshare)}
+                            <BlueButtonText text="button_reshare" onPress={this.reshare} />
                         </View>
                     </View>
                 </View>
@@ -131,12 +157,14 @@ export default class FolderInlineContainer extends SafeComponent {
     render() {
         const { folder } = this;
         const dmRecipient = chatState.currentChat.otherParticipants[0];
-
+        if (!dmRecipient) return null;
         // TODO temporary solution until SDK supports "owner, editor, viewer" logic
         // If the folder has been unshared, we need to show appropriate UX feedback
         // Check that either the User or Recipient have lost access to the folder
-        const showUnshareBody = !folder || folder.allParticipants.filter(c => c.username === dmRecipient.username).length === 0 ||
-        folder.allParticipants.filter(c => c.username === User.current.username).length === 0;
+        const showUnshareBody =
+            !folder ||
+            folder.allParticipants.filter(c => c.username === dmRecipient.username).length === 0 ||
+            folder.allParticipants.filter(c => c.username === User.current.username).length === 0;
         if (showUnshareBody) return this.unsharedBody;
 
         const outer = {
@@ -147,7 +175,7 @@ export default class FolderInlineContainer extends SafeComponent {
 
         return (
             <TouchableOpacity
-                pressRetentionOffset={vars.pressRetentionOffset}
+                pressRetentionOffset={vars.retentionOffset}
                 style={container}
                 onPress={this.press}>
                 <View style={outer} {...this.props}>

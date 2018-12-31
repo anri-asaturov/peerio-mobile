@@ -1,10 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, Animated, FlatList } from 'react-native';
-import { observable, reaction, action } from 'mobx';
+import { View, Animated } from 'react-native';
+import { observable, action, computed } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
-import FilesPlaceholder from './files-placeholder';
+import FilesZeroStatePlaceholder from './files-zero-state-placeholder';
 import ProgressOverlay from '../shared/progress-overlay';
 import FileItem from './file-item';
 import FileUploadActionSheet from './file-upload-action-sheet';
@@ -20,8 +20,13 @@ import icons from '../helpers/icons';
 import ButtonText from '../controls/button-text';
 import uiState from '../layout/ui-state';
 import SharedFolderRemovalNotif from './shared-folder-removal-notif';
-import { fileStore } from '../../lib/icebear';
 import SearchBar from '../controls/search-bar';
+import FlatListWithDrawer from '../shared/flat-list-with-drawer';
+import zeroStateBeacons from '../beacons/zerostate-beacons';
+import filesBeacons from '../beacons/files-beacons';
+import MeasureableView from '../shared/measureable-view';
+import beaconState from '../beacons/beacon-state';
+import routes from '../routes/routes';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -29,7 +34,7 @@ const INITIAL_LIST_SIZE = 20;
 const PAGE_SIZE = 20;
 
 function backFolderAction() {
-    fileStore.folderStore.currentFolder = fileStore.folderStore.currentFolder.parent;
+    fileState.store.folderStore.currentFolder = fileState.store.folderStore.currentFolder.parent;
 }
 
 @observer
@@ -38,64 +43,54 @@ export default class Files extends SafeComponent {
     @observable refresh = 0;
 
     get leftIcon() {
-        if (!fileStore.folderStore.currentFolder.parent) return null;
+        if (!fileState.store.folderStore.currentFolder.parent) return null;
         return <BackIcon action={backFolderAction} />;
     }
 
     get rightIcon() {
-        return !fileState.isFileSelectionMode &&
-            <PlusBorderIcon
-                action={() => FileUploadActionSheet.show(false, true)}
-                testID="buttonUploadFileToFiles" />;
+        return (
+            !fileState.isFileSelectionMode && (
+                <PlusBorderIcon
+                    action={() => FileUploadActionSheet.show({ createFolder: true })}
+                    beacon={[zeroStateBeacons.uploadFileBeacon, filesBeacons.foldersBeacon]}
+                    testID="buttonUploadFileToFiles"
+                />
+            )
+        );
     }
 
     get layoutTitle() {
-        if (!fileStore.folderStore.currentFolder.parent) return null;
-        return fileStore.folderStore.currentFolder.name;
+        if (!fileState.store.folderStore.currentFolder.parent) return null;
+        return fileState.store.folderStore.currentFolder.name;
     }
 
-    @observable dataSource = [];
-    @observable refreshing = false;
-    @observable maxLoadedIndex = INITIAL_LIST_SIZE;
     actionsHeight = new Animated.Value(0);
 
+    @computed
     get data() {
-        let data = fileState.store.searchQuery ?
-            fileState.store.filesAndFoldersSearchResult
-            : fileStore.folderStore.currentFolder.filesAndFoldersDefaultSorting;
-        if (fileState.isFileSelectionMode) data = data.filter(item => !item.isLegacy);
+        let data = fileState.store.searchQuery
+            ? fileState.store.filesAndFoldersSearchResult
+            : fileState.store.folderStore.currentFolder.filesAndFoldersDefaultSorting;
+        if (fileState.isFileSelectionMode) {
+            data = data.filter(item => !item.isLegacy && (item.isFolder || item.readyForDownload));
+        }
         return data;
     }
 
     componentDidMount() {
-        this.reactionNavigation = reaction(() => fileStore.folderStore.currentFolder,
-            action(() => {
-                this.maxLoadedIndex = INITIAL_LIST_SIZE;
-                this.refresh++;
-            }));
-        this.reaction = reaction(() => [
-            fileState.routerMain.route === 'files',
-            fileState.routerMain.currentIndex === 0,
-            this.data,
-            this.data.length,
-            fileState.store.searchQuery,
-            this.maxLoadedIndex
-        ], () => {
-            console.debug(`files.js: update ${this.data.length} -> ${this.maxLoadedIndex}`);
-            this.dataSource = this.data.slice(0, Math.min(this.data.length, this.maxLoadedIndex));
-        }, true);
+        // download last uploaded file
+        uiState.testAction1 = () => routes.main.files(this.data.filter(f => !f.isFolder)[0]);
     }
 
     componentWillUnmount() {
-        this.reaction && this.reaction();
-        this.reaction = null;
-        this.reactionNavigation && this.reactionNavigation();
-        this.reactionNavigation = null;
         // remove icebear hook for deletion
-        fileStore.bulk.deleteFolderConfirmator = null;
+        fileState.store.bulk.deleteFolderConfirmator = null;
+        uiState.testAction1 = null;
     }
 
-    onChangeFolder = folder => { fileStore.folderStore.currentFolder = folder; };
+    onChangeFolder = folder => {
+        fileState.store.folderStore.currentFolder = folder;
+    };
 
     item = ({ item, index }) => {
         // fileId for file, id for folder
@@ -106,53 +101,66 @@ export default class Files extends SafeComponent {
                 rowID={index}
                 onChangeFolder={this.onChangeFolder}
                 onFileAction={() => FileActionSheet.show(item)}
-                onFolderAction={() => FoldersActionSheet.show(item)} />
+                onFolderAction={() => FoldersActionSheet.show(item)}
+            />
         );
     };
 
-    onEndReached = () => {
-        if (this.maxLoadedIndex <= this.data.length) this.maxLoadedIndex += PAGE_SIZE;
-    };
+    keyExtractor = fsObject => (fsObject ? fsObject.fileId || fsObject.id : null);
 
-    flatListRef = (ref) => { uiState.currentScrollView = ref; };
-
-    keyExtractor = fsObject => fsObject ? (fsObject.fileId || fsObject.id) : null;
-
-    list() {
+    get noFilesMatchSearch() {
+        if (this.data.length || !fileState.findFilesText || fileState.store.loading) return null;
         return (
-            <FlatList
-                keyExtractor={this.keyExtractor}
-                initialNumToRender={INITIAL_LIST_SIZE}
-                pageSize={PAGE_SIZE}
-                data={this.dataSource}
-                extraData={this.refresh}
-                renderItem={this.item}
-                onEndReached={this.onEndReached}
-                onEndReachedThreshold={0.5}
-                ref={this.flatListRef}
-            />
+            <View>
+                <Text style={{ marginTop: vars.headerSpacing, textAlign: 'center' }}>
+                    {tx('title_noFilesMatchSearch')}
+                </Text>
+            </View>
         );
     }
 
-    get isZeroState() { return fileState.store.isEmpty; }
+    onMeasure = position => {
+        const beacon = filesBeacons.fileReceivedBeacon;
+        beacon.position = position;
+        beaconState.requestBeacon(beacon);
+    };
+
+    list() {
+        return (
+            <MeasureableView onMeasure={this.onMeasure}>
+                <FlatListWithDrawer
+                    ListHeaderComponent={!this.isZeroState && this.searchTextbox()}
+                    ListFooterComponent={this.noFilesMatchSearch}
+                    keyExtractor={this.keyExtractor}
+                    initialNumToRender={INITIAL_LIST_SIZE}
+                    pageSize={PAGE_SIZE}
+                    data={this.data}
+                    extraData={this.refresh}
+                    renderItem={this.item}
+                />
+            </MeasureableView>
+        );
+    }
+
+    get isZeroState() {
+        return fileState.store.isEmpty;
+    }
+
+    get isEmpty() {
+        const folder = fileState.store.folderStore.currentFolder;
+        if (this.data.length || (!folder.isShared && folder.isRoot)) return false;
+        return true;
+    }
 
     get noFilesInFolder() {
-        const folder = fileStore.folderStore.currentFolder;
-        if (this.data.length
-            || (!folder.isShared && folder.isRoot)) return null;
-        const s = {
-            color: vars.txtMedium,
-            textAlign: 'center',
-            marginTop: vars.headerSpacing
-        };
-        return <Text style={s}>{tx('title_noFilesInFolder')}</Text>;
+        if (!this.isEmpty) return null;
+        return <FilesZeroStatePlaceholder emptyFolder />;
     }
 
     onChangeFindFilesText(text) {
         const items = text.split(/[ ,;]/);
         if (items.length > 1) {
             fileState.findFilesText = items[0].trim();
-            this.onSubmit();
             return;
         }
         fileState.findFilesText = text;
@@ -175,21 +183,24 @@ export default class Files extends SafeComponent {
         fileState.store.searchQuery = val;
     };
 
-    @action.bound onChangeText(text) {
+    @action.bound
+    onChangeText(text) {
         this.clean = !text.length;
         this.onChangeFindFilesText(text);
     }
 
     searchTextbox() {
+        if (this.isEmpty) return null;
         const leftIcon = icons.plain('search', vars.iconSize, vars.black12);
         let rightIcon = null;
         if (fileState.findFilesText) {
-            rightIcon = icons.iconImage(
+            rightIcon = icons.imageButton(
                 iconClear,
                 () => {
                     fileState.findFilesText = '';
                     this.onChangeFindFilesText('');
                 },
+                null,
                 vars.opacity54
             );
         }
@@ -201,7 +212,8 @@ export default class Files extends SafeComponent {
                 onSubmit={this.onSubmit}
                 leftIcon={leftIcon}
                 rightIcon={rightIcon}
-            />);
+            />
+        );
     }
 
     toolbar() {
@@ -222,18 +234,22 @@ export default class Files extends SafeComponent {
             paddingRight: vars.spacing.small.midi2x
         };
         return (
-            fileState.isFileSelectionMode && <View style={container}>
-                <ButtonText
-                    testID="fileShareButtonCancel"
-                    onPress={this.handleExit}
-                    secondary
-                    text={tx('button_cancel')} />
-                <ButtonText
-                    testID="fileShareButtonShare"
-                    onPress={this.submitSelection}
-                    text={tx('button_share')}
-                    disabled={!fileState.showSelection} />
-            </View>
+            fileState.isFileSelectionMode && (
+                <View style={container}>
+                    <ButtonText
+                        testID="fileShareButtonCancel"
+                        onPress={this.handleExit}
+                        secondary
+                        text={tx('button_cancel')}
+                    />
+                    <ButtonText
+                        testID="fileShareButtonShare"
+                        onPress={this.submitSelection}
+                        text={tx('button_share')}
+                        disabled={!fileState.showSelection}
+                    />
+                </View>
+            )
         );
     }
 
@@ -247,7 +263,7 @@ export default class Files extends SafeComponent {
 
     sharedFolderRemovalNotifs() {
         // TODO: add any missed conditions for when to NOT show this
-        if (!fileStore.folderStore.currentFolder.isRoot) return null;
+        if (!fileState.store.folderStore.currentFolder.isRoot) return null;
         // TODO: map them from a list of notifications from SDK
         const folderNames = [
             'test-folder-name-1',
@@ -259,27 +275,23 @@ export default class Files extends SafeComponent {
     }
 
     body() {
-        if (this.data.length || !fileStore.folderStore.currentFolder.isRoot) return this.list();
-        if (!this.data.length && fileState.findFilesText && !fileState.store.loading) {
-            return (
-                <Text style={{ marginTop: vars.headerSpacing, textAlign: 'center' }}>
-                    {tx('title_noFilesMatchSearch')}
-                </Text>
-            );
-        }
-        return this.isZeroState && <FilesPlaceholder />;
+        if (
+            this.data.length ||
+            fileState.findFilesText ||
+            !fileState.store.folderStore.currentFolder.isRoot
+        )
+            return this.list();
+        return this.isZeroState && <FilesZeroStatePlaceholder />;
     }
 
     renderThrow() {
+        const { noFilesInFolder } = this;
         return (
-            <View
-                style={{ flex: 1 }}>
-                <View style={{ flex: 1, backgroundColor: vars.darkBlueBackground05 }}>
-                    {!this.isZeroState && this.searchTextbox()}
+            <View ref={this.flatListRef} style={{ flex: 1, flexGrow: 1 }}>
+                <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.darkBlueBackground05 }}>
                     {upgradeForFiles()}
-                    {this.noFilesInFolder}
+                    {noFilesInFolder || this.body()}
                     {/* this.sharedFolderRemovalNotifs() */}
-                    {this.body()}
                 </View>
                 <ProgressOverlay enabled={fileState.store.loading} />
                 {this.toolbar()}

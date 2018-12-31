@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
 import { T } from '../utils/translator';
 
+@observer
 export default class IdentityVerificationNotice extends Component {
     securityIcon = {
         margin: vars.spacing.small.mini,
@@ -16,7 +18,7 @@ export default class IdentityVerificationNotice extends Component {
         flex: 1,
         color: vars.txtMedium,
         flexGrow: 1,
-        fontSize: vars.font.size.smaller
+        fontSize: vars.font.size12
     };
 
     hyperlink = {
@@ -35,12 +37,8 @@ export default class IdentityVerificationNotice extends Component {
             width: this.props.fullWidth ? null : vars.verificationMessageWidth
         };
         return (
-            <View style={idVerificationContainer} >
-                <Icon style={this.securityIcon}
-                    name="security"
-                    size={vars.iconSize}
-                    color="gray"
-                />
+            <View style={idVerificationContainer}>
+                <Icon style={this.securityIcon} name="security" size={vars.iconSize} color="gray" />
                 <Text style={this.idVerificationText}>
                     <T k="title_verifyUserIdentity" />
                 </Text>

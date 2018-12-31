@@ -11,7 +11,7 @@ const brandingDefines = {
         darkBlue: '#040B40',
         darkTeal: '#004E69',
         peerioBlue: '#408CFF',
-        peerioPurple: '#408CFF',
+        peerioPurple: '#5461CC',
         peerioTeal: '#02CEDB',
         yellow: '#FDC700',
         red: '#E90162',

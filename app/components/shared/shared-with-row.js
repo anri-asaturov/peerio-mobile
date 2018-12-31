@@ -29,7 +29,7 @@ const numberSharedWithContainer = {
     zIndex: 0
 };
 const numberSharedWithText = {
-    fontSize: vars.font.size.smaller,
+    fontSize: vars.font.size12,
     color: vars.sharedWithNumberFontColor,
     textAlign: 'right'
 };
@@ -55,9 +55,13 @@ export default class SharedWithRow extends SafeComponent {
         return (
             <View style={rowContainer}>
                 <View key={contact.username} style={readReceiptStyle}>
-                    <ReadReceipt key={contact.username} username={contact.username} avatarSize={20} />
+                    <ReadReceipt
+                        key={contact.username}
+                        username={contact.username}
+                        avatarSize={20}
+                    />
                 </View>
-                <View style={[numberSharedWithContainer, { width: 70 }]} >
+                <View style={[numberSharedWithContainer, { width: 70 }]}>
                     <Text semibold style={numberSharedWithText}>
                         {tx('title_plusRoomSharedWith')}
                     </Text>
@@ -69,10 +73,8 @@ export default class SharedWithRow extends SafeComponent {
     renderOneRoomOnly() {
         return (
             <View style={rowContainer}>
-                <View style={[numberSharedWithContainer, { width: 50 }]} >
-                    <Text style={numberSharedWithText}>
-                        {tx('title_roomSharedWith')}
-                    </Text>
+                <View style={[numberSharedWithContainer, { width: 50 }]}>
+                    <Text style={numberSharedWithText}>{tx('title_roomSharedWith')}</Text>
                 </View>
             </View>
         );
@@ -83,7 +85,7 @@ export default class SharedWithRow extends SafeComponent {
         const roomsSharedWith = rooms.length;
         return (
             <View style={rowContainer}>
-                <View style={[numberSharedWithContainer, { width: 56 }]} >
+                <View style={[numberSharedWithContainer, { width: 56 }]}>
                     <Text style={numberSharedWithText}>
                         {tx('title_roomsSharedWith', { roomsSharedWith })}
                     </Text>
@@ -101,16 +103,24 @@ export default class SharedWithRow extends SafeComponent {
         }
         return (
             <View style={rowContainer}>
-                {contactSubArray.map((contact) => {
-                    return (<View key={contact.username} style={readReceiptStyle}>
-                        <ReadReceipt key={contact.username} username={contact.username} avatarSize={20} />
-                    </View>);
+                {contactSubArray.map(contact => {
+                    return (
+                        <View key={contact.username} style={readReceiptStyle}>
+                            <ReadReceipt
+                                key={contact.username}
+                                username={contact.username}
+                                avatarSize={20}
+                            />
+                        </View>
+                    );
                 })}
-                {!!chatNumberSharedWith && <View style={[numberSharedWithContainer, { width: 50 }]} >
-                    <Text style={numberSharedWithText}>
-                        {tx('title_numberOfChatsSharedWith', { chatNumberSharedWith })}
-                    </Text>
-                </View>}
+                {!!chatNumberSharedWith && (
+                    <View style={[numberSharedWithContainer, { width: 50 }]}>
+                        <Text style={numberSharedWithText}>
+                            {tx('title_numberOfChatsSharedWith', { chatNumberSharedWith })}
+                        </Text>
+                    </View>
+                )}
             </View>
         );
     }

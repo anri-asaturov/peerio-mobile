@@ -40,7 +40,8 @@ export default class Notifications extends SafeComponent {
                         title={tx('title_dndMode')}
                         description={tx('title_dndModeDescription')}
                     /> */}
-                    {/* !state.doNotDisturbModeEnabled && */
+                    {
+                        /* !state.doNotDisturbModeEnabled && */
                         <View>
                             {/* <View style={spacer} />
                             <Text style={text}>{tx('title_notifyOf')}</Text>
@@ -78,6 +79,12 @@ export default class Notifications extends SafeComponent {
                         property="messageNotifications"
                         title={tx('title_forNewMessage')}
                     />
+                    {__DEV__ && (
+                        <SettingsToggleItem
+                            property="disableOnboardingEmails"
+                            title="Disable onboarding emails"
+                        />
+                    )}
                 </ScrollView>
             </View>
         );

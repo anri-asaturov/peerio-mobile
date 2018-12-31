@@ -8,10 +8,11 @@ import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import { User } from '../../lib/icebear';
 import routes from '../routes/routes';
 import testLabel from '../helpers/test-label';
+import BlueButtonText from '../buttons/blue-text-button';
+import RedTextButton from '../buttons/red-text-button';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -26,7 +27,7 @@ const bgStyle = {
 
 const headerStyle = {
     color: vars.txtDark,
-    fontSize: vars.font.size.bigger,
+    fontSize: vars.font.size16,
     marginLeft: vars.spacing.small.midi2x
 };
 
@@ -39,12 +40,14 @@ const infoStyle = {
 const labelStyle = {
     color: vars.txtDate,
     marginBottom: vars.spacing.small.mini2x,
-    fontSize: vars.font.size.smaller,
+    fontSize: vars.font.size12,
     marginLeft: vars.spacing.small.midi2x
 };
 
 const whiteStyle = {
-    backgroundColor: vars.white, paddingVertical: vars.spacing.small.maxi, paddingHorizontal
+    backgroundColor: vars.white,
+    paddingVertical: vars.spacing.small.maxi,
+    paddingHorizontal
 };
 
 const row = { flexDirection: 'row' };
@@ -100,7 +103,9 @@ export default class TwoFactorAuthCodes extends SafeComponent {
 
         // if (Platform.OS === 'android') {
         mimeType = 'text/plain';
-        filePath = `${Platform.OS === 'android' ? RNFS.ExternalDirectoryPath : RNFS.DocumentDirectoryPath}/backup codes for ${User.current.username}.txt`;
+        filePath = `${
+            Platform.OS === 'android' ? RNFS.ExternalDirectoryPath : RNFS.DocumentDirectoryPath
+        }/backup codes for ${User.current.username}.txt`;
         await RNFS.writeFile(filePath, formatTableTxt(this.codes), 'utf8');
         /* } else {
             const html = formatTableHTML(this.codes);
@@ -120,40 +125,44 @@ export default class TwoFactorAuthCodes extends SafeComponent {
         return (
             <View style={bgStyle}>
                 <View>
-                    <Text bold
-                        style={headerStyle}
-                        {...testLabel('title_2FABackupCode')} >
+                    <Text bold style={headerStyle} {...testLabel('title_2FABackupCode')}>
                         {tx('title_2FABackupCode')}
                     </Text>
                     <Text style={infoStyle}>
-                        {
-                            `Save these backup codes in a safe place so that you
+                        {`Save these backup codes in a safe place so that you
 still login if you're unable to access your
 authenticator app.`}
                     </Text>
-                    <Text style={labelStyle}>
-                        {tx('title_2FABackupCode')}
-                    </Text>
+                    <Text style={labelStyle}>{tx('title_2FABackupCode')}</Text>
                 </View>
                 <View style={whiteStyle}>
                     <View style={row}>
                         <View style={column}>
-                            {this.codes.slice(0, this.codes.length / 2).map(i =>
-                                <Text bold style={textStyle} key={i}>{i}</Text>
-                            )}
+                            {this.codes.slice(0, this.codes.length / 2).map(i => (
+                                <Text bold style={textStyle} key={i}>
+                                    {i}
+                                </Text>
+                            ))}
                         </View>
                         <View style={column}>
-                            {this.codes.slice(this.codes.length / 2, this.codes.length).map(i =>
-                                <Text bold style={textStyle} key={i}>{i}</Text>
-                            )}
+                            {this.codes.slice(this.codes.length / 2, this.codes.length).map(i => (
+                                <Text bold style={textStyle} key={i}>
+                                    {i}
+                                </Text>
+                            ))}
                         </View>
                     </View>
                     <View style={rowRight}>
-                        {buttons.blueTextButton(tx('title_download'), () => this.downloadCodes())}
+                        <BlueButtonText text="title_download" onPress={this.downloadCodes} />
                     </View>
                 </View>
-                <View style={{ left: paddingHorizontal + 12, bottom: paddingVertical, position: 'absolute' }}>
-                    {buttons.redTextButton('button_2FADeactivate', this.disable2fa)}
+                <View
+                    style={{
+                        left: paddingHorizontal + 12,
+                        bottom: paddingVertical,
+                        position: 'absolute'
+                    }}>
+                    <RedTextButton text="title_2FADisableAuth" onPress={this.disable2fa} />
                 </View>
             </View>
         );

@@ -4,8 +4,12 @@ import RoutedState from '../routes/routed-state';
 class InvitationState extends RoutedState {
     @observable currentInvitation;
 
+    titleFromInvite = invite => {
+        return invite ? invite.channelName : '';
+    };
+
     get title() {
-        return this.currentInvitation ? this.currentInvitation.channelName : '';
+        return this.titleFromInvite(this.currentInvitation);
     }
 
     onTransition(active, inv) {

@@ -21,6 +21,22 @@ class CreateAccountPage extends Page {
         return this.getWhenEnabled('~button_next');
     }
 
+    get createButton() {
+        return this.getWhenEnabled('~button_create');
+    }
+
+    get copyButton() {
+        return this.getWhenEnabled('~button_copy');
+    }
+
+    get acceptButton() {
+        return this.getWhenEnabled('~button_accept');
+    }
+
+    get shareButton() {
+        return this.getWhenEnabled('~button_share');
+    }
+
     get passphrase() {
         return this.getWhenVisible('~passphrase');
     }

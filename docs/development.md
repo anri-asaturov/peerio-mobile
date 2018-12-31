@@ -65,7 +65,7 @@ When updating your local copy of peerio-icebear, run `npm run icebear:compile` t
 
 ## Prepare environment
 
-You should have Node v8, brew, latest XCode and Android Studio installed to build the project in both supported OS.
+You should have Node v8, brew, latest XCode and Android Studio 3 installed to build the project in both supported OS.
 
 pull the project and run:
 
@@ -95,7 +95,9 @@ To debug the project or run it on actual device (or a different simulator), use 
 
 You need to have Android SDK installed. You also need Android NDK installed, and it needs to specifically be version `android-ndk-r10e`, which cannot be downloaded within Android Studio but must be [downloaded directly](https://developer.android.com/ndk/downloads/index.html). 
 
-Current recommended Android Studio version is 2.3.3.
+Current recommended Android Studio version is 3.1.3. Gradle version 4.4.
+
+Please note that react-native project had changes incorporated to support both implemented in our fork.
 
 Set the following environment variables to point to your installations of the NDK and SDK: 
 

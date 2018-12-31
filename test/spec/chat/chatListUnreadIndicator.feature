@@ -1,28 +1,28 @@
 Feature: Chat list unread message indicator
 
-    Scenario Outline: Use top unread message indicator to find chat in chat list
-        When I log in as <user_sender> user
-        Then I start a DM with <user_reciever> user
-        Then I can send a message to the current chat
-        Then I exit the current chat
-        And  they sign out
-        When I log in as <user_reciever> user
-        Then I scroll down the chat list
-        And  I press the top unread message indicator 
-        And  I can see the top unread chat
-    Examples:
-    | user_reciever          | user_sender          |
-    | chatListUnreadReciever | chatListUnreadSender |
+    Background: Create helper user
+        Given a helper user signs up
+        And   they sign out
 
-    Scenario Outline: Use bottom unread message indicator to find chat in chat list
-        When I log in as <user_sender> user
-        Then I start a DM with <user_reciever> user
-        Then I can send a message to the current chat
+    Scenario: Use top unread message indicator to find chat in chat list
+        When I log in as new user
+        Then I create a new room named 0
+        And  I exit the current chat
+        Then I invite them to join the room
+        And  I sign out
+        When I log in as helper user
+        And  I fill my chatlist
+        Then I scroll down the chat list
+        And  I press the top unread message indicator
+        And  I can see the top unread chat
+
+    Scenario: Use bottom unread message indicator to find chat in chat list
+        When I log in as new user
+        Then I create a new room named Z
         Then I exit the current chat
-        And  they sign out
-        When I log in as <user_reciever> user
+        Then I invite them to join the room
+        And  I sign out
+        When I log in as helper user
+        And  I fill my chatlist
         Then I press the bottom unread message indicator
         And  I can see the bottom unread chat
-    Examples:
-    | user_reciever            | user_sender            |
-    | chatListUnreadReciever_2 | chatListUnreadSender_2 |

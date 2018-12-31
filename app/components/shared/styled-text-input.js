@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { observable, action } from 'mobx';
-import { TextInput, View, Platform, Animated } from 'react-native';
+import { observable, action, reaction } from 'mobx';
+import { View, Platform, Animated } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import uiState from '../layout/ui-state';
@@ -10,6 +10,9 @@ import { vars, styledTextInput } from '../../styles/styles';
 import icons from '../helpers/icons';
 import testLabel from '../helpers/test-label';
 import { tx } from '../utils/translator';
+import { socket } from '../../lib/icebear';
+import tm from '../../telemetry';
+import TextInputUncontrolled from '../controls/text-input-uncontrolled';
 
 // Because JS has no enums
 const VALID = true;
@@ -26,7 +29,10 @@ export default class StyledTextInput extends SafeComponent {
     @observable start = 0;
     @observable end = 0;
     @observable focusedAnim;
-    @observable errorMessageText;
+    @observable errorTextCopy;
+    @observable customErrorTextCopy;
+    @observable isDirty = false;
+    prevTextLength = 0;
 
     constructor(props) {
         super(props);
@@ -36,21 +42,44 @@ export default class StyledTextInput extends SafeComponent {
         this.focusedAnim = new Animated.Value(0);
     }
 
+    componentDidMount() {
+        this.reaction = reaction(
+            () => socket.connected,
+            () => {
+                // Only run validation on reconnect, not on disconnect
+                if (socket.connected) this.validate();
+            },
+            { fireImmediately: true }
+        );
+    }
+
     componentWillUnmount() {
         if (uiState.focusedTextBox === this.textInput) {
             uiState.focusedTextBox = null;
         }
+        this.reaction && this.reaction();
+        this.reaction = null;
     }
 
-    get isValid() { return this.valid; }
+    get isValid() {
+        return this.valid === VALID;
+    }
+
+    get hasError() {
+        return this.valid === INVALID || this.customErrorTextCopy;
+    }
 
     /**
-     * Sets validation state to INVALID and displays the custom error
+     * Sets validation state to INVALID and displays the custom error.
+     * Custom error always overrides normal error. Custom error is cleared onFocus.
      * @param {String} error - The error to be displayed
+     * @param {Boolean} sendTmEvent - Whether the event needs to be sent through telemetry or not
      */
-    @action.bound setCustomError(error) {
+    @action.bound
+    setCustomError(error, sendTmEvent) {
         this.valid = INVALID;
-        this.errorMessageText = error;
+        this.customErrorTextCopy = error;
+        if (sendTmEvent) tm.shared.textInputOnError(this.props.telemetry, error);
     }
 
     // Checks if text field is empty and validates accordingly
@@ -60,12 +89,12 @@ export default class StyledTextInput extends SafeComponent {
             if (!state.value) {
                 if (alwaysDirty) {
                     this.valid = INVALID;
-                    this.errorMessageText = validations[0].message;
+                    this.errorTextCopy = validations[0].message;
                     throw new Error();
                 }
-                if (required) {
+                if (required && this.isDirty) {
                     this.valid = INVALID;
-                    this.errorMessageText = tx('title_required');
+                    this.errorTextCopy = 'error_fieldRequired';
                 }
             }
         } catch (error) {
@@ -80,8 +109,11 @@ export default class StyledTextInput extends SafeComponent {
      * @prop {Func} validation.action - Validates "input". Returns true/false (VALID/INVALID)
      * @prop {String} validation.message - The error to show if validation fails at action
      */
-    @action.bound async validate() {
-        const { validations, alwaysDirty, state } = this.props;
+    @action.bound
+    async validate() {
+        const { validations, alwaysDirty, state, telemetry } = this.props;
+        // Do not run validation on a field that hasn't been modified yet unless it is alwaysDirty
+        if (!this.isDirty && !alwaysDirty) return;
         this.handleEmptyField();
         // If no validation prop is passed, then no validation is needed and it is always valid
         if (!validations) {
@@ -92,28 +124,28 @@ export default class StyledTextInput extends SafeComponent {
         if (alwaysDirty) {
             // If its always dirty, assume it only has one validation method
             this.valid = INVALID;
-            this.errorMessageText = validations[0].message;
+            this.errorTextCopy = validations[0].message;
         }
         // Create a promise chain in order to execute one validation at a time
         // Next validation gets executed only if the previous one returns VALID
         let promise = Promise.resolve();
-        validations.forEach((validation) => {
+        validations.forEach(validation => {
             promise = promise.then(async () => {
                 const { value } = state;
-                const result = await validation.action(state.value)
-                    .then((valid) => {
-                        // Validation is inapplicable because it is validating against old input
-                        if (value !== state.value) return false;
-                        this.valid = valid;
-                        if (valid === INVALID) {
-                            this.errorMessageText = validation.message;
-                            return false;
-                        }
-                        return true;
-                    });
+                const result = await validation.action(state.value).then(valid => {
+                    // Validation is inapplicable because it is validating against old input
+                    if (value !== state.value) return false;
+                    this.valid = valid;
+                    if (valid === INVALID) {
+                        this.errorTextCopy = validation.message;
+                        tm.shared.textInputOnError(telemetry, this.errorTextCopy);
+                        return false;
+                    }
+                    return true;
+                });
                 // Throw an error to break the chain if a validation action returns INVALID
                 if (result === false) {
-                    throw new Error(this.errorMessageText);
+                    throw new Error(this.errorTextCopy);
                 }
             });
         });
@@ -121,21 +153,31 @@ export default class StyledTextInput extends SafeComponent {
         promise = promise.catch(() => {
             // Do nothing
         });
+
+        await promise;
     }
 
-    @action.bound async onChangeText(text) {
-        // even if not focused, move the hint to the top
-        if (text) this.setHintToTop();
+    @action.bound
+    async onChangeText(text) {
+        this.isDirty = true;
+        if (this.props.onChange) this.props.onChange(text, this.prevTextLength);
+        if (text.length === this.props.maxLength)
+            tm.shared.textInputOnMaxChars(this.props.telemetry);
         let inputText = text;
         const { Version, OS } = Platform;
         if (OS !== 'android' || Version > 22) {
             inputText = this.props.lowerCase ? text.toLowerCase() : text;
         }
         this.props.state.value = inputText;
+        this.prevTextLength = inputText.length;
         this.validate();
     }
 
-    onSelectionChange = ({ nativeEvent: { selection: { start, end } } }) => {
+    onSelectionChange = ({
+        nativeEvent: {
+            selection: { start, end }
+        }
+    }) => {
         if (this._skip) {
             this._skip = false;
             return;
@@ -144,138 +186,148 @@ export default class StyledTextInput extends SafeComponent {
         this.end = end;
     };
 
-    @action.bound async onBlur() {
-        if (!this.props.state.value) this.validate();
+    @action.bound
+    async onBlur() {
+        const { telemetry, onBlur } = this.props;
         uiState.focusedTextBox = null;
         this.focused = false;
-        if (this.props.onBlur) this.props.onBlur();
-        this.blurAnimation();
+        if (onBlur) onBlur();
+        await this.validate();
+        if (this.hasError)
+            tm.shared.textInputOnBlur(telemetry, this.customErrorTextCopy || this.errorTextCopy);
     }
 
-    @action.bound onFocus() {
+    @action.bound
+    onFocus() {
+        const { telemetry, onFocus } = this.props;
         uiState.focusedTextBox = this.textInput;
+        this.customErrorTextCopy = '';
         this.focused = true;
-        if (this.props.onFocus) this.props.onFocus();
+        if (onFocus) onFocus();
         this.textInput.focus();
-        this.setHintToTop();
-    }
-
-    /**
-     * Move the hint to the top
-     */
-    setHintToTop = () => {
-        Animated.timing(
-            this.focusedAnim,
-            {
-                toValue: 1,
-                duration: 300
-            }).start();
-    };
-
-    /**
-     * Move the hint to the bottom
-     */
-    setHintToBottom = () => {
-        Animated.timing(
-            this.focusedAnim,
-            {
-                toValue: 0,
-                duration: 300
-            }).start();
-    };
-
-    blurAnimation() {
-        const { state } = this.props;
-        if (!(state.value && state.value.length)) {
-            this.setHintToBottom();
-        }
+        tm.shared.textInputOnFocus(telemetry);
     }
 
     get borderColor() {
-        if (this.valid === INVALID) return vars.red;
+        if (this.hasError) return vars.red;
         else if (this.focused) return vars.peerioBlue;
         return vars.inputBorderColor;
     }
 
-    get hint() {
-        const normalFont = vars.font.size.normal;
-        const smallFont = vars.font.size.smaller;
-        const fontSize = this.focusedAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [normalFont, smallFont]
-        });
-        const bottomMin = (vars.inputHeight - normalFont) / 2 - vars.spacing.small.mini;
-        const bottomMax = (vars.inputHeight / 2) + vars.spacing.one;
-        const bottom = this.focusedAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [bottomMin, bottomMax]
-        });
-        let color = vars.textBlack38;
+    get label() {
+        let color = vars.textBlack54;
         if (this.focused) color = vars.peerioBlue;
-        if (this.valid === INVALID) color = vars.red;
-        const animatedhintStyle = {
+        if (this.hasError) color = vars.red;
+        const labelStyle = {
+            fontSize: vars.font.size12,
             alignSelf: 'center',
-            color,
-            fontSize
+            color
         };
-        return (this.props.hint &&
-            <Animated.View key="hint"
-                pointerEvents="none"
-                style={{ position: 'absolute', bottom, paddingLeft: vars.inputPaddingHorizontal }}>
-                <Animated.Text
-                    style={animatedhintStyle}>
-                    {this.props.hint}
-                </Animated.Text>
-            </Animated.View>
+        return (
+            this.props.label && (
+                <View pointerEvents="none" style={styledTextInput.labelContainerStyle}>
+                    <Text style={labelStyle}>{this.props.label}</Text>
+                </View>
+            )
         );
     }
 
-    get secretIcon() {
-        return !this.props.secureText ? null : (
-            <View style={[styledTextInput.iconContainer, borderOffset]}>
-                {this.showSecret ?
-                    icons.colored('visibility', this.toggleSecret, vars.peerioTeal, 'transparent') :
-                    icons.dark('visibility', this.toggleSecret, { backgroundColor: 'transparent' })}
-            </View>
-        );
-    }
-
-    get customIcon() {
-        const { customIcon } = this.props;
-        return !customIcon ? null : (
-            <View style={[styledTextInput.iconContainer, borderOffset]}>
-                {customIcon}
-            </View>
-        );
-    }
-
-    @action.bound toggleSecret() {
+    @action.bound
+    toggleSecret() {
         const { state } = this.props;
         // we don't give user the ability to hide passphrase again, because Apple
         this.showSecret = !this.showSecret;
+        tm.login.toggleAkVisibility(this.showSecret);
         // prevent cursor skip
         if (state.value && Platform.OS === 'android') this._skip = true;
     }
 
-    // reserves space below text input for error message
-    get errorSpacer() {
-        const marginBottom = styledTextInput.errorStyle.height
-            + styledTextInput.errorStyle.marginTop
-            + styledTextInput.errorStyle.marginBottom;
-        return (<View style={{ marginBottom }} />);
+    @action.bound
+    clearInputValue() {
+        this.props.state.value = '';
+        this.onChangeText('');
+        tm.shared.textInputOnClear(this.props.telemetry);
     }
 
-    get errorMessage() {
-        if (this.valid === INVALID) {
-            return (
-                <Text style={styledTextInput.errorStyle}>
-                    {tx(this.errorMessageText)}
-                </Text>);
-        }
-        return this.errorSpacer;
+    get customIcon() {
+        return (
+            <View style={[styledTextInput.iconContainer, borderOffset]}>
+                {this.props.customIcon}
+            </View>
+        );
     }
 
-    @action.bound textInputRef(ref) { this.textInput = ref; }
+    get secretIcon() {
+        return (
+            <View style={[styledTextInput.iconContainer, borderOffset]}>
+                {this.showSecret
+                    ? icons.colored('visibility', this.toggleSecret, vars.peerioTeal, 'transparent')
+                    : icons.dark('visibility', this.toggleSecret, {
+                          backgroundColor: 'transparent'
+                      })}
+            </View>
+        );
+    }
+
+    get clearTextIcon() {
+        return (
+            <View style={[styledTextInput.iconContainer, borderOffset]}>
+                {icons.dark('clear', this.clearInputValue, { backgroundColor: 'transparent' })}
+            </View>
+        );
+    }
+
+    // icon priority: custom > secureText > clearText
+    get rightIcon() {
+        const { customIcon, secureText, clearTextIcon, state } = this.props;
+        if (customIcon) return this.customIcon;
+        else if (secureText) return this.secretIcon;
+        else if (clearTextIcon && state.value) return this.clearTextIcon;
+        return null;
+    }
+
+    // reserves space below text input for error or helper message
+    get bottomTextSpacer() {
+        const marginBottom =
+            styledTextInput.bottomMessageContainer.height +
+            styledTextInput.bottomMessageContainer.marginTop;
+        return <View style={{ marginBottom }} />;
+    }
+
+    get errorText() {
+        const marginRight = vars.spacing.small.mini;
+        return (
+            <View style={styledTextInput.bottomMessageContainer}>
+                {icons.plainalert('error-outline', vars.iconSizeSmall, { marginRight })}
+                <Text style={styledTextInput.errorTextStyle}>
+                    {tx(this.customErrorTextCopy || this.errorTextCopy)}
+                </Text>
+            </View>
+        );
+    }
+
+    get helperText() {
+        const { helperText } = this.props;
+        const style = this.focused
+            ? styledTextInput.helperTextFocusedStyle
+            : styledTextInput.helperTextBlurredStyle;
+        return (
+            <View style={styledTextInput.bottomMessageContainer}>
+                <Text style={style}>{tx(helperText)}</Text>
+            </View>
+        );
+    }
+
+    get bottomText() {
+        if (this.hasError) return this.errorText;
+        else if (this.props.helperText) return this.helperText;
+        return this.bottomTextSpacer;
+    }
+
+    @action.bound
+    textInputRef(ref) {
+        this.textInput = ref;
+    }
 
     renderThrow() {
         const { style, state, secureText, maxLength, testID } = this.props;
@@ -287,15 +339,13 @@ export default class StyledTextInput extends SafeComponent {
             borderRadius: 4,
             overflow: 'hidden'
         };
-        const paddingRight = { paddingRight: secureText ? vars.iconSizeLarge : null };
+        const marginRight = { marginRight: this.rightIcon ? vars.iconSizeLarge : null };
         return (
-            <View style={styledTextInput.outerStyle}>
+            <View style={styledTextInput.inputContainer}>
                 <View style={fieldStyle}>
-                    {this.hint}
-                    {this.secretIcon}
-                    {this.customIcon}
-                    <TextInput
-                        style={[styledTextInput.textinputStyle, style, paddingRight]}
+                    {this.rightIcon}
+                    <TextInputUncontrolled
+                        style={[styledTextInput.textinputStyle, style, marginRight]}
                         value={state.value}
                         secureTextEntry={secureText && !this.showSecret}
                         maxLength={maxLength}
@@ -310,9 +360,11 @@ export default class StyledTextInput extends SafeComponent {
                         onBlur={this.onBlur}
                         onFocus={this.onFocus}
                         {...testLabel(testID)}
-                        {...this.props} />
+                        {...this.props}
+                    />
                 </View>
-                {this.errorMessage}
+                {this.bottomText}
+                {this.label}
             </View>
         );
     }
@@ -321,15 +373,19 @@ export default class StyledTextInput extends SafeComponent {
 StyledTextInput.propTypes = {
     state: PropTypes.any,
     style: PropTypes.any,
+    telemetry: PropTypes.any,
     validations: PropTypes.any,
-    hint: PropTypes.any,
+    label: PropTypes.any,
     testID: PropTypes.any,
     alwaysDirty: PropTypes.bool,
     customIcon: PropTypes.any,
     secureText: PropTypes.bool,
+    clearTextIcon: PropTypes.bool,
     required: PropTypes.bool,
+    helperText: PropTypes.string,
     maxLength: PropTypes.number,
     onBlur: PropTypes.any,
     onFocus: PropTypes.any,
-    lowerCase: PropTypes.bool
+    lowerCase: PropTypes.bool,
+    onChangeText: PropTypes.any
 };

@@ -18,6 +18,15 @@
 	<string>3.0.11</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(SHARE_URL_SCHEME)</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -45,6 +54,8 @@
 	<string>Upload images and photos to your encrypted storage</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Access your contacts to find and chat with them</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use your biometry to access your account</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Access your location always</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -71,12 +82,9 @@
 		<string>OpenSansItalic.ttf</string>
 		<string>OpenSansSemiBold.ttf</string>
 		<string>OpenSansSemiBoldItalic.ttf</string>
-		<string>OpenSans-Bold.ttf</string>
-		<string>OpenSans-BoldItalic.ttf</string>
-		<string>OpenSans-Italic.ttf</string>
-		<string>OpenSans-Regular.ttf</string>
-		<string>OpenSans-SemiBold.ttf</string>
-		<string>OpenSans-SemiBoldItalic.ttf</string>
+		<string>SourceSerifPro.ttf</string>
+		<string>SourceSerifProBold.ttf</string>
+		<string>SourceSerifProSemiBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

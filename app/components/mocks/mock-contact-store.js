@@ -1,63 +1,60 @@
-import randomWords from 'random-words';
-import capitalize from 'capitalize';
-
-function createMockContact(username) {
-    const firstName = capitalize(randomWords());
-    const lastName = capitalize(randomWords());
-    return {
-        username,
-        firstName,
-        lastName,
-        fullName: `${firstName} ${lastName}`
-    };
-}
-
-const sampleSet = [
-    createMockContact('seavan'),
-    createMockContact('floh'),
-    createMockContact('anri'),
-    createMockContact('oscar'),
-    createMockContact('delhi'),
-    createMockContact('paul'),
-    createMockContact('saumya'),
-    createMockContact('arthur'),
-    createMockContact('armen'),
-    createMockContact('ruben'),
-    createMockContact('zaragoz'),
-    createMockContact('eren'),
-    createMockContact('skylar')
-];
+import { observable } from 'mobx';
+import MockCurrentUser from './mock-current-user';
+import MockContact from './mock-contact';
 
 class MockContactStore {
     addedContacts = [];
     invitedContacts = [];
-    contacts = sampleSet;
+    invitedNotJoinedContacts = [];
+    contacts = [];
+    contactsMap = observable.map();
 
     constructor() {
         for (let i = 0; i < 15; ++i) {
-            this.contacts.push(this.createMock());
+            this.createMock();
         }
     }
 
-    filter(text) {
-        return text ? sampleSet.filter(c => c.username.indexOf(text) !== -1) : sampleSet;
+    get uiView() {
+        return [
+            {
+                letter: 'A',
+                items: this.contacts
+            }
+        ];
+    }
+
+    filter = text => {
+        return text ? this.contacts.filter(c => c.username.indexOf(text) !== -1) : this.contacts;
+    };
+
+    addContact(contact) {
+        if (typeof val === 'string') {
+            throw new Error('Mocking string contact adding is not implemented');
+        }
+        const existingContact = this.contactsMap[contact.username];
+        if (existingContact) {
+            console.error(`There's already a contact with username ${existingContact.username}`);
+            return existingContact;
+        }
+        this.contacts.push(contact);
+        this.contactsMap.set(contact.username, contact);
+        return contact;
     }
 
     createMock() {
-        const username = `un_${randomWords()}`;
-        const firstName = capitalize(randomWords());
-        const lastName = capitalize(randomWords());
-        return {
-            username,
-            firstName,
-            lastName,
-            fullName: `${firstName} ${lastName}`
-        };
+        return this.addContact(new MockContact());
+    }
+
+    createMockCurrentUser() {
+        const contact = new MockCurrentUser();
+        return this.addContact.addContact(contact);
     }
 
     getContact(username) {
-        return { username, loading: false, notFound: true };
+        const r = this.contactsMap.get(username);
+        return r || { username, loading: false, notFound: true };
     }
 }
 
-export default new MockContactStore();
+export default MockContactStore;

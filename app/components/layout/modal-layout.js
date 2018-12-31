@@ -18,24 +18,43 @@ export default class ModalLayout extends SafeComponent {
     }
 
     componentDidMount() {
-        reaction(() => routerModal.modal, modal => {
-            const duration = vars.animationDuration;
-            const useNativeDriver = true;
-            if (modal) {
-                uiState.hideKeyboard();
-                this.modal = modal;
-                routerModal.animating = true;
-                // add timeout to allow for render to happen
-                setTimeout(() => Animated.timing(this.modalAnimated, { toValue: 0, duration, useNativeDriver })
-                    .start(() => { routerModal.animating = false; }), 20);
-            } else {
-                // this.modal = null;
-                Animated.timing(this.modalAnimated, { toValue: this.height, duration, useNativeDriver })
-                    .start(() => {
-                        setTimeout(() => { this.modal = null; }, 10);
+        reaction(
+            () => routerModal.modal,
+            modal => {
+                const duration = vars.animationDuration;
+                const useNativeDriver = true;
+                if (modal) {
+                    uiState.hideKeyboard();
+                    this.modal = modal;
+                    routerModal.animating = true;
+                    // add timeout to allow for render to happen
+                    setTimeout(
+                        () =>
+                            Animated.timing(this.modalAnimated, {
+                                toValue: 0,
+                                duration,
+                                useNativeDriver
+                            }).start(() => {
+                                routerModal.animating = false;
+                                uiState.modalShown = true;
+                            }),
+                        20
+                    );
+                } else {
+                    // this.modal = null;
+                    uiState.modalShown = false;
+                    Animated.timing(this.modalAnimated, {
+                        toValue: this.height,
+                        duration,
+                        useNativeDriver
+                    }).start(() => {
+                        setTimeout(() => {
+                            this.modal = null;
+                        }, 10);
                     });
+                }
             }
-        });
+        );
     }
 
     get androidTapContainer() {
@@ -43,7 +62,9 @@ export default class ModalLayout extends SafeComponent {
         return (
             <ScrollView
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={grow} style={grow} scrollEnabled={false}>
+                contentContainerStyle={grow}
+                style={grow}
+                scrollEnabled={false}>
                 {this.modal}
             </ScrollView>
         );
@@ -60,13 +81,15 @@ export default class ModalLayout extends SafeComponent {
         };
         const transformModal = [{ translateY: this.modalAnimated }];
         const modalAnimatedStyle = [modalStyle, { transform: transformModal }];
-        const sbStyle = routerModal.current && routerModal.current.isWhite ? 'light-content' : 'default';
+        const sbStyle =
+            routerModal.current && routerModal.current.isWhite ? 'light-content' : 'default';
         return (
             <Animated.View style={modalAnimatedStyle}>
                 {Platform.OS === 'android' ? this.androidTapContainer : this.modal}
                 <StatusBar
                     barStyle={!routerModal.animating && routerModal.current ? sbStyle : undefined}
-                    hidden={Platform.OS !== 'android' && !this.modal} />
+                    hidden={Platform.OS !== 'android' && !this.modal}
+                />
             </Animated.View>
         );
     }

@@ -17,6 +17,7 @@ export default class MedcryptorRolePickerBox extends SafeComponent {
                 data={medcryptorUiState.roles}
                 value={medcryptorUiState.roleSelected}
                 state={medcryptorUiState}
+                label={tx('title_yourRole')}
                 hint={tx('title_yourRole')}
                 errorMessage={tx('title_selectYourRole')}
                 style={pickerBox}

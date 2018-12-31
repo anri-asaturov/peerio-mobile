@@ -19,16 +19,23 @@ const otplib = require('otplib');
 const FileViewPage = require('./pages/files/fileViewPage');
 const AlertsPage = require('./pages/popups/alertsPage');
 const ContactsPage = require('./pages/contacts/contactsPage');
+const ListenerServer = require('../listener/listener-server');
 
 class World {
     constructor({ attach, parameters }) {
         this.attach = attach;
         this.context = parameters.platform === 'ios' ? iOSFactory : AndroidFactory;
+        this.listener = ListenerServer.create(parameters.platform);
+    }
+
+    destroy() {
+        ListenerServer.close();
+        this.listener = null;
     }
 
     openApp() {
         this.app = webDriver.remote(this.context.platform);
-        this.app.options.waitforTimeout = 15000;
+        this.app.options.waitforTimeout = 30000;
         this.app.options.screenshotPath = 'test/screenshots';
 
         this.createPages();
@@ -56,7 +63,7 @@ class World {
 
         this.contactsPage = new ContactsPage(this.app);
 
-        this.settingsPage = new SettingsPage(this.app);
+        this.settingsPage = this.context.settingsPage(this.app);
         this.twoStepVerificationPage = new TwoStepVerificationPage(this.app);
         this.twoFactorAuthPrompt = new TwoFactorAuthPrompt(this.app);
         this.profileSettingsPage = new ProfileSettingsPage(this.app);
@@ -64,6 +71,7 @@ class World {
 
     closeApp() {
         return this.app
+            .closeApp()
             .removeApp(this.context.bundleId) // remove app so it doesn't influence next test
             .end(); // end server session and close webdriver
     }
@@ -85,41 +93,50 @@ class World {
 
     async tryEnterTokenInSettings() {
         const token = otplib.authenticator.generate(this.secretKey);
+        console.log(`Trying for secret key ${this.secretKey}, token ${token}`);
         await this.twoStepVerificationPage.confirmationCode.setValue(token);
         await this.twoStepVerificationPage.hideKeyboardHelper();
         await this.twoStepVerificationPage.confirmButton.click();
     }
 
     async enterTokenInSettings() {
-        await this.tryEnterTokenInSettings();
-        if (!(await this.twoStepVerificationPage.backupCodesVisible)) { // Retry if token was expired
+        // might be too slow to enter the correct code, trying several times
+        for (let i = 0; i < 3; ++i) {
             await this.tryEnterTokenInSettings();
+            // we successfully enabled 2fa
+            if (await this.twoStepVerificationPage.backupCodesVisible) return;
+            // possibly to regenerate the code in the next time frame
+            await this.app.pause(5000);
         }
+        throw new Error('Could not enable 2fa in settings');
     }
 
     async tryEnterTokenInPrompt() {
         const token = otplib.authenticator.generate(this.secretKey);
+        console.log(`Trying with this token: ${token}`);
         await this.twoFactorAuthPrompt.tokenInput.setValue(token);
         await this.twoFactorAuthPrompt.hideKeyboardHelper();
         await this.twoFactorAuthPrompt.submitButton.click();
-        await this.twoFactorAuthPrompt.submitButton.click(); // TODO tap twice
     }
 
     async enterTokenInPrompt() {
         await this.tryEnterTokenInPrompt();
-        if (await this.twoFactorAuthPrompt.tokenInputPresent) { // Retry if token was expired
+        // wait for the token to be verified
+        await this.app.pause(3000);
+        if (await this.twoFactorAuthPrompt.tokenInputPresent) {
+            // Retry if token was expired
             await this.tryEnterTokenInPrompt();
         }
     }
 
     async selectCreateAccount() {
         await this.alertsPage.dismissNotificationsAlert();
+        if (await this.loginPage.backButtonVisible) await this.loginPage.backButton.click();
         await this.startPage.createAccountButton.click();
     }
 
-    async typePersonalInfo(username) {
-        if (!username) this.username = new Date().getTime();
-        else this.username = username;
+    async typePersonalInfo() {
+        this.username = new Date().getTime();
         const email = `${this.username}@test.lan`;
         console.log('Creating account with username', this.username);
 
@@ -127,11 +144,16 @@ class World {
         await this.createAccountPage.hideKeyboardHelper();
         await this.createAccountPage.lastName.setValue('last');
         await this.createAccountPage.hideKeyboardHelper();
+        await this.createAccountPage.nextButton.click();
+
         await this.createAccountPage.username.setValue(this.username);
         await this.createAccountPage.hideKeyboardHelper();
+        await this.createAccountPage.nextButton.click();
+
         await this.createAccountPage.email.setValue(email);
         await this.createAccountPage.hideKeyboardHelper();
-        await this.createAccountPage.nextButton.click();
+
+        await this.createAccountPage.createButton.click();
     }
 
     async savePasscode() {
@@ -139,21 +161,21 @@ class World {
             this.passphrase = innerText;
         });
         console.log('Creating account with passphrase', this.passphrase);
-        await this.createAccountPage.nextButton.click();
     }
 
-    async confirmSavingPasscode() {
-        await this.createAccountPage.confirmInput.setValue('I have saved my account key');
-        await this.createAccountPage.hideKeyboardHelper();
+    async acceptTerms() {
+        await this.createAccountPage.copyButton.click();
         await this.createAccountPage.nextButton.click();
-    }
 
-    async skipContactSync() {
-        await this.createAccountPage.skipButton.click();
+        await this.contactsPage.snackbar.click();
+
+        await this.createAccountPage.acceptButton.click();
+        await this.createAccountPage.shareButton.click();
     }
 
     async seeWelcomeScreen() {
         await this.homePage.isVisible;
+        await this.homePage.chatTab.click();
     }
 
     async dismissEmailConfirmationPopup() {
@@ -164,6 +186,11 @@ class World {
 
     async loginExistingAccount(username, passphrase) {
         await this.alertsPage.dismissNotificationsAlert();
+
+        // Go back from "welcome back screen" to "welcome screen"
+        if (await this.loginPage.backButtonVisible) {
+            await this.loginPage.backButton.click();
+        }
         await this.startPage.loginButton.click();
 
         await this.loginPage.username.setValue(username);
@@ -171,20 +198,50 @@ class World {
         await this.loginPage.passphrase.setValue(passphrase);
         await this.loginPage.hideKeyboardHelper();
         await this.loginPage.submitButton.click();
+    }
 
+    async loginExistingAccountWithout2FA(username, passphrase) {
+        await this.loginExistingAccount(username, passphrase);
+
+        await this.dismissEmailConfirmationPopup();
+        await this.seeWelcomeScreen();
+    }
+
+    async loginExistingAccountWith2FA(username, passphrase) {
+        await this.loginExistingAccount(username, passphrase);
+
+        await this.enterTokenInPrompt();
+
+        await this.dismissEmailConfirmationPopup();
+        await this.seeWelcomeScreen();
+    }
+
+    // username is optional
+    async createNewAccount() {
+        await this.selectCreateAccount();
+        await this.typePersonalInfo();
+        await this.savePasscode();
+        await this.acceptTerms();
         await this.seeWelcomeScreen();
         await this.dismissEmailConfirmationPopup();
     }
 
-    // username is optional
-    async createNewAccount(username) {
+    async createHelperAccount(params) {
         await this.selectCreateAccount();
-        await this.typePersonalInfo(username);
-        await this.savePasscode();
-        await this.confirmSavingPasscode();
-        await this.skipContactSync();
+        const { username, passphrase } = await this.listener.request(
+            `signupState.testQuickSignup(${JSON.stringify(params || {})})`
+        );
+        Object.assign(this, { helperUsername: username, helperPassphrase: passphrase });
+    }
+
+    async callQuickSignup(params) {
+        await this.selectCreateAccount();
+        const result = await this.listener.request(
+            `signupState.testQuickSignup(${JSON.stringify(params || {})})`
+        );
+        const { username, passphrase } = result;
+        Object.assign(this, { username, passphrase });
         await this.seeWelcomeScreen();
-        await this.dismissEmailConfirmationPopup();
     }
 
     async logout() {
@@ -192,7 +249,7 @@ class World {
         await this.homePage.scrollDownHelper();
         await this.settingsPage.logoutButton.click();
         await this.settingsPage.lockButton.click();
-
+        await this.loginPage.passphrase;
         await this.app.closeApp();
         await this.app.launch();
     }
@@ -203,8 +260,9 @@ class World {
         // Wait for rooms to load, otherwise position will change
         await this.app.pause(5000);
 
-        while (!(await this.chatListPage.chatWithTitleVisible(this.roomName))) { // eslint-disable-line
-            await this.chatListPage.scrollDownHelper();  // eslint-disable-line
+        while (!(await this.chatListPage.chatWithTitleIsVisible(this.roomName))) {
+            // eslint-disable-line
+            await this.chatListPage.scrollDownHelper(); // eslint-disable-line
         }
     }
 
@@ -221,8 +279,9 @@ class World {
 
     async scrollToContact() {
         await this.homePage.contactsTab.click();
-        while (!(await this.contactsPage.contactVisible)) { // eslint-disable-line
-            await this.contactsPage.scrollDownHelper();  // eslint-disable-line
+        while (!(await this.contactsPage.contactVisible)) {
+            // eslint-disable-line
+            await this.contactsPage.scrollDownHelper(); // eslint-disable-line
         }
     }
 

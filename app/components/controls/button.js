@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { observer } from 'mobx-react/native';
 import { View, TouchableOpacity } from 'react-native';
 import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
 
+@observer
 export default class Button extends Component {
     render() {
         const { textStyle } = this.props;
@@ -22,7 +24,13 @@ export default class Button extends Component {
                 accessibilityLabel={this.props.accessibilityLabel}
                 testID={this.props.testID}>
                 <View style={this.props.style}>
-                    <Text bold={this.props.bold} style={[{ backgroundColor: 'transparent', color: vars.highlight }, textStyle, opacity]}>
+                    <Text
+                        bold={this.props.bold}
+                        style={[
+                            { backgroundColor: 'transparent', color: vars.highlight },
+                            textStyle,
+                            opacity
+                        ]}>
                         {text}
                     </Text>
                 </View>

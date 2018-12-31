@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clipboard, LayoutAnimation } from 'react-native';
+import { Clipboard } from 'react-native';
 import { observable, action, reaction } from 'mobx';
 import Text from '../controls/custom-text';
 import RoutedState from '../routes/routed-state';
@@ -24,7 +24,7 @@ class SettingsState extends RoutedState {
         twoFactorAuth: 'title_2FA',
         notifications: 'title_notifications',
         display: 'title_displayPreferences',
-        logs: 'title_help'
+        help: 'title_help'
     };
 
     get title() {
@@ -43,19 +43,22 @@ class SettingsState extends RoutedState {
         this.routerMain.isRightMenuVisible = false;
         this.routerMain.isLeftHamburgerVisible = false;
         if (this.reaction) return;
-        this.reaction = reaction(() => this.routerMain.currentIndex, (i) => {
-            if (this.routerMain.route === 'settings') {
-                while (i < this.stack.length) {
-                    this.stack.pop();
-                    this.subroute = i ? this.stack[i - 1] : null;
+        this.reaction = reaction(
+            () => this.routerMain.currentIndex,
+            i => {
+                if (this.routerMain.route === 'settings') {
+                    while (i < this.stack.length) {
+                        this.stack.pop();
+                        this.subroute = i ? this.stack[i - 1] : null;
+                    }
                 }
             }
-        });
+        );
     }
 
-    @action transition(subroute) {
+    @action
+    transition(subroute) {
         console.log(`settings-state.js: transition ${subroute}`);
-        LayoutAnimation.easeInEaseOut();
         if (subroute) {
             this.subroute = subroute;
             this.stack.push(subroute);
@@ -66,7 +69,7 @@ class SettingsState extends RoutedState {
     }
 
     upgrade() {
-        this.routerModal.accountUpgradeSwiper();
+        this.routerMain.accountUpgrade();
     }
 
     async showPassphrase() {
@@ -74,19 +77,17 @@ class SettingsState extends RoutedState {
         let { passphrase } = user;
         if (!passphrase && keychain.hasPlugin) {
             const data = await keychain.get(`user::${user.username}`);
-            if (data) ({ passphrase } = JSON.parse(data));
+            if (data) {
+                ({ passphrase } = JSON.parse(data));
+            }
         }
         if (passphrase) {
             const mp = (
-                <Text bold style={{ fontSize: vars.font.size.normal }}>
+                <Text bold style={{ fontSize: vars.font.size14 }}>
                     {passphrase}
                 </Text>
             );
-            popupCopyCancel(
-                tx('title_AccountKey'),
-                tx('title_AKDetail'),
-                mp
-            ).then(r => {
+            popupCopyCancel(tx('title_AccountKey'), tx('title_AKDetail'), mp).then(r => {
                 if (!r) return;
                 Clipboard.setString(passphrase);
                 snackbarState.pushTemporary(tx('title_copied'));
@@ -96,4 +97,5 @@ class SettingsState extends RoutedState {
     }
 }
 
-export default new SettingsState();
+const settingsState = new SettingsState();
+export default settingsState;

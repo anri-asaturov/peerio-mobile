@@ -21,7 +21,8 @@ const PAGE_SIZE = 2;
 export default class FolderSelect extends SafeComponent {
     @observable currentFolder = fileState.store.folderStore.root;
 
-    @computed get data() {
+    @computed
+    get data() {
         const { currentFolder } = this;
         const folders = currentFolder.foldersSortedByName.slice();
         currentFolder.isRoot && folders.unshift(fileState.store.folderStore.root);
@@ -62,7 +63,8 @@ export default class FolderSelect extends SafeComponent {
                 hideOptionsIcon
                 onSelect={selectFolder}
                 disabled={fileState.hasLegacyObjectsInSelection}
-                onPress={folder.hasNested ? changeFolder : selectFolder} />
+                onPress={folder.hasNested ? changeFolder : selectFolder}
+            />
         );
     };
 
@@ -90,10 +92,12 @@ export default class FolderSelect extends SafeComponent {
     }
 
     exitRow() {
-        const leftIcon = this.currentFolder.isRoot ?
-            icons.dark('close', () => routes.modal.discard()) :
-            icons.dark('arrow-back', () => { this.currentFolder = this.currentFolder.parent; });
-        const fontSize = vars.font.size.normal;
+        const leftIcon = this.currentFolder.isRoot
+            ? icons.dark('close', () => routes.modal.discard())
+            : icons.dark('arrow-back', () => {
+                  this.currentFolder = this.currentFolder.parent;
+              });
+        const fontSize = vars.font.size14;
         const title = 'title_moveFileTo';
         const outerStyle = { marginBottom: 0 };
         return <ModalHeader {...{ leftIcon, title, fontSize, outerStyle }} />;
@@ -103,8 +107,7 @@ export default class FolderSelect extends SafeComponent {
         return (
             <View style={{ flex: 1, flexGrow: 1, backgroundColor: vars.white }}>
                 {this.exitRow()}
-                {!this.data.length && !this.currentFolder.isRoot ?
-                    this.noFilesInFolder : null}
+                {!this.data.length && !this.currentFolder.isRoot ? this.noFilesInFolder : null}
                 {this.list()}
             </View>
         );

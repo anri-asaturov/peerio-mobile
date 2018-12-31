@@ -1,9 +1,12 @@
 import vars from './vars';
 import common from './common';
 
-const inputContainer = [common.fullAbsoluteContainer, {
-    flexDirection: 'row'
-}];
+const inputContainer = [
+    common.fullAbsoluteContainer,
+    {
+        flexDirection: 'row'
+    }
+];
 
 const alertInvisible = {
     borderBottomColor: 'transparent',
@@ -21,7 +24,7 @@ const textbox = {
     padding: 0,
     height: 28,
     color: vars.textBlack87,
-    fontSize: vars.font.size.normal
+    fontSize: vars.font.size14
 };
 
 const radius = {
@@ -44,15 +47,20 @@ export default {
     alertInvisible,
     alertVisible,
     focused: {
-        outer: [{
-            // ios shadow
-            // shadowOpacity: 0.4,
-            elevation: 10
-        }],
-        radius: [radius, {
-            // android shadow
-            // elevation: 10
-        }],
+        outer: [
+            {
+                // ios shadow
+                // shadowOpacity: 0.4,
+                elevation: 10
+            }
+        ],
+        radius: [
+            radius,
+            {
+                // android shadow
+                // elevation: 10
+            }
+        ],
         touchable: [inputContainer],
         textbox
     },
@@ -68,7 +76,7 @@ export default {
             text: {
                 color: vars.black38,
                 alignSelf: 'center',
-                fontSize: vars.font.size.normal
+                fontSize: vars.font.size14
             }
         },
         small: {
@@ -76,7 +84,7 @@ export default {
             text: {
                 color: vars.peerioBlue,
                 alignSelf: 'center',
-                fontSize: vars.font.size.small
+                fontSize: vars.font.size10
             }
         }
     },

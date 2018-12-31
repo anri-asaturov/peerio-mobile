@@ -6,7 +6,12 @@ function selectorWithPartialResourceId(query) {
     return `android=new UiSelector().resourceIdMatches("${query}")`;
 }
 
+function selectorWithPartialText(query) {
+    return `android=new UiSelector().textContains("${query}")`;
+}
+
 module.exports = {
     selectorWithText,
-    selectorWithPartialResourceId
+    selectorWithPartialResourceId,
+    selectorWithPartialText
 };

@@ -5,7 +5,9 @@ export default class Snackbar extends SnackbarBase {
     level = 'medium';
 
     // to override
-    getText() { return snackbarState.text; }
+    getText() {
+        return snackbarState.text;
+    }
 
     tap() {
         this.hide(() => snackbarState.pop());

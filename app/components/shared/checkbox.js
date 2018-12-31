@@ -9,13 +9,24 @@ import testLabel from '../helpers/test-label';
 
 @observer
 export default class CheckBox extends Component {
+    get isChecked() {
+        if (!this.props.state) {
+            console.error('must specify the state to use checkbox');
+            return false;
+        }
+        return !!this.props.state[this.props.property];
+    }
+
     toggle() {
-        this.props.isChecked = !this.props.isChecked;
-        this.props.onChange && this.props.onChange(this.props.isChecked);
+        if (this.props.state) {
+            this.props.state[this.props.property] = !this.isChecked;
+        }
+        this.props.onChange && this.props.onChange();
     }
 
     render() {
-        const { isChecked, alignLeft } = this.props;
+        const { alignLeft } = this.props;
+        const { isChecked } = this;
         const borderColor = isChecked ? vars.peerioBlue : 'gray';
         const backgroundColor = isChecked ? vars.peerioBlueBackground15 : undefined;
         const container = {
@@ -27,7 +38,6 @@ export default class CheckBox extends Component {
             paddingVertical: vars.spacing.small.maxi
         };
         const checkbox = {
-            flexShrink: 1,
             borderRadius: 2,
             borderWidth: 2,
             borderColor,
@@ -45,20 +55,21 @@ export default class CheckBox extends Component {
                 {...testLabel(this.props.accessibilityLabel)}
                 onPress={() => this.toggle()}
                 pressRetentionOffset={vars.retentionOffset}>
-                {alignLeft ?
+                {alignLeft ? (
                     <View style={container}>
                         <View style={checkbox}>
-                            {this.props.isChecked && <Icon name="check" color={borderColor} />}
+                            {isChecked && <Icon name="check" color={borderColor} />}
                         </View>
                         <Text style={text}>{this.props.text}</Text>
-                    </View> :
+                    </View>
+                ) : (
                     <View style={container}>
                         <Text style={text}>{this.props.text}</Text>
                         <View style={checkbox}>
-                            {this.props.isChecked && <Icon name="check" color={borderColor} />}
+                            {isChecked && <Icon name="check" color={borderColor} />}
                         </View>
                     </View>
-                }
+                )}
             </TouchableOpacity>
         );
     }

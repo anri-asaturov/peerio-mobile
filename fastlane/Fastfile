@@ -68,8 +68,8 @@ platform :android do
   supply(
     track: "alpha",
     apk_paths: [
-    "android/app/build/outputs/apk/app-armeabi-v7a-release-signed.apk",
-    "android/app/build/outputs/apk/app-x86-release-signed.apk" ],
+    "apk/release-armeabi-v7a-signed.apk",
+    "apk/release-x86-signed.apk" ],
     json_key: "gp-service.json",
     package_name: "com.peerio.app",
     skip_upload_metadata: true,

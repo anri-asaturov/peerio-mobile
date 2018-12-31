@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
-import Avatar from '../shared/avatar';
 import contactState from './contact-state';
+import ContactCard from '../shared/contact-card';
 
 @observer
 export default class ContactItem extends SafeComponent {
@@ -17,19 +16,15 @@ export default class ContactItem extends SafeComponent {
 
     renderThrow() {
         const { contact } = this.props;
-        const { username, fullName, email, isDeleted } = contact;
+        const { username } = contact;
         const isInvited = !username;
         return (
-            <Avatar
+            <ContactCard
                 onPress={this.onPress}
-                noTap={isInvited}
-                height={56}
+                disableTapping={isInvited}
                 contact={contact}
-                isDeleted={isDeleted}
-                title={username || email}
-                title2={fullName || <Text italic>(invited)</Text>}
-                hideOnline
-                invited={isInvited} />
+                invited={isInvited}
+            />
         );
     }
 }

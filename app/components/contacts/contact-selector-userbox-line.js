@@ -19,13 +19,9 @@ export default class ContactSelectorUserBoxLine extends Component {
             <ContactSelectorUserBox
                 contact={contact}
                 key={i}
-                onPress={() => this.props.onPress(contact)} />
+                onPress={() => this.props.onPress(contact)}
+            />
         ));
-        return (
-            <View style={container}>
-                {boxes}
-            </View>
-        );
+        return <View style={container}>{boxes}</View>;
     }
 }
-

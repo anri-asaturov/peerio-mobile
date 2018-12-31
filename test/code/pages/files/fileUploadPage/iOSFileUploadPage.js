@@ -1,19 +1,31 @@
 const Page = require('../../page');
 
 class iOSFileUploadPage extends Page {
-    async uploadFileFromGallery() {
-        await this.app.element('~Choose from gallery').click(); // by accessibility id
+    async uploadFromGallery() {
+        await this.getWhenVisible('~Upload from gallery').click();
 
-        // Wait for permission to show up
-        await this.app.pause(3000);
-        if (await this.app.alertText()) {
-            await this.app.alertAccept();
+        try {
+            console.log(`Waiting for gallery permission`);
+            await this.getWhenVisible('~OK', 2000).click();
+        } catch (e) {
+            console.log(`No gallery permission needed`);
+            // no permissions alert present
         }
+    }
 
-        // Wait for albums to show up
-        await this.app.pause(3000);
-        await this.app.element('~Moments').click(); // by name
-        await this.app.element('~Photo, Landscape, August 08, 2012, 6:52 PM').click(); // by accessibility id
+    async uploadFileFromGallery() {
+        await this.uploadFromGallery();
+        await this.getWhenVisible('~Moments').click();
+        // selects the third photo in the list
+        await this.getWhenVisible(`//XCUIElementTypeCell[2]`).click();
+    }
+
+    async uploadCropImageFromCamera() {
+        await this.uploadFromGallery();
+        await this.getWhenVisible('~Camera Roll').click();
+        await this.waitToDisappear('~Camera Roll');
+        await this.pressCoords(100, 100);
+        await this.getWhenVisible('~Choose').click();
     }
 }
 

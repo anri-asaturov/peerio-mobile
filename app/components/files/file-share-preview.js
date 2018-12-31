@@ -32,13 +32,13 @@ const shareContainer = {
 };
 
 const shareTextStyle = {
-    fontSize: vars.font.size.smaller,
+    fontSize: vars.font.size12,
     color: vars.extraSubtleText,
     marginBottom: vars.spacing.small.mini
 };
 
 const recipientStyle = {
-    fontSize: vars.font.size.normal,
+    fontSize: vars.font.size14,
     color: vars.lighterBlackText
 };
 
@@ -49,7 +49,10 @@ export default class FileSharePreview extends SafeComponent {
         fileState.previewFile = observable({
             path,
             fileName,
-            ext: fileHelpers.getFileExtension(fileName || path).trim().toLowerCase(),
+            ext: fileHelpers
+                .getFileExtension(fileName || path)
+                .trim()
+                .toLowerCase(),
             name: fileHelpers.getFileNameWithoutExtension(fileName || path),
             // message to send with shared file
             message: '',
@@ -58,27 +61,30 @@ export default class FileSharePreview extends SafeComponent {
             // contact to be selected in "change recipient"
             contact: {}
         });
-        return new Promise((resolve) => {
-            const showPopup = () => popupState.showPopup({
-                title: tx('title_uploadAndShare'),
-                contents: <FileSharePreview
-                    state={fileState.previewFile}
-                    onSubmit={() => {
-                        popupState.discardPopup();
-                        const { previewFile } = fileState;
-                        fileState.previewFile = null;
-                        resolve(previewFile);
-                    }}
-                    onCancel={() => {
-                        popupState.discardPopup();
-                        resolve(false);
-                    }}
-                    onChooseRecipients={async () => {
-                        await routes.modal.changeRecipient();
-                        showPopup();
-                    }}
-                />
-            });
+        return new Promise(resolve => {
+            const showPopup = () =>
+                popupState.showPopup({
+                    title: tx('title_uploadAndShare'),
+                    contents: (
+                        <FileSharePreview
+                            state={fileState.previewFile}
+                            onSubmit={() => {
+                                popupState.discardPopup();
+                                const { previewFile } = fileState;
+                                fileState.previewFile = null;
+                                resolve(previewFile);
+                            }}
+                            onCancel={() => {
+                                popupState.discardPopup();
+                                resolve(false);
+                            }}
+                            onChooseRecipients={async () => {
+                                await routes.modal.changeRecipient();
+                                showPopup();
+                            }}
+                        />
+                    )
+                });
             showPopup();
         });
     }
@@ -87,36 +93,30 @@ export default class FileSharePreview extends SafeComponent {
         return (
             <Text style={recipientStyle}>
                 {text}
-                <Text italic>
-                    {italicText}
-                </Text>
-            </Text>);
+                <Text italic>{italicText}</Text>
+            </Text>
+        );
     }
 
     getRecipient(state) {
         const { contact, chat } = state;
-        if (contact && contact.firstName) { // Share with selected User
+        if (contact && contact.firstName) {
+            // Share with selected User
             return this.recipientText(
                 `${contact.firstName} ${contact.lastName} `,
                 `@${contact.username}`
             );
-        } else if (!chat.isChannel) { // Share with current User
+        } else if (!chat.isChannel) {
+            // Share with current User
             const recipient = chatStore.activeChat.otherParticipants[0];
-            if (!recipient) { // DM with self, i.e; there are no other participants
+            if (!recipient) {
+                // DM with self, i.e; there are no other participants
                 const user = User.current;
-                return this.recipientText(
-                    `${user.fullName} `,
-                    `@${user.username}`
-                );
+                return this.recipientText(`${user.fullName} `, `@${user.username}`);
             }
-            return this.recipientText(
-                `${recipient.fullName} `,
-                `@${recipient.username}`
-            );
+            return this.recipientText(`${recipient.fullName} `, `@${recipient.username}`);
         } // Share with current Room
-        return this.recipientText(
-            `# ${chat.name}`
-        );
+        return this.recipientText(`# ${chat.name}`);
     }
 
     renderThrow() {
@@ -125,17 +125,13 @@ export default class FileSharePreview extends SafeComponent {
 
         return (
             <View>
-                <FilePreview
-                    state={state}
-                />
+                <FilePreview state={state} />
                 <TouchableOpacity
                     onPress={this.props.onChooseRecipients}
-                    pressRetentionOffset={vars.pressRetentionOffset}
+                    pressRetentionOffset={vars.retentionOffset}
                     style={shareContainer}>
                     <View style={{ flexGrow: 1 }}>
-                        <Text style={shareTextStyle}>
-                            {tx('title_shareWith')}
-                        </Text>
+                        <Text style={shareTextStyle}>{tx('title_shareWith')}</Text>
                         {recipient}
                     </View>
                     {icons.plaindark('keyboard-arrow-right')}

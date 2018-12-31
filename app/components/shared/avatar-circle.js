@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { ActivityIndicator, View, Image } from 'react-native';
+import { ActivityIndicator, View, Image, TouchableOpacity } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import icons from '../helpers/icons';
 import ErrorCircle from './error-circle';
 import { vars } from '../../styles/styles';
+import testLabel from '../helpers/test-label';
 
 @observer
 export default class AvatarCircle extends SafeComponent {
     renderThrow() {
         const { large, medium, contact, loading, invited } = this.props;
         let ratio = 1;
-        if (large) ratio = 2 + (2 / 3);
+        if (large) ratio = 2 + 2 / 3;
         if (medium) ratio = 2;
         const width = vars.avatarDiameter * ratio;
         const height = width;
@@ -29,15 +30,25 @@ export default class AvatarCircle extends SafeComponent {
         }
 
         const { color, tofuError, letter } = contact || {};
-        const coloredAvatarStyle = [avatarStyle, {
-            overflow: 'hidden',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: color || 'gray'
-        }];
+        const tryColor = color || {};
+        const coloredAvatarStyle = [
+            avatarStyle,
+            {
+                overflow: 'hidden',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: tryColor.value || 'gray'
+            }
+        ];
         const avatarLetter = (
             <View style={coloredAvatarStyle}>
-                <Text style={{ color: 'white', textAlign: 'center', width: 14 * ratio, fontSize: vars.font.size.smaller * ratio }}>
+                <Text
+                    style={{
+                        color: tryColor.isLight ? 'black' : 'white',
+                        textAlign: 'center',
+                        width: 14 * ratio,
+                        fontSize: vars.font.size12 * ratio
+                    }}>
                     {letter}
                 </Text>
             </View>
@@ -54,7 +65,7 @@ export default class AvatarCircle extends SafeComponent {
                 );
             }
             if (contact.hasAvatar) {
-                const uri = (large || medium) ? contact.largeAvatarUrl : contact.mediumAvatarUrl;
+                const uri = large || medium ? contact.largeAvatarUrl : contact.mediumAvatarUrl;
                 // image is absolute positioned so that it doesn't jump over letter when it loads
                 avatarIcon = (
                     <Image
@@ -66,15 +77,19 @@ export default class AvatarCircle extends SafeComponent {
             }
         }
 
+        const Renderer = this.props.onPress ? TouchableOpacity : View;
         return (
-            <View style={{ borderWidth: 0, borderColor: 'green' }}>
+            <Renderer
+                onPress={this.props.onPress}
+                {...testLabel(contact.hasAvatar ? 'currentAvatar' : 'avatarLetter')}
+                style={{ borderWidth: 0, borderColor: 'green' }}>
                 {/* if we don't have contact specified show group icon */}
                 {!contact && groupIcon}
                 {/* show letter if there's no avatar or it hasn't loaded yet */}
                 {!invited && contact && avatarLetter}
                 {avatarIcon}
                 <ErrorCircle large={this.props.large} visible={tofuError} />
-            </View>
+            </Renderer>
         );
     }
 }

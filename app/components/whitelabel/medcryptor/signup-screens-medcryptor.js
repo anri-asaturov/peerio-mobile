@@ -1,28 +1,34 @@
 import React from 'react';
+import SignupCountryMedcryptor from './signup-country-medcryptor';
+import SignupRoleMedcryptor from './signup-role-medcryptor';
 import SignupStep1 from '../../signup/signup-step1';
-import SignupStepMedcryptor from './signup-step-medcryptor';
-import SignupAccountKey from '../../signup/signup-account-key';
-import SignupConfirmBackup from '../../signup/signup-confirm-backup';
-import SignupContactSyncStart from '../../signup/signup-contact-sync-start';
-import SignupContactAdd from '../../signup/signup-contact-add';
-import SignupContactInvite from '../../signup/signup-contact-invite';
+import SignupStep2 from '../../signup/signup-step2';
+import SignupStep3 from '../../signup/signup-step3';
+import SignupGenerateAK from '../../signup/signup-generate-ak';
+import SignupBackupAK from '../../signup/signup-backup-ak';
+import SignupTermsOfUseMedcryptor from './signup-tos-mcr';
+import SignupShareData from '../../signup/signup-share-data';
 
 const signupStep1 = () => <SignupStep1 />;
-const signupStepMedcryptor = () => <SignupStepMedcryptor />;
-const signupAccountKey = () => <SignupAccountKey />;
-const signupConfirmBackup = () => <SignupConfirmBackup />;
-const signupContactSyncStart = () => <SignupContactSyncStart />;
-const signupContactAdd = () => <SignupContactAdd />;
-const signupContactInvite = () => <SignupContactInvite />;
+const signupStep2 = () => <SignupStep2 />;
+const signupStep3 = () => <SignupStep3 />;
+const signupCountryMedcryptor = () => <SignupCountryMedcryptor />;
+const signupRoleMedcryptor = () => <SignupRoleMedcryptor />;
+const signupGenerateAK = () => <SignupGenerateAK />;
+const signupBackupAK = () => <SignupBackupAK />;
+const signupTermsOfUse = () => <SignupTermsOfUseMedcryptor />;
+const signupShareData = () => <SignupShareData />;
 
 const PAGES = {
     signupStep1,
-    signupStepMedcryptor,
-    signupAccountKey,
-    signupConfirmBackup,
-    signupContactSyncStart,
-    signupContactAdd,
-    signupContactInvite
+    signupStep2,
+    signupStep3,
+    signupCountryMedcryptor,
+    signupRoleMedcryptor,
+    signupGenerateAK,
+    signupBackupAK,
+    signupTermsOfUse,
+    signupShareData
 };
 
 const PAGE_NAMES = Object.keys(PAGES);

@@ -37,12 +37,18 @@ export default class Display extends SafeComponent {
                 <PreferenceToggleItem
                     property="peerioContentEnabled"
                     title={tx('title_showImagePreviews')}
-                    description={tx('title_showImagePreviewsDescription')} />
+                    description={tx('title_showImagePreviewsDescription')}
+                />
                 <PreferenceToggleItem
                     reverse
                     property="limitInlineImageSize"
-                    title={tx('title_showLargeImages', { size: util.formatBytes(config.chat.inlineImageSizeLimit) })}
-                    description={tx('title_imageTooBigCutoff', { size: util.formatBytes(config.chat.inlineImageSizeLimitCutoff) })} />
+                    title={tx('title_showLargeImages', {
+                        size: util.formatBytes(config.chat.inlineImageSizeLimit)
+                    })}
+                    description={tx('title_imageTooBigCutoff', {
+                        size: util.formatBytes(config.chat.inlineImageSizeLimitCutoff)
+                    })}
+                />
                 <View style={spacer} />
                 {<Text style={text}>{tx('title_urlPreview')}</Text>}
                 <WarningItem
@@ -53,11 +59,14 @@ export default class Display extends SafeComponent {
                 />
                 <PreferenceToggleItem
                     property="externalContentEnabled"
-                    title={tx('title_enableAllUrlPreview')} />
-                {preferenceStore.prefs.externalContentEnabled &&
+                    title={tx('title_enableAllUrlPreview')}
+                />
+                {preferenceStore.prefs.externalContentEnabled && (
                     <PreferenceToggleItem
                         property="externalContentJustForFavs"
-                        title={tx('title_onlyFromFavourites')} />}
+                        title={tx('title_onlyFromFavourites')}
+                    />
+                )}
                 <View style={spacer} />
             </View>
         );

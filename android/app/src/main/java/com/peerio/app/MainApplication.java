@@ -4,13 +4,15 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.corbt.keepawake.KCKeepAwakePackage;
-import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.filepicker.FilePickerPackage;
+import com.chirag.RNMail.RNMail;
+import net.kangyufei.KeyEventPackage;
+import com.jadsonlourenco.RNShakeEvent.RNShakeEventPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
+import com.corbt.keepawake.KCKeepAwakePackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.BV.LinearGradient.LinearGradientPackage;
-import com.chirag.RNMail.RNMail;
 import com.idehub.Billing.InAppBillingBridgePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.zmxv.RNSound.RNSoundPackage;
@@ -49,15 +51,17 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-                    new KCKeepAwakePackage(),
-                    new RNViewShotPackage(),
                     new FilePickerPackage(),
+                    new RNMail(),
+                    new KeyEventPackage(),
+                    new RNShakeEventPackage(),
+                    new LottiePackage(),
+                    new KCKeepAwakePackage(),
                     new PickerPackage(),
                     new ReactNativeContacts(),
                     new RNSodiumPackage(),
                     new RNKeychainPackage(),
                     new LinearGradientPackage(),
-                    new RNMail(),
                     new InAppBillingBridgePackage(),
                     new VectorIconsPackage(),
                     new RNSoundPackage(),

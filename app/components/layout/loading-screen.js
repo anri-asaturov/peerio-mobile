@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Animated, View, Image, Easing } from 'react-native';
+import { View, Animated } from 'react-native';
 import { observer } from 'mobx-react/native';
-import { observable, computed } from 'mobx';
-import Text from '../controls/custom-text';
+import { observable, action, computed } from 'mobx';
+import LottieView from 'lottie-react-native';
 import { vars } from '../../styles/styles';
 import loginState from '../login/login-state';
 import routes from '../routes/routes';
@@ -11,281 +11,130 @@ import { promiseWhen } from '../helpers/sugar';
 import { tx } from '../utils/translator';
 import SnackBarConnection from '../snackbars/snackbar-connection';
 
-const lineDormant = require('../../assets/loading_screens/line-dormant.png');
-
-const smallIcon = {
-    height: vars.iconSize,
-    width: vars.iconSize,
-    marginHorizontal: vars.spacing.small.midi,
-    transform: [{ scale: 1 }]
-};
-const bigIcon = {
-    height: vars.iconSize,
-    width: vars.iconSize,
-    marginHorizontal: vars.spacing.small.midi
-};
+const logoHeight = 72; // Logo in the animation
+const logoAnimation = require('../../assets/loading_screens/loading-screen-logo-animation.json');
+const revealAnimation = require('../../assets/loading_screens/loading-screen-reveal-animation.json');
 
 @observer
 export default class LoadingScreen extends Component {
-    // Animations
-    animationStyle;
-    fadeValue;
-    growValue;
-    // States
-    @observable loadingStep = 0;
-    iconState;
-    @observable randomMessage;
+    @observable authenticated = false;
+    @observable logoAnimVisible = true;
+    @observable statusTextVisible = true;
+    @observable revealAnimVisible = false;
 
-    constructor(props) {
-        super(props);
-        this.fadeValue = new Animated.Value(0.70);
-        this.growValue = new Animated.Value(1);
-        this.animationStyle = {
-            transform: [{ scale: this.growValue }],
-            opacity: this.fadeValue
-        };
-        this.randomMessage = tx(this.randomMessages[Math.floor(Math.random() * this.randomMessages.length)]);
-    }
+    statusTextOpacity = new Animated.Value(1);
+    containerOpacity = new Animated.Value(1);
 
     async componentDidMount() {
         try {
             await loginState.load();
             if (!loginState.loaded) throw new Error('error logging in after return');
-            this.goToNextStep();
             await promiseWhen(() => socket.authenticated);
-            this.goToNextStep();
+            this.authenticated = true;
             await promiseWhen(() => routes.main.chatStateLoaded);
-            this.goToNextStep();
             await promiseWhen(() => routes.main.fileStateLoaded);
-            this.goToNextStep();
-            await promiseWhen(() => routes.main.contactStateLoaded);
+            // TODO: this actually causes a 1000 ms delay in rendering the app
+            // there should be a better way to handle this transition
+            this.animateReveal();
         } catch (e) {
             console.log('loading-screen.js: loading screen error');
-            if (!loginState.loaded) routes.app.routes.loginStart.transition();
+            if (!loginState.loaded) routes.app.loginWelcomeBack();
             console.error(e);
-            return;
+            this.dismiss();
         }
-        this.fadeInOut();
-        this.growIcon();
     }
 
-    fadeInOut() {
-        Animated.sequence([
-            Animated.timing(
-                this.fadeValue,
-                {
-                    toValue: 1,
-                    duration: 400,
-                    easing: Easing.linear,
-                    useNativeDriver: true
-                }),
-            Animated.timing(
-                this.fadeValue,
-                {
-                    toValue: 0.70,
-                    duration: 400,
-                    easing: Easing.linear,
-                    useNativeDriver: true
-                })
-        ]).start(() => this.fadeInOut());
-    }
+    @action.bound
+    animateReveal() {
+        this.revealAnimVisible = true;
+        this.logoAnimVisible = false;
 
-    growIcon() {
-        Animated.timing(
-            this.growValue,
-            {
-                toValue: 1.5,
-                duration: 300,
-                easing: Easing.linear,
+        Animated.timing(this.statusTextOpacity, {
+            toValue: 0,
+            duration: 250,
+            useNativeDriver: true
+        }).start();
+
+        // TODO: this actually causes a 1000 ms delay in rendering the app
+        // there should be a better way to handle this transition
+        setTimeout(() => {
+            Animated.timing(this.containerOpacity, {
+                toValue: 0,
+                duration: 250,
                 useNativeDriver: true
-            }).start();
+            }).start(this.dismiss);
+        }, 1000);
     }
 
-    goToNextStep = () => {
-        this.loadingStep++;
-        this.growIcon(); // Restarts animation
-        this.iconState = this.currentState;
-    };
-
-    @computed get currentState() {
-        const result = {};
-        const numberOfSteps = Object.keys(this.icons).length - 1;
-        Object.keys(this.icons).forEach((name, i) => {
-            result[name] = {};
-            if (!socket.connected) {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
-                else result[name].line = lineDormant;
-                result[name].icon = this.icons[name].source.dormant;
-                result[name].iconStyle = smallIcon;
-                result.statusText = tx('title_waitingToConnect');
-            } else if (i < this.loadingStep) {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
-                else result[name].line = this.icons[name].line.done;
-                result[name].icon = this.icons[name].source.done;
-                result[name].iconStyle = smallIcon;
-            } else if (i === this.loadingStep) {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
-                else result[name].line = this.icons[name].line.inProgress;
-                result[name].icon = this.icons[name].source.inProgress;
-                result[name].iconStyle = [bigIcon, this.animationStyle];
-                result.statusText = tx(this.icons[name].copy);
-            } else {
-                if (i === numberOfSteps) result[name].line = null; // Icon on the far right should not have a line
-                else result[name].line = lineDormant;
-                result[name].icon = this.icons[name].source.dormant;
-                result[name].iconStyle = smallIcon;
-            }
-        });
-        return result;
+    @computed
+    get statusText() {
+        if (!socket.connected) return tx('title_waitingToConnect');
+        if (!this.authenticated) return tx('title_authenticating');
+        return tx('title_decrypting');
     }
 
-    getSource(imageName) {
-        return this.imagesNew[this.loadingStep][imageName];
+    dismiss() {
+        loginState.showLoadingScreen = false;
     }
-
-    renderImages = (name) => {
-        const lineStyle = {
-            height: 3,
-            width: 20,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginHorizontal: 5
-        };
-        this.iconState = this.currentState;
-        return (
-            <View key={name} style={{ flexDirection: 'row', height: vars.iconSizeLarge, justifyContent: 'center', alignItems: 'center' }}>
-                <Animated.Image
-                    key={`${name}Icon`}
-                    source={this.iconState[`${name}`].icon}
-                    style={this.iconState[`${name}`].iconStyle}
-                    resizeMode="contain"
-                />
-                {this.iconState[`${name}`].line && <Image
-                    key={`${name}Line`}
-                    source={this.iconState[`${name}`].line}
-                    style={lineStyle}
-                    resizeMode="contain"
-                />}
-            </View>
-        );
-    };
 
     render() {
+        if (!loginState.showLoadingScreen) return null;
         const container = {
-            backgroundColor: vars.darkBlueBackground05,
-            flex: 1,
-            flexGrow: 1,
-            alignItems: 'center'
-        };
-        const flavorTextStyle = {
-            fontSize: vars.font.size.big,
-            color: vars.subtleText,
-            paddingHorizontal: vars.spacing.medium.maxi2x,
-            textAlign: 'center',
-            marginTop: vars.loadingScreenMarginTop
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            opacity: this.containerOpacity
         };
         const loadingProgressContainer = {
-            flex: 1,
-            flexGrow: 1,
-            justifyContent: 'flex-end',
-            marginBottom: vars.loadingScreenMarginBottom
+            position: 'absolute',
+            top: '50%',
+            marginTop: vars.spacing.medium.maxi2x + logoHeight / 2
         };
-        const iconContainer = {
-            flexDirection: 'row',
-            paddingHorizontal: vars.spacing.large.maxi,
-            height: vars.iconSizeLarge,
-            justifyContent: 'center',
-            alignItems: 'center'
+        const animationContainer = {
+            alignSelf: 'stretch', // this is for android throwing errors
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
         };
         const statusTextStyle = {
-            marginTop: vars.spacing.medium.midi2x,
-            fontSize: vars.font.size.big,
-            color: vars.subtleText,
-            textAlign: 'center'
+            marginStart: vars.spacing.small.mini2x,
+            fontSize: vars.font.size18,
+            color: vars.white,
+            textAlign: 'center',
+            opacity: this.statusTextOpacity
         };
         return (
-            <View style={container}>
-                {socket.connected && <Text style={flavorTextStyle}>
-                    {this.randomMessage}
-                </Text>}
+            <Animated.View style={container}>
+                {this.revealAnimVisible && (
+                    <LottieView
+                        autoPlay
+                        loop={false}
+                        style={[animationContainer, { backgroundColor: vars.darkBlue }]}
+                        source={revealAnimation}
+                        resizeMode="cover"
+                    />
+                )}
+                {this.logoAnimVisible && (
+                    <LottieView
+                        autoPlay
+                        loop
+                        style={[animationContainer, { backgroundColor: vars.darkBlueBackground05 }]}
+                        source={logoAnimation}
+                        resizeMode="cover"
+                    />
+                )}
                 <View style={loadingProgressContainer}>
-                    <View style={iconContainer}>
-                        {Object.keys(this.icons).map(this.renderImages)}
-                    </View>
-                    <Text style={statusTextStyle}>
-                        {this.iconState.statusText}
-                    </Text>
+                    <Animated.Text style={statusTextStyle}>{this.statusText}</Animated.Text>
                 </View>
                 <View style={{ position: 'absolute', bottom: 0, right: 0, left: 0 }}>
                     <SnackBarConnection />
                 </View>
-            </View>
+            </Animated.View>
         );
     }
-
-    randomMessages = [
-        'title_randomMessage1',
-        'title_randomMessage2',
-        'title_randomMessage3',
-        'title_randomMessage4'
-    ];
-
-    icons = {
-        connecting: {
-            copy: 'title_connecting',
-            source: {
-                dormant: require('../../assets/loading_screens/connecting-dormant.png'),
-                inProgress: require('../../assets/loading_screens/connecting-inProgress.png'),
-                done: require('../../assets/loading_screens/connecting-done.png')
-            },
-            line: {
-                inProgress: require('../../assets/loading_screens/line-inProgress1.png'),
-                done: require('../../assets/loading_screens/line-done1.png')
-            }
-        },
-        authenticating: {
-            copy: 'title_authenticating',
-            source: {
-                dormant: require('../../assets/loading_screens/authenticating-dormant.png'),
-                inProgress: require('../../assets/loading_screens/authenticating-inProgress.png'),
-                done: require('../../assets/loading_screens/authenticating-done.png')
-            },
-            line: {
-                inProgress: require('../../assets/loading_screens/line-inProgress2.png'),
-                done: require('../../assets/loading_screens/line-done2.png')
-            }
-        },
-        decrypting: {
-            copy: 'title_decrypting',
-            source: {
-                dormant: require('../../assets/loading_screens/decrypting-dormant.png'),
-                inProgress: require('../../assets/loading_screens/decrypting-inProgress.png'),
-                done: require('../../assets/loading_screens/decrypting-done.png')
-            },
-            line: {
-                inProgress: require('../../assets/loading_screens/line-inProgress3.png'),
-                done: require('../../assets/loading_screens/line-done3.png')
-            }
-        },
-        confirming: {
-            copy: 'title_confirming',
-            source: {
-                dormant: require('../../assets/loading_screens/confirming-dormant.png'),
-                inProgress: require('../../assets/loading_screens/confirming-inProgress.png'),
-                done: require('../../assets/loading_screens/confirming-done.png')
-            },
-            line: {
-                inProgress: require('../../assets/loading_screens/line-inProgress4.png'),
-                done: require('../../assets/loading_screens/line-done4.png')
-            }
-        },
-        done: {
-            copy: 'title_done',
-            source: {
-                dormant: require('../../assets/loading_screens/done-dormant.png'),
-                inProgress: require('../../assets/loading_screens/done-inProgress.png'),
-                done: require('../../assets/loading_screens/done-done.png')
-            }
-        }
-    };
 }

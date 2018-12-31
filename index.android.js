@@ -1,16 +1,17 @@
-import React from 'react';
-import {
-    AppRegistry, UIManager
-} from 'react-native';
+import { AppRegistry, UIManager, Platform } from 'react-native';
 import './shim';
 import App from './app/components/App';
 
 global.platform = 'android';
 
-const nicebear = () => (
-    <App />
-);
+function enableAndroidAnimation() {
+    // skip for Android 7.0 (API 24)
+    if (Platform.Version === 24) return;
+    // skip if we don't have the native capability
+    if (!UIManager.setLayoutAnimationEnabledExperimental) return;
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
-UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+enableAndroidAnimation();
 
-AppRegistry.registerComponent('peeriomobile', () => nicebear);
+AppRegistry.registerComponent('peeriomobile', () => App);

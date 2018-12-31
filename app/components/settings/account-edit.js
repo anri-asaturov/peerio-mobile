@@ -6,11 +6,10 @@ import SafeComponent from '../shared/safe-component';
 import ToggleItem from './toggle-item';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
-import buttons from '../helpers/buttons';
+import RedTextButton from '../buttons/red-text-button';
 import { popupDeleteAccount } from '../shared/popups';
 import { User } from '../../lib/icebear';
 import { loginState } from '../states';
-
 
 const label = {
     color: vars.txtDate,
@@ -25,7 +24,6 @@ const label2 = {
     marginTop: vars.spacing.medium.mini2x
 };
 
-
 @observer
 export default class AccountEdit extends SafeComponent {
     label(title) {
@@ -39,12 +37,11 @@ export default class AccountEdit extends SafeComponent {
     toggle(title, prop) {
         const state = User.current.settings;
         const onPress = () => {
-            state[prop] = !state[prop];
-            User.current.saveSettings();
+            User.current.saveSettings(settings => {
+                settings[prop] = !settings[prop];
+            });
         };
-        return (
-            <ToggleItem {...{ prop, title, state, onPress }} />
-        );
+        return <ToggleItem {...{ prop, title, state, onPress }} />;
     }
 
     async deleteAccount() {
@@ -65,7 +62,10 @@ export default class AccountEdit extends SafeComponent {
                 contentContainerStyle={{ flex: 1, flexGrow: 1 }}
                 onScroll={this.onScroll}
                 keyboardShouldPersistTaps="handled"
-                style={{ backgroundColor: vars.darkBlueBackground05 }} ref={ref => { this._scrollView = ref; }}>
+                style={{ backgroundColor: vars.darkBlueBackground05 }}
+                ref={ref => {
+                    this._scrollView = ref;
+                }}>
                 <View style={{ margin: vars.spacing.small.midi2x }}>
                     {this.label('title_promoConsentRequestTitle')}
                     {this.toggle('title_promoConsent', 'subscribeToPromoEmails')}
@@ -73,11 +73,18 @@ export default class AccountEdit extends SafeComponent {
                 <View style={{ margin: vars.spacing.small.midi2x }}>
                     {this.label2('title_dataDetail')}
                     {this.label('title_dataPreferences')}
-                    {this.toggle('title_errorTrackingMessage', 'errorTracking')}
                     {this.toggle('title_dataCollectionMessage', 'dataCollection')}
                 </View>
-                <View style={{ marginTop: vars.spacing.medium.mini2x, marginLeft: vars.spacing.medium.maxi2x, marginBottom: vars.spacing.large.midi, flex: 1, flexGrow: 1, justifyContent: 'flex-end' }}>
-                    {buttons.redTextButton('button_accountDelete', () => this.deleteAccount())}
+                <View
+                    style={{
+                        marginTop: vars.spacing.medium.mini2x,
+                        marginLeft: vars.spacing.medium.maxi2x,
+                        marginBottom: vars.spacing.large.midi,
+                        flex: 1,
+                        flexGrow: 1,
+                        justifyContent: 'flex-end'
+                    }}>
+                    <RedTextButton text="button_accountDelete" onPress={this.deleteAccount} />
                 </View>
             </ScrollView>
         );

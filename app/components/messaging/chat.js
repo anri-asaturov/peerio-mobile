@@ -1,25 +1,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { ScrollView, Image, View, TouchableOpacity, ActivityIndicator, Dimensions, Platform } from 'react-native';
+import {
+    ScrollView,
+    View,
+    TouchableOpacity,
+    ActivityIndicator,
+    Dimensions,
+    Platform
+} from 'react-native';
 import { observable, action, when, reaction, computed } from 'mobx';
-import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import ProgressOverlay from '../shared/progress-overlay';
-import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 import ChatItem from './chat-item';
 import AvatarCircle from '../shared/avatar-circle';
 import ChatUnreadMessageIndicator from './chat-unread-message-indicator';
 import FileActionSheet from '../files/file-action-sheet';
 import contactState from '../contacts/contact-state';
 import { vars } from '../../styles/styles';
-import { tx } from '../utils/translator';
 import chatState from '../messaging/chat-state';
 import uiState from '../layout/ui-state';
 import VideoIcon from '../layout/video-icon';
 import IdentityVerificationNotice from './identity-verification-notice';
 import DmContactInvite from './dm-contact-invite';
 import { clientApp } from '../../lib/icebear';
+import ChatBeginningNotice from './chat-beginning-notice';
+import BackIcon from '../layout/back-icon';
+import routes from '../routes/routes';
 
 const { width } = Dimensions.get('window');
 
@@ -42,7 +49,13 @@ export default class Chat extends SafeComponent {
     indicatorHeight = 16;
 
     componentDidMount() {
-        this.selfMessageReaction = reaction(() => chatState.selfNewMessageCounter,
+        uiState.testAction2 = () => {
+            const y = Math.max(0, this.lastId / 2);
+            this.scrollView.scrollTo({ y, animated: false });
+        };
+
+        this.selfMessageReaction = reaction(
+            () => chatState.selfNewMessageCounter,
             () => {
                 this.isAtBottom = true;
             }
@@ -64,6 +77,10 @@ export default class Chat extends SafeComponent {
         uiState.customOverlayComponent = null;
         this.selfMessageReaction();
         this.chatReaction();
+    }
+
+    get leftIcon() {
+        return <BackIcon action={routes.main.chats} testID="buttonBackIcon" />;
     }
 
     get rightIcon() {
@@ -89,24 +106,26 @@ export default class Chat extends SafeComponent {
     // TODO add folder action sheet
     item = (item, index) => {
         const key = item.id || index;
-        const actions = getOrMake(
-            key, this._itemActionMap, () => ({
-                ref: ref => { this._refs[key] = ref; },
-                onInlineImageAction: image => FileActionSheet.show(image),
-                onLegacyFileAction: file => FileActionSheet.show(file),
-                onFileAction: file => FileActionSheet.show(file, true)
-            }));
+        const actions = getOrMake(key, this._itemActionMap, () => ({
+            ref: ref => {
+                this._refs[key] = ref;
+            },
+            onInlineImageAction: image => FileActionSheet.show(image),
+            onLegacyFileAction: file => FileActionSheet.show(file),
+            onFileAction: file => FileActionSheet.show(file, true)
+        }));
         return (
             <ChatItem
                 key={key}
                 message={item}
                 chat={this.chat}
+                backgroundColor={this.background}
                 {...actions}
             />
         );
     };
 
-    layoutScrollView = (event) => {
+    layoutScrollView = event => {
         this.scrollViewHeight = event.nativeEvent.layout.height;
         this.contentSizeChanged();
     };
@@ -122,7 +141,9 @@ export default class Chat extends SafeComponent {
 
         // waiting for page loads or other updates
         if (this.refreshing || this.disableNextScroll) {
-            console.debug(`refreshing: ${this.refreshing}, disableNextScroll: ${this.disableNextScroll}`);
+            console.debug(
+                `refreshing: ${this.refreshing}, disableNextScroll: ${this.disableNextScroll}`
+            );
             return;
         }
 
@@ -135,14 +156,29 @@ export default class Chat extends SafeComponent {
                 if (this.chat.canGoDown) indicatorSpacing += this.indicatorHeight;
                 const y = this.contentHeight - this.scrollViewHeight;
                 this.scrollEnabled = y - indicatorSpacing > 0;
-                console.debug(`in timeout refreshing: ${this.refreshing}, disableNextScroll: ${this.disableNextScroll}`);
+                console.debug(
+                    `in timeout refreshing: ${this.refreshing}, disableNextScroll: ${
+                        this.disableNextScroll
+                    }`
+                );
                 if (!this.refreshing) {
-                    if (!this.initialScrollDone ||
-                        wasAtBottom) {
+                    if (!this.initialScrollDone || wasAtBottom) {
+                        requestAnimationFrame(() => {
+                            this.initialScrollDone = true;
+                        });
+                        if (
+                            this.contentHeight < this.scrollViewHeight &&
+                            !this.chat.canGoUp &&
+                            !this.chat.canGoDown
+                        ) {
+                            console.log(
+                                `chat.js: ignoring auto scrolling because content size is small`
+                            );
+                            return;
+                        }
                         console.log('chat.js: auto scrolling');
                         this.isAtBottom = wasAtBottom;
                         this.scrollView.scrollTo({ y, animated: false });
-                        requestAnimationFrame(() => { this.initialScrollDone = true; });
                     }
                 }
 
@@ -158,11 +194,19 @@ export default class Chat extends SafeComponent {
     async measureItemById(id) {
         if (!id) return null;
         const ref = this._refs[id];
-        if (!ref) { console.debug('chat.js: could not find ref'); return null; }
+        if (!ref) {
+            console.debug('chat.js: could not find ref');
+            return null;
+        }
         const nativeViewRef = ref._ref._ref;
-        if (!nativeViewRef) { console.debug('chat.js: could not resolve native view ref'); return null; }
+        if (!nativeViewRef) {
+            console.debug('chat.js: could not resolve native view ref');
+            return null;
+        }
         return new Promise(resolve =>
-            nativeViewRef.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => resolve({ pageY, frameY }))
+            nativeViewRef.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) =>
+                resolve({ pageY, frameY })
+            )
         );
     }
 
@@ -206,10 +250,16 @@ export default class Chat extends SafeComponent {
         this.refreshing = true;
         const id = await this.saveItemPositionById(0);
         this.chat.loadPreviousPage();
-        when(() => !this.chat.loadingTopPage, () => requestAnimationFrame(() => {
-            this.restoreScrollPositionById(id);
-            setTimeout(() => { this.refreshing = false; }, 1000);
-        }));
+        when(
+            () => !this.chat.loadingTopPage,
+            () =>
+                requestAnimationFrame(() => {
+                    this.restoreScrollPositionById(id);
+                    setTimeout(() => {
+                        this.refreshing = false;
+                    }, 1000);
+                })
+        );
     }
 
     async _onGoDown() {
@@ -217,23 +267,29 @@ export default class Chat extends SafeComponent {
         this.refreshing = true;
         const id = await this.saveItemPositionById(this.data.length - 1);
         this.chat.loadNextPage();
-        when(() => !this.chat.loadingBottomPage, () => setTimeout(() => {
-            this.restoreScrollPositionById(id, true);
-            setTimeout(() => { this.refreshing = false; }, 1000);
-        }), 100);
+        when(
+            () => !this.chat.loadingBottomPage,
+            () =>
+                setTimeout(() => {
+                    this.restoreScrollPositionById(id, true);
+                    setTimeout(() => {
+                        this.refreshing = false;
+                    }, 1000);
+                }),
+            100
+        );
     }
 
     isAtBottom = true;
 
     unreadMessageIndicatorTimeout = null;
 
-    onScroll = (event) => {
+    onScroll = event => {
         const { nativeEvent } = event;
         const { y } = nativeEvent.contentOffset;
         const maxY = this.contentHeight - this.scrollViewHeight;
         // values here may be float therefore the magic "2" number
-        this.isAtBottom = (maxY - y) < 2;
-        console.log(`onscroll: ${y} - ${this.contentHeight} - ${this.scrollViewHeight}, ${y - maxY}`);
+        this.isAtBottom = maxY - y < 2;
         clientApp.isReadingNewestMessages = this.isAtBottom;
 
         if (this.unreadMessageIndicatorTimeout) {
@@ -244,8 +300,9 @@ export default class Chat extends SafeComponent {
         if (!this.isAtBottom && !chatState.loading) {
             this.unreadMessageIndicatorTimeout = setTimeout(() => {
                 if (this.isAtBottom || chatState.loading) return;
-                uiState.customOverlayComponent =
-                    <ChatUnreadMessageIndicator onPress={this.scrollToBottom} />;
+                uiState.customOverlayComponent = (
+                    <ChatUnreadMessageIndicator onPress={this.scrollToBottom} />
+                );
             }, 1000);
         } else {
             uiState.customOverlayComponent = null;
@@ -266,7 +323,8 @@ export default class Chat extends SafeComponent {
     };
 
     // scroll to end
-    @action.bound scrollToBottom() {
+    @action.bound
+    scrollToBottom() {
         if (this.chat.canGoDown) {
             this.resetScrolling();
             this.chat.reset();
@@ -278,11 +336,20 @@ export default class Chat extends SafeComponent {
         }
     }
 
+    get background() {
+        return vars.white;
+    }
+
     listView() {
         if (chatState.loading) return null;
         const refreshControlTop = this.chat.canGoUp ? (
-            <ActivityIndicator size="large" style={{ padding: vars.spacing.small.maxi }}
-                onLayout={e => { this.indicatorHeight = e.nativeEvent.layout.height; }} />
+            <ActivityIndicator
+                size="large"
+                style={{ padding: vars.spacing.small.maxi }}
+                onLayout={e => {
+                    this.indicatorHeight = e.nativeEvent.layout.height;
+                }}
+            />
         ) : null;
         const refreshControlBottom = this.chat.canGoDown ? (
             <ActivityIndicator size="large" style={{ padding: vars.spacing.small.maxi }} />
@@ -291,7 +358,7 @@ export default class Chat extends SafeComponent {
             <ScrollView
                 onLayout={this.layoutScrollView}
                 contentContainerStyle={{ opacity: this.initialScrollDone ? 1 : 0 }}
-                style={{ flexGrow: 1, flex: 1, backgroundColor: vars.white }}
+                style={{ flexGrow: 1, flex: 1, backgroundColor: this.background }}
                 initialListSize={1}
                 onContentSizeChange={this.contentSizeChanged}
                 scrollEnabled={this.scrollEnabled}
@@ -299,20 +366,29 @@ export default class Chat extends SafeComponent {
                 onScroll={this.onScroll}
                 keyboardShouldPersistTaps="never"
                 enableEmptySections
-                ref={sv => { this.scrollView = sv; }}>
+                ref={sv => {
+                    this.scrollView = sv;
+                }}>
                 {this.chat.canGoUp ? refreshControlTop : this.zeroStateItem}
                 {this.data.map(this.item)}
                 {this.chat.limboMessages &&
-                    this.chat.limboMessages.filter(m => !(m.files && !m.files.length)).map(this.item)}
+                    this.chat.limboMessages
+                        .filter(m => !(m.files && !m.files.length))
+                        .map(this.item)}
                 {refreshControlBottom}
             </ScrollView>
         );
     }
 
-    @computed get zeroStateItem() {
+    @computed
+    get zeroStateItem() {
         const { chat } = this;
-        if (chat.isChatCreatedFromPendingDM) return this.zeroStateChatInvite;
+        if (chat.isChatCreatedFromPendingDM) return <DmContactInvite />;
         return this.zeroStateChat;
+    }
+
+    chatNotice(chat) {
+        return <ChatBeginningNotice chat={chat} />;
     }
 
     get zeroStateChat() {
@@ -328,84 +404,34 @@ export default class Chat extends SafeComponent {
         const w = 3 * 36;
         const shiftX = (width - w - w * participants.length) / participants.length;
         const shift = shiftX < 0 ? shiftX : 0;
-        const marginLeft = shift < -w ? (-w + 1) : shift;
+        const marginLeft = shift < -w ? -w + 1 : shift;
         const avatars = (participants || []).map(contact => (
             <View key={contact.username} style={{ marginLeft, width: w }}>
                 <TouchableOpacity
                     style={{ flex: 0 }}
-                    pressRetentionOffset={vars.pressRetentionOffset}
-                    onPress={() => contactState.contactView(contact)} key={contact.username}>
-                    <AvatarCircle
-                        contact={contact}
-                        medium />
+                    pressRetentionOffset={vars.retentionOffset}
+                    onPress={() => contactState.contactView(contact)}
+                    key={contact.username}>
+                    <AvatarCircle contact={contact} medium />
                 </TouchableOpacity>
             </View>
         ));
         return (
             <View style={zsContainer}>
                 <View style={{ flexDirection: 'row', paddingLeft: -marginLeft }}>{avatars}</View>
-                <Text style={{
-                    textAlign: 'left',
-                    marginTop: vars.spacing.small.maxi2x,
-                    marginBottom: vars.spacing.small.maxi2x,
-                    color: vars.txtDark
-                }}>
-                    {tx('title_chatBeginning', { chatName: chat.name })}
-                </Text>
+                {this.chatNotice(chat)}
                 <IdentityVerificationNotice fullWidth />
             </View>
         );
     }
 
-    get zeroStateChatInvite() {
-        const { chat } = this;
-        const participant = chat.otherParticipants[0];
-        const emojiTada = require('../../assets/emoji/tada.png');
-        const container = {
-            flex: 1,
-            flexGrow: 1,
-            paddingTop: vars.dmInvitePaddingTop,
-            alignItems: 'center',
-            marginBottom: vars.spacing.small.midi
-        };
-        const emojiStyle = {
-            alignSelf: 'center',
-            width: vars.iconSizeMedium,
-            height: vars.iconSizeMedium,
-            marginBottom: vars.spacing.small.mini2x
-        };
-        const headingStyle = {
-            color: vars.lighterBlackText,
-            textAlign: 'center',
-            fontSize: vars.font.size.bigger,
-            lineHeight: 22,
-            marginBottom: vars.spacing.medium.maxi
-        };
-        const headingCopy = chat.isNewUserFromInvite ? 'title_newUserDmInviteHeading' : 'title_dmInviteHeading';
-        return (
-            <View style={container}>
-                <Image source={emojiTada} style={emojiStyle} resizeMode="contain" />
-                <Text style={headingStyle}>
-                    {tx(headingCopy, { contactName: participant.fullName })}
-                </Text>
-                <View style={{ alignItems: 'center' }}>
-                    <AvatarCircle contact={participant} medium />
-                </View>
-                <Text style={{ textAlign: 'center', marginBottom: vars.spacing.medium.maxi2x }}>
-                    {participant.usernameTag}
-                </Text>
-                <IdentityVerificationNotice />
-            </View>);
-    }
-
     renderThrow() {
-        if (this.chat && this.chat.isInvite) return <DmContactInvite />;
+        if (this.chat && this.chat.isInvite) return <DmContactInvite showButtons />;
         return (
-            <View
-                style={{ flexGrow: 1, paddingBottom: vars.spacing.small.mini2x }}>
+            <View style={{ flexGrow: 1, paddingBottom: vars.spacing.small.mini2x }}>
                 {/* this.chat && !this.chat.canGoUp && upgradeForArchive() */}
-                <View style={{ flex: 1, flexGrow: 1 }}>
-                    {this.data ? this.listView() : !chatState.loading && <whiteLabelComponents.ChatZeroStatePlaceholder />}
+                <View style={{ flex: 1, flexGrow: 1, backgroundColor: this.background }}>
+                    {this.data ? this.listView() : null}
                 </View>
                 <ProgressOverlay enabled={/* chatState.loading || */ !this.initialScrollDone} />
             </View>
