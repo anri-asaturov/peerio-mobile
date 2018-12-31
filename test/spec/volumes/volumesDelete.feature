@@ -6,32 +6,31 @@ Feature: Volume user
     This feature file contains volume operations specifically related to deleting / removing files 
     from the perspective of a user who is not the owner of the volume. 
 
-Background: 
-    Given I have navigated to the files tab
-    And   I have selected the FileActions (...)
-    And   I have selected Delete 
+Background:
+    Given I have quickly signed up
+    When  I sign out
+    Then  a helper user signs up
+    Then  they navigate to files
+    And   they create a folder named "testFolder"
+    And   they upload a file
+    And   I move the file in the folder named "testFolder"
+    And   they invite recent user to share "testFolder"
+    Then  they sign out
+    When  I log in as recent user
+    Then  I navigate to files
+    Then  I delete the folder named "testFolder"
 
-# TODO (Mona): Adjust for having a scenario outline with examples
-Scenario Outline: I want to delete a file or folder (as an editor)
-    Then  the folder is removed from "Files"
+Scenario: I want to delete a volume (as an editor)
+    Then  the folder is no longer available
     But   the owner will retain access
     And   any other users will retain access
-    And   the folder binaries will remain on Peerio servers (Azure)
     And   users in rooms or chats where the file has been shared will retain access 
     And   if I am in rooms or chats where the file has been shared
     Then  the folder will still be available to me in those rooms or chats 
-Examples: 
-    | file or folder | 
-    | file           |
-    | folder         |
 
-Scenario Outline: I want to delete a file or folder (as an owner)
+Scenario: I want to delete a file or folder (as an owner)
     Given I am the owner of the <file or folder>
     And   I delete the <file or folder>
     Then  the <file or folder> is removed from Peerio servers
     And   the <file or folder> is unshared and deleted for every user who ever received it
     And   I will have my storage freed for the capacity of the <file or folder>
-Examples: 
-    | file or folder | 
-    | file           |
-    | folder         |
