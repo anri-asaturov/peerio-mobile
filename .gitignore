@@ -25,7 +25,7 @@ ios/main.jsbundle
 ios/main.jsbundle.*
 ios/worker.jsbundle
 ios/worker.jsbundle.*
-ios/peeriomobile.xcodeproj/project.xcworkspace/xcshareddata
+# ios/peeriomobile.xcodeproj/project.xcworkspace/xcshareddata
 
 # Android/IJ
 #

@@ -14,6 +14,7 @@
     "expandoo": "source env-expandoo.sh && ./node_modules/react-native/scripts/packager.sh --reset-cache",
     "medcryptor": "APP_LABEL='medcryptor' EXECUTABLE_NAME='medcryptor' npm start",
     "clean": "rm -rf ios/build && rm -rf android/build",
+    "clean-xcode": "rm -rf ~/Library/Developer/Xcode/DerivedData/*",
     "ios": "react-native run-ios",
     "android": "react-native run-android",
     "android-signed": "npm run build-android && ./scripts/release_android.sh",

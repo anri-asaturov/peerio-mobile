@@ -15,6 +15,8 @@
 		020633D02178066B00F5743C /* libRNMail.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 020633CB2177FF8E00F5743C /* libRNMail.a */; };
 		020C455F2138710300A0691D /* privacy.txt in Resources */ = {isa = PBXBuildFile; fileRef = 020C45292138710200A0691D /* privacy.txt */; };
 		020C45FF2138C95D00A0691D /* account_key_backup_medcryptor.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 020C45C92138C95D00A0691D /* account_key_backup_medcryptor.pdf */; };
+		0214A64C21DA7EBD003BE0F8 /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96CEC560210F699500F546CE /* QBImagePicker.framework */; };
+		0214A64D21DA7EC2003BE0F8 /* RSKImageCropper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96CEC562210F699500F546CE /* RSKImageCropper.framework */; };
 		02210A811E019037006D7AC0 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02210A7F1E01902A006D7AC0 /* libRNSound.a */; };
 		02210A841E0191BA006D7AC0 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 02210A831E0191BA006D7AC0 /* sounds */; };
 		0221BCD21DDC710400706A4F /* libRCTRestart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0221BCD11DDC6D3C00706A4F /* libRCTRestart.a */; };
@@ -234,6 +236,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = E72EC1401F7ABB5A0001BC90;
 			remoteInfo = "RNDeviceInfo-tvOS";
+		};
+		0214A64921DA7CC0003BE0F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53F9542E76844F59917732EA /* RNVectorIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
+			remoteInfo = "RNVectorIcons-tvOS";
 		};
 		02210A7E1E01902A006D7AC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -744,6 +753,7 @@
 				02D372A62194C3EE0020FDC8 /* FLAnimatedImage.framework in Frameworks */,
 				02BCD72D1DFE1606000B8FCF /* QuickLook.framework in Frameworks */,
 				0235B5DB1E65DEAF001D77D1 /* libsqlite3.0.tbd in Frameworks */,
+				0214A64C21DA7EBD003BE0F8 /* QBImagePicker.framework in Frameworks */,
 				025373851EB3751800752E61 /* libsodium.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -767,6 +777,7 @@
 				029F0E641E55303400C8586F /* libRNShare.a in Frameworks */,
 				0235B5D81E65DE4B001D77D1 /* libSQLite.a in Frameworks */,
 				025935601E809AAF00FAEE7E /* libInAppUtils.a in Frameworks */,
+				0214A64D21DA7EC2003BE0F8 /* RSKImageCropper.framework in Frameworks */,
 				02F966301E9D493900FBECFF /* libRCTPrivacySnapshot.a in Frameworks */,
 				0253784B1EC4E1A000752E61 /* libBVLinearGradient.a in Frameworks */,
 				02ADBC5E1EDDA0D600D304BE /* libRCTContacts.a in Frameworks */,
@@ -1040,6 +1051,7 @@
 			isa = PBXGroup;
 			children = (
 				02D763F21D9918E800E7E57C /* libRNVectorIcons.a */,
+				0214A64A21DA7CC0003BE0F8 /* libRNVectorIcons-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1653,6 +1665,13 @@
 			remoteRef = 020D14892167F2AA007484E3 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		0214A64A21DA7CC0003BE0F8 /* libRNVectorIcons-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNVectorIcons-tvOS.a";
+			remoteRef = 0214A64921DA7CC0003BE0F8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		02210A7F1E01902A006D7AC0 /* libRNSound.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2178,10 +2197,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/peeriomobile\"",
-					"$(PROJECT_DIR)/peeriomobile/libsodium-ios/lib",
 					"$(PROJECT_DIR)/lib",
-					"\"$(SRCROOT)/peeriomobile\"",
-					"\"$(SRCROOT)/peeriomobile\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2249,11 +2265,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/peeriomobile\"",
-					"$(PROJECT_DIR)/peeriomobile/libsodium-ios/lib",
 					"$(PROJECT_DIR)/lib",
-					"\"$(SRCROOT)/peeriomobile\"",
-					"\"$(SRCROOT)/peeriomobile\"",
-					"\"$(SRCROOT)/peeriomobile\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

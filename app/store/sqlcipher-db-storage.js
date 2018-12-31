@@ -5,32 +5,38 @@ import CacheEngineBase from '../lib/peerio-icebear/db/cache-engine-base';
 sqlcipher.enablePromise(false);
 
 function serialize(item) {
-    if (item.payload) {
-        item.payload = bytesToB64(item.payload);
+    let { payload, chatHead, props } = item;
+    if (payload) {
+        payload = bytesToB64(payload);
     }
-    if (item.chatHead && item.chatHead.payload) {
-        item.chatHead.payload = bytesToB64(item.chatHead.payload);
+    if (chatHead && chatHead.payload) {
+        chatHead = { ...chatHead, payload: bytesToB64(chatHead.payload) };
     }
-    if (item.props && item.props.descriptor && item.props.descriptor.payload) {
-        item.props.descriptor.payload = bytesToB64(item.props.descriptor.payload);
+    if (props && props.descriptor && props.descriptor.payload) {
+        props = {
+            ...props,
+            descriptor: { ...props.descriptor, payload: bytesToB64(props.descriptor.payload) }
+        };
     }
-    return JSON.stringify(item);
+    const copiedItem = { ...item, payload, chatHead, props };
+    return JSON.stringify(copiedItem);
 }
 
 function deserialize(data) {
     try {
         const item = JSON.parse(data);
         if (item.payload) {
-            item.payload = b64ToBytes(item.payload);
+            item.payload = b64ToBytes(item.payload).buffer;
         }
         if (item.chatHead && item.chatHead.payload) {
             item.chatHead.payload = b64ToBytes(item.chatHead.payload).buffer;
         }
         if (item.props && item.props.descriptor && item.props.descriptor.payload) {
-            item.props.descriptor.payload = b64ToBytes(item.props.descriptor.payload);
+            item.props.descriptor.payload = b64ToBytes(item.props.descriptor.payload).buffer;
         }
         return item;
     } catch (e) {
+        console.error(`error deserializing cached payload`);
         return null;
     }
 }
