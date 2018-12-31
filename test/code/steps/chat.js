@@ -3,7 +3,9 @@ const { existingUsers } = require('../helpers/userHelper');
 const { When, Then } = require('cucumber');
 
 When('I start a DM with {word} user', async function(string) {
-    const user = string === 'helper' ? this.helperUsername : existingUsers[string].name;
+    let user = existingUsers[string].name;
+    if (string === 'helper') user = this.helperUsername;
+    else if (string === 'recent') user = this.username;
     await this.openContactsPickerForDM();
     await this.searchForRecipient(user);
     await this.contactSelectorPage.recipientContact(user).click();
@@ -88,6 +90,10 @@ Then('I open the chat', async function() {
     await this.chatListPage.chatWithTitle(this.username).click();
 });
 
+Then('I open the chat with the helper user', async function() {
+    await this.chatListPage.chatWithTitle(this.helperUsername).click();
+});
+
 Then('I scroll up the chat', async function() {
     await this.app.pause(5000); // wait till chat loads
     if (await this.chatPage.shareFileInChatBeaconVisible)
@@ -147,4 +153,8 @@ Then('I fill my chatlist', async function() {
 
 Then('A chat opens with the support user', async function() {
     await this.chatPage.textInput;
+});
+
+Then('I upload {string} folder to the current Chat', async function() {
+    // TODO FILL
 });
