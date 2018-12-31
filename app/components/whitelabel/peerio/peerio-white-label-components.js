@@ -6,9 +6,11 @@ import PeerioContactAddWarning from './peerio-contact-add-warning';
 import PeerioSettingsHelpButton from './peerio-settings-help-button';
 import ChannelInvite from '../../messaging/channel-invite';
 import PeerioManageAccountButton from './peerio-manage-account-button';
+import TermsOfUseUpgradePeerio from './tos-upgrade-peerio';
 
 export default {
     ContactAddWarning: PeerioContactAddWarning,
+    TermsOfUseUpgrade: TermsOfUseUpgradePeerio,
     SettingsHelpButton: PeerioSettingsHelpButton,
     ManageAccountButton: PeerioManageAccountButton,
     ChatList,

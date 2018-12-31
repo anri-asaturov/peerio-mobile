@@ -6,14 +6,13 @@ import MedcryptorSpecialtyPickerBox from './medcryptor-specialty-picker-box';
 import MedcryptorRolePickerBox from './medcryptor-role-picker-box';
 import { vars, signupStyles } from '../../../styles/styles';
 import signupState from '../../signup/signup-state';
-import { tx } from '../../utils/translator';
 import { socket } from '../../../lib/icebear';
 import medcryptorUiState from './medcryptor-ui-state';
 import SafeComponent from '../../shared/safe-component';
 import SignupButtonBack from '../../signup/signup-button-back';
 import SignupHeading from '../../signup/signup-heading';
 import SignupStepIndicator from '../../signup/signup-step-indicator';
-import buttons from '../../helpers/buttons';
+import BlueRoundButton from '../../buttons/blue-round-button';
 
 @observer
 export default class SignupRoleMedcryptor extends SafeComponent {
@@ -72,13 +71,13 @@ export default class SignupRoleMedcryptor extends SafeComponent {
                         {this.body}
                     </View>
                     <View style={{ alignItems: 'flex-end' }}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_next'),
-                            this.handleNextButton,
-                            this.isNextDisabled,
-                            'button_next',
-                            { width: vars.signupButtonWidth, marginVertical: 30 }
-                        )}
+                        <BlueRoundButton
+                            text="button_next"
+                            accessibilityId="button_next"
+                            onPress={this.handleNextButton}
+                            disabled={this.isNextDisabled}
+                            style={{ width: vars.signupButtonWidth, marginVertical: 30 }}
+                        />
                     </View>
                 </View>
             </View>

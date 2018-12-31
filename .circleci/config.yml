@@ -47,6 +47,9 @@ jobs:
                   name: 'Eslint'
                   command: npm run test:lint
             - run:
+                  name: 'TSC'
+                  command: npm run test:tsc
+            - run:
                   name: 'Prettier'
                   command: npm run test:prettier
             - run:

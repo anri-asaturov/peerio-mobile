@@ -4,17 +4,14 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import ComposeMessage from '../messaging/compose-message';
 import CreateChannel from '../channels/create-channel';
-import contactState from '../contacts/contact-state';
-import { User } from '../../lib/icebear';
-import mockContactStore from './mock-contact-store';
+import mockStoresCreate from './mock-stores-create';
 
 @observer
 export default class MockChannelCreate extends Component {
     @observable isChatMode = true;
 
     componentDidMount() {
-        User.current = {};
-        contactState.store = mockContactStore;
+        mockStoresCreate();
     }
 
     createChannel = () => {

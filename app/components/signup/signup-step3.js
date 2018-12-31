@@ -8,12 +8,12 @@ import { tx } from '../utils/translator';
 import StyledTextInput from '../shared/styled-text-input';
 import { socket, validation, telemetry } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
-import buttons from '../helpers/buttons';
 import CheckBox from '../shared/checkbox';
 import SignupButtonBack from './signup-button-back';
 import SignupHeading from './signup-heading';
 import SignupStepIndicator from './signup-step-indicator';
 import tm from '../../telemetry';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 const { S } = telemetry;
 
@@ -117,13 +117,13 @@ export default class SignupStep3 extends SafeComponent {
                         />
                     </View>
                     <View style={{ alignItems: 'flex-end', marginTop: buttonMarginTop }}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_create'),
-                            this.handleCreateButton,
-                            this.isCreateDisabled,
-                            'button_create',
-                            { width: vars.signupButtonWidth, marginVertical: 30 }
-                        )}
+                        <BlueRoundButton
+                            text="button_create"
+                            accessibilityId="button_create"
+                            onPress={this.handleCreateButton}
+                            disabled={this.isCreateDisabled}
+                            style={{ width: vars.signupButtonWidth, marginVertical: 30 }}
+                        />
                     </View>
                 </View>
             </View>

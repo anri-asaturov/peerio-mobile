@@ -10,12 +10,12 @@ import { tx } from '../utils/translator';
 import StyledTextInput from '../shared/styled-text-input';
 import { socket, validation, telemetry, config } from '../../lib/icebear';
 import SafeComponent from '../shared/safe-component';
-import buttons from '../helpers/buttons';
 import SignupButtonBack from './signup-button-back';
 import SignupHeading from './signup-heading';
 import SignupStepIndicator from './signup-step-indicator';
 import tm from '../../telemetry';
 import { transitionAnimation } from '../helpers/animations';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 const { S } = telemetry;
 
@@ -151,13 +151,13 @@ export default class SignupStep2 extends SafeComponent {
                 <View style={{ height: suggestionContainerHeight + 48 }}>
                     {suggestionBox}
                     <View style={{ alignItems: 'flex-end' }}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_next'),
-                            this.handleNextButton,
-                            this.isNextDisabled,
-                            'button_next',
-                            { width: vars.signupButtonWidth }
-                        )}
+                        <BlueRoundButton
+                            text="button_next"
+                            accessibilityId="button_next"
+                            onPress={this.handleNextButton}
+                            disabled={this.isNextDisabled}
+                            style={{ width: vars.signupButtonWidth }}
+                        />
                     </View>
                 </View>
             </View>

@@ -44,6 +44,18 @@ class SettingsPage extends Page {
     get chatButton() {
         return this.getWhenVisible('~title_contactPeerioSupport');
     }
+
+    get visitButton() {
+        return this.getWhenPresent('~title_helpCenter');
+    }
+
+    get sendButton() {
+        return this.getWhenPresent('~title_sendLogsToSupport');
+    }
+
+    checkIfWebsiteHasOpened() {
+        throw new Error('Not implemented');
+    }
 }
 
 module.exports = SettingsPage;

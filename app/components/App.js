@@ -166,7 +166,6 @@ export default class App extends SafeComponent {
                 {/* BeaconLayout.debugHelper */}
                 <ModalLayout key="modals" />
                 <BeaconLayout />
-                <PopupLayout key="popups" />
                 <DebugMenu />
                 <ActionSheetLayout key="actionSheets" />
                 {uiState.picker}
@@ -176,6 +175,7 @@ export default class App extends SafeComponent {
                 <StatusBar barStyle="light-content" hidden={false} key="statusBar" />
                 <TopDrawerAutoMount />
                 {loginState.showLoadingScreen && <whiteLabelComponents.LoadingScreen />}
+                <PopupLayout key="popups" />
                 {!process.env.NO_DEV_BAR && <TestHelper key="testHelper" />}
             </View>
         );

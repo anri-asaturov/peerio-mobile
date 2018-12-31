@@ -1,7 +1,6 @@
-import randomWords from 'random-words';
-import capitalize from 'capitalize';
 import { observable } from 'mobx';
 import MockCurrentUser from './mock-current-user';
+import MockContact from './mock-contact';
 
 class MockContactStore {
     addedContacts = [];
@@ -29,30 +28,27 @@ class MockContactStore {
         return text ? this.contacts.filter(c => c.username.indexOf(text) !== -1) : this.contacts;
     };
 
-    createMock() {
-        const username = `${randomWords()}${this.contacts.length}`;
-        const firstName = capitalize(randomWords());
-        const lastName = capitalize(randomWords());
-        const address = `${randomWords()}@123com`;
-        const contact = {
-            username,
-            firstName,
-            lastName,
-            addresses: [address],
-            loading: false,
-            notFound: false,
-            fullName: `${firstName} ${lastName}`
-        };
+    addContact(contact) {
+        if (typeof val === 'string') {
+            throw new Error('Mocking string contact adding is not implemented');
+        }
+        const existingContact = this.contactsMap[contact.username];
+        if (existingContact) {
+            console.error(`There's already a contact with username ${existingContact.username}`);
+            return existingContact;
+        }
         this.contacts.push(contact);
-        this.contactsMap.set(username, contact);
+        this.contactsMap.set(contact.username, contact);
         return contact;
+    }
+
+    createMock() {
+        return this.addContact(new MockContact());
     }
 
     createMockCurrentUser() {
         const contact = new MockCurrentUser();
-        this.contacts.push(contact);
-        this.contactsMap.set(contact.username, contact);
-        return contact;
+        return this.addContact.addContact(contact);
     }
 
     getContact(username) {
@@ -61,4 +57,4 @@ class MockContactStore {
     }
 }
 
-export default new MockContactStore();
+export default MockContactStore;

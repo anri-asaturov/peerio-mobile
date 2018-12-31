@@ -11,7 +11,6 @@ import { tx, tu, t } from '../utils/translator';
 import uiState from '../layout/ui-state';
 import contactState from './contact-state';
 import snackbarState from '../snackbars/snackbar-state';
-import buttons from '../helpers/buttons';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
 import routes from '../routes/routes';
@@ -20,6 +19,8 @@ import BackIcon from '../layout/back-icon';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
 import ViewWithDrawer from '../shared/view-with-drawer';
 import { transitionAnimation } from '../helpers/animations';
+import fonts from '../../styles/fonts';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const textinputContainer = {
     backgroundColor: vars.white,
@@ -50,7 +51,7 @@ const textinput = {
     color: vars.txtDark,
     flex: 1,
     flexGrow: 1,
-    fontFamily: vars.peerioFontFamily
+    fontFamily: fonts.peerioFontFamily
 };
 
 const textStatic = {
@@ -205,6 +206,15 @@ export default class ContactAdd extends SafeComponent {
         );
     }
 
+    inviteAction = () => {
+        const mockContact = this.toInvite || {};
+        const { email } = mockContact;
+
+        mockContact.invited = true;
+        contactStore.invite(email);
+        this.query = '';
+    };
+
     get inviteBlock() {
         const mockContact = this.toInvite || {};
         const { email, invited } = mockContact;
@@ -229,17 +239,12 @@ export default class ContactAdd extends SafeComponent {
                     <Text style={textStyle}>{tx('title_couldntLocateContact1')}</Text>
                     <Text style={textStyle}>{tx('title_couldntLocateContact2')}</Text>
                 </View>
-                {buttons.blueTextButton(
-                    tx('button_invite'),
-                    () => {
-                        mockContact.invited = true;
-                        contactStore.invite(email);
-                        this.query = '';
-                    },
-                    invited,
-                    null,
-                    'button_invite'
-                )}
+                <BlueButtonText
+                    text="button_invite"
+                    disabled={invited}
+                    accessibilityId="button_invite"
+                    onPress={this.inviteAction}
+                />
             </View>
         );
     }

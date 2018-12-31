@@ -12,6 +12,7 @@ import SafeComponent from './safe-component';
 import uiState from '../layout/ui-state';
 import { transitionAnimation } from '../helpers/animations';
 import TextInputUncontrolled from '../controls/text-input-uncontrolled';
+import fonts from '../../styles/fonts';
 
 const { height } = Dimensions.get('window');
 
@@ -47,7 +48,7 @@ const input = {
     height: 40,
     backgroundColor: '#FFFFFF90',
     marginTop: vars.spacing.small.maxi2x,
-    fontFamily: vars.peerioFontFamily,
+    fontFamily: fonts.peerioFontFamily,
     borderColor: vars.darkBlue,
     borderWidth: 1,
     borderRadius: 8

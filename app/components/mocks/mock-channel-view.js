@@ -9,18 +9,15 @@ import PopupLayout from '../layout/popup-layout';
 import ChannelAddPeople from '../messaging/channel-add-people';
 import InputMainContainer from '../layout/input-main-container';
 import FileUploadProgress from '../files/file-upload-progress';
-import { User, clientApp, TinyDb } from '../../lib/icebear';
+import { clientApp, TinyDb } from '../../lib/icebear';
 import fileState from '../files/file-state';
 import chatState from '../messaging/chat-state';
-import contactState from '../contacts/contact-state';
-import mockContactStore from './mock-contact-store';
-import mockChatStore from './mock-chat-store';
-import mockFileStore from './mock-file-store';
+import mockStoresCreate from './mock-stores-create';
 import routerMain from '../routes/router-main';
 import routerModal from '../routes/router-modal';
 
 @observer
-export default class MockChannel extends Component {
+export default class MockChannelView extends Component {
     @observable showChannelInfo = false;
     @observable showAddPeople = false;
     @observable originalData = null;
@@ -29,11 +26,7 @@ export default class MockChannel extends Component {
     async componentWillMount() {
         clientApp.uiUserPrefs.externalContentConsented = true;
         clientApp.uiUserPrefs.externalContentEnabled = true;
-
-        User.current = { activePlans: [] };
-        mockFileStore.install();
-        contactState.store = mockContactStore;
-        chatState.store = mockChatStore;
+        mockStoresCreate();
         chatState.addAck = () => {
             chatState.store.activeChat.addInlineImageMessage();
         };

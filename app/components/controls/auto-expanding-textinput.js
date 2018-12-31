@@ -2,8 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react/native';
 import { observable } from 'mobx';
-import { vars } from '../../styles/styles';
+import _ from 'lodash';
 import TextInputUncontrolled from './text-input-uncontrolled';
+import { transitionAnimation } from '../helpers/animations';
+import fonts from '../../styles/fonts';
 
 @observer
 export default class AutoExpandingTextInput extends Component {
@@ -18,17 +20,17 @@ export default class AutoExpandingTextInput extends Component {
     }
 
     _onContentSizeChange = event => {
-        const curHeight = event.nativeEvent.contentSize.height;
-        if (curHeight < this.props.minHeight || curHeight > this.props.maxHeight) return;
-        this.height = curHeight;
+        const { maxHeight, minHeight } = this.props;
+        this.height = _.clamp(event.nativeEvent.contentSize.height, minHeight, maxHeight);
     };
 
     setRef = ref => {
         this.textInputRef = ref;
     };
 
-    clear() {
-        this.textInputRef.clear();
+    resetHeight() {
+        transitionAnimation();
+        this.height = this.props.minHeight;
     }
 
     focus() {
@@ -41,7 +43,7 @@ export default class AutoExpandingTextInput extends Component {
         const style = {
             textAlign: 'left',
             padding: 0,
-            fontFamily: vars.peerioFontFamily
+            fontFamily: fonts.peerioFontFamily
         };
 
         return (

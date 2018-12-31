@@ -14,6 +14,7 @@ import icons from '../helpers/icons';
 import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
 import { transitionAnimation } from '../helpers/animations';
+import fonts from '../../styles/fonts';
 
 const emailFormatValidator = validation.validators.emailFormat.action;
 
@@ -32,7 +33,7 @@ const textinput = {
     marginLeft: vars.inputPaddingLeft,
     flex: 1,
     flexGrow: 1,
-    fontFamily: vars.peerioFontFamily
+    fontFamily: fonts.peerioFontFamily
 };
 
 const textStatic = {

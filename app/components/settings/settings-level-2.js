@@ -17,8 +17,8 @@ import AccountEdit from './account-edit';
 import AccountUpgrade from './account-upgrade';
 import keychain from '../../lib/keychain-bridge';
 import chatState from '../messaging/chat-state';
-import buttons from '../helpers/buttons';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const bgStyle = {
     flexGrow: 1,
@@ -124,21 +124,19 @@ export default class SettingsLevel2 extends SafeComponent {
                 <whiteLabelComponents.SettingsHelpButton
                     onPress={helpCenterAction}
                     title="title_helpCenter">
-                    {buttons.blueTextButton('button_visit', helpCenterAction)}
+                    <BlueButtonText text="button_visit" onPress={helpCenterAction} />
                 </whiteLabelComponents.SettingsHelpButton>
                 <whiteLabelComponents.SettingsHelpButton
                     title="title_contactPeerioSupport"
                     onPress={startChatWithSupport}>
-                    {buttons.blueTextButton(
-                        'button_chat',
-                        startChatWithSupport,
-                        null,
-                        null,
-                        'button_chat'
-                    )}
+                    <BlueButtonText
+                        text="button_chat"
+                        onPress={startChatWithSupport}
+                        accessibilityId="button_chat"
+                    />
                 </whiteLabelComponents.SettingsHelpButton>
                 <BasicSettingsItem title="title_sendLogsToSupport" onPress={sendLogs}>
-                    {buttons.blueTextButton('button_send', sendLogs)}
+                    <BlueButtonText text="button_send" onPress={sendLogs} />
                 </BasicSettingsItem>
             </View>
         );

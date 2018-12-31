@@ -25,10 +25,6 @@ class MockFileStore {
         };
     }
 
-    install() {
-        fileState.store = this;
-    }
-
     createMock() {
         const id = `file:${randomWords({ min: 1, max: 4, join: '-' })}`;
         const fileId = id;

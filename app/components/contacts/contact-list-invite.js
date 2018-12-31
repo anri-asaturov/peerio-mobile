@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, SectionList } from 'react-native';
 import SafeComponent from '../shared/safe-component';
-import buttons from '../helpers/buttons';
+import WhiteButtonText from '../buttons/white-text-button';
 import ContactInviteItem from './contact-invite-item';
 import ContactSectionHeader from './contact-section-header';
 import contactAddState from './contact-add-state';
@@ -18,9 +18,7 @@ export default class ContactListInvite extends SafeComponent {
     }
 
     get leftIcon() {
-        return buttons.whiteTextButton(tx('button_done'), () =>
-            contactAddState.routerMain.contacts()
-        );
+        return <WhiteButtonText text="button_done" onPress={contactAddState.routerMain.contacts} />;
     }
 
     item({ item }) {

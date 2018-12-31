@@ -431,9 +431,7 @@ export default class Chat extends SafeComponent {
             <View style={{ flexGrow: 1, paddingBottom: vars.spacing.small.mini2x }}>
                 {/* this.chat && !this.chat.canGoUp && upgradeForArchive() */}
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: this.background }}>
-                    {this.data
-                        ? this.listView()
-                        : !chatState.loading && this.zeroStatePlaceholder()}
+                    {this.data ? this.listView() : null}
                 </View>
                 <ProgressOverlay enabled={/* chatState.loading || */ !this.initialScrollDone} />
             </View>

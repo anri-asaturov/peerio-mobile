@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import beaconState from '../beacons/beacon-state';
 import SafeComponent from './safe-component';
-import buttons from '../helpers/buttons';
 import { contactState } from '../states';
 import MeasureableView from './measureable-view';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 @observer
 export default class SyncContactsButton extends SafeComponent {
@@ -27,14 +27,12 @@ export default class SyncContactsButton extends SafeComponent {
         return (
             <View style={{ alignItems: 'center' }}>
                 <MeasureableView onMeasure={this.onMeasure}>
-                    {buttons.roundBlueBgButton(
-                        'button_syncContacts',
-                        contactState.syncContacts,
-                        null,
-                        null,
-                        { width },
-                        { height: undefined }
-                    )}
+                    <BlueRoundButton
+                        text="button_syncContacts"
+                        onPress={contactState.syncContacts}
+                        style={{ width }}
+                        extraTextStyle={{ height: undefined }}
+                    />
                 </MeasureableView>
             </View>
         );

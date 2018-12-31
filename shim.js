@@ -47,6 +47,9 @@ if (typeof localStorage !== 'undefined') {
 	localStorage.debug = isDev ? '*' : '';
 }
 
+// initializing crypto and tweetnacl
+require('./app/lib/crypto');
+
 // patching react native websocket JS bridge
 // for SSL pinning
 // TODO: subject for review
@@ -64,21 +67,6 @@ global.WebSocket = function (url) {
 	r.binaryType = 'blob';
 	return r;
 };
-
-// randomBytes polyfill is used by tweetnacl
-const { randomBytes } = require('react-native-randombytes');
-// cryptoShim global is used by icebear to provide tweetnacl with randomBytes
-// here: https://github.com/PeerioTechnologies/peerio-icebear/blob/dev/src/crypto/util/random.ts#L20
-global.cryptoShim = { randomBytes };
-
-console.log(`shim.js: checking randomBytes`);
-console.log(randomBytes(8));
-
-const nacl = require('tweetnacl');
-nacl.setPRNG((x, n) => {
-	const a = randomBytes(n);
-	a.copy(x);
-});
 
 // codepointat polyfill for string (used for utf-8 substring extraction)
 /*! https://mths.be/codepointat v0.2.0 by @mathias */

@@ -1,5 +1,5 @@
 import { observable, reaction } from 'mobx';
-import { TinyDb } from '../lib/icebear';
+import { TinyDb } from './icebear';
 /**
  * This class wires regular console.log/debug/info functions
  * into a proxy which saves the logs into an array

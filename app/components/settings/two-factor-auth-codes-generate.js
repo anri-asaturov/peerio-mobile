@@ -6,10 +6,11 @@ import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import { User } from '../../lib/icebear';
 import routes from '../routes/routes';
 import TwoFactorAuthCodes from './two-factor-auth-codes';
+import RedTextButton from '../buttons/red-text-button';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -57,13 +58,11 @@ export default class TwoFactorAuthCodesGenerate extends SafeComponent {
                         {tx('title_2FABackupCode')}
                     </Text>
                     <View style={buttonCenterStyle}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_2FAGenerateCodes'),
-                            () => this.reissueCodes(),
-                            null,
-                            null,
-                            { width: vars.wideRoundedButtonWidth }
-                        )}
+                        <BlueRoundButton
+                            text="button_2FAGenerateCodes"
+                            onPress={this.reissueCodes}
+                            style={{ width: vars.wideRoundedButtonWidth }}
+                        />
                     </View>
                 </View>
                 <View
@@ -72,7 +71,7 @@ export default class TwoFactorAuthCodesGenerate extends SafeComponent {
                         bottom: paddingVertical,
                         position: 'absolute'
                     }}>
-                    {buttons.redTextButton('title_2FADisableAuth', this.disable2fa)}
+                    <RedTextButton text="title_2FADisableAuth" onPress={this.disable2fa} />
                 </View>
             </View>
         );

@@ -5,7 +5,6 @@ import { observable, action, computed } from 'mobx';
 import ActivityOverlay from '../controls/activity-overlay';
 import { listHeader, textListTitle, footerContainer, container } from '../../styles/contact-sync';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import contactState from './contact-state';
 import ContactImportItem from './contact-import-item';
 import snackbarState from '../snackbars/snackbar-state';
@@ -18,6 +17,8 @@ import Text from '../controls/custom-text';
 import imagePopups from '../shared/image-popups';
 import SafeComponent from '../shared/safe-component';
 import BackIcon from '../layout/back-icon';
+import WhiteButtonText from '../buttons/white-text-button';
+import BlueButtonText from '../buttons/blue-text-button';
 
 import routes from '../routes/routes';
 
@@ -38,7 +39,7 @@ export default class ContactSyncInvite extends SafeComponent {
     }
 
     get rightIcon() {
-        return buttons.whiteTextButton(tx('button_skip'), () => routes.main.contacts());
+        return <WhiteButtonText text="button_skip" onPress={routes.main.contact} />;
     }
 
     get layoutTitle() {
@@ -217,10 +218,10 @@ export default class ContactSyncInvite extends SafeComponent {
                     <Text semibold style={textListTitle}>
                         {tx('title_inviteByEmail')}
                     </Text>
-                    {buttons.blueTextButton(
-                        this.allSelected ? tx('title_deselectAll') : tx('title_selectAll'),
-                        this.allSelected ? this.deselectAll : this.selectAll
-                    )}
+                    <BlueButtonText
+                        text={this.allSelected ? 'title_deselectAll' : 'title_selectAll'}
+                        onPress={this.allSelected ? this.deselectAll : this.selectAll}
+                    />
                 </View>
                 <FlatList
                     initialNumToRender={INITIAL_LIST_SIZE}
@@ -261,13 +262,15 @@ export default class ContactSyncInvite extends SafeComponent {
         if (uiState.keyboardHeight) return null;
         return (
             <View style={footerContainer}>
-                {buttons.blueTextButton(
-                    this.selectedContacts.length === 1
-                        ? tx('button_sendInvite')
-                        : tx('button_sendInvites'),
-                    this.inviteSelectedContacts,
-                    this.selectedContacts.length === 0
-                )}
+                <BlueButtonText
+                    text={
+                        this.selectedContacts.length === 1
+                            ? 'button_sendInvite'
+                            : 'button_sendInvites'
+                    }
+                    onPress={this.inviteSelectedContacts}
+                    disabled={this.selectedContacts.length === 0}
+                />
             </View>
         );
     }

@@ -9,7 +9,6 @@ import snackbarState from '../snackbars/snackbar-state';
 import { tx } from '../utils/translator';
 import { popup2FA } from '../shared/popups';
 import { clientApp, User } from '../../lib/icebear';
-import buttons from '../helpers/buttons';
 import loginState from '../login/login-state';
 import TwoFactorAuthCodes from './two-factor-auth-codes';
 import TwoFactorAuthCodesGenerate from './two-factor-auth-codes-generate';
@@ -17,6 +16,8 @@ import uiState from '../layout/ui-state';
 import testLabel from '../helpers/test-label';
 import tm from '../../telemetry';
 import TextInputUncontrolled from '../controls/text-input-uncontrolled';
+import fonts from '../../styles/fonts';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -106,17 +107,17 @@ export default class TwoFactorAuth extends SafeComponent {
         }
     }
 
-    copyKey() {
+    copyKey = () => {
         Clipboard.setString(this.key2fa);
         snackbarState.pushTemporary('2FA key has been copied to clipboard');
-    }
+    };
 
-    async confirm() {
+    confirm = async () => {
         Keyboard.dismiss();
         const { confirmCode } = this;
         this.confirmCode = null;
         this.backupCodes = await User.current.confirm2faSetup(confirmCode, true);
-    }
+    };
 
     get key2FAControl() {
         if (!this.key2fa) return <ActivityIndicator />;
@@ -148,11 +149,11 @@ export default class TwoFactorAuth extends SafeComponent {
                                 flexDirection: 'row',
                                 justifyContent: 'flex-end'
                             }}>
-                            {buttons.blueTextButton(
-                                tx('button_2FACopyKey'),
-                                () => this.copyKey(),
-                                !this.key2fa
-                            )}
+                            <BlueButtonText
+                                text="button_2FACopyKey"
+                                onPress={this.copyKey}
+                                disabled={!this.key2fa}
+                            />
                         </View>
                     </View>
                 </View>
@@ -175,7 +176,7 @@ export default class TwoFactorAuth extends SafeComponent {
                                 marginVertical: vars.spacing.small.midi2x,
                                 height: vars.inputHeight,
                                 flexGrow: 1,
-                                fontFamily: vars.peerioFontFamily
+                                fontFamily: fonts.peerioFontFamily
                             }}
                             {...testLabel('confirmationCodeInput')}
                             placeholderTextColor={vars.txtDate}
@@ -183,13 +184,12 @@ export default class TwoFactorAuth extends SafeComponent {
                             onChangeText={this.onChangeText}
                             value={this.confirmCode}
                         />
-                        {buttons.blueTextButton(
-                            tx('button_confirm'),
-                            () => this.confirm(),
-                            !this.confirmCode || !this.key2fa,
-                            false,
-                            'button_confirm'
-                        )}
+                        <BlueButtonText
+                            text="button_confirm"
+                            onPress={this.confirm}
+                            disabled={!this.confirmCode || !this.key2fa}
+                            accessibilityId="button_confirm"
+                        />
                     </View>
                 </View>
                 <View>

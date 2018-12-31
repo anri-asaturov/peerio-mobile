@@ -11,7 +11,7 @@ import icons from '../../helpers/icons';
 import chatState from '../../messaging/chat-state';
 import { uiState } from '../../states';
 import { contactStore } from '../../../lib/icebear';
-import buttons from '../../helpers/buttons';
+import BlueRoundButton from '../../buttons/blue-round-button';
 
 const container = {
     flex: 1,
@@ -126,7 +126,7 @@ export default class MedcryptorAdminScreen extends SafeComponent {
                         <Text style={upgradeDescriptionStyle}>{t('mcr_title_upgrade')}</Text>
                         {this.features.map(f => this.renderFeature(f))}
                     </View>
-                    {buttons.roundBlueBgButton('mcr_title_getAccount', this.contactMedcryptor)}
+                    <BlueRoundButton text="mcr_title_getAccount" onPress={this.contactMedcryptor} />
                     <TouchableOpacity
                         pressRetentionOffset={vars.retentionOffset}
                         onPress={this.skipScreen}

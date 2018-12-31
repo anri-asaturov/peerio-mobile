@@ -13,7 +13,7 @@ import SafeComponent from '../../shared/safe-component';
 import SignupButtonBack from '../../signup/signup-button-back';
 import SignupHeading from '../../signup//signup-heading';
 import SignupStepIndicator from '../../signup//signup-step-indicator';
-import buttons from '../../helpers/buttons';
+import BlueRoundButton from '../../buttons/blue-round-button';
 
 const { validators } = validation;
 const { mcrDoctorAhpraAvailability, mcrAdminAhpraAvailability, medicalIdFormat } = validators;
@@ -113,13 +113,13 @@ export default class SignupCountryMedcryptor extends SafeComponent {
                         {this.body}
                     </View>
                     <View style={{ alignItems: 'flex-end' }}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_next'),
-                            this.handleNextButton,
-                            this.isNextDisabled,
-                            'button_next',
-                            { width: vars.signupButtonWidth, marginVertical: 30 }
-                        )}
+                        <BlueRoundButton
+                            text="button_next"
+                            accessibilityId="button_next"
+                            onPress={this.handleNextButton}
+                            disabled={this.isNextDisabled}
+                            style={{ width: vars.signupButtonWidth, marginVertical: 30 }}
+                        />
                     </View>
                 </View>
             </View>

@@ -10,9 +10,9 @@ import { fileStore, User } from '../../lib/icebear';
 import { tx } from '../utils/translator';
 import routes from '../routes/routes';
 import FoldersActionSheet from './folder-action-sheet';
-import buttons from '../helpers/buttons';
 import Text from '../controls/custom-text';
 import chatState from '../messaging/chat-state';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const padding = 8;
 const borderWidth = 1;
@@ -146,7 +146,7 @@ export default class FolderInlineContainer extends SafeComponent {
                             <Text style={infoStyle}>{tx('title_folderUnshared')}</Text>
                         </View>
                         <View>
-                            {buttons.uppercaseBlueButton(tx('button_reshare'), this.reshare)}
+                            <BlueButtonText text="button_reshare" onPress={this.reshare} />
                         </View>
                     </View>
                 </View>

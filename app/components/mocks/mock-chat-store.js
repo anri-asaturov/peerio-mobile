@@ -1,6 +1,6 @@
 import { observable, computed } from 'mobx';
 import randomWords from 'random-words';
-import mockContactStore from './mock-contact-store';
+import contactState from '../contacts/contact-state';
 import { popupCancelConfirm } from '../shared/popups';
 import MockChannel from './mock-channel';
 import MockChat from './mock-chat';
@@ -50,7 +50,7 @@ class MockChatStore {
         const invite = observable({
             id: randomWords({ min: 7, max: 7, join: ':' }),
             title: randomWords({ min: 1, max: 3, join: '-' }),
-            invitedBy: mockContactStore.createMock()
+            invitedBy: contactState.store.createMock()
         });
 
         invite.acceptInvite = () => {
@@ -67,4 +67,4 @@ class MockChatStore {
     loadAllChats() {}
 }
 
-export default new MockChatStore();
+export default MockChatStore;

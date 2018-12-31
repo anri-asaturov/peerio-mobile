@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 import SpotBeacon from './spot-beacon';
 import routes from '../routes/routes';
-import { chatStore } from '../../lib/peerio-icebear';
+import { chatStore } from '../../lib/icebear';
 import beaconState from './beacon-state';
 import AreaBeacon from './area-beacon';
 import uiState from '../layout/ui-state';
@@ -65,4 +65,4 @@ function createBeacon(props) {
     });
 }
 
-module.exports = chatBeacons;
+export default chatBeacons;

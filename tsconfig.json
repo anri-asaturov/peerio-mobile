@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "allowJs": true,
+    "baseUrl": "./src",
+    // outDir is declared even if it's unused to avoid a class of mixed-js errors
+    "outDir": "./build",
+    "target": "esnext",
+    "noImplicitThis": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "strictNullChecks": false, // TODO: enable (default enabled under `strict`, so just remove this line)
+    "paths": {
+      // path mappings are mirrored in the jest config in package.json. if you
+      // change them here, update them there as well!
+      "~/*": ["./*"]
+    }
+  },
+  "include": ["app/**/*.ts", "app/**/*.tsx"]
+}

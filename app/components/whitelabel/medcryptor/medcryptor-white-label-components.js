@@ -7,9 +7,11 @@ import MedcryptorContactAddWarning from './medcryptor-contact-add-warning';
 import MedcryptorChannelInvite from './medcryptor-channel-invite';
 import MedcryptorSettingsHelpButton from './medcryptor-settings-help-button';
 import MedcryptorManageAccountButton from './medcryptor-manage-account-button';
+import TermsOfUseUpgradeMedcryptor from './tos-upgrade-mcr';
 
 export default {
     ContactAddWarning: MedcryptorContactAddWarning,
+    TermsOfUseUpgrade: TermsOfUseUpgradeMedcryptor,
     SettingsHelpButton: MedcryptorSettingsHelpButton,
     ManageAccountButton: MedcryptorManageAccountButton,
     ChatList: MedcryptorChatList,

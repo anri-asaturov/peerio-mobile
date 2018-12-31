@@ -5,9 +5,9 @@ import { View } from 'react-native';
 import Text from '../controls/custom-text';
 import SafeComponent from './safe-component';
 import { vars } from '../../styles/styles';
-import buttons from '../helpers/buttons';
 import icons from '../helpers/icons';
 import drawerState from './drawer-state';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const container = {
     backgroundColor: 'white',
@@ -78,7 +78,11 @@ export default class TopDrawer extends SafeComponent {
                         </Text>
                     )}
                 </View>
-                {buttons.blueTextButton(buttonText, this.onButtonAction, null, null, buttonText)}
+                <BlueButtonText
+                    text={buttonText}
+                    onPress={this.onButtonAction}
+                    accessibilityId={buttonText}
+                />
                 <View style={iconStyle}>{icons.darkNoPadding('close', this.onDismiss)}</View>
             </View>
         );

@@ -1,9 +1,11 @@
-import { observable } from 'mobx';
 import randomWords from 'random-words';
 import capitalize from 'capitalize';
-import mockContactStore from './mock-contact-store';
-import mockFileStore from './mock-file-store';
+import { observable } from 'mobx';
 import { TinyDb } from '../../lib/icebear';
+import Chat from '../../lib/peerio-icebear/models/chats/chat';
+import fileState from '../files/file-state';
+import contactState from '../contacts/contact-state';
+import MockContact from './mock-contact';
 
 const randomImages = [
     'https://i.ytimg.com/vi/xC5n8f0fTeE/maxresdefault.jpg',
@@ -17,19 +19,17 @@ const randomImages = [
     'http://www.shoreexcursionsgroup.com/img/article/region_bermuda2.jpg'
 ];
 
-class MockChannel {
-    @observable messages = [];
-    @observable id;
-    @observable isChannel = true;
-    @observable name = randomWords({ min: 1, max: 4, join: '-' });
-    @observable topic = `${capitalize(randomWords({ min: 2, max: 4, join: ' ' }))}!`;
-    @observable participants = [];
-    @observable isFavorite = false;
-    @observable isMuted = false;
-    @observable adminMap = observable.map();
-    @observable loaded = true;
-    @observable unreadCount = 0;
-    @observable headLoaded = true;
+class MockChannel extends Chat {
+    participants = [];
+    adminMap = observable.map();
+
+    get headLoaded() {
+        return true;
+    }
+
+    get allParticipants() {
+        return this.participants;
+    }
 
     get allJoinedParticipants() {
         return this.participants;
@@ -39,22 +39,30 @@ class MockChannel {
     }
 
     constructor(name) {
+        super();
         TinyDb.userCollection = TinyDb.open('testuser');
-        this.initParticipants();
         this.id = randomWords({ min: 7, max: 7, join: ':' });
-
-        if (name) this.name = name;
+        this.chatHead = {
+            name: name || randomWords({ min: 1, max: 4, join: '-' }),
+            loaded: true
+        };
+        this.topic = `${capitalize(randomWords({ min: 2, max: 4, join: ' ' }))}!`;
+        this.loaded = true;
+        this.isChannel = true;
+        this.initParticipants();
 
         for (let i = 0; i < 10; ++i) {
             this.addInlineImageMessage();
             // this.addRandomMessage();
         }
+
         // this.addInlineImageMessage();
         // this.addExternalUrlMessage();
     }
 
     initParticipants() {
-        for (let i = 0; i < 8; ++i) this.participants.push(mockContactStore.createMock());
+        for (let i = 0; i < 8; ++i)
+            this.participants.push(contactState.store.addContact(new MockContact()));
         this.addAdmin(this.participants[0]);
         this.addAdmin(this.participants[1]);
     }
@@ -127,7 +135,7 @@ class MockChannel {
 
     addFileMessage() {
         const m = this.createMock(false);
-        m.files = [mockFileStore.files[0].id];
+        m.files = [fileState.store.files[0].id];
         this.messages.push(m);
     }
 
@@ -140,7 +148,7 @@ class MockChannel {
     }
 
     get uploadQueue() {
-        const f = mockFileStore.files[0];
+        const f = fileState.store.files[0];
         f.uploading = true;
         return [f];
     }

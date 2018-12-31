@@ -7,12 +7,13 @@ import { User } from '../../lib/icebear';
 import { popupYes } from '../shared/popups';
 import Text from '../controls/custom-text';
 import { tx, t } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import icons from '../helpers/icons';
 import plans from '../payments/payments-config';
 import SafeComponent from '../shared/safe-component';
 import BackIcon from '../layout/back-icon';
 import { uiState } from '../states';
+import BlueRoundButton from '../buttons/blue-round-button';
+import WhiteRoundButton from '../buttons/white-round-button';
 
 const { width } = Dimensions.get('window');
 
@@ -98,22 +99,18 @@ export default class AccountUpgradeOffer extends SafeComponent {
         const { priceOptions } = plans[1];
         return (
             <View style={buttonContainer}>
-                {buttons.roundBlueBgButtonWithSubtitle(
-                    priceOptions[1].price,
-                    tx(priceOptions[1].title),
-                    () => routes.main.accountUpgradeAnnual(),
-                    null,
-                    null,
-                    { width: vars.roundedButtonWidth, marginRight: 6 }
-                )}
-                {buttons.roundWhiteBgButtonWithSubtitle(
-                    priceOptions[0].price,
-                    tx(priceOptions[0].title),
-                    () => routes.main.accountUpgradeMonthly(),
-                    null,
-                    null,
-                    { width: vars.roundedButtonWidth }
-                )}
+                <BlueRoundButton
+                    text={priceOptions[1].price}
+                    subtitle={priceOptions[1].title}
+                    onPress={routes.main.accountUpgradeAnnual}
+                    style={{ width: vars.roundedButtonWidth, marginRight: 6 }}
+                />
+                <WhiteRoundButton
+                    text={priceOptions[0].price}
+                    subtitle={priceOptions[0].title}
+                    onPress={routes.main.accountUpgradeMonthly}
+                    style={{ width: vars.roundedButtonWidth }}
+                />
             </View>
         );
     }

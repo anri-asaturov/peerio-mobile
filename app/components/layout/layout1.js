@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Dimensions } from 'react-native';
 import { observable, reaction, when } from 'mobx';
 import { MenuContext } from 'react-native-popup-menu';
 import SafeComponent from '../shared/safe-component';
 import SnackBarConnection from '../snackbars/snackbar-connection';
 import uiState from '../layout/ui-state';
 import { vars } from '../../styles/styles';
+
+const windowHeight = Dimensions.get('window').height;
 
 @observer
 export default class Layout1 extends SafeComponent {
@@ -23,8 +25,8 @@ export default class Layout1 extends SafeComponent {
                 if (uiState.focusedTextBox) {
                     // console.debug('layout1.js: trying to measure textbox');
                     uiState.focusedTextBox.measure((fx, fy, width, height, px, py) => {
-                        const padding = height + uiState.height / 8;
-                        const preferrableY = uiState.height - padding - uiState.keyboardHeight;
+                        const padding = height + windowHeight / 8;
+                        const preferrableY = windowHeight - padding - uiState.keyboardHeight;
                         // console.debug(`layout1.js: preferrable Y: ${preferrableY}`);
                         // console.debug(`layout1.js: py: ${py}`);
                         if (uiState.keyboardHeight > 0) {

@@ -1,4 +1,6 @@
-class Routes {}
+class Routes {
+    main;
+}
 
 const routes = new Routes();
 global.routes = routes;

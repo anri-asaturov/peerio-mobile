@@ -6,7 +6,7 @@ import SafeComponent from '../shared/safe-component';
 import ToggleItem from './toggle-item';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
-import buttons from '../helpers/buttons';
+import RedTextButton from '../buttons/red-text-button';
 import { popupDeleteAccount } from '../shared/popups';
 import { User } from '../../lib/icebear';
 import { loginState } from '../states';
@@ -84,7 +84,7 @@ export default class AccountEdit extends SafeComponent {
                         flexGrow: 1,
                         justifyContent: 'flex-end'
                     }}>
-                    {buttons.redTextButton('button_accountDelete', () => this.deleteAccount())}
+                    <RedTextButton text="button_accountDelete" onPress={this.deleteAccount} />
                 </View>
             </ScrollView>
         );

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { View, StatusBar } from 'react-native';
 import { observer } from 'mobx-react/native';
 import PopupLayout from '../layout/popup-layout';
-import { User } from '../../lib/icebear';
-import chatState from '../messaging/chat-state';
-import mockChatStore from './mock-chat-store';
+import mockStoresCreate from './mock-stores-create';
 import HeaderMain from '../layout/header-main';
 // import TwoFactorAuth from '../settings/two-factor-auth';
 // import TwoFactorAuthCodes from '../settings/two-factor-auth-codes';
@@ -13,8 +11,7 @@ import TwoFactorAuthCodesGenerate from '../settings/two-factor-auth-codes-genera
 @observer
 export default class MockTwoFactorAuth extends Component {
     componentDidMount() {
-        User.current = {};
-        chatState.store = mockChatStore;
+        mockStoresCreate();
     }
 
     render() {

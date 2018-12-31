@@ -64,7 +64,7 @@ class World {
 
         this.contactsPage = new ContactsPage(this.app);
 
-        this.settingsPage = new SettingsPage(this.app);
+        this.settingsPage = this.context.settingsPage(this.app);
         this.twoStepVerificationPage = new TwoStepVerificationPage(this.app);
         this.twoFactorAuthPrompt = new TwoFactorAuthPrompt(this.app);
         this.profileSettingsPage = new ProfileSettingsPage(this.app);
@@ -94,17 +94,22 @@ class World {
 
     async tryEnterTokenInSettings() {
         const token = otplib.authenticator.generate(this.secretKey);
+        console.log(`Trying for secret key ${this.secretKey}, token ${token}`);
         await this.twoStepVerificationPage.confirmationCode.setValue(token);
         await this.twoStepVerificationPage.hideKeyboardHelper();
         await this.twoStepVerificationPage.confirmButton.click();
     }
 
     async enterTokenInSettings() {
-        await this.tryEnterTokenInSettings();
-        if (!(await this.twoStepVerificationPage.backupCodesVisible)) {
-            // Retry if token was expired
+        // might be too slow to enter the correct code, trying several times
+        for (let i = 0; i < 3; ++i) {
             await this.tryEnterTokenInSettings();
+            // we successfully enabled 2fa
+            if (await this.twoStepVerificationPage.backupCodesVisible) return;
+            // possibly to regenerate the code in the next time frame
+            await this.app.pause(5000);
         }
+        throw new Error('Could not enable 2fa in settings');
     }
 
     async tryEnterTokenInPrompt() {

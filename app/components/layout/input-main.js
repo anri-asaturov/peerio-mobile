@@ -43,6 +43,7 @@ export default class InputMain extends SafeComponent {
         if (!this.canSend) return;
         this.hasText ? this.props.send(this.value) : this.props.sendAck();
         this.value = '';
+        this.textInputRef.resetHeight();
     }
 
     setFocus() {

@@ -1,7 +1,7 @@
 import PushNotification from 'react-native-push-notification';
 import { Platform, PushNotificationIOS } from 'react-native';
 import { when, observable } from 'mobx';
-import { socket } from '../lib/icebear';
+import { socket } from './peerio-icebear';
 import whitelabel from '../components/whitelabel/white-label-config';
 
 const pushState = observable({

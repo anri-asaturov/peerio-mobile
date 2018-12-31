@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { chatStore, fileStore, User } from '../../lib/peerio-icebear';
+import { chatStore, fileStore, User } from '../../lib/icebear';
 import SpotBeacon from './spot-beacon';
 import routes from '../routes/routes';
 import beaconState from './beacon-state';

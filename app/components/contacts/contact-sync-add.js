@@ -4,7 +4,6 @@ import { View, FlatList } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import ActivityOverlay from '../controls/activity-overlay';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import contactState from './contact-state';
 import ContactImportItem from './contact-import-item';
 import { listHeader, textListTitle, footerContainer, container } from '../../styles/contact-sync';
@@ -13,6 +12,8 @@ import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import BackIcon from '../layout/back-icon';
 import routes from '../routes/routes';
+import WhiteButtonText from '../buttons/white-text-button';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const INITIAL_LIST_SIZE = 10;
 
@@ -27,7 +28,7 @@ export default class ContactSyncAdd extends SafeComponent {
     }
 
     get rightIcon() {
-        return buttons.whiteTextButton(tx('button_skip'), () => routes.main.contactSyncInvite());
+        return <WhiteButtonText text="button_skip" onPress={routes.main.contactSyncInvite} />;
     }
 
     @computed
@@ -127,10 +128,10 @@ export default class ContactSyncAdd extends SafeComponent {
                     <Text semibold style={textListTitle}>
                         {tx('title_contactsOnPeerio')}
                     </Text>
-                    {buttons.blueTextButton(
-                        this.allSelected ? tx('title_deselectAll') : tx('title_selectAll'),
-                        this.allSelected ? this.deselectAll : this.selectAll
-                    )}
+                    <BlueButtonText
+                        text={this.allSelected ? 'title_deselectAll' : 'title_selectAll'}
+                        onPress={this.allSelected ? this.deselectAll : this.selectAll}
+                    />
                 </View>
                 <FlatList
                     initialNumToRender={INITIAL_LIST_SIZE}
@@ -154,11 +155,11 @@ export default class ContactSyncAdd extends SafeComponent {
     footer() {
         return (
             <View style={footerContainer}>
-                {buttons.blueTextButton(
-                    tx('button_add'),
-                    this.addSelectedContacts,
-                    this.selectedContacts.length === 0
-                )}
+                <BlueButtonText
+                    text="button_add"
+                    onPress={this.addSelectedContacts}
+                    disabled={this.selectedContacts.length === 0}
+                />
             </View>
         );
     }

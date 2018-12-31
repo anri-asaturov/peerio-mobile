@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 import MockChannel from './mock-channel';
-import mockContactStore from './mock-contact-store';
+import MockContact from './mock-contact';
+import contactState from '../contacts/contact-state';
 
 class MockChat extends MockChannel {
     @observable isChannel = false;
@@ -8,7 +9,7 @@ class MockChat extends MockChannel {
 
     initParticipants() {
         // exactly one participant
-        this.participants.push(mockContactStore.createMock());
+        this.participants.push(contactState.store.addContact(new MockContact()));
     }
 }
 

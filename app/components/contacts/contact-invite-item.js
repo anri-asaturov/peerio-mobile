@@ -5,9 +5,9 @@ import { observer } from 'mobx-react/native';
 import { observable } from 'mobx';
 import SafeComponent from '../shared/safe-component';
 import { contactStore } from '../../lib/icebear';
-import buttons from '../helpers/buttons';
 import { tx } from '../utils/translator';
 import ContactCard from '../shared/contact-card';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const containerStyle = {
     flexDirection: 'row',
@@ -45,10 +45,9 @@ export default class ContactInviteItem extends SafeComponent {
                         backgroundColor={this.props.backgroundColor}
                     />
                 </View>
-                {invited !== null &&
-                    buttons.blueTextButton(title, () => this.invite(), invited, null, null, {
-                        flexShrink: 1
-                    })}
+                {invited !== null && (
+                    <BlueButtonText text={title} onPress={this.invite} style={{ flexShrink: 1 }} />
+                )}
             </View>
         );
     }

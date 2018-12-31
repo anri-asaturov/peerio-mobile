@@ -6,6 +6,7 @@ import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import testLabel from '../helpers/test-label';
 import TextInputUncontrolled from './text-input-uncontrolled';
+import fonts from '../../styles/fonts';
 
 @observer
 export default class TextInputStateful extends SafeComponent {
@@ -24,7 +25,7 @@ export default class TextInputStateful extends SafeComponent {
                         {
                             height: vars.inputHeight,
                             paddingLeft: vars.iconPadding,
-                            fontFamily: vars.peerioFontFamily
+                            fontFamily: fonts.peerioFontFamily
                         },
                         this.props.style
                     ]}

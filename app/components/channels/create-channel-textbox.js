@@ -7,6 +7,7 @@ import { tx } from '../utils/translator';
 import testLabel from '../helpers/test-label';
 import Text from '../controls/custom-text';
 import TextInputUncontrolled from '../controls/text-input-uncontrolled';
+import fonts from '../../styles/fonts';
 
 const height = vars.inputHeight;
 const fontSize = vars.font.size14;
@@ -28,7 +29,7 @@ const placeholderStyle = {
     height,
     marginLeft: vars.spacing.small.midi,
     fontSize,
-    fontFamily: vars.peerioFontFamily
+    fontFamily: fonts.peerioFontFamily
 };
 
 const bottomTextStyle = {

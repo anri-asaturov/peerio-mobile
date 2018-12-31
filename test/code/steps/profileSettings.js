@@ -60,12 +60,3 @@ When('I can see my account key', async function() {
 
     await this.settingsPage.copyButton.click();
 });
-
-When('I go to help settings', async function() {
-    await this.homePage.settingsTab.click();
-    await this.settingsPage.helpButton.click();
-});
-
-When('I tap Chat button in help settings', async function() {
-    await this.settingsPage.chatButton.click();
-});

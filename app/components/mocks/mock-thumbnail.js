@@ -4,10 +4,10 @@ import { observable } from 'mobx';
 import { View } from 'react-native';
 import Text from '../controls/custom-text';
 import Thumbnail from '../shared/thumbnail';
-import buttons from '../helpers/buttons';
 import FileActionSheet from '../files/file-action-sheet';
 import fileState from '../files/file-state';
 import { TinyDb } from '../../lib/icebear';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 @observer
 export default class MockThumbnail extends Component {
@@ -41,7 +41,7 @@ export default class MockThumbnail extends Component {
                 <View style={{ margin: 10 }}>
                     <Text>{this.path}</Text>
                 </View>
-                {buttons.blueBgButton('Select image', this.showActionSheet)}
+                <BlueRoundButton text="Select image" onPress={this.showActionSheet} />
             </View>
         );
     }

@@ -8,8 +8,8 @@ import { tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
 import signupState from './signup-state';
 import Text from '../controls/custom-text';
-import buttons from '../helpers/buttons';
 import tm from '../../telemetry';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 const roundedBoxStyle = {
     borderColor: vars.txtMedium,
@@ -110,13 +110,13 @@ export default class SignupPdfPreview extends SafeComponent {
                         <Text style={filenameStyle}>{signupState.backupFileName('pdf')}</Text>
                         <Text style={filesizeStyle}>{FILE_SIZE}</Text>
                     </View>
-                    {buttons.roundBlueBgButton(
-                        tx('button_downloadPdf'),
-                        this.saveAccountKey,
-                        null,
-                        'button_downloadPdf',
-                        { marginHorizontal: vars.spacing.small.mini2x }
-                    )}
+
+                    <BlueRoundButton
+                        text="button_downloadPdf"
+                        accessibilityId="button_login"
+                        onPress={this.saveAccountKey}
+                        style={{ marginHorizontal: vars.spacing.small.mini2x }}
+                    />
                 </View>
             </View>
         );

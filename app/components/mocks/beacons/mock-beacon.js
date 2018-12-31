@@ -4,18 +4,16 @@ import { View, StatusBar } from 'react-native';
 import { observer } from 'mobx-react/native';
 import Text from '../../controls/custom-text';
 import PopupLayout from '../../layout/popup-layout';
-import { User } from '../../../lib/icebear';
-import contactState from '../../contacts/contact-state';
 import { vars } from '../../../styles/styles';
-import mockContactStore from '../mock-contact-store';
+import mockStoresCreate from '../mock-stores-create';
 import BeaconLayout from '../../beacons/beacon-layout';
 import routes from '../../routes/routes';
-import buttons from '../../helpers/buttons';
 import MockTabContainer from './mock-tab-container';
 import { uiState } from '../../states';
 import AreaBeacon from '../../beacons/area-beacon';
 import SpotBeacon from '../../beacons/spot-beacon';
 import beaconState from '../../beacons/beacon-state';
+import WhiteRoundButton from '../../buttons/white-round-button';
 
 @observer
 export default class MockBeacon extends Component {
@@ -25,15 +23,7 @@ export default class MockBeacon extends Component {
     @observable padding;
 
     componentWillMount() {
-        User.current = mockContactStore.createMock();
-        User.current.activePlans = [];
-        User.current.beacons = {
-            get() {
-                return null;
-            }
-        };
-        contactState.store = mockContactStore;
-        contactState.init();
+        mockStoresCreate();
         routes.main.route = 'chats';
     }
 
@@ -89,14 +79,17 @@ export default class MockBeacon extends Component {
                     }}>
                     <Text>1. Click on any icon to see its beacon</Text>
                     <Text>2. Use the buttons to change beacon properties</Text>
-                    {buttons.roundWhiteBgButton('Toggle Top/Bottom', this.toggleTopBottom)}
-                    {buttons.roundWhiteBgButton('Toggle Left/Right', this.toggleLeftRight)}
-                    {buttons.roundWhiteBgButton('Toggle Arrow Orientation', this.toggleArrow)}
-                    {buttons.roundWhiteBgButton('Toggle Area/Spot Beacon', this.toggleBeaconType)}
-                    {buttons.roundWhiteBgButton(
-                        'Toggle Left/Right Padding',
-                        this.toggleHorizontalPadding
-                    )}
+                    <WhiteRoundButton text="Toggle Top/Bottom" onPress={this.toggleTopBottom} />
+                    <WhiteRoundButton text="Toggle Left/Right" onPress={this.toggleLeftRight} />
+                    <WhiteRoundButton text="Toggle Arrow Orientation" onPress={this.toggleArrow} />
+                    <WhiteRoundButton
+                        text="Toggle Area/Spot Beacon"
+                        onPress={this.toggleBeaconType}
+                    />
+                    <WhiteRoundButton
+                        text="Toggle Left/Right Padding"
+                        onPress={this.toggleHorizontalPadding}
+                    />
                     <Text>
                         (Left/Right padding causes beacon position on the page to change, which
                         changes the position of the arrow with respect to the beacon when the arrow

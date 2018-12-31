@@ -10,9 +10,9 @@ import StyledTextInput from '../shared/styled-text-input';
 import { socket, validation, telemetry, User } from '../../lib/icebear';
 import uiState from '../layout/ui-state';
 import SafeComponent from '../shared/safe-component';
-import buttons from '../helpers/buttons';
 import Text from '../controls/custom-text';
 import tm from '../../telemetry';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 const { S } = telemetry;
 
@@ -136,13 +136,13 @@ export default class LoginInputs extends SafeComponent {
                 />
                 <View style={{ height: 8 }} />
                 <View>
-                    {buttons.roundBlueBgButton(
-                        tx('button_login'),
-                        this.submit,
-                        this.isNextDisabled || loginState.isInProgress,
-                        'button_login',
-                        { alignSelf: 'flex-end', marginBottom: vars.spacing.small.midi2x }
-                    )}
+                    <BlueRoundButton
+                        text="button_login"
+                        accessibilityId="button_login"
+                        onPress={this.submit}
+                        disabled={this.isNextDisabled || loginState.isInProgress}
+                        style={{ alignSelf: 'flex-end', marginBottom: vars.spacing.small.midi2x }}
+                    />
                 </View>
                 <View style={{ height: 42 }} />
                 <Text style={findKeyText}>{tx('title_whereToFind')}</Text>

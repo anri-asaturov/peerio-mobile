@@ -8,14 +8,10 @@ import ContactList from '../contacts/contact-list';
 import SettingsLevel1 from '../settings/settings-level-1';
 import Files from '../files/files';
 import ChannelInvite from '../messaging/channel-invite';
-import { User } from '../../lib/icebear';
-import contactState from '../contacts/contact-state';
 import chatState from '../messaging/chat-state';
 import drawerState from '../shared/drawer-state';
-import mockChatStore from './mock-chat-store';
+import mockStoresCreate from './mock-stores-create';
 import { vars } from '../../styles/styles';
-import mockContactStore from './mock-contact-store';
-import mockFileStore from './mock-file-store';
 import TabContainer from '../layout/tab-container';
 import {
     TopDrawerMaintenance,
@@ -62,12 +58,7 @@ const remove = [
 @observer
 export default class MockChatList extends Component {
     componentWillMount() {
-        User.current = mockContactStore.createMockCurrentUser();
-        mockFileStore.install();
-        chatState.store = mockChatStore;
-        chatState.init();
-        contactState.store = mockContactStore;
-        contactState.init();
+        mockStoresCreate();
         const { chats } = chatState.store;
         chats[0].unreadCount = 2;
         chats[chats.length - 1].unreadCount = 3;

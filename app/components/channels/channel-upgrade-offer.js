@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { User } from '../../lib/icebear';
-import buttons from '../helpers/buttons';
-import { tx, T } from '../utils/translator';
+import { T } from '../utils/translator';
 import settingsState from '../settings/settings-state';
 import { vars } from '../../styles/styles';
 import { gradient } from '../controls/effects';
 import Text from '../controls/custom-text';
+import WhiteButtonText from '../buttons/white-text-button';
 
 @observer
 export default class ChannelUpgradeOffer extends Component {
@@ -52,12 +52,12 @@ export default class ChannelUpgradeOffer extends Component {
                     </Text>
                 </View>
                 <View style={buttonStyle}>
-                    {buttons.whiteTextButtonNoPadding(
-                        tx('button_upgrade'),
-                        () => settingsState.upgrade(),
-                        false,
-                        { fontWeight: '600' }
-                    )}
+                    <WhiteButtonText
+                        noPadding
+                        text="button_upgrade"
+                        onPress={settingsState.upgrade}
+                        extraTextStyle={{ fontWeight: '600' }}
+                    />
                 </View>
             </View>
         );

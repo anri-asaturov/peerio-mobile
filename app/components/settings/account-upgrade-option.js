@@ -4,13 +4,14 @@ import { observer } from 'mobx-react/native';
 import Text from '../controls/custom-text';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import plans from '../payments/payments-config';
 import SafeComponent from '../shared/safe-component';
 import BackIcon from '../layout/back-icon';
 import routes from '../routes/routes';
 import { uiState } from '../states';
 import payments from '../payments/payments';
+import BlueRoundButton from '../buttons/blue-round-button';
+import whiteLabel from '../whitelabel/white-label-components';
 
 const { width } = Dimensions.get('window');
 
@@ -66,18 +67,15 @@ class AccountUpgradeOption extends SafeComponent {
                         flexGrow: 1,
                         padding: vars.spacing.large.midi
                     }}>
-                    <Text
-                        semibold
-                        style={{
-                            color: vars.black54,
-                            fontSize: vars.font.size12,
-                            paddingBottom: 60
-                        }}>
-                        {tx(this.paymentInfo)}
-                    </Text>
-                    {buttons.roundBlueBgButton(tx('button_upgrade'), this.action, null, null, {
-                        width: vars.wideRoundedButtonWidth
-                    })}
+                    <whiteLabel.TermsOfUseUpgrade
+                        paymentInfo={this.paymentInfo}
+                        title={this.title}
+                    />
+                    <BlueRoundButton
+                        text="button_upgrade"
+                        onPress={this.action}
+                        style={{ width: vars.wideRoundedButtonWidth }}
+                    />
                 </View>
             </ScrollView>
         );

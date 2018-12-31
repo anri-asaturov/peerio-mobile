@@ -12,6 +12,7 @@ import { fileHelpers, config, warnings } from '../../lib/icebear';
 import Thumbnail from '../shared/thumbnail';
 import testLabel from '../helpers/test-label';
 import TextInputUncontrolled from '../controls/text-input-uncontrolled';
+import fonts from '../../styles/fonts';
 
 const nameContainer = {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -27,7 +28,7 @@ const inputStyle = {
     paddingVertical: 0,
     paddingLeft: 0,
     height: vars.searchInputHeight,
-    fontFamily: vars.peerioFontFamily
+    fontFamily: fonts.peerioFontFamily
 };
 
 const thumbnailDim = vars.searchInputHeight * 2;

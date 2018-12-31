@@ -6,11 +6,10 @@ import { observable, action } from 'mobx';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import { contactStore } from '../../lib/icebear';
-import buttons from '../helpers/buttons';
 import { t, tx } from '../utils/translator';
 import Text from '../controls/custom-text';
 import whiteLabelComponents from '../../components/whitelabel/white-label-components';
-
+import BlueRoundButton from '../buttons/blue-round-button';
 @observer
 export default class ContactInviteItemPrompt extends SafeComponent {
     @observable invited = false;
@@ -43,7 +42,7 @@ export default class ContactInviteItemPrompt extends SafeComponent {
                     <whiteLabelComponents.ContactAddWarning />
                 </View>
                 <View style={{ alignSelf: 'flex-end', marginTop: vars.spacing.small.maxi2x }}>
-                    {buttons.roundBlueBgButton(title, this.invite, !!invited)}
+                    <BlueRoundButton text={title} onPress={this.invite} disabled={!!invited} />
                 </View>
             </View>
         );

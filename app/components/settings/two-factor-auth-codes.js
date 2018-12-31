@@ -8,10 +8,11 @@ import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import { User } from '../../lib/icebear';
 import routes from '../routes/routes';
 import testLabel from '../helpers/test-label';
+import BlueButtonText from '../buttons/blue-text-button';
+import RedTextButton from '../buttons/red-text-button';
 
 const paddingVertical = vars.listViewPaddingVertical;
 const paddingHorizontal = vars.listViewPaddingHorizontal;
@@ -152,7 +153,7 @@ authenticator app.`}
                         </View>
                     </View>
                     <View style={rowRight}>
-                        {buttons.blueTextButton(tx('title_download'), () => this.downloadCodes())}
+                        <BlueButtonText text="title_download" onPress={this.downloadCodes} />
                     </View>
                 </View>
                 <View
@@ -161,7 +162,7 @@ authenticator app.`}
                         bottom: paddingVertical,
                         position: 'absolute'
                     }}>
-                    {buttons.redTextButton('title_2FADisableAuth', this.disable2fa)}
+                    <RedTextButton text="title_2FADisableAuth" onPress={this.disable2fa} />
                 </View>
             </View>
         );

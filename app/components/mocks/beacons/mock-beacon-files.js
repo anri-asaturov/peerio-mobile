@@ -3,10 +3,8 @@ import { action } from 'mobx';
 import { View, StatusBar } from 'react-native';
 import { observer } from 'mobx-react/native';
 import PopupLayout from '../../layout/popup-layout';
-import { User } from '../../../lib/icebear';
-import contactState from '../../contacts/contact-state';
 import { vars } from '../../../styles/styles';
-import mockContactStore from '../mock-contact-store';
+import mockStoresCreate from '../mock-stores-create';
 import BeaconLayout from '../../beacons/beacon-layout';
 import routes from '../../routes/routes';
 import MeasureableView from '../../shared/measureable-view';
@@ -22,15 +20,7 @@ const filesView = {
 @observer
 export default class MockBeaconFiles extends Component {
     componentWillMount() {
-        User.current = mockContactStore.createMock();
-        User.current.activePlans = [];
-        User.current.beacons = {
-            get() {
-                return null;
-            }
-        };
-        contactState.store = mockContactStore;
-        contactState.init();
+        mockStoresCreate();
         routes.main.route = 'files';
     }
 

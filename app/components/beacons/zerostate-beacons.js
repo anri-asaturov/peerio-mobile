@@ -2,7 +2,7 @@ import { observable } from 'mobx';
 import SpotBeacon from './spot-beacon';
 import AreaBeacon from './area-beacon';
 import routes from '../routes/routes';
-import { chatStore, fileStore, contactStore } from '../../lib/peerio-icebear';
+import { chatStore, fileStore, contactStore } from '../../lib/icebear';
 import beaconState from './beacon-state';
 import preferenceStore from '../settings/preference-store';
 
@@ -80,4 +80,4 @@ function createZeroStateBeacon(props) {
     });
 }
 
-module.exports = zeroStateBeacons;
+export default zeroStateBeacons;

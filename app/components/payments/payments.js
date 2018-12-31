@@ -3,10 +3,10 @@ import { View } from 'react-native';
 import Text from '../controls/custom-text';
 import settingsState from '../settings/settings-state';
 import { vars } from '../../styles/styles';
-import buttons from '../helpers/buttons';
 import plans from './payments-config';
 import paymentsNative from './payments-native';
 import { tx } from '../utils/translator';
+import BlueButtonText from '../buttons/blue-text-button';
 
 function upgradeMessage(title) {
     const container = {
@@ -26,7 +26,7 @@ function upgradeMessage(title) {
     return (
         <View style={container}>
             <Text style={text}>{title}</Text>
-            {buttons.blueTextButton('button_upgrade', () => settingsState.upgrade())}
+            <BlueButtonText text="button_upgrade" onPress={settingsState.upgrade} />
         </View>
     );
 }

@@ -2,11 +2,9 @@ import React from 'react';
 import { View, Image, Dimensions, StatusBar } from 'react-native';
 import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { tx } from '../utils/translator';
 import loginState from './login-state';
 import ActivityOverlay from '../controls/activity-overlay';
 import { vars, signupStyles } from '../../styles/styles';
-import buttons from '../helpers/buttons';
 import SafeComponent from '../shared/safe-component';
 import LoginHeading from './login-heading';
 import { adjustImageDimensions } from '../helpers/image';
@@ -15,6 +13,8 @@ import tm from '../../telemetry';
 import DebugMenuTrigger from '../shared/debug-menu-trigger';
 import { uiState } from '../states';
 import signupState from '../signup/signup-state';
+import BlueRoundButton from '../buttons/blue-round-button';
+import WhiteRoundButton from '../buttons/white-round-button';
 
 const { S } = telemetry;
 
@@ -99,23 +99,23 @@ export default class LoginWelcome extends SafeComponent {
                         subTitle="title_newUserWelcomeDescription"
                     />
                     <View style={buttonContainer}>
-                        {buttons.roundBlueBgButton(
-                            tx('button_CreateAccount'),
-                            this.onSignupPress,
-                            null,
-                            'button_CreateAccount',
-                            {
+                        <BlueRoundButton
+                            text="button_CreateAccount"
+                            accessibilityId="button_CreateAccount"
+                            onPress={this.onSignupPress}
+                            style={{
                                 width: vars.roundedButtonWidth,
                                 marginBottom: vars.spacing.small.midi2x
-                            }
-                        )}
-                        {buttons.roundWhiteBgButton(
-                            tx('button_login'),
-                            this.onLoginPress,
-                            null,
-                            'button_login',
-                            { width: vars.roundedButtonWidth }
-                        )}
+                            }}
+                        />
+                        <WhiteRoundButton
+                            text="button_login"
+                            accessibilityId="button_login"
+                            onPress={this.onLoginPress}
+                            style={{
+                                width: vars.roundedButtonWidth
+                            }}
+                        />
                     </View>
                 </View>
                 <ActivityOverlay large visible={loginState.isInProgress} />

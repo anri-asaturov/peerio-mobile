@@ -7,7 +7,6 @@ import { vars, signupStyles } from '../../styles/styles';
 import signupState from './signup-state';
 import { T, tx } from '../utils/translator';
 import SafeComponent from '../shared/safe-component';
-import buttons from '../helpers/buttons';
 import { TopDrawerBackupAccountKey } from '../shared/top-drawer-components';
 import { drawerState } from '../states';
 import { socket, telemetry } from '../../lib/icebear';
@@ -15,6 +14,8 @@ import SignupHeading from './signup-heading';
 import routes from '../routes/routes';
 import tm from '../../telemetry';
 import { popupTOS, popupPrivacy } from '../shared/popups';
+import BlueButtonText from '../buttons/blue-text-button';
+import BlueRoundButton from '../buttons/blue-round-button';
 
 const { S } = telemetry;
 
@@ -113,20 +114,19 @@ export default class SignupCancel extends SafeComponent {
                     </Text>
 
                     <View style={buttonContainer}>
-                        {buttons.blueTextButton(
-                            tx('button_confirmCancel'),
-                            this.cancel,
-                            !socket.connected,
-                            null,
-                            'button_decline'
-                        )}
+                        <BlueButtonText
+                            text="button_confirmCancel"
+                            onPress={this.cancel}
+                            disabled={!socket.connected}
+                            accessibilityId="button_decline"
+                        />
                         <View style={{ width: 16 }} />
-                        {buttons.roundBlueBgButton(
-                            tx('button_goBack'),
-                            this.goBack,
-                            !socket.connected,
-                            'button_accept'
-                        )}
+                        <BlueRoundButton
+                            text="button_goBack"
+                            accessibilityId="button_accept"
+                            onPress={this.goBack}
+                            disabled={!socket.connected}
+                        />
                     </View>
                 </View>
             </View>

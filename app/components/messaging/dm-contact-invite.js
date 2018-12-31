@@ -6,12 +6,12 @@ import { observer } from 'mobx-react/native';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import { tx } from '../utils/translator';
-import buttons from '../helpers/buttons';
 import routes from '../routes/routes';
 import chatState from '../messaging/chat-state';
 import AvatarCircle from '../shared/avatar-circle';
 import IdentityVerificationNotice from './identity-verification-notice';
 import Text from '../controls/custom-text';
+import BlueButtonText from '../buttons/blue-text-button';
 
 const emojiTada = require('../../assets/emoji/tada.png');
 
@@ -109,22 +109,19 @@ export default class DmContactInvite extends SafeComponent {
                                 justifyContent: 'center',
                                 paddingRight: vars.spacing.medium.maxi2x
                             }}>
-                            {buttons.blueTextButton(
-                                tx('button_dismiss'),
-                                this.decline,
-                                null,
-                                null,
-                                'button_dismiss'
-                            )}
+                            <BlueButtonText
+                                text="button_dismiss"
+                                onPress={this.decline}
+                                accessibilityId="button_dismiss"
+                            />
                         </View>
                         <View
                             style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
-                            {buttons.roundBlueBgButton(
-                                tx('button_message'),
-                                this.accept,
-                                null,
-                                'button_message'
-                            )}
+                            <BlueButtonText
+                                text="button_message"
+                                onPress={this.accept}
+                                accessibilityId="button_message"
+                            />
                         </View>
                     </View>
                 )}
