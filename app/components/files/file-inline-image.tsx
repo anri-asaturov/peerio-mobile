@@ -1,8 +1,15 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, when, reaction, action } from 'mobx';
-import { View, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+    View,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    ActivityIndicator,
+    ViewStyle,
+    TextStyle
+} from 'react-native';
 import FLAnimatedImage from 'react-native-gif';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -13,7 +20,7 @@ import InlineUrlPreviewConsent from './inline-url-preview-consent';
 import inlineImageCacheStore from './inline-image-cache-store';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
-import fileState from '../files/file-state';
+import fileState from './file-state';
 import settingsState from '../settings/settings-state';
 import { clientApp, config, util } from '../../lib/icebear';
 import { T, tx } from '../utils/translator';
@@ -32,27 +39,38 @@ const toSettings = text => (
 
 const toSettingsParser = { toSettings };
 
-const textMessageOuter = {
-    padding: this.outerPadding,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    top: 0,
-    justifyContent: 'center'
-};
-
-const textMessageTextStyle = {
+const textMessageTextStyle: TextStyle = {
     color: vars.txtDark,
     backgroundColor: 'transparent',
     textAlign: 'center'
 };
 
+const text0: TextStyle = {
+    color: vars.txtDark,
+    backgroundColor: vars.lightGrayBg,
+    paddingVertical: 54,
+    textAlign: 'center'
+};
+
+export interface FileInlineImageProps {
+    image: any;
+    onActionSheet: any;
+    isClosed: boolean;
+    onAction: Function;
+    onLegacyFileAction: Function;
+}
+
+const text: TextStyle = {
+    color: vars.peerioBlue,
+    textAlign: 'center',
+    marginVertical: 10
+};
+
 // TODO: image urls are now handled by inline-url-container
 // remove the URL support from this component
 @observer
-export default class FileInlineImage extends SafeComponent {
-    @observable cachedImage;
+export default class FileInlineImage extends SafeComponent<FileInlineImageProps> {
+    @observable cachedImage: any;
     @observable width = 0;
     @observable height = 0;
     @observable optimalContentWidth = 0;
@@ -75,6 +93,17 @@ export default class FileInlineImage extends SafeComponent {
     @observable loadedBytesCount = 0;
     @observable totalBytesCount = 0;
     outerPadding = 8;
+    loadingTimeoutId: any;
+
+    textMessageOuter: ViewStyle = {
+        padding: this.outerPadding,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+        justifyContent: 'center'
+    };
 
     componentWillMount() {
         this.optimalContentHeight = Dimensions.get('window').height;
@@ -180,9 +209,11 @@ export default class FileInlineImage extends SafeComponent {
         // if width or height is undefined, there was an error loading it
         when(
             () =>
-                cachedImage.width !== undefined &&
-                cachedImage.height !== undefined &&
-                this.optimalContentWidth,
+                !!(
+                    cachedImage.width !== undefined &&
+                    cachedImage.height !== undefined &&
+                    this.optimalContentWidth
+                ),
             () => {
                 const { width, height } = cachedImage;
                 const { optimalContentWidth, optimalContentHeight } = this;
@@ -234,7 +265,7 @@ export default class FileInlineImage extends SafeComponent {
     }
 
     get displayCutOffImageOffer() {
-        const outer = {
+        const outer: ViewStyle = {
             padding: this.outerPadding,
             height: vars.imageInnerContainerHeight,
             justifyContent: 'center'
@@ -260,12 +291,6 @@ export default class FileInlineImage extends SafeComponent {
         const outer = {
             padding: this.outerPadding
         };
-        const text0 = {
-            color: vars.txtDark,
-            backgroundColor: vars.lightGrayBg,
-            paddingVertical: 54,
-            textAlign: 'center'
-        };
         return (
             <View style={outer}>
                 <Text style={text0}>{tx('title_poorConnectionInlineImage')}</Text>
@@ -274,11 +299,6 @@ export default class FileInlineImage extends SafeComponent {
     }
 
     get displayImageOffer() {
-        const text = {
-            color: vars.peerioBlue,
-            textAlign: 'center',
-            marginVertical: 10
-        };
         return (
             <TouchableOpacity
                 pressRetentionOffset={vars.retentionOffset}
@@ -311,7 +331,7 @@ export default class FileInlineImage extends SafeComponent {
 
     get downloadErrorMessage() {
         return (
-            <View style={textMessageOuter}>
+            <View style={this.textMessageOuter}>
                 <Text style={textMessageTextStyle}>{tx('Image preview is not available')}</Text>
             </View>
         );
@@ -319,7 +339,7 @@ export default class FileInlineImage extends SafeComponent {
 
     get downloadSlowMessage() {
         return (
-            <View style={textMessageOuter}>
+            <View style={this.textMessageOuter}>
                 <Text style={textMessageTextStyle}>{tx('title_poorConnectionExternalURL')}</Text>
             </View>
         );
@@ -369,7 +389,7 @@ export default class FileInlineImage extends SafeComponent {
         const outer = {
             padding: this.outerPadding
         };
-        const text0 = {
+        const text0: TextStyle = {
             color: vars.txtDark,
             backgroundColor: vars.lightGrayBg,
             paddingVertical: vars.spacing.large.midi2x,
@@ -395,10 +415,10 @@ export default class FileInlineImage extends SafeComponent {
     }
 
     renderThrow() {
-        const { image } = this.props;
+        const { image, onLegacyFileAction } = this.props;
         const { fileId, downloading } = image;
         const { width, height, loaded, showUpdateSettingsLink, cachingFailed } = this;
-        const { source, acquiringSize, shouldUseFLAnimated } = this.cachedImage || {};
+        const { source, acquiringSize, shouldUseFLAnimated }: any = this.cachedImage || {};
         // console.log(`render ${source ? source.uri : null}, shouldUseFLAnimated: ${shouldUseFLAnimated}`);
         const isLocal = !!fileId;
         if (!clientApp.uiUserPrefs.externalContentConsented && !isLocal) {
@@ -411,7 +431,7 @@ export default class FileInlineImage extends SafeComponent {
             );
         }
 
-        const inner = {
+        const inner: ViewStyle = {
             backgroundColor: loaded ? vars.white : vars.lightGrayBg,
             minHeight: loaded ? undefined : vars.imageInnerContainerHeight,
             justifyContent: 'center'
@@ -426,7 +446,7 @@ export default class FileInlineImage extends SafeComponent {
                     file={image}
                     onActionSheet={this.props.onAction}
                     onAction={shouldUseFLAnimated ? null : this.imageAction}
-                    onLegacyFileAction={this.props.onLegacyFileAction}
+                    onLegacyFileAction={onLegacyFileAction}
                     isImage
                     isOpen={this.opened}
                     extraActionIcon={
@@ -493,8 +513,3 @@ export default class FileInlineImage extends SafeComponent {
         );
     }
 }
-
-FileInlineImage.propTypes = {
-    image: PropTypes.any,
-    onActionSheet: PropTypes.any
-};
