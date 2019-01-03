@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, View, ViewStyle } from 'react-native';
 import moment from 'moment';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -13,17 +12,23 @@ import { fileHelpers } from '../../lib/icebear';
 const { width } = Dimensions.get('window');
 const height = 64;
 
-const fileInfoContainerStyle = {
+const fileInfoContainerStyle: ViewStyle = {
     flexGrow: 1,
     flexDirection: 'row'
 };
 
+export interface RecentFileItemProps {
+    file: any;
+    onMenu: Function;
+    hideArrow: any;
+}
+
 @observer
-export default class RecentFileItem extends SafeComponent {
+export default class RecentFileItem extends SafeComponent<RecentFileItemProps> {
     renderThrow() {
-        const { file } = this.props;
+        const { file, onMenu, hideArrow } = this.props;
         if (file.deleted) return null;
-        const iconRight = icons.dark('more-vert', this.props.onMenu);
+        const iconRight = icons.dark('more-vert', onMenu);
         const nameStyle = {
             color: vars.txtDark,
             fontSize: vars.font.size14
@@ -32,7 +37,7 @@ export default class RecentFileItem extends SafeComponent {
             color: vars.extraSubtleText,
             fontSize: vars.font.size12
         };
-        const itemContainerStyle = {
+        const itemContainerStyle: ViewStyle = {
             flex: 1,
             flexGrow: 1,
             flexDirection: 'row',
@@ -44,7 +49,7 @@ export default class RecentFileItem extends SafeComponent {
             width,
             paddingLeft: vars.spacing.medium.mini2x
         };
-        const arrow = this.props.hideArrow ? null : <View style={{ flex: 0 }}>{iconRight}</View>;
+        const arrow = hideArrow ? null : <View style={{ flex: 0 }}>{iconRight}</View>;
         return (
             <View style={fileInfoContainerStyle}>
                 <View style={[itemContainerStyle, { width }]}>
@@ -72,8 +77,3 @@ export default class RecentFileItem extends SafeComponent {
         );
     }
 }
-
-RecentFileItem.propTypes = {
-    file: PropTypes.any.isRequired,
-    onMenu: PropTypes.func
-};
