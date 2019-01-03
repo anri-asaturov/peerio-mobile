@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react/native';
-import { Dimensions, View, TouchableOpacity } from 'react-native';
+import { Dimensions, View, TouchableOpacity, ViewStyle } from 'react-native';
 import moment from 'moment';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -15,19 +14,27 @@ import testLabel from '../helpers/test-label';
 import FileProgress from './file-progress';
 import { fileHelpers, contactStore, User } from '../../lib/icebear';
 import MeasureableIcon from '../layout/measureable-icon';
-import filesBeacons from '../beacons/files-beacons';
+import * as filesBeacons from '../beacons/files-beacons';
 
 const { width } = Dimensions.get('window');
 const height = vars.filesListItemHeight;
 const checkBoxWidth = height;
 
-const fileInfoContainerStyle = {
+const fileInfoContainerStyle: ViewStyle = {
     flexGrow: 1,
     flexDirection: 'row'
 };
 
+export interface FileInnerItemProps {
+    onPress: Function;
+    file: any;
+    checkbox: string;
+    hideArrow: boolean;
+    onFileAction: Function;
+}
+
 @observer
-export default class FileInnerItem extends SafeComponent {
+export default class FileInnerItem extends SafeComponent<FileInnerItemProps> {
     @action.bound
     onPress() {
         const { file } = this.props;
@@ -43,7 +50,7 @@ export default class FileInnerItem extends SafeComponent {
         const iconColor = checked ? v.checkboxIconActive : v.checkboxIconInactive;
         const iconBgColor = 'transparent';
         const icon = checked ? 'check-box' : 'check-box-outline-blank';
-        const outer = {
+        const outer: ViewStyle = {
             backgroundColor: checked ? vars.peerioBlueBackground05 : vars.filesBg,
             padding: vars.spacing.small.mini2x,
             flex: 0,
@@ -67,7 +74,7 @@ export default class FileInnerItem extends SafeComponent {
             <MeasureableIcon
                 icon="more-vert"
                 testId="more-vert"
-                beacon={filesBeacons.fileOptionsBeacon}
+                beacon={(filesBeacons as any).fileOptionsBeacon}
                 color={vars.darkIcon}
                 onPress={onFileAction}
                 spotBgColor={vars.filesBg}
@@ -94,7 +101,7 @@ export default class FileInnerItem extends SafeComponent {
             color: vars.extraSubtleText,
             fontSize: vars.font.size12
         };
-        const itemContainerStyle = {
+        const itemContainerStyle: ViewStyle = {
             flex: 1,
             flexGrow: 1,
             flexDirection: 'row',
@@ -175,11 +182,3 @@ export default class FileInnerItem extends SafeComponent {
         );
     }
 }
-
-FileInnerItem.propTypes = {
-    onPress: PropTypes.func,
-    file: PropTypes.any.isRequired,
-    checkbox: PropTypes.string,
-    hideArrow: PropTypes.bool,
-    onFileAction: PropTypes.func
-};
