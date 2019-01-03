@@ -28,6 +28,8 @@ class FileState extends RoutedState {
     store = fileStore;
     _prefix = 'files';
     selectedFile = null;
+    resolveFileSelection: any;
+    rejectFileSelection: any;
 
     @action
     async init() {
@@ -80,7 +82,7 @@ class FileState extends RoutedState {
     async remindAboutEncryption() {
         if (Platform.OS !== 'android') return;
         let text = null;
-        switch (global.fileEncryptionStatus) {
+        switch ((global as any).fileEncryptionStatus) {
             case undefined:
             case 2:
                 return;
@@ -137,7 +139,7 @@ class FileState extends RoutedState {
     }
 
     @action
-    selectFilesAndFolders(params = {}) {
+    selectFilesAndFolders(params: any = {}) {
         const { disableFolders } = params;
         this.resetSelection();
         fileStore.folderStore.currentFolder = this.store.folderStore.root;
