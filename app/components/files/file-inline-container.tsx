@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
 import { observer } from 'mobx-react/native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -40,23 +39,35 @@ const text = {
     paddingLeft: padding
 };
 
+const errorContainer = {
+    backgroundColor: vars.legacyImageErrorBg,
+    padding: vars.spacing.small.midi2x,
+    borderRadius: 4
+};
+const errorStyle: TextStyle = {
+    fontSize: vars.font.size12,
+    color: vars.lighterBlackText,
+    fontStyle: 'italic'
+};
+const learnMoreStyle = {
+    fontSize: vars.font.size12,
+    color: vars.peerioBlue
+};
+
+export interface FileInlineContainerProps {
+    file: any;
+    onLayout: any;
+    extraActionIcon: any;
+    onActionSheet: Function;
+    onAction: any;
+    isImage: boolean;
+    isOpen: boolean;
+    onLegacyFileAction: Function;
+}
+
 @observer
-export default class FileInlineContainer extends SafeComponent {
+export default class FileInlineContainer extends SafeComponent<FileInlineContainerProps> {
     legacyNotification() {
-        const errorContainer = {
-            backgroundColor: vars.legacyImageErrorBg,
-            padding: vars.spacing.small.midi2x,
-            borderRadius: 4
-        };
-        const errorStyle = {
-            fontSize: vars.font.size12,
-            color: vars.lighterBlackText,
-            fontStyle: 'italic'
-        };
-        const learnMoreStyle = {
-            fontSize: vars.font.size12,
-            color: vars.peerioBlue
-        };
         return (
             this.props.isOpen && (
                 <View style={errorContainer}>
@@ -129,7 +140,7 @@ export default class FileInlineContainer extends SafeComponent {
             padding,
             paddingBottom: downloading && !isImage ? spacingDifference : padding
         };
-        const header = {
+        const header: ViewStyle = {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -169,13 +180,3 @@ export default class FileInlineContainer extends SafeComponent {
         );
     }
 }
-
-FileInlineContainer.propTypes = {
-    file: PropTypes.any,
-    onLayout: PropTypes.any,
-    extraActionIcon: PropTypes.any,
-    onActionSheet: PropTypes.any,
-    onAction: PropTypes.any,
-    isImage: PropTypes.bool,
-    isOpen: PropTypes.bool
-};
