@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, TextStyle } from 'react-native';
 import { observable, computed } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -18,7 +18,9 @@ const INITIAL_LIST_SIZE = 10;
 const PAGE_SIZE = 2;
 
 @observer
-export default class FolderSelect extends SafeComponent {
+export default class FolderSelect extends SafeComponent<{ fsObject: any }> {
+    reaction: any;
+    onEndReached: any;
     @observable currentFolder = fileState.store.folderStore.root;
 
     @computed
@@ -71,8 +73,8 @@ export default class FolderSelect extends SafeComponent {
     list() {
         return (
             <FlatList
-                initialListSize={INITIAL_LIST_SIZE}
-                pageSize={PAGE_SIZE}
+                // initialListSize={INITIAL_LIST_SIZE}
+                // pageSize={PAGE_SIZE}
                 data={this.data}
                 renderItem={this.item}
                 onEndReached={this.onEndReached}
@@ -83,7 +85,7 @@ export default class FolderSelect extends SafeComponent {
 
     get noFilesInFolder() {
         if (this.data.length || this.currentFolder.isRoot) return null;
-        const s = {
+        const s: TextStyle = {
             color: vars.txtMedium,
             textAlign: 'center',
             marginTop: vars.headerSpacing

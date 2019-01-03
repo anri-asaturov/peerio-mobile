@@ -30,6 +30,7 @@ class FileState extends RoutedState {
     selectedFile = null;
     resolveFileSelection: any;
     rejectFileSelection: any;
+    hasLegacyObjectsInSelection: any;
 
     @action
     async init() {
