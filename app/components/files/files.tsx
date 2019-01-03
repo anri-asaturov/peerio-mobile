@@ -106,7 +106,7 @@ export default class Files extends SafeComponent {
                 file={item}
                 rowID={index}
                 onChangeFolder={this.onChangeFolder}
-                onFileAction={() => FileActionSheet.show(item)}
+                onFileAction={() => FileActionSheet.show(item, null, null)}
                 onFolderAction={() => FoldersActionSheet.show(item)}
             />
         );
