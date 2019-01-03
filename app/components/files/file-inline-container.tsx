@@ -55,14 +55,15 @@ const learnMoreStyle = {
 };
 
 export interface FileInlineContainerProps {
+    onLayout?: any;
+    extraActionIcon?: any;
+    isImage?: any;
+    isOpen?: any;
+    children?: any;
     file: any;
-    onLayout: any;
-    extraActionIcon: any;
-    onActionSheet: Function;
-    onAction: any;
-    isImage: boolean;
-    isOpen: boolean;
-    onLegacyFileAction: Function;
+    onActionSheet?: any;
+    onAction?: () => void;
+    onLegacyFileAction?: Function;
 }
 
 @observer
