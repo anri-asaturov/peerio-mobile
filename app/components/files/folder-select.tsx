@@ -14,8 +14,8 @@ import { tx } from '../utils/translator';
 import preferenceStore from '../settings/preference-store';
 import ModalHeader from '../shared/modal-header';
 
-const INITIAL_LIST_SIZE = 10;
-const PAGE_SIZE = 2;
+// const INITIAL_LIST_SIZE = 10;
+// const PAGE_SIZE = 2;
 
 @observer
 export default class FolderSelect extends SafeComponent<{ fsObject?: any }> {
