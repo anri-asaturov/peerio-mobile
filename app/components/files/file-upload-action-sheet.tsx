@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import { observable } from 'mobx';
-import fileState from '../files/file-state';
+import fileState from './file-state';
 import chatState from '../messaging/chat-state';
 import { tx } from '../utils/translator';
 import { popupInputCancel } from '../shared/popups';
@@ -13,7 +13,7 @@ async function doUpload(sourceFunction, inline) {
     const uploader = inline ? fileState.uploadInline : fileState.uploadInFiles;
     const source = observable(await sourceFunction());
     if (inline) {
-        const userSelection = await FileSharePreview.popup(source.url, source.fileName);
+        const userSelection: any = await FileSharePreview.popup(source.url, source.fileName);
         if (!userSelection) return;
         source.fileName = `${userSelection.name}.${source.ext}`;
         source.message = userSelection.message;
@@ -29,20 +29,22 @@ async function doUpload(sourceFunction, inline) {
 }
 
 export default class FileUploadActionSheet {
-    static show(params = {}) {
+    static show(params: any = {}) {
         const { inline, createFolder, disableFolders } = params;
         const actionButtons = [
             {
                 title: tx('button_takeAPicture'),
                 action() {
                     doUpload(imagepicker.getImageFromCamera, inline);
-                }
+                },
+                disabled: false
             },
             {
                 title: tx('title_chooseFromGallery'),
                 action() {
                     doUpload(imagepicker.getImageFromGallery, inline);
-                }
+                },
+                disabled: false
             }
         ];
 
@@ -51,7 +53,8 @@ export default class FileUploadActionSheet {
                 title: tx('title_chooseFromFiles'),
                 action() {
                     doUpload(imagepicker.getImageFromAndroidFilePicker, inline);
-                }
+                },
+                disabled: false
             });
         }
 
@@ -80,7 +83,8 @@ export default class FileUploadActionSheet {
                     requestAnimationFrame(() => {
                         fileStore.folderStore.currentFolder.createFolder(result.value);
                     });
-                }
+                },
+                disabled: false
             });
         }
 
