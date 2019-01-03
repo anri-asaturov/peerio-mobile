@@ -18,9 +18,9 @@ const fileInfoContainerStyle: ViewStyle = {
 };
 
 export interface RecentFileItemProps {
-    file: any;
-    onMenu: Function;
-    hideArrow: any;
+    file?: any;
+    onMenu?: Function;
+    hideArrow?: any;
 }
 
 @observer
