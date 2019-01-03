@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { observer } from 'mobx-react/native';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ViewStyle } from 'react-native';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import { tu } from '../utils/translator';
@@ -10,12 +9,20 @@ import SharedWithRow from '../shared/shared-with-row';
 import uiState from '../layout/ui-state';
 import Text from '../controls/custom-text';
 
+export interface SharedFolderFooterProps {
+    title: any;
+    action: Function;
+    icon: string;
+    showAvatars: boolean;
+    volume: any;
+}
+
 @observer
-export default class SharedFolderFooter extends SafeComponent {
+export default class SharedFolderFooter extends SafeComponent<SharedFolderFooterProps> {
     renderThrow() {
         const { title, action, icon, showAvatars, volume } = this.props;
 
-        const bottomRowStyle = {
+        const bottomRowStyle: ViewStyle = {
             flexDirection: 'row',
             alignItems: 'center',
             paddingLeft: vars.spacing.small.mini,
@@ -32,7 +39,7 @@ export default class SharedFolderFooter extends SafeComponent {
             <TouchableOpacity
                 pressRetentionOffset={vars.retentionOffset}
                 style={bottomRowStyle}
-                onPress={action}>
+                onPress={action as OnPressResponder}>
                 {icon && icons.plaindark(icon, vars.iconSize, iconStyle)}
                 <View style={{ padding: vars.spacing.medium.mini }}>
                     <Text style={{ fontWeight: 'bold', color: vars.peerioBlue }}>{tu(title)}</Text>
@@ -42,11 +49,3 @@ export default class SharedFolderFooter extends SafeComponent {
         );
     }
 }
-
-SharedFolderFooter.propTypes = {
-    title: PropTypes.any,
-    action: PropTypes.func,
-    icon: PropTypes.string,
-    showAvatars: PropTypes.bool,
-    volume: PropTypes.any
-};
