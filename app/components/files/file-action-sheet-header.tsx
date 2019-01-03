@@ -1,8 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import { observer } from 'mobx-react/native';
-import { View, TouchableOpacity, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Dimensions, TextStyle, ViewStyle } from 'react-native';
 import { tx } from '../utils/translator';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -17,7 +16,7 @@ const lineStyle = {
     backgroundColor: vars.actionSheetButtonBorderColor
 };
 
-const container = {
+const container: ViewStyle = {
     backgroundColor: vars.actionSheetButtonColor,
     justifyContent: 'center',
     alignItems: 'center',
@@ -34,7 +33,7 @@ const infoIconStyle = {
     bottom: 8
 };
 
-const infoTextStyle = {
+const infoTextStyle: TextStyle = {
     fontSize: vars.font.size12,
     alignItems: 'center',
     textAlign: 'center',
@@ -42,8 +41,13 @@ const infoTextStyle = {
     lineHeight: 16
 };
 
+export interface FileActionSheetProps {
+    file: any;
+    onPress: Function;
+}
+
 @observer
-export default class FileActionSheetHeader extends SafeComponent {
+export default class FileActionSheetHeader extends SafeComponent<FileActionSheetProps> {
     // Android border color does not work with border radius
     get borderBottom() {
         return <View style={lineStyle} />;
@@ -56,7 +60,7 @@ export default class FileActionSheetHeader extends SafeComponent {
             <View style={[container, { backgroundColor: vars.lightGrayBg }]}>
                 <TouchableOpacity
                     style={container}
-                    onPress={onPress}
+                    onPress={onPress as OnPressResponder}
                     disabled={!onPress}
                     pressRetentionOffset={vars.retentionOffset}>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -74,8 +78,3 @@ export default class FileActionSheetHeader extends SafeComponent {
         );
     }
 }
-
-FileActionSheetHeader.propTypes = {
-    file: PropTypes.any,
-    onPress: PropTypes.func
-};
