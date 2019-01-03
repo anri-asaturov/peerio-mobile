@@ -28,9 +28,10 @@ const fileInfoContainerStyle: ViewStyle = {
 export interface FileInnerItemProps {
     onPress: Function;
     file: any;
-    checkbox: string;
-    hideArrow: boolean;
-    onFileAction: Function;
+    checkbox?: string;
+    hideArrow?: boolean;
+    onFileAction?: Function;
+    rowID?: any;
 }
 
 @observer

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View } from 'react-native';
@@ -14,8 +13,16 @@ const fileContainer = {
     paddingHorizontal: vars.spacing.medium.mini2x
 };
 
+export interface FileItemProps {
+    file: any;
+    rowID: any;
+    onChangeFolder: any;
+    onFileAction: Function;
+    onFolderAction: Function;
+}
+
 @observer
-export default class FileItem extends SafeComponent {
+export default class FileItem extends SafeComponent<FileItemProps> {
     @observable
     store = {
         get checkBoxHidden() {
@@ -23,6 +30,7 @@ export default class FileItem extends SafeComponent {
         },
 
         set checkBoxHidden(value) {
+            console.log(value);
             // noop
         }
     };
@@ -79,10 +87,3 @@ export default class FileItem extends SafeComponent {
         );
     }
 }
-
-FileItem.propTypes = {
-    file: PropTypes.any.isRequired,
-    onChangeFolder: PropTypes.any,
-    onFileAction: PropTypes.func,
-    onFolderAction: PropTypes.func
-};
