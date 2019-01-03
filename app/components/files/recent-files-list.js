@@ -10,13 +10,13 @@ import { tx } from '../utils/translator';
 
 const INITIAL_LIST_SIZE = 25;
 
-export interface RecentFilesListProps {
-    collapsed: boolean;
-    toggleCollapsed: any;
-}
+// export interface RecentFilesListProps {
+//     collapsed: boolean;
+//     toggleCollapsed: any;
+// }
 
 @observer
-export default class RecentFilesList extends SafeComponent<RecentFilesListProps> {
+export default class RecentFilesList extends SafeComponent {
     get sections() {
         return [{ data: chatState.currentChat.recentFiles, key: tx('title_recentFiles') }];
     }
