@@ -4,7 +4,7 @@ import ContactSelectorUniversal from '../contacts/contact-selector-universal';
 import chatState from '../messaging/chat-state';
 
 @observer
-export default class FileShare extends Component {
+export default class FileShare extends Component<{ file: any }> {
     exit = () => chatState.routerModal.discard();
     action = contacts => chatState.startChatAndShareFiles(contacts, this.props.file);
 
