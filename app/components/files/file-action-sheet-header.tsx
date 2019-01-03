@@ -43,7 +43,7 @@ const infoTextStyle: TextStyle = {
 
 export interface FileActionSheetProps {
     file: any;
-    onPress: Function;
+    onPress?: Function;
 }
 
 @observer
