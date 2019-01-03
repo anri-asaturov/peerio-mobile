@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
-import { View, Animated } from 'react-native';
+import { View, Animated, ViewStyle } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -8,8 +8,8 @@ import FilesZeroStatePlaceholder from './files-zero-state-placeholder';
 import ProgressOverlay from '../shared/progress-overlay';
 import FileItem from './file-item';
 import FileUploadActionSheet from './file-upload-action-sheet';
-import FileActionSheet from '../files/file-action-sheet';
-import FoldersActionSheet from '../files/folder-action-sheet';
+import FileActionSheet from './file-action-sheet';
+import FoldersActionSheet from './folder-action-sheet';
 import fileState from './file-state';
 import PlusBorderIcon from '../layout/plus-border-icon';
 import { upgradeForFiles } from '../payments/payments';
@@ -41,6 +41,10 @@ function backFolderAction() {
 export default class Files extends SafeComponent {
     @observable findFilesText;
     @observable refresh = 0;
+    _searchTimeout: any;
+    clean: any;
+    onSubmit: any;
+    flatListRef: any;
 
     get leftIcon() {
         if (!fileState.store.folderStore.currentFolder.parent) return null;
@@ -72,7 +76,9 @@ export default class Files extends SafeComponent {
             ? fileState.store.filesAndFoldersSearchResult
             : fileState.store.folderStore.currentFolder.filesAndFoldersDefaultSorting;
         if (fileState.isFileSelectionMode) {
-            data = data.filter(item => !item.isLegacy && (item.isFolder || item.readyForDownload));
+            data = data.filter(
+                (item: any) => !item.isLegacy && (item.isFolder || item.readyForDownload)
+            );
         }
         return data;
     }
@@ -217,7 +223,7 @@ export default class Files extends SafeComponent {
     }
 
     toolbar() {
-        const container = {
+        const container: ViewStyle = {
             height: vars.listItemHeight,
             backgroundColor: vars.darkBlueBackground05,
             flexDirection: 'row',

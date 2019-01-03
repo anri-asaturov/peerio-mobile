@@ -34,7 +34,7 @@ const labelStyle: TextStyle = {
 };
 
 export interface FilesPlaceholderProps {
-    emptyFolder: boolean;
+    emptyFolder?: boolean;
 }
 
 @observer

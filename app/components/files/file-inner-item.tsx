@@ -14,7 +14,7 @@ import testLabel from '../helpers/test-label';
 import FileProgress from './file-progress';
 import { fileHelpers, contactStore, User } from '../../lib/icebear';
 import MeasureableIcon from '../layout/measureable-icon';
-import * as filesBeacons from '../beacons/files-beacons';
+import filesBeacons from '../beacons/files-beacons';
 
 const { width } = Dimensions.get('window');
 const height = vars.filesListItemHeight;
