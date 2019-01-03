@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { observable, action } from 'mobx';
 import { Keyboard, View } from 'react-native';
 import { observer } from 'mobx-react/native';
@@ -8,9 +8,10 @@ import SharedFolderFooter from './shared-folder-footer';
 import { vars } from '../../styles/styles';
 import routes from '../routes/routes';
 import { transitionAnimation } from '../helpers/animations';
+import SafeComponent from '../shared/safe-component';
 
 @observer
-export default class FolderShare extends Component {
+export default class FolderShare extends SafeComponent<{ folder: any }> {
     @observable currentPage = 0;
 
     @action.bound

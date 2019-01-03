@@ -18,7 +18,7 @@ const INITIAL_LIST_SIZE = 10;
 const PAGE_SIZE = 2;
 
 @observer
-export default class FolderSelect extends SafeComponent<{ fsObject: any }> {
+export default class FolderSelect extends SafeComponent<{ fsObject?: any }> {
     reaction: any;
     onEndReached: any;
     @observable currentFolder = fileState.store.folderStore.root;
