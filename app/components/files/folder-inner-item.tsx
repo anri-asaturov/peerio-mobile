@@ -35,12 +35,12 @@ const nameStyle = {
 
 export interface FolderInnerItemProps {
     onPress: Function;
-    onSelect: any;
+    onSelect?: any;
     folder: any;
-    hideOptionsIcon: boolean;
-    radio: boolean;
+    hideOptionsIcon?: boolean;
+    radio?: boolean;
     onFolderAction: Function;
-    disabled: boolean;
+    disabled?: boolean;
 }
 
 @observer

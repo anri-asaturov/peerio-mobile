@@ -9,7 +9,7 @@ import routes from '../routes/routes';
 import chatState from '../messaging/chat-state';
 
 export default class FoldersActionSheet {
-    static show(folder, canUnshare?) {
+    static show(folder, canUnshare) {
         const { hasLegacyFiles, isShared, owner } = folder;
         const isOwner = !owner || owner === User.current.username;
 
