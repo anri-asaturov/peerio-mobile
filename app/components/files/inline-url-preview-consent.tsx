@@ -36,7 +36,7 @@ const descriptionText = {
 const options = ['title_forAllContacts', 'title_forFavouriteContactsOnly', 'title_disable'];
 
 @observer
-export default class InlineUrlPreviewConsent extends SafeComponent<{ onChange: any }> {
+export default class InlineUrlPreviewConsent extends SafeComponent<{ onChange: Function }> {
     @observable optionSelected = 0;
 
     onSelectRadioButton = index => {

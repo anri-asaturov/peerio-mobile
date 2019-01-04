@@ -56,12 +56,12 @@ const learnMoreStyle = {
 
 export interface FileInlineContainerProps {
     onLayout?: (event: LayoutChangeEvent) => void;
-    extraActionIcon?: any;
-    isImage?: any;
-    isOpen?: any;
-    children?: any;
+    extraActionIcon?: JSX.Element;
+    isImage?: boolean;
+    isOpen?: boolean;
+    children?: Array<JSX.Element>;
     file: any;
-    onActionSheet?: any;
+    onActionSheet?: Function;
     onAction?: () => void;
     onLegacyFileAction?: Function;
 }

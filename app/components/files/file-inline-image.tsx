@@ -70,7 +70,7 @@ const text: TextStyle = {
 // remove the URL support from this component
 @observer
 export default class FileInlineImage extends SafeComponent<FileInlineImageProps> {
-    @observable cachedImage: any;
+    @observable cachedImage: { width; height };
     @observable width = 0;
     @observable height = 0;
     @observable optimalContentWidth = 0;
@@ -93,7 +93,7 @@ export default class FileInlineImage extends SafeComponent<FileInlineImageProps>
     @observable loadedBytesCount = 0;
     @observable totalBytesCount = 0;
     outerPadding = 8;
-    loadingTimeoutId: any;
+    loadingTimeoutId: NodeJS.Timeout;
 
     textMessageOuter: ViewStyle = {
         padding: this.outerPadding,
@@ -107,7 +107,7 @@ export default class FileInlineImage extends SafeComponent<FileInlineImageProps>
 
     componentWillMount() {
         this.optimalContentHeight = Dimensions.get('window').height;
-        when(() => this.cachedImage, () => this.fetchSize());
+        when(() => !!this.cachedImage, () => this.fetchSize());
         const { image } = this.props;
         const { fileId, url, isOverInlineSizeLimit, isOversizeCutoff } = image;
         let { tmpCachePath, tmpCached } = image;

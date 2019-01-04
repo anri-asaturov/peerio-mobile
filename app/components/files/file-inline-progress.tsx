@@ -15,8 +15,8 @@ import snackbarState from '../snackbars/snackbar-state';
 export interface FileInlineProgressProps {
     file: any;
     transparentOnFinishUpload: boolean;
-    onActionSheet: any;
-    chatId: any;
+    onActionSheet: Function;
+    chatId: string;
     onLegacyFileAction: Function;
 }
 

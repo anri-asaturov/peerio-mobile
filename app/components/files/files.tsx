@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { LegacyRef } from 'react';
 import { observer } from 'mobx-react/native';
 import { View, Animated, ViewStyle } from 'react-native';
 import { observable, action, computed } from 'mobx';
@@ -41,10 +41,10 @@ function backFolderAction() {
 export default class Files extends SafeComponent {
     @observable findFilesText;
     @observable refresh = 0;
-    _searchTimeout: any;
-    clean: any;
-    onSubmit: any;
-    flatListRef: any;
+    _searchTimeout: NodeJS.Timeout;
+    clean: boolean;
+    onSubmit: Function;
+    flatListRef: LegacyRef<View>;
 
     get leftIcon() {
         if (!fileState.store.folderStore.currentFolder.parent) return null;

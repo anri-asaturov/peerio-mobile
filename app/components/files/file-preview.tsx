@@ -43,10 +43,10 @@ const previewContainerSmall: ViewStyle = {
 
 export interface FilePreviewProps {
     state: {
-        fileName: any;
-        path: any;
-        name: any;
-        ext: any;
+        fileName: string;
+        path: string;
+        name: string;
+        ext: string;
     };
 }
 

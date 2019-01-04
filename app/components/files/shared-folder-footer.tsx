@@ -10,7 +10,7 @@ import uiState from '../layout/ui-state';
 import Text from '../controls/custom-text';
 
 export interface SharedFolderFooterProps {
-    title?: any;
+    title?: string;
     action?: Function;
     icon?: string;
     showAvatars?: boolean;
