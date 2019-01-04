@@ -79,10 +79,10 @@ export default class FileInlineProgress extends SafeComponent<FileInlineProgress
         if (file.signatureError) return <FileSignatureError />;
         return (
             <FileInlineContainer
-                file={file as any}
-                onActionSheet={this.props.onActionSheet as any}
-                onAction={this.fileAction as any}
-                onLegacyFileAction={this.props.onLegacyFileAction as any}>
+                file={file}
+                onActionSheet={this.props.onActionSheet}
+                onAction={this.fileAction}
+                onLegacyFileAction={this.props.onLegacyFileAction}>
                 {!this.filePreviouslyDownloaded && (
                     <TouchableOpacity
                         pressRetentionOffset={vars.retentionOffset}

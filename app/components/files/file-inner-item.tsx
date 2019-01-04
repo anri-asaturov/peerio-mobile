@@ -76,7 +76,7 @@ export default class FileInnerItem extends SafeComponent<FileInnerItemProps> {
             <MeasureableIcon
                 icon="more-vert"
                 testId="more-vert"
-                beacon={(filesBeacons as any).fileOptionsBeacon}
+                beacon={filesBeacons.fileOptionsBeacon}
                 color={vars.darkIcon}
                 onPress={onFileAction}
                 spotBgColor={vars.filesBg}
