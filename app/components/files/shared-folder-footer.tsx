@@ -8,13 +8,14 @@ import icons from '../helpers/icons';
 import SharedWithRow from '../shared/shared-with-row';
 import uiState from '../layout/ui-state';
 import Text from '../controls/custom-text';
+import { Volume } from '../../lib/peerio-icebear/models';
 
 export interface SharedFolderFooterProps {
     title?: string;
     action?: Function;
     icon?: string;
     showAvatars?: boolean;
-    volume?: any;
+    volume?: Volume;
 }
 
 @observer

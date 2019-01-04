@@ -4,9 +4,10 @@ import { action } from 'mobx';
 import SafeComponent from '../shared/safe-component';
 import ProgressWide from '../shared/progress-wide';
 import fileState from './file-state';
+import { File } from '../../lib/peerio-icebear/models';
 
 @observer
-export default class FileUploadProgress extends SafeComponent<{ file: any }> {
+export default class FileUploadProgress extends SafeComponent<{ file: File }> {
     get max() {
         const { file } = this.props;
         const max = file.progressMax || 1;

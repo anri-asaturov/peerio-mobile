@@ -15,6 +15,7 @@ import FileProgress from './file-progress';
 import { fileHelpers, contactStore, User } from '../../lib/icebear';
 import MeasureableIcon from '../layout/measureable-icon';
 import filesBeacons from '../beacons/files-beacons';
+import { File } from '../../lib/peerio-icebear/models';
 
 const { width } = Dimensions.get('window');
 const height = vars.filesListItemHeight;
@@ -27,7 +28,7 @@ const fileInfoContainerStyle: ViewStyle = {
 
 export interface FileInnerItemProps {
     onPress: Function;
-    file: any;
+    file: File;
     checkbox?: string;
     hideArrow?: boolean;
     onFileAction?: Function;

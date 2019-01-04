@@ -9,9 +9,10 @@ import { vars } from '../../styles/styles';
 import routes from '../routes/routes';
 import { transitionAnimation } from '../helpers/animations';
 import SafeComponent from '../shared/safe-component';
+import { Volume } from '../../lib/peerio-icebear/models';
 
 @observer
-export default class FolderShare extends SafeComponent<{ folder: any }> {
+export default class FolderShare extends SafeComponent<{ folder: Volume }> {
     @observable currentPage = 0;
 
     @action.bound

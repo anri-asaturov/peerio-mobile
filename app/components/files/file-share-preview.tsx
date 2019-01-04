@@ -13,6 +13,7 @@ import routes from '../routes/routes';
 import fileState from './file-state';
 import { User, fileHelpers, chatStore } from '../../lib/icebear';
 import FilePreview from './file-preview';
+import { File } from '../../lib/peerio-icebear/models';
 
 // TODO Workaround negative margin
 const buttonContainer: ViewStyle = {
@@ -42,8 +43,8 @@ const recipientStyle = {
 };
 
 export interface FileSharePreviewProps {
-    file?: any;
-    files?: any;
+    file?: File;
+    files?: Array<File>;
     onSubmit: Function;
     onChooseRecipients: (event: GestureResponderEvent) => void;
     state: { fileName: string; path: string; name: string; ext: string };

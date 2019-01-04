@@ -2,9 +2,10 @@ import React from 'react';
 import { observer } from 'mobx-react/native';
 import SafeComponent from '../shared/safe-component';
 import Progress from '../shared/progress';
+import { File } from '../../lib/peerio-icebear/models';
 
 export interface FileProgressProps {
-    file: any;
+    file: File;
 }
 
 @observer

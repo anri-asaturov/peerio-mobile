@@ -140,7 +140,7 @@ class FileState extends RoutedState {
     }
 
     @action
-    selectFilesAndFolders(params: any = {}) {
+    selectFilesAndFolders(params: { disableFolders?: boolean } = {}) {
         const { disableFolders } = params;
         this.resetSelection();
         fileStore.folderStore.currentFolder = this.store.folderStore.root;
