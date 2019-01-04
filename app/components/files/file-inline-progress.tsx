@@ -13,7 +13,7 @@ import FileSignatureError from './file-signature-error';
 import snackbarState from '../snackbars/snackbar-state';
 
 export interface FileInlineProgressProps {
-    file: any;
+    file: string;
     transparentOnFinishUpload: boolean;
     onActionSheet: Function;
     chatId: string;

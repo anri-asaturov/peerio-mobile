@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, ViewStyle } from 'react-native';
+import { View, TouchableOpacity, ViewStyle, GestureResponderEvent } from 'react-native';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react/native';
 import Text from '../controls/custom-text';
@@ -44,10 +44,10 @@ const recipientStyle = {
 export interface FileSharePreviewProps {
     file?: any;
     files?: any;
-    onSubmit: any;
-    onChooseRecipients: any;
-    state: any;
-    onCancel?: any;
+    onSubmit: Function;
+    onChooseRecipients: (event: GestureResponderEvent) => void;
+    state: { fileName: string; path: string; name: string; ext: string };
+    onCancel?: Function;
 }
 
 @observer

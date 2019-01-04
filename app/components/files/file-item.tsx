@@ -7,6 +7,7 @@ import FileInnerItem from './file-inner-item';
 import FolderInnerItem from './folder-inner-item';
 import fileState from './file-state';
 import { vars } from '../../styles/styles';
+import { File } from '../../lib/peerio-icebear/models';
 
 const fileContainer = {
     backgroundColor: vars.filesBg,
@@ -14,9 +15,9 @@ const fileContainer = {
 };
 
 export interface FileItemProps {
-    file: any;
-    rowID: any;
-    onChangeFolder: any;
+    file: File;
+    rowID: string;
+    onChangeFolder: Function;
     onFileAction: Function;
     onFolderAction: Function;
 }

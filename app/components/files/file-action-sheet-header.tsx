@@ -7,6 +7,7 @@ import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
+import { File } from '../../lib/peerio-icebear/models';
 
 const { width } = Dimensions.get('window');
 
@@ -42,7 +43,7 @@ const infoTextStyle: TextStyle = {
 };
 
 export interface FileActionSheetProps {
-    file: any;
+    file: File;
     onPress?: Function;
 }
 

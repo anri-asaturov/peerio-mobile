@@ -18,7 +18,7 @@ import ModalHeader from '../shared/modal-header';
 // const PAGE_SIZE = 2;
 
 @observer
-export default class FolderSelect extends SafeComponent<{ fsObject?: any }> {
+export default class FolderSelect extends SafeComponent<{ fsObject?: string }> {
     reaction: Function;
     onEndReached: (info: { distanceFromEnd: number }) => void;
     @observable currentFolder = fileState.store.folderStore.root;

@@ -28,9 +28,9 @@ class FileState extends RoutedState {
     store = fileStore;
     _prefix = 'files';
     selectedFile = null;
-    resolveFileSelection: any;
-    rejectFileSelection: any;
-    hasLegacyObjectsInSelection: any;
+    resolveFileSelection: Function;
+    rejectFileSelection: Function;
+    hasLegacyObjectsInSelection: boolean;
 
     @action
     async init() {

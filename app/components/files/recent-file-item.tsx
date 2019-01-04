@@ -8,6 +8,7 @@ import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
 import FileTypeIcon from './file-type-icon';
 import { fileHelpers } from '../../lib/icebear';
+import { File } from '../../lib/peerio-icebear/models';
 
 const { width } = Dimensions.get('window');
 const height = 64;
@@ -18,7 +19,7 @@ const fileInfoContainerStyle: ViewStyle = {
 };
 
 export interface RecentFileItemProps {
-    file?: any;
+    file?: File;
     onMenu?: Function;
     hideArrow?: boolean;
 }

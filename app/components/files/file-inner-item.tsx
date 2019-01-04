@@ -31,7 +31,7 @@ export interface FileInnerItemProps {
     checkbox?: string;
     hideArrow?: boolean;
     onFileAction?: Function;
-    rowID?: any;
+    rowID?: string;
 }
 
 @observer
