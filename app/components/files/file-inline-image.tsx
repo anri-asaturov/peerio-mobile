@@ -54,7 +54,7 @@ const text0: TextStyle = {
 
 export interface FileInlineImageProps {
     image: any;
-    onActionSheet: any;
+    onActionSheet: Function;
     isClosed: boolean;
     onAction: Function;
     onLegacyFileAction: Function;

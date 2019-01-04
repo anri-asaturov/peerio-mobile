@@ -34,7 +34,7 @@ const bottomTextStyle = {
 };
 
 export interface SharedFolderRemovalNotifProps {
-    folderNames: any;
+    folderNames: Array<string>;
 }
 
 @observer

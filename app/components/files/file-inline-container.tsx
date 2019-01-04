@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, TextStyle, ViewStyle } from 'react-native';
+import { View, TouchableOpacity, TextStyle, ViewStyle, LayoutChangeEvent } from 'react-native';
 import { observer } from 'mobx-react/native';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -55,7 +55,7 @@ const learnMoreStyle = {
 };
 
 export interface FileInlineContainerProps {
-    onLayout?: any;
+    onLayout?: (event: LayoutChangeEvent) => void;
     extraActionIcon?: any;
     isImage?: any;
     isOpen?: any;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import { observable, action } from 'mobx';
-import { View, TouchableOpacity, ViewStyle } from 'react-native';
+import { View, TouchableOpacity, ViewStyle, GestureResponderEvent } from 'react-native';
 import moment from 'moment';
 import Text from '../controls/custom-text';
 import SafeComponent from '../shared/safe-component';
@@ -35,7 +35,7 @@ const nameStyle = {
 
 export interface FolderInnerItemProps {
     onPress?: Function;
-    onSelect?: any;
+    onSelect?: (event: GestureResponderEvent) => void;
     folder?: any;
     hideOptionsIcon?: boolean;
     radio?: boolean;
