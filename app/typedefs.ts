@@ -17,5 +17,6 @@ declare global {
         icebear: object;
         // test functions
         testConfirmEmail: () => Promise<any>;
+        fileEncryptionStatus: any;
     }
 }

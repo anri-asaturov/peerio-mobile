@@ -16,6 +16,8 @@ import { rnAlertYesNo } from '../../lib/alerts';
 import { popupInputWithPreview, popupYesCancel, popupOkCancel } from '../shared/popups';
 import { promiseWhen } from '../helpers/sugar';
 
+declare const global: GlobalExtended;
+
 class FileState extends RoutedState {
     // the current selected file for FileDetailView
     @observable currentFile = null;
@@ -83,7 +85,7 @@ class FileState extends RoutedState {
     async remindAboutEncryption() {
         if (Platform.OS !== 'android') return;
         let text = null;
-        switch ((global as any).fileEncryptionStatus) {
+        switch (global.fileEncryptionStatus) {
             case undefined:
             case 2:
                 return;
