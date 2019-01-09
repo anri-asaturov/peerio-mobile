@@ -65,8 +65,7 @@ class InlineImageCacheStore {
         // after the image has been loaded
         if (await image.loadImageSize()) return;
         image.acquiringSize = true;
-        const size = await this.getSizeByUrl(url);
-        const { width, height } = size;
+        const { width, height } = await this.getSizeByUrl(url);
         image.acquiringSize = false;
         console.debug(`remote filesize: ${width}, ${height}`);
         image.setImageSize(width, height);
@@ -91,7 +90,7 @@ class InlineImageCacheStore {
     }
 
     async getSizeByUrl(url) {
-        return new Promise(resolve =>
+        return new Promise<{ width: number; height: number }>(resolve =>
             Image.getSize(
                 url,
                 (width, height) => {
@@ -104,7 +103,7 @@ class InlineImageCacheStore {
     }
 
     async getSizeByFilename(path) {
-        return ImagePicker.getImageDimensions(path);
+        return (ImagePicker as ImagePickerExtended).getImageDimensions(path);
     }
 }
 
