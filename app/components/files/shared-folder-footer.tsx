@@ -12,7 +12,7 @@ import { Volume } from '../../lib/peerio-icebear/models';
 
 export interface SharedFolderFooterProps {
     title?: string;
-    action?: Function;
+    action?: OnPressResponder;
     icon?: string;
     showAvatars?: boolean;
     volume?: Volume;
@@ -40,7 +40,7 @@ export default class SharedFolderFooter extends SafeComponent<SharedFolderFooter
             <TouchableOpacity
                 pressRetentionOffset={vars.retentionOffset}
                 style={bottomRowStyle}
-                onPress={action as OnPressResponder}>
+                onPress={action}>
                 {icon && icons.plaindark(icon, vars.iconSize, iconStyle)}
                 <View style={{ padding: vars.spacing.medium.mini }}>
                     <Text style={{ fontWeight: 'bold', color: vars.peerioBlue }}>{tu(title)}</Text>

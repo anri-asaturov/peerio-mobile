@@ -44,7 +44,7 @@ const infoTextStyle: TextStyle = {
 
 export interface FileActionSheetProps {
     file: File;
-    onPress?: Function;
+    onPress?: OnPressResponder;
 }
 
 @observer
@@ -61,7 +61,7 @@ export default class FileActionSheetHeader extends SafeComponent<FileActionSheet
             <View style={[container, { backgroundColor: vars.lightGrayBg }]}>
                 <TouchableOpacity
                     style={container}
-                    onPress={onPress as OnPressResponder}
+                    onPress={onPress}
                     disabled={!onPress}
                     pressRetentionOffset={vars.retentionOffset}>
                     <View style={{ flex: 1, justifyContent: 'center' }}>
