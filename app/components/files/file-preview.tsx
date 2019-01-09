@@ -81,7 +81,9 @@ export default class FilePreview extends SafeComponent<FilePreviewProps> {
             }
         );
         const { path } = this.props.state;
-        const { width, height } = await (ImagePicker as any).getImageDimensions(path);
+        const { width, height } = await (ImagePicker as ImagePickerExtended).getImageDimensions(
+            path
+        );
         Object.assign(this, { width, height });
     }
 

@@ -1,5 +1,6 @@
 import { GestureResponderEvent } from 'react-native';
 import { Contact } from './lib/icebear';
+import { ImageCropPicker } from 'react-native-image-crop-picker';
 
 declare global {
     type OnPressResponder = (event: GestureResponderEvent) => any;
@@ -18,5 +19,9 @@ declare global {
         // test functions
         testConfirmEmail: () => Promise<any>;
         fileEncryptionStatus: any;
+    }
+
+    interface ImagePickerExtended extends ImageCropPicker {
+        getImageDimensions: Function;
     }
 }
