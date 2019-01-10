@@ -14,6 +14,8 @@ import chatState from '../messaging/chat-state';
 import mockStoresCreate from './mock-stores-create';
 import routerMain from '../routes/router-main';
 import routerModal from '../routes/router-modal';
+import CustomOverlay from '../layout/custom-overlay';
+import Bottom from '../controls/bottom';
 
 @observer
 export default class MockChannelView extends Component {
@@ -84,6 +86,9 @@ export default class MockChannelView extends Component {
                 <HeaderMain />
                 <Chat />
                 <StatusBar barStyle="light-content" />
+                <Bottom>
+                    <CustomOverlay />
+                </Bottom>
             </View>
         );
     }
