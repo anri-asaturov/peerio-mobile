@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { observer } from 'mobx-react/native';
 import {
-    ScrollView,
+    FlatList,
     View,
     TouchableOpacity,
-    ActivityIndicator,
+    // ActivityIndicator,
     Dimensions,
     Platform
 } from 'react-native';
@@ -88,8 +88,9 @@ export default class Chat extends SafeComponent {
         return <VideoIcon onAddVideoLink={link => chatState.addVideoMessage(link)} />;
     }
 
+    @computed
     get data() {
-        return this.chat ? this.chat.messages : null;
+        return this.chat ? this.chat.messages.reverse() : null;
     }
 
     get chat() {
@@ -103,8 +104,12 @@ export default class Chat extends SafeComponent {
     _refs = {};
     _itemActionMap = {};
 
+    keyExtractor = (item, index) => {
+        return item.id || index;
+    };
+
     // TODO add folder action sheet
-    item = (item, index) => {
+    renderItem = ({ item, index }) => {
         const key = item.id || index;
         const actions = getOrMake(key, this._itemActionMap, () => ({
             ref: ref => {
@@ -116,6 +121,7 @@ export default class Chat extends SafeComponent {
         }));
         return (
             <ChatItem
+                style={{ transform: [{ scaleY: -1 }] }}
                 key={key}
                 message={item}
                 chat={this.chat}
@@ -342,7 +348,7 @@ export default class Chat extends SafeComponent {
 
     listView() {
         if (chatState.loading) return null;
-        const refreshControlTop = this.chat.canGoUp ? (
+        /* const refreshControlTop = this.chat.canGoUp ? (
             <ActivityIndicator
                 size="large"
                 style={{ padding: vars.spacing.small.maxi }}
@@ -353,8 +359,25 @@ export default class Chat extends SafeComponent {
         ) : null;
         const refreshControlBottom = this.chat.canGoDown ? (
             <ActivityIndicator size="large" style={{ padding: vars.spacing.small.maxi }} />
-        ) : null;
+        ) : null; */
+        const style = {
+            transform: [{ scaleY: -1 }],
+            flexGrow: 1,
+            flex: 1,
+            backgroundColor: this.background
+        };
         return (
+            <FlatList
+                onLayout={this.layoutScrollView}
+                style={style}
+                initialListSize={1}
+                keyboardShouldPersistTaps="never"
+                data={this.data}
+                renderItem={this.renderItem}
+                keyExtractor={this.keyExtractor}
+            />
+        );
+        /* return (
             <ScrollView
                 onLayout={this.layoutScrollView}
                 contentContainerStyle={{ opacity: this.initialScrollDone ? 1 : 0 }}
@@ -377,7 +400,7 @@ export default class Chat extends SafeComponent {
                         .map(this.item)}
                 {refreshControlBottom}
             </ScrollView>
-        );
+        ); */
     }
 
     @computed
@@ -433,7 +456,9 @@ export default class Chat extends SafeComponent {
                 <View style={{ flex: 1, flexGrow: 1, backgroundColor: this.background }}>
                     {this.data ? this.listView() : null}
                 </View>
-                <ProgressOverlay enabled={/* chatState.loading || */ !this.initialScrollDone} />
+                <ProgressOverlay
+                    enabled={/* chatState.loading || !this.initialScrollDone */ false}
+                />
             </View>
         );
     }
