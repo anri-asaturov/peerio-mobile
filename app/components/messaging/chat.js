@@ -5,7 +5,7 @@ import {
     FlatList,
     View,
     TouchableOpacity,
-    // ActivityIndicator,
+    ActivityIndicator,
     Dimensions,
     Platform
 } from 'react-native';
@@ -121,7 +121,6 @@ export default class Chat extends SafeComponent {
         }));
         return (
             <ChatItem
-                style={{ transform: [{ scaleY: -1 }] }}
                 key={key}
                 message={item}
                 chat={this.chat}
@@ -346,9 +345,22 @@ export default class Chat extends SafeComponent {
         return vars.white;
     }
 
+    get limboMessages() {
+        return this.chat.limboMessages
+            ? this.chat.limboMessages
+                  .filter(m => !(m.files && !m.files.length))
+                  .map((item, index) => this.renderItem({ item, index }))
+            : null;
+    }
+
+    @action.bound
+    scrollViewRef(sv) {
+        this.scrollView = sv;
+    }
+
     listView() {
         if (chatState.loading) return null;
-        /* const refreshControlTop = this.chat.canGoUp ? (
+        const refreshControlTop = this.chat.canGoUp ? (
             <ActivityIndicator
                 size="large"
                 style={{ padding: vars.spacing.small.maxi }}
@@ -356,25 +368,38 @@ export default class Chat extends SafeComponent {
                     this.indicatorHeight = e.nativeEvent.layout.height;
                 }}
             />
-        ) : null;
+        ) : (
+            this.zeroStateItem
+        );
         const refreshControlBottom = this.chat.canGoDown ? (
             <ActivityIndicator size="large" style={{ padding: vars.spacing.small.maxi }} />
-        ) : null; */
+        ) : null;
         const style = {
-            transform: [{ scaleY: -1 }],
             flexGrow: 1,
             flex: 1,
             backgroundColor: this.background
         };
+        const footer = (
+            <View>
+                {this.limboMessages}
+                {refreshControlBottom}
+            </View>
+        );
         return (
             <FlatList
                 onLayout={this.layoutScrollView}
+                onContentSizeChange={this.contentSizeChanged}
                 style={style}
+                inverted
                 initialListSize={1}
                 keyboardShouldPersistTaps="never"
                 data={this.data}
                 renderItem={this.renderItem}
                 keyExtractor={this.keyExtractor}
+                ref={this.scrollViewRef}
+                scrollEventThrottle={0}
+                ListFooterComponent={refreshControlTop}
+                ListHeaderComponent={footer}
             />
         );
         /* return (
