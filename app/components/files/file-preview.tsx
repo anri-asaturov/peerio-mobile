@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, ViewStyle } from 'react-native';
 import { observable, action, when } from 'mobx';
 import { observer } from 'mobx-react/native';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker, { ImageCropPicker } from 'react-native-image-crop-picker';
 import Text from '../controls/custom-text';
 import { tx } from '../utils/translator';
 import { vars } from '../../styles/styles';
@@ -40,6 +40,16 @@ const previewContainerSmall: ViewStyle = {
     marginRight: vars.spacing.small.maxi,
     flex: 0
 };
+
+interface ImageDimensions {
+    width: number;
+    height: number;
+}
+
+// TODO: move the type definition to plugin
+interface ImagePickerPlugin extends ImageCropPicker {
+    getImageDimensions: (path: string) => ImageDimensions;
+}
 
 export interface FilePreviewProps {
     state: {
@@ -81,9 +91,7 @@ export default class FilePreview extends SafeComponent<FilePreviewProps> {
             }
         );
         const { path } = this.props.state;
-        const { width, height } = await (ImagePicker as ImagePickerExtended).getImageDimensions(
-            path
-        );
+        const { width, height } = await (ImagePicker as ImagePickerPlugin).getImageDimensions(path);
         Object.assign(this, { width, height });
     }
 
