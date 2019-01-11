@@ -7,7 +7,7 @@ import FileInnerItem from './file-inner-item';
 import FolderInnerItem from './folder-inner-item';
 import fileState from './file-state';
 import { vars } from '../../styles/styles';
-import { File } from '../../lib/peerio-icebear/models';
+import { File, FileFolder } from '../../lib/peerio-icebear/models';
 
 const fileContainer = {
     backgroundColor: vars.filesBg,
@@ -15,7 +15,7 @@ const fileContainer = {
 };
 
 export interface FileItemProps {
-    file: File;
+    file: File | FileFolder;
     rowID: string;
     onChangeFolder: Function;
     onFileAction: Function;
@@ -72,13 +72,13 @@ export default class FileItem extends SafeComponent<FileItemProps> {
             <View style={fileContainer}>
                 {file.isFolder ? (
                     <FolderInnerItem
-                        folder={file}
+                        folder={file as FileFolder}
                         onPress={this.onFolderPress}
                         onFolderAction={this.onFolderAction}
                     />
                 ) : (
                     <FileInnerItem
-                        file={file}
+                        file={file as File}
                         onPress={f => this.press(f)}
                         onFileAction={this.onFileAction}
                         rowID={this.props.rowID}

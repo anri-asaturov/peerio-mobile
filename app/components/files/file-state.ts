@@ -15,13 +15,25 @@ import { tx } from '../utils/translator';
 import { rnAlertYesNo } from '../../lib/alerts';
 import { popupInputWithPreview, popupYesCancel, popupOkCancel } from '../shared/popups';
 import { promiseWhen } from '../helpers/sugar';
+import { Chat } from '../../lib/peerio-icebear/models';
+import Contact from 'peerio-icebear/src/models/contacts/contact';
 
 declare const global: GlobalExtended;
+
+export interface FilePreviewProps {
+    path: string;
+    fileName: string;
+    ext: string;
+    name: string;
+    message: string;
+    chat: Chat | {};
+    contact: Contact | {};
+}
 
 class FileState extends RoutedState {
     // the current selected file for FileDetailView
     @observable currentFile = null;
-    @observable previewFile = null;
+    @observable previewFile: FilePreviewProps;
     @observable isFileSelectionMode = null;
     @observable disableFoldersInSelection;
     @observable findFilesText;

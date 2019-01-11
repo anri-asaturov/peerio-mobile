@@ -16,9 +16,11 @@ const INITIAL_LIST_SIZE = 25;
 // }
 
 @observer
-export default class RecentFilesList extends SafeComponent {
+export default class RecentFilesList extends SafeComponent<{ collapsed?; toggleCollapsed? }> {
     get sections() {
-        return [{ data: chatState.currentChat.recentFiles, key: tx('title_recentFiles') }];
+        return [
+            { data: chatState.currentChat.recentFiles, key: tx('title_recentFiles') as string }
+        ];
     }
 
     get hasData() {
@@ -34,14 +36,14 @@ export default class RecentFilesList extends SafeComponent {
         // for event handler
         return (
             <RecentFileItem
-                onMenu={() => FileActionSheet.show(item, false)}
+                onMenu={() => FileActionSheet.show(item, false, null)}
                 key={item.fileId}
                 file={item}
             />
         );
     };
 
-    header = ({ section: { key } }) => {
+    header = ({ section: { key } }: { section: { key?: string } }) => {
         const { collapsed, toggleCollapsed } = this.props;
         return (
             <ChatInfoSectionHeader

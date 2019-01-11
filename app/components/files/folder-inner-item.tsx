@@ -11,6 +11,7 @@ import { tx } from '../utils/translator';
 import fileState from './file-state';
 import { User, contactStore } from '../../lib/icebear';
 import testLabel from '../helpers/test-label';
+import { FileFolder } from '../../lib/peerio-icebear/models';
 
 const height = vars.filesListItemHeight;
 const width = vars.listItemHeight;
@@ -36,7 +37,7 @@ const nameStyle = {
 export interface FolderInnerItemProps {
     onPress?: Function;
     onSelect?: (event: GestureResponderEvent) => void;
-    folder?: any;
+    folder?: FileFolder;
     hideOptionsIcon?: boolean;
     radio?: boolean;
     onFolderAction?: Function;

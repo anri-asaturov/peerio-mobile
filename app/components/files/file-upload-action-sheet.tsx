@@ -18,7 +18,7 @@ async function doUpload(sourceFunction, inline) {
     }
     const source = observable(uploadInfo);
     if (inline) {
-        const userSelection: any = await FileSharePreview.popup(source.url, source.fileName);
+        const userSelection = await FileSharePreview.popup(source.url, source.fileName);
         if (!userSelection) return;
         source.fileName = `${userSelection.name}.${source.ext}`;
         source.message = userSelection.message;

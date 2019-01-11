@@ -10,7 +10,7 @@ import SafeComponent from '../shared/safe-component';
 import ButtonText from '../controls/button-text';
 import popupState from '../layout/popup-state';
 import routes from '../routes/routes';
-import fileState from './file-state';
+import fileState, { FilePreviewProps } from './file-state';
 import { User, fileHelpers, chatStore } from '../../lib/icebear';
 import FilePreview from './file-preview';
 import { File } from '../../lib/peerio-icebear/models';
@@ -70,7 +70,7 @@ export default class FileSharePreview extends SafeComponent<FileSharePreviewProp
             // contact to be selected in "change recipient"
             contact: {}
         });
-        return new Promise(resolve => {
+        return new Promise<FilePreviewProps | false>(resolve => {
             const showPopup = () =>
                 popupState.showPopup({
                     title: tx('title_uploadAndShare'),

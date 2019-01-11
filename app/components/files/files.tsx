@@ -27,6 +27,7 @@ import filesBeacons from '../beacons/files-beacons';
 import MeasureableView from '../shared/measureable-view';
 import beaconState from '../beacons/beacon-state';
 import routes from '../routes/routes';
+import { File } from '../../lib/peerio-icebear/models';
 
 const iconClear = require('../../assets/file_icons/ic_close.png');
 
@@ -77,7 +78,7 @@ export default class Files extends SafeComponent {
             : fileState.store.folderStore.currentFolder.filesAndFoldersDefaultSorting;
         if (fileState.isFileSelectionMode) {
             data = data.filter(
-                (item: any) => !item.isLegacy && (item.isFolder || item.readyForDownload)
+                item => !item.isLegacy && (item.isFolder || (item as File).readyForDownload)
             );
         }
         return data;
@@ -107,7 +108,7 @@ export default class Files extends SafeComponent {
                 rowID={index}
                 onChangeFolder={this.onChangeFolder}
                 onFileAction={() => FileActionSheet.show(item, null, null)}
-                onFolderAction={() => FoldersActionSheet.show(item)}
+                onFolderAction={() => FoldersActionSheet.show(item, null)}
             />
         );
     };
