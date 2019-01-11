@@ -12,7 +12,7 @@ const INITIAL_LIST_SIZE = 25;
 
 export interface RecentFilesListProps {
     collapsed?: boolean;
-    toggleCollapsed?: any;
+    toggleCollapsed?: OnPressResponder;
 }
 
 @observer

@@ -17,7 +17,7 @@ import Progress from '../shared/progress';
 import FileProgress from './file-progress';
 import FileInlineContainer from './file-inline-container';
 import InlineUrlPreviewConsent from './inline-url-preview-consent';
-import inlineImageCacheStore from './inline-image-cache-store';
+import inlineImageCacheStore, { CachedImage } from './inline-image-cache-store';
 import { vars } from '../../styles/styles';
 import icons from '../helpers/icons';
 import fileState from './file-state';
@@ -53,7 +53,7 @@ const text0: TextStyle = {
 };
 
 export interface FileInlineImageProps {
-    image: any;
+    image: any; // chat-message-inline-images.js needs to be refactored and converted
     onActionSheet: Function;
     isClosed: boolean;
     onAction: Function;
@@ -68,9 +68,10 @@ const text: TextStyle = {
 
 // TODO: image urls are now handled by inline-url-container
 // remove the URL support from this component
+
 @observer
 export default class FileInlineImage extends SafeComponent<FileInlineImageProps> {
-    @observable cachedImage: { width; height };
+    @observable cachedImage: CachedImage;
     @observable width = 0;
     @observable height = 0;
     @observable optimalContentWidth = 0;
@@ -418,7 +419,8 @@ export default class FileInlineImage extends SafeComponent<FileInlineImageProps>
         const { image, onLegacyFileAction } = this.props;
         const { fileId, downloading } = image;
         const { width, height, loaded, showUpdateSettingsLink, cachingFailed } = this;
-        const { source, acquiringSize, shouldUseFLAnimated }: any = this.cachedImage || {};
+        const { source, acquiringSize, shouldUseFLAnimated } =
+            this.cachedImage || new CachedImage();
         // console.log(`render ${source ? source.uri : null}, shouldUseFLAnimated: ${shouldUseFLAnimated}`);
         const isLocal = !!fileId;
         if (!clientApp.uiUserPrefs.externalContentConsented && !isLocal) {

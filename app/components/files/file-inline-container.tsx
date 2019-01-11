@@ -60,7 +60,7 @@ export interface FileInlineContainerProps {
     isImage?: boolean;
     isOpen?: boolean;
     children?: Array<JSX.Element>;
-    file: any;
+    file: any; // TODO - needs a File type with title and description
     onActionSheet?: Function;
     onAction?: () => void;
     onLegacyFileAction?: Function;

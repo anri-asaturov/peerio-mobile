@@ -6,7 +6,7 @@ import { TinyDb } from '../../lib/icebear';
 // TODO: clean up the db once in a while
 const imageCacheTinyDb = TinyDb.open('imageCaches.v3');
 
-class CachedImage {
+export class CachedImage {
     @observable source = null;
     @observable width = undefined;
     @observable height = undefined;

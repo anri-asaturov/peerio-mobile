@@ -33,8 +33,14 @@ async function doUpload(sourceFunction, inline) {
     uploader(source);
 }
 
+export interface FileActionsheetProps {
+    inline?: boolean;
+    createFolder?: boolean;
+    disableFolders?: boolean;
+}
+
 export default class FileUploadActionSheet {
-    static show(params: any = {}) {
+    static show(params: FileActionsheetProps = {}) {
         const { inline, createFolder, disableFolders } = params;
         const actionButtons = [
             {
