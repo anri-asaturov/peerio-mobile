@@ -110,9 +110,10 @@ export default class Chat extends SafeComponent {
             ref: ref => {
                 this._refs[key] = ref;
             },
-            onInlineImageAction: image => FileActionSheet.show(image),
-            onLegacyFileAction: file => FileActionSheet.show(file),
-            onFileAction: file => FileActionSheet.show(file, true)
+            onInlineImageAction: image => FileActionSheet.show({ file: image, canUnshare: true }),
+            onLegacyFileAction: file => FileActionSheet.show({ file }),
+            onFileAction: file =>
+                FileActionSheet.show({ file, canUnshare: true, fileAutoOpen: true })
         }));
         return (
             <ChatItem
